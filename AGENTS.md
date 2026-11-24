@@ -38,6 +38,13 @@ Present tense, declarative, specific. Do not write "the user shall", "in order t
 
 Every commit that changes a doc has a "Cross-doc check:" section in its body, listing the dependent docs checked.
 
+## Branching
+
+No pull requests: the project has one contributor. Work lands on `main` directly, after `make check`
+passes locally and the commit is rebased on `origin/main`; CI runs on every push to `main` and is
+watched until it settles. A red CI run on `main` is fixed before anything else lands. Short-lived
+local branches are fine; nothing waits on review. Force-pushing and deleting `main` are blocked.
+
 ## Licensing boundary
 
 Summary of [docs/LICENSING.md](docs/LICENSING.md); the file is authoritative.
