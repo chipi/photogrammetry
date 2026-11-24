@@ -61,9 +61,9 @@ others describe only what differs.
 
 | Source | What it gives | How the engine gets it |
 |---|---|---|
-| Main camera, 48 MP *(to verify: 24 MP default output)* | HEIC or JPEG, or ProRAW DNG | Web upload, or AirDrop to the laptop then upload |
+| Main camera, 48 MP sensor; the Camera app saves 24 MP HEIF by default, 48 MP only in HEIF Max, JPEG Max or RAW Max at 1× (verified 2026-11-24) | HEIC or JPEG, or ProRAW DNG | Web upload, or AirDrop to the laptop then upload |
 | EXIF | Focal length, lens id, exposure, GPS | Read at ingest |
-| Lens switching | The Camera app switches to the ultra-wide for close subjects (macro) *(to verify: can be turned off in settings)* | EXIF lens id per image — the engine groups images by lens and calibrates each separately |
+| Lens switching | The Camera app switches to the ultra-wide for close subjects (macro); it can be turned off with the Auto Macro button or Settings > Camera > Macro Control (verified 2026-11-24) | EXIF lens id per image — the engine groups images by lens and calibrates each separately |
 | LiDAR depth | Low-resolution metric depth | **Not in plain Camera photos.** Only through a capture app (Record3D, Polycam, Scaniverse) or our own capture app (PG-P11) |
 | ARKit camera poses | Metric camera positions, gravity | Same: only through a capture app's export |
 | Portrait-mode depth | A depth map embedded in the HEIC *(to verify)* | Possible at ingest, but portrait mode is not a capture mode for photogrammetry |
@@ -76,7 +76,7 @@ the later iPhone app exists for. Until then there are two ways in: *photos-only*
 *pose-and-depth* (a capture app's export).
 
 **2. Into the system.** The owner opens the web UI on the phone and uploads. Risk: Safari may
-convert HEIC to JPEG on upload *(to verify)* — acceptable for a first test, but the ingest stage
+convert HEIC on upload: it transcodes a file whose type is not in the page's `accept` list (verified 2026-11-24), so the upload page lists HEIC and DNG explicitly; what the photo picker hands over is tested on the phone — acceptable for a first test, but the ingest stage
 records which happened. ProRAW DNG files come through the Files picker. A capture-app export comes
 in as a folder: images, intrinsics, poses, depth.
 
@@ -91,7 +91,7 @@ views of the spine and edges carry it. Lego studs produce repetitive matches; ge
 verification rejects most of the false ones, and masks keep the background from dominating. The
 camera's glass returns false matches that move with the viewpoint; bundle adjustment marks those
 points as high-error, and they are filtered. **What resists:** the iPhone's per-photo processing
-(Smart HDR, Deep Fusion) tone-maps each photo differently *(to verify the extent)*. Matching
+(Smart HDR, Deep Fusion) tone-maps each photo differently, and ProRAW is captured together with that processing, so it is not radiometrically linear (verified 2026-11-24). Matching
 tolerates it; texturing does not — hence ProRAW and the develop stage.
 
 **5. Scale and frame.** Photos-only: **arbitrary scale**, stated as such, unless the owner puts a
@@ -120,11 +120,11 @@ model); a scale-entry tool; ProRAW through the develop stage.
 ### UC-A2 · Object with the GoPro
 
 **Differs from A1:**
-- **Lens.** GoPro photos in Wide/HyperView are strongly distorted *(to verify per mode)*; Linear
+- **Lens.** GoPro photos in Wide/HyperView are strongly distorted; HERO13 photos offer Wide (16–34 mm) and Linear (19–39 mm) only, and RAW (.gpr) requires Wide (verified 2026-11-24); Linear
   mode is dewarped in-camera to a near-pinhole image at some cost in field of view. The recipe
   differs: a fisheye camera model for Wide, pinhole for Linear. The engine reads the lens mode from
-  metadata where it can *(to verify which GoPro metadata carries it)*.
-- **Close focus and resolution.** The GoPro has fixed focus *(to verify the minimum distance)*; a
+  metadata where it can (the GPMF spec defines field-of-view and projection tags; whether HERO13 photos write them is tested on a real file).
+- **Close focus and resolution.** The GoPro has fixed focus (minimum distance unpublished; measured on the camera); the Macro Lens Mod focuses at 11–75 cm and, like every lens mod, is calibrated as its own camera; a
   small Lego model fills little of the wide frame, so effective resolution on the object is low.
   Shoes and the book are better targets than Lego.
 - **Capture.** Time-lapse photo (a frame every 0.5 s) while walking around is the natural mode;

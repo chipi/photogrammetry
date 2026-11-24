@@ -8,3 +8,4 @@ Research, reviews and drafts that are not yet settled documents. Content here is
 - [Research: Metashape, other tools, underwater, cameras](research-metashape-underwater-2026-11-23.md)
 - [Review of the concept-phase start](review-fable-2026-11-23.md)
 - [Capture-set amendments to propose to robotics-lab](capture-set-amendments.md)
+- [Verification of open facts (2026-11-24)](verification-2026-11-24.md)

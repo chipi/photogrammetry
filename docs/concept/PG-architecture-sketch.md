@@ -152,7 +152,7 @@ re-runs only what depends on it (Meshroom's node graph works this way). Each sta
 | **Pair select** | Choose which image pairs to match | Exhaustive, sequential, retrieval, spatial from priors | — | Coordinator |
 | **Match** | Match descriptors, verify geometry | COLMAP matcher; LightGlue (Apache-2.0 weights per its README) with ALIKED | RoMa dense matching | Fan-out across all machines |
 | **Learned first pass** | Fast poses, depth and metric scale as priors | MapAnything Apache checkpoint | VGGT, Pi3X, MASt3R (non-commercial) | GB10 (CUDA, memory) |
-| **Poses (SfM)** | Register images, triangulate tracks | GLOMAP (global), COLMAP (incremental) via pycolmap | Refractive COLMAP (underwater; licence unknown) | X3 (strong CPU, big memory) |
+| **Poses (SfM)** | Register images, triangulate tracks | GLOMAP (global), COLMAP (incremental) via pycolmap | Refractive COLMAP (underwater; New BSD, separate C++ build, no pycolmap) | X3 (strong CPU, big memory) |
 | **Bundle adjust + frame** | Refine, apply priors, fix scale and frame, Sim(3) to the given frame | COLMAP/Ceres via pycolmap; AprilTag markers; own Sim(3) alignment | — | X3 |
 | **Dense depth** | Depth map per view, fused cloud | COLMAP PatchMatch stereo (CUDA, or a HIP build) | OpenMVS (AGPL) | GB10 (CUDA), X3 (HIP build, unproven); no COLMAP dense path on the Macs |
 | **Mesh** | Surface from dense cloud | Poisson (Open3D), TSDF fusion for RGB-D | — | X3, GB10 |
@@ -427,7 +427,7 @@ Recommendations for the prototypes to confirm, not locked decisions.
    changes the answer.
 6. Which stages actually run on Metal and ROCm today, and which fall back to CPU (PG-P1, PG-P2).
 7. Texturing: which permissive implementation is good enough, or whether texturing is built.
-8. Refraction: adopt Refractive COLMAP (licence unknown) or implement a refractive camera model.
+8. Refraction: adopt Refractive COLMAP (New BSD; a separate C++ build without Python bindings, not merged upstream) or implement a refractive camera model.
 9. The develop step: own pipeline or darktable (PG-P5).
 10. The UI's 3D stack — leaning: one three.js scene (section 9). Open: which splat renderer, and
     the LOD format for large clouds.

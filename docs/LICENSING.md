@@ -51,7 +51,7 @@ MIT stays honest only if nothing more restrictive is pulled into the MIT code. T
 
 ## Open points
 
-- The licence of Refractive COLMAP (the main underwater candidate) is unknown; it is adopted only
-  once known, under rule 1 or as a dependency if permissive.
+- Refractive COLMAP (the main underwater candidate) is New BSD (verified 2026-11-24); it has no
+  Python bindings, so it runs as a separately built program. It is permissive and may be vendored.
 - Test fixtures with real photos need their own licence per file (Chemigram uses CC BY-SA 4.0 for
   its raw fixtures); decided when the first fixture is added.

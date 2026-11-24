@@ -315,7 +315,7 @@ metric recovers.
 **Proves:** That the products are measurably good, not just plausible.
 **Input:** ETH3D evaluation scans; Mip-NeRF 360 for splats.
 **Proven when:** Dense cloud and mesh are scored against ETH3D's laser scans for accuracy,
-completeness and F-score at ETH3D's evaluation thresholds *(to confirm which)*; the textured mesh
+completeness and F-score at ETH3D's evaluation thresholds (1, 2, 5, 10, 20 and 50 cm, with the BSD-licensed ETH3D multi-view-evaluation tool); the textured mesh
 and the splat come from the same poses; the splat's PSNR and SSIM on held-out views of at least two
 Mip-NeRF 360 scenes are recorded; the seven complaint measurements of §0 each have a first number.
 
@@ -406,7 +406,7 @@ distance maps; non-commercial); SeaThru-NeRF scenes for splats.
 **Proven when:** On AquaMVS, distances between board corners are measured with the standard camera
 model and with a refractive model, and the error of each is recorded; on SQUID, range-based colour
 correction with ranges from the reconstruction is compared with uncorrected images on the scene's
-reference targets *(to verify which targets SQUID provides)*; the open underwater benchmark is
+reference targets (identical DGK Color Tools charts placed at several distances); the open underwater benchmark is
 specified from what the public sets lack.
 
 ### After Step 0 — the owner's data
