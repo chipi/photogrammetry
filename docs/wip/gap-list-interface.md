@@ -45,11 +45,31 @@ What changes here as a result:
 - Until `capture_view` exists, a planner can send only a position (`point` has no heading), so a
   viewpoint's heading reaches the robot only through a human or a later goal kind. The loop in
   section 5 works for position today and for heading after the amendment.
-- `frame.id` is minted by Recce from what the capture set states (run, site, dock pose), not
-  read from robotics-lab; a match between two ids is a claim Recce cannot verify until the MVP 2
-  frame question is answered. `usable_as_goal` stays false across frame ids.
+- `frame.id` comes from robotics-lab once its frame identity exists (decision 5 below). Until
+  then Recce mints a model-frame id of its own and treats any two ids as different frames:
+  `usable_as_goal` stays false across frame ids.
 - Recce's transport follows answer d: its HTTP API on the tailnet with tokens, a stdio MCP
   client beside the agent. Open question 4 below is answered by that.
+
+### The operator's decisions (2026-11-24)
+
+The owner decided the amendments the same day, taking robotics-lab's recommendations; robotics-lab
+records them in its RFC-0025 §5.1, "The gap list".
+
+| # | Amendment | Decision |
+|---|---|---|
+| 1 | `gaps.json` in "what we want back" | Yes: pulled, a file beside `provenance.json` |
+| 2 | Manifest `site`, `targets`, `frame_id` | `site` and `targets` yes; `frame_id` only once frame identity (5) is designed |
+| 3 | `capture_view` goal kind | Yes, its own kind; after the Burger's cameras (robotics-lab step 11), with a navigator contract version that gives a goal a yaw |
+| 4 | Camera entry in robot capabilities | Yes, in the profile's `capabilities.sensors`; Recce reads the robot file and keeps no actor format of its own |
+| 5 | Frame identity | Robotics-lab mints it: one id per map of a site, minted when the map is made, kept across a relocalisation only when the navigator says so (its RFC-0025 §7 item 10) |
+| 6 | Recce MCP slot | Yes: Recce's HTTP API on the tailnet with a token; a stdio MCP on the agent's machine is its client |
+| 7 | Claim lease | A robot's is shorter than a person's |
+
+Also decided on robotics-lab's side: Recce models feed Gazebo scenes (the import is robotics-lab's
+to design in MVP 2, its RFC-0025 Q21), and the NXT's Pi module gets a depth camera and maps with
+mapd (Q16). Open questions 3 (actor profile), 4 (transport) and 6 (frame identity) below are
+settled by these decisions.
 
 ## 2. What robotics-lab needs, in its own terms
 

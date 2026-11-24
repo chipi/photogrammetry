@@ -42,12 +42,22 @@ project's requirements; this project owns its design.
 - Poses and intrinsics optional on input; a statement of whether poses were refined, and the
   refined poses if so.
 - Same input and parameters → same output, as far as possible.
+- `gaps.json` beside `provenance.json`, pulled (decided 2026-11-24, recorded in robotics-lab's
+  RFC-0025 §5.1, "The gap list"; design in [gap-list interface](gap-list-interface.md)).
+
+## Settled since (2026-11-24)
+
+The project is named Recce (this repository, `chipi/recce`); the licence is MIT. A Recce model may
+feed a Gazebo world: robotics-lab designs the import in its MVP 2 (its RFC-0025 Q21). The
+manifest gains `site` and `targets`; frame identity is robotics-lab's to mint, one id per map of a
+site; capture is triggered by a `capture_view` goal kind after the Burger's cameras. Details in
+the [gap-list interface](gap-list-interface.md), "The operator's decisions".
 
 ## Left open for this project
 
-Name and licence; whether a model may later feed a Gazebo world; splat, mesh and point-cloud
+Splat, mesh and point-cloud
 formats; colour normalisation; capture needs (overlap, speed, blur, frame count) — robotics-lab
-wants these as input to how a robot drives a capture; who triggers a capture; where it runs and how
+wants these as input to how a robot drives a capture; where it runs and how
 large a set may be (uncompressed 640×480 at 30 Hz is about 1.7 GB per minute); how a result is
 placed into its frames; whether a model is ever used by a mapper or a judge (a pleasing model is
 not collision-safe). Privacy: home scans hold faces, screens and documents, so retention matters.
