@@ -507,19 +507,29 @@ function build() {
     const inner = new THREE.Group(); outer.add(inner);
     const d = 0.32, hw = d * c.width / 2 / c.focal, hh = d * c.height / 2 / c.focal;
     const corners = [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]];
-    const lp = [];
-    corners.forEach((q, k) => { lp.push(0, 0, 0, ...q, ...q, ...corners[(k + 1) % 4]); });
-    const lineMat = new THREE.LineBasicMaterial({ color: accent, transparent: true, opacity: 0.85 });
-    const lines = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)), lineMat);
-    inner.add(lines);
+    // Four hairline rays, fading from the photo to the camera centre; no edges close the pyramid.
+    const lp = [], fade = [];
+    corners.forEach((q) => { lp.push(0, 0, 0, ...q); fade.push(0, 1); });
+    const lineMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: new THREE.Color() }, uOpacity: { value: 0.15 } },
+      vertexShader: "attribute float aF; varying float vF; void main(){ vF = aF; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+      fragmentShader: "uniform vec3 uColor; uniform float uOpacity; varying float vF; void main(){ gl_FragColor = vec4(uColor, uOpacity * smoothstep(0.0, 1.0, vF * 0.9 + 0.1)); }",
+      transparent: true, depthWrite: false });
+    const rays = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)).setAttribute("aF", new THREE.Float32BufferAttribute(fade, 1)), lineMat);
+    inner.add(rays);
+    const edgeMat = new THREE.LineBasicMaterial({ color: accent, transparent: true, opacity: 0, depthWrite: false });
+    const edge = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(corners.map((q) => new THREE.Vector3(...q))), edgeMat);
+    inner.add(edge);
+    const dotMat = new THREE.PointsMaterial({ color: accent, size: 3, sizeAttenuation: false, transparent: true, opacity: 0.8, depthWrite: false });
+    inner.add(new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0], 3)), dotMat));
     const pg = new THREE.BufferGeometry();
     pg.setAttribute("position", new THREE.Float32BufferAttribute([...corners[0], ...corners[1], ...corners[3], ...corners[2]], 3));
     pg.setAttribute("uv", new THREE.Float32BufferAttribute([0, 1, 1, 1, 0, 0, 1, 0], 2));
     pg.setIndex([0, 2, 1, 1, 2, 3]);
-    const photo = new THREE.Mesh(pg, new THREE.MeshBasicMaterial({ map: tex(c.name), side: THREE.DoubleSide, transparent: true, opacity: 0.92 }));
+    const photo = new THREE.Mesh(pg, new THREE.MeshBasicMaterial({ map: tex(c.name), side: THREE.DoubleSide, transparent: true, opacity: 1 }));
     photo.userData.cam = i;
     inner.add(photo);
-    outer.userData = { inner, lineMat, photo, index: i };
+    outer.userData = { inner, lineMat, edgeMat, dotMat, photo, index: i };
     scene.add(outer); camGroups.push(outer);
   });
 
@@ -771,6 +781,8 @@ function frame() {
   pointMat.uniforms.uGlow.value = state.reduceMotion ? 0 : 1;
 
   const accent = new THREE.Color(css("--accent")), fresh = new THREE.Color(css("--new"));
+  const light = document.documentElement.dataset.theme === "light";
+  const rayCol = new THREE.Color(light ? 0x3a4048 : 0xdde4ec);
   camGroups.forEach((g) => {
     const rank = ranks[g.userData.index], age = t - rank;
     g.visible = state.layers.cameras && age >= 0;
@@ -778,9 +790,14 @@ function frame() {
     g.userData.inner.scale.setScalar(0.25 + 0.75 * p);
     g.userData.inner.position.set(0, 0, state.reduceMotion ? 0 : -(1 - p) * 0.6);
     const isNew = rank === k, isSel = g.userData.index === state.selected;
-    g.userData.lineMat.color.copy(isSel ? fresh.clone().lerp(accent, 0.0) : isNew ? fresh : accent);
-    g.userData.lineMat.opacity = isNew || isSel ? 1 : 0.55;
-    g.userData.photo.material.opacity = isNew || isSel ? 0.95 : 0.6;
+    const hot = isNew || isSel, ph = state.layers.photos;
+    g.userData.lineMat.uniforms.uColor.value.copy(hot ? (isSel ? accent : fresh) : rayCol);
+    g.userData.lineMat.uniforms.uOpacity.value = hot ? (light ? 0.5 : 0.45) : (light ? 0.14 : 0.16);
+    g.userData.dotMat.color.copy(hot ? (isSel ? accent : fresh) : rayCol);
+    g.userData.dotMat.opacity = hot ? 0.95 : 0.55;
+    g.userData.edgeMat.color.copy(isSel ? accent : isNew ? fresh : rayCol);
+    g.userData.edgeMat.opacity = hot ? (ph ? 0.8 : 0.9) : ph ? 0 : (light ? 0.3 : 0.28);
+    g.userData.photo.material.opacity = hot ? 1 : 0.88;
   });
 
   const tc = state.selected >= 0 ? state.selected : order[k];
@@ -794,13 +811,12 @@ function frame() {
     if (u >= 1) fly = null;
   }
   // Light theme: threads blend normally (additive turns white on white) and the grid recedes.
-  const light = document.documentElement.dataset.theme === "light";
   const blend = light ? THREE.NormalBlending : THREE.AdditiveBlending;
   if (threadObj.material.blending !== blend) { threadObj.material.blending = blend; threadObj.material.needsUpdate = true; }
   groundObj.material.opacity = light ? 0.18 : 0.55;
   const pulse = state.reduceMotion ? 0.5 : 0.5 + 0.5 * Math.sin(performance.now() / 420);
   pointMat.uniforms.uPulse.value = pulse;
-  if (ghostObj) ghostObj.userData.lines.forEach((l, i) => (l.material.opacity = i ? 0.35 + 0.35 * pulse : 0.55 + 0.45 * pulse));
+  if (ghostObj) ghostObj.userData.lines.forEach((l, i) => (l.material.opacity = i ? 0.15 + 0.15 * pulse : 0.22 + 0.2 * pulse));
   controls.update();
   renderer.render(scene, camera);
   drawLabels();
@@ -930,13 +946,13 @@ function analyse() {
     const d = 0.42, hw = d * 0.75, hh = d * 0.5, cn = [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]], lp = [];
     cn.forEach((q, k) => lp.push(0, 0, 0, ...q, ...q, ...cn[(k + 1) % 4]));
     const fr = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)),
-      new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.04, gapSize: 0.03, transparent: true }));
+      new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.03, gapSize: 0.04, transparent: true, depthWrite: false }));
     fr.computeLineDistances();
     fr.matrixAutoUpdate = false;
     fr.matrix.copy(new THREE.Matrix4().makeTranslation(r.ghost.x, r.ghost.y, r.ghost.z)
       .multiply(new THREE.Matrix4().lookAt(r.centre, r.ghost, new THREE.Vector3(0, 1, 0))).multiply(new THREE.Matrix4().makeRotationX(Math.PI)));
     const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints([r.ghost, r.centre]),
-      new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.08, gapSize: 0.08, transparent: true, opacity: 0.6 }));
+      new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.08, gapSize: 0.08, transparent: true, opacity: 0.3, depthWrite: false }));
     ray.computeLineDistances();
     ghostObj.add(fr, ray); ghostObj.userData.lines.push(fr, ray);
   });
@@ -1326,7 +1342,8 @@ if (q.get("view") === "map") setView("map");
 if (q.has("gap")) selectGap(+q.get("gap") - 1);
 if (q.get("brief") === "1") $("robot-brief").click();
 if (q.get("fly") === "weak") flyTo(A.centre, 3.2);
-if (q.get("fly") === "ghost") flyTo(A.ghost, 2.4, A.centre);
+if (q.get("fly") === "sel" && state.selected >= 0) flyToCamera(state.selected);
+if (q.get("fly") === "ghost")flyTo(A.ghost, 2.4, A.centre);
 requestAnimationFrame(frame);
 </script>
 </body>
