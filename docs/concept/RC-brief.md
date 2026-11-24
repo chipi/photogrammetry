@@ -1,10 +1,10 @@
-# Photogrammetry — Project Brief
+# Recce — Project Brief
 
-*Seed document for the concept package. Input to the Step 0 prototypes and to PG-01 Vision.*
+*Seed document for the concept package. Input to the Step 0 prototypes and to RC-01 Vision.*
 
 **Version:** 0.1 · Draft
-**Prefix:** PG
-**Working name:** photogrammetry (final name open)
+**Prefix:** RC
+**Name:** Recce (chosen 2026-11-24; formerly the working name "photogrammetry")
 **Date:** 2026-11-23
 **Inputs:** [landscape research](../wip/research-landscape-2026-11-23.md) ·
 [robotics-lab contract](../wip/robotics-lab-contract.md) ·
@@ -63,7 +63,7 @@ underwater sets published with Sea-thru and SeaThru-NeRF).
 - **In the first month: three starting points.** Small objects (the learning path where the
   engine is built and measured), underwater sites (the case that exposes the compute and quality
   problem), and robots (the first real client). The car, the bikes and the rest of the
-  [use cases](PG-use-cases.md) follow once those three work.
+  [use cases](RC-use-cases.md) follow once those three work.
 
 *Vision sentence under consideration* (from the 2026-11-23 review): "A reconstruction engine that
 always says what it knows and what it does not — scale, frame, coverage, uncertainty — so that a
@@ -128,7 +128,7 @@ One use case cuts across scales: **realistic assets for game engines** — a mod
 
 A small internal iPhone app that captures and sends straight to the system — no manual upload —
 and carries what a web page can't reach: LiDAR depth and ARKit camera poses, written in the same
-capture-set format the robots use (prototype PG-P11). Photos-only captures still come in through the
+capture-set format the robots use (prototype RC-P11). Photos-only captures still come in through the
 web interface.
 
 ### The engine at the centre
@@ -164,7 +164,7 @@ such as DaVinci Resolve, design tools such as Figma and Linear, 3D tools such as
 Spline, and explanatory work such as Bartosz Ciechanowski's interactive articles and NASA's Eyes
 on the Solar System. The owner's taste drives this register; the agent's part is to propose
 boldly, build quickly to look at, and take critique.
-The design system (PG-05) and the UX specs carry the detail.
+The design system (RC-05) and the UX specs carry the detail.
 
 **Upload and it lines up.** The heart of the engine is registration: a thousand unordered photos
 of a wreck go in, and the engine finds features, chooses which photos to compare, verifies matches
@@ -235,6 +235,23 @@ A reconstruction tool: photographs and poses in, models with provenance out.
   and are labelled where used.
 - Robotics code. The robot seam is files and a command line; nothing from robotics-lab is imported.
 
+### Name and terminology (owner, 2026-11-24)
+
+The project is **Recce**: short for reconnaissance, the survey that goes ahead of a mission. It
+fits the robots doing autonomous mapping runs and the drones surveying terrain, and works as a
+verb for anyone ("recce the wreck"). The theme stays light inside the product, which has to be
+plain to anyone who knows the field:
+
+- **Domain terms come first and stay primary:** capture set, reconstruction, camera pose, point
+  cloud, mesh, splat, scale, frame, coverage, quality report, gap list.
+- **A few mission words are allowed, always beside the standard term,** never instead of it:
+  a capture run may be called a *sortie*, the quality report a *debrief*, the gap list a
+  *brief for the next sortie*. A screen title or a doc heading uses the standard term; the mission
+  word is a secondary label at most.
+- **No military vocabulary beyond these.** No ranks, no callsigns, no "intel", no "targets" in
+  the user-facing text (the gap-list data field `targets` is a technical name, not a label).
+- **The engine package and command stay `recon`**, as agreed in the robotics-lab contract.
+
 ### Settled in the interview (2026-11-23)
 
 - **Three pillars, equal — the six-month shape.** All the hardware as one pool; robots and agents
@@ -244,11 +261,11 @@ A reconstruction tool: photographs and poses in, models with provenance out.
   the GB10 and rented GPUs.
 - **Storage stays conservative** (2026-11-24). Keep what cannot be recomputed, evict what can, and
   add external disks to a machine when space runs short; the rule is in the
-  [architecture sketch](PG-architecture-sketch.md) §8.
+  [architecture sketch](RC-architecture-sketch.md) §8.
 - **The X3 is home.** The coordinator runs on the X3, always on. The laptop is a client and a
   worker, and runs the whole system alone when offline in the field.
 - **RAW pipeline: prototype both.** A minimal own pipeline (rawpy/LibRaw, set-wide white balance,
-  exposure and tone) and darktable driven from its command line are compared in PG-P5.
+  exposure and tone) and darktable driven from its command line are compared in RC-P5.
 - **The iPhone app starts in Step 0** (revised 2026-11-23; first answer was "a later surface").
   An internal capture app, installed on the owner's iPhone, records photos with ARKit poses,
   intrinsics and LiDAR depth and sends them to the engine. It writes the **same capture-set format
@@ -267,11 +284,11 @@ A reconstruction tool: photographs and poses in, models with provenance out.
   next to the field's tooling (pycolmap, PyTorch, gsplat, rawpy). The data model is
   language-neutral from day one — a documented on-disk schema and a coordinator–worker wire
   protocol — so the coordinator or a worker agent can move to Rust where measurement says so. The
-  question stays open in PG-04 and closes on the evidence from PG-P1, PG-P2 and PG-P7.
+  question stays open in RC-04 and closes on the evidence from RC-P1, RC-P2 and RC-P7.
 
 - **Architecture leanings** (own pull-based worker protocol; one three.js scene; layered capture
   advice; splats in the MVP, bounded) are recorded in the
-  [architecture sketch](PG-architecture-sketch.md) §9, for the prototypes to confirm.
+  [architecture sketch](RC-architecture-sketch.md) §9, for the prototypes to confirm.
 
 - **One monorepo.** Engine, workers, web UI, the iPhone app (`apps/ios/`) and infrastructure as
   code live in this repository. Robotics-lab stays separate, joined by the capture-set format.
@@ -298,18 +315,18 @@ friend's dive set arrive. Numeric tolerances were agreed with the owner on 2026-
 P4 → P8 · P5 → P9 · P9 → P10 · P10 → P11 · P8 → P12.
 
 **Two tracks, one meeting point** *(owner, 2026-11-24)*. Step 0 runs two tracks side by side. Below,
-the **prototypes** (PG-P1..P12) prove how the technology works. Above, the **mock-ups** (PG-M<n>,
+the **prototypes** (RC-P1..P12) prove how the technology works. Above, the **mock-ups** (RC-M<n>,
 in `mockups/`) work out how the product looks and behaves: every concept in the
 [visual ideas](../wip/visual-ideas.md) catalogue is mocked, looked at and critiqued before anything
 is built. A mock-up is proven when the owner has judged it on screen and the concepts it carries
 are kept, changed or dropped with a reason. Mock-ups use real outputs from the prototypes wherever
-they exist (PG-P1's cameras and points first), so the picture shows real data, not invented data.
+they exist (RC-P1's cameras and points first), so the picture shows real data, not invented data.
 The two tracks meet in the first build phase, where the PRDs, RFCs and UX specs draw on both, and
 the build starts from a worked-out design rather than discovering one.
 
 ### A — Foundation
 
-#### PG-P1 — Registration on every machine
+#### RC-P1 — Registration on every machine
 
 **Proves:** The registration core end to end on real photos, which machine runs it, and where the
 time goes.
@@ -322,7 +339,7 @@ reprojection error (mean and 95th percentile), wall-clock time per stage, and po
 ETH3D's ground truth after Sim(3) alignment (rotation in degrees, position as a fraction of the
 scene's extent).
 
-#### PG-P2 — The expensive stages on the GPUs
+#### RC-P2 — The expensive stages on the GPUs
 
 **Proves:** The two platform facts the hardware pillar rests on.
 **Proven when:** COLMAP's dense depth runs on one ETH3D scene on the X3 through a HIP build
@@ -331,11 +348,11 @@ recorded with the error and what was tried. The GB10's available CUDA time under
 schedule is recorded. If neither GPU path works, the rented GPU becomes the planned CUDA
 worker and the architecture sketch says so.
 
-#### PG-P3 — Quality state an agent can read
+#### RC-P3 — Quality state an agent can read
 
 **Proves:** That the engine's quality state is enough for an agent to find a real weakness.
 **Proven when:** `quality.json` v0 (registration rate, connected components, per-image verdict and
-reason, reprojection mean and tail, coverage per region, scale state) is produced from PG-P1 and
+reason, reprojection mean and tail, coverage per region, scale state) is produced from RC-P1 and
 served through three MCP read tools; then a **hold-out test**: all images seeing one region of an
 ETH3D scene are removed, the region's coverage metric drops by at least half *(agreed 2026-11-24)*, an agent
 with only the MCP tools names that region among the scene's regions, and when the images return the
@@ -343,7 +360,7 @@ metric recovers.
 
 ### B — Products against ground truth
 
-#### PG-P4 — Dense, mesh, texture and splat, measured
+#### RC-P4 — Dense, mesh, texture and splat, measured
 
 **Proves:** That the products are measurably good, not just plausible.
 **Input:** ETH3D evaluation scans; Mip-NeRF 360 for splats.
@@ -352,7 +369,7 @@ completeness and F-score at ETH3D's evaluation thresholds (1, 2, 5, 10, 20 and 5
 and the splat come from the same poses; the splat's PSNR and SSIM on held-out views of at least two
 Mip-NeRF 360 scenes are recorded; the seven complaint measurements of §0 each have a first number.
 
-#### PG-P5 — RAW to a consistent set
+#### RC-P5 — RAW to a consistent set
 
 **Proves:** That a develop stage replaces the Lightroom step without hurting reconstruction, and
 which develop route to use.
@@ -363,17 +380,17 @@ the same scene; registration rate from RAW is no worse than from JPEG; the expos
 spread across the set and the seam contrast in the texture are measured for each; one route is
 chosen on those numbers.
 
-#### PG-P6 — Mesh and splat in the browser
+#### RC-P6 — Mesh and splat in the browser
 
 **Proves:** That one three.js scene shows the mesh and the splat together, on the laptop and the
 iPhone.
-**Proven when:** A PG-P4 mesh and a splat of about one million gaussians load together in one
+**Proven when:** A RC-P4 mesh and a splat of about one million gaussians load together in one
 three.js scene from the result's files, render at 60 fps or more on the M4 Pro and 30 fps or more on
 the iPhone 15 Pro *(agreed 2026-11-24)*, and the same result also exports to Rerun as the engineering view.
 
 ### C — Scale: the reason the project exists
 
-#### PG-P7 — Distribution on a large set
+#### RC-P7 — Distribution on a large set
 
 **Proves:** The central bet — that splitting the expensive work across machines, including a
 rented GPU, beats the best single machine after transfer costs.
@@ -386,7 +403,7 @@ maps match within 1% median relative difference *(agreed 2026-11-24)*; wall-cloc
 rental cost are recorded against the fastest single machine. If splitting does not pay, the set size
 at which it would is the number recorded.
 
-#### PG-P8 — Learned and classical, compared
+#### RC-P8 — Learned and classical, compared
 
 **Proves:** Whether MapAnything's Apache checkpoint is a useful first pass — fast poses and metric
 scale — checked by bundle adjustment.
@@ -398,7 +415,7 @@ error; the result decides whether the learned first pass enters a recipe.
 
 ### D — Robots and the phone
 
-#### PG-P9 — A robot's capture set
+#### RC-P9 — A robot's capture set
 
 **Proves:** The file contract and metric placement.
 **Input:** An own fixture first — a Blender render of a room with exact camera poses, written in
@@ -408,29 +425,29 @@ the model's scale error is under 0.5% and its placement error under 1% of the sc
 given frame *(agreed 2026-11-24)*; the frame conversions (axes, handedness, camera-to-world) are checked by
 the render's known geometry.
 
-#### PG-P10 — A room from inside
+#### RC-P10 — A room from inside
 
 **Proves:** That an interior registers as one model, and what LiDAR and ARKit add.
-**Input:** ARKitScenes first; the owner's room later ([use cases](PG-use-cases.md) UC-B1).
+**Input:** ARKitScenes first; the owner's room later ([use cases](RC-use-cases.md) UC-B1).
 **Proven when:** With poses and depth, the room gives one metric model (TSDF mesh plus splat) whose
 wall lengths match the reference within 2% or 2 cm, whichever is larger *(agreed 2026-11-24)*; photos-only,
 the room either registers as one model or the engine reports its separate components and where the
 links are missing.
 
-#### PG-P11 — The iPhone capture app
+#### RC-P11 — The iPhone capture app
 
 **Proves:** That a small internal app captures what the Camera app cannot — ARKit poses, intrinsics
 and LiDAR depth with each photo — in the shared capture-set format.
-**Timebox:** one week *(agreed 2026-11-24)*; it starts once PG-P8 or PG-P10 shows that pose priors improve
+**Timebox:** one week *(agreed 2026-11-24)*; it starts once RC-P8 or RC-P10 shows that pose priors improve
 the result.
 **Proven when:** The app writes a capture set that the engine's ingest reads unchanged, alongside a
-PG-P9 robot set; per-frame intrinsics, the image format and the ARKit-to-capture-set axis
+RC-P9 robot set; per-frame intrinsics, the image format and the ARKit-to-capture-set axis
 conversion are in the format (amendments proposed to robotics-lab); photos are at the highest
 resolution ARKit allows while tracking *(to verify)*.
 
 ### E — Underwater
 
-#### PG-P12 — Underwater
+#### RC-P12 — Underwater
 
 **Proves:** That the pipeline holds up underwater, and what refraction modelling and range-based
 colour correction add.
@@ -445,10 +462,10 @@ specified from what the public sets lack.
 ### After Step 0 — the owner's data
 
 When the engine takes captures end to end, the owner shoots the use-case sets
-([use cases](PG-use-cases.md)) and asks the friend for the dive set, with its Metashape result as the
+([use cases](RC-use-cases.md)) and asks the friend for the dive set, with its Metashape result as the
 baseline. Both join the benchmark set.
 
 ## 6. Sequence after Step 0
 
-Prototypes and mock-ups → PG-01 Vision → PG-03 Data Catalog → PG-04 Technical Architecture → PG-05 Design
-System → PG-02 Project Concept → PG-00 Introduction → audit → PDF.
+Prototypes and mock-ups → RC-01 Vision → RC-03 Data Catalog → RC-04 Technical Architecture → RC-05 Design
+System → RC-02 Project Concept → RC-00 Introduction → audit → PDF.

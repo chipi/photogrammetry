@@ -2,7 +2,7 @@
 
 Date: 2026-11-23. Scope: features, workflows and user experience. Libraries, licences and platforms of
 the building blocks live in `tools-overview.md` and are not repeated here. Inputs:
-[brief](../concept/PG-brief.md), [Metashape and underwater research](../wip/research-metashape-underwater-2026-11-23.md),
+[brief](../concept/RC-brief.md), [Metashape and underwater research](../wip/research-metashape-underwater-2026-11-23.md),
 [landscape research](../wip/research-landscape-2026-11-23.md).
 
 ## Conventions
@@ -418,7 +418,7 @@ The smallest set that stops the owner reaching for RealityScan, Polycam or Apple
 
 > **Superseded on splats (2026-11-23):** the owner decided splats are in the MVP, bounded — one
 > splat per reconstruction from the same poses, GLB and PLY, held-out-view PSNR/SSIM as a quality
-> metric ([architecture sketch](../concept/PG-architecture-sketch.md) §9). The line below is
+> metric ([architecture sketch](../concept/RC-architecture-sketch.md) §9). The line below is
 > this analysis's original recommendation.
 
 Not in the MVP: splats, tiled models, DEM and ortho, GCP and CRS work, de-lighting, normal maps, underwater, floor plans.

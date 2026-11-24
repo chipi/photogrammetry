@@ -62,7 +62,7 @@ CUDA 13), X3 (ROCm/HIP or Vulkan, x86_64 Linux), iMac Pro (CPU, macOS x86_64).
 
 | Tool | What it does | Licence | Platforms / GPU | Role | Source |
 |---|---|---|---|---|---|
-| MapAnything (Meta) | Metric multi-view reconstruction; optional intrinsics, poses, depth; to ~2,000 views on 140 GB | Code Apache-2.0 [V]; `map-anything-apache` weights Apache-2.0 [V]; `map-anything` weights CC-BY-NC [V] | PyTorch, CUDA | Default (Apache checkpoint, PG-P4); NC checkpoint = plug-in | <https://github.com/facebookresearch/map-anything> |
+| MapAnything (Meta) | Metric multi-view reconstruction; optional intrinsics, poses, depth; to ~2,000 views on 140 GB | Code Apache-2.0 [V]; `map-anything-apache` weights Apache-2.0 [V]; `map-anything` weights CC-BY-NC [V] | PyTorch, CUDA | Default (Apache checkpoint, RC-P4); NC checkpoint = plug-in | <https://github.com/facebookresearch/map-anything> |
 | VGGT (Meta/Oxford) | Feed-forward poses + depth, COLMAP export | Code relicensed commercial-friendly (excluding military) 2025-07-29 [V README]; `VGGT-1B` weights non-commercial; `VGGT-1B-Commercial` gated by application form [V]; code licence not captured separately in the landscape note [U]; "VGGT-Omega" (May 2026) unread [U] | PyTorch, CUDA | Plug-in (commercial checkpoint is gated) | <https://github.com/facebookresearch/vggt> [V] |
 | Pi3 / Pi3X | Permutation-equivariant reconstruction; Pi3X takes optional pose/intrinsics/depth | Code BSD-3 [V]; weights CC-BY-NC 4.0 [V] | PyTorch | Plug-in (NC) | <https://github.com/yyfz/Pi3> |
 | DUSt3R / MASt3R / MASt3R-SfM (Naver) | Pairwise pointmaps, matching | CC BY-NC-SA 4.0 [V] | PyTorch | Plug-in (NC) | <https://github.com/naver/mast3r> |
@@ -79,7 +79,7 @@ engine. No head-to-head numbers were checked.
 | OpenMVS | Dense point cloud, mesh, refine, texture | Copyleft, AGPL-3.0 [V] | CPU/CUDA [U] | Plug-in | <https://github.com/cdcseacave/openMVS> [V] |
 | Metashape depth maps | Depth-map MVS | Proprietary | CUDA, OpenCL 1.2; Vulkan for texture blending; **Metal not mentioned** [V manual] | Reference | <https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf> |
 | MapAnything / VGGT depth | Learned depth as dense prior | see section 4 | | Optional | |
-| Own depth fusion (Metal, wgpu) | To fill the M4 Pro and iMac Pro gap | n/a | Metal/wgpu | Open question for PG-P2/P3 | n/a |
+| Own depth fusion (Metal, wgpu) | To fill the M4 Pro and iMac Pro gap | n/a | Metal/wgpu | Open question for RC-P2/P3 | n/a |
 
 ## 6. Meshing, mesh processing, texturing, UV, decimation
 
@@ -94,7 +94,7 @@ engine. No head-to-head numbers were checked.
 | xatlas | UV atlas generation | Permissive, MIT [V]; `xatlas` PyPI wheels macOS arm64+x86_64, Linux x86_64 [V]; Linux aarch64 not in the visible list [U] | CPU | Default | <https://github.com/jpcy/xatlas> [V] |
 | Poisson / screened Poisson (Kazhdan) | Surface reconstruction | licence not checked [U] | CPU | Via COLMAP/Open3D | unverified |
 | MeshLab | Desktop mesh tool | GPL-3.0 [U] | desktop | Reference | <https://github.com/cnr-isti-vclab/meshlab> |
-| darktable | RAW development, CLI driven (PG-P7b) | GPL-3.0 [U] | macOS, Linux | Plug-in (compared in PG-P7b) | unverified |
+| darktable | RAW development, CLI driven (RC-P7b) | GPL-3.0 [U] | macOS, Linux | Plug-in (compared in RC-P7b) | unverified |
 
 ## 7. Radiance fields and gaussian splatting (incl. underwater)
 
@@ -147,7 +147,7 @@ No evidence was found that GPMF has been used as an SfM prior.
 |---|---|---|---|---|---|
 | Sea-Thru (Akkaynak and Treibitz, CVPR 2019) | Physically based underwater colour recovery; needs per-pixel range | No official code [V] | n/a | Reference | n/a |
 | Sea-Thru-Impl (Teragion) | Small reimplementation | GPL-3.0 and MIT, as the note reads [V] | Python | Reference only | <https://github.com/Teragion/Sea-Thru-Impl> |
-| Own set-wide white balance, exposure, tone | Minimal pipeline on rawpy | n/a | CPU | Default (PG-P7b) | n/a |
+| Own set-wide white balance, exposure, tone | Minimal pipeline on rawpy | n/a | CPU | Default (RC-P7b) | n/a |
 | Refraction-aware camera models | Flat/dome port | see Refractive COLMAP, section 1 | | Differentiator | <https://isprs-archives.copernicus.org/articles/XLIII-B2-2020/977/2020/> [V] |
 
 Colour correction after geometry (the reconstruction supplies Sea-thru's range), with an uncorrected
@@ -202,7 +202,7 @@ DJI Mini 4 Pro EXIF/XMP fields are unverified.
 | 3D Tiles | Streaming tiled geometry; LOD splats added Apr 2026 [V note] | OGC standard [U]; `3d-tiles-tools` Apache-2.0 [V] | Cesium | Optional | <https://github.com/CesiumGS/3d-tiles-tools> [V] |
 | E57 / LAS / LAZ | Point cloud exchange | ASTM / ASPRS [U] | Polycam exports LAS/LAZ/PLY/PTS/XYZ [U] | Only if survey input arrives | n/a |
 | MCAP, rrd | Rerun/robot logs | n/a | Rerun ingests MCAP, rrd, LeRobot [V] | Optional | <https://github.com/rerun-io/rerun> |
-| `provenance.json`, world frame | Project's own contract | n/a (see PG-P5) | | Default | n/a |
+| `provenance.json`, world frame | Project's own contract | n/a (see RC-P5) | | Default | n/a |
 
 ## 14. Game engines and DCC import paths
 
@@ -221,7 +221,7 @@ Splat-in-engine paths (KHR_gaussian_splatting in Unity, Unreal, Godot) are unver
 
 | Tool | What it does | Licence | Platforms | Role | Source |
 |---|---|---|---|---|---|
-| MCP Python SDK (`modelcontextprotocol/python-sdk`) | Build MCP servers and clients | Permissive, MIT [V]; PyPI `mcp` 2.3.0, Python >=3.10, pure wheel [V] | any | Default (agent surface, PG-P6) | <https://github.com/modelcontextprotocol/python-sdk> [V]; <https://pypi.org/project/mcp/> [V] |
+| MCP Python SDK (`modelcontextprotocol/python-sdk`) | Build MCP servers and clients | Permissive, MIT [V]; PyPI `mcp` 2.3.0, Python >=3.10, pure wheel [V] | any | Default (agent surface, RC-P6) | <https://github.com/modelcontextprotocol/python-sdk> [V]; <https://pypi.org/project/mcp/> [V] |
 | `metashape-mcp` | MCP server over the Metashape Python API; 106 tools reported | Author and licence unverified [U] | needs licensed Metashape Professional | Reference | PyPI (name only) |
 | SceneAgent | Paper, arXiv 2610.34745 | unread [U] | | Reference | unverified |
 | NodeODM REST | Task API | AGPL project [V, partly] | | Reference | <https://github.com/WebODM/WebODM> |
@@ -257,7 +257,7 @@ Prices only where the notes hold them.
 
 ## 18. Platform matrix
 
-Expectation table, not measurement. Prototype PG-P2 confirms or replaces every cell with a command
+Expectation table, not measurement. Prototype RC-P2 confirms or replaces every cell with a command
 and its output. "Native GPU" = a vendor GPU path exists for that machine; "CPU only" = runs, no GPU
 path; "build needed" = no wheel or binary for that architecture, a source build is required.
 

@@ -219,7 +219,7 @@ canvas.spark { width: 100%; height: 54px; display: block; }
     </section>
     <section class="sec">
       <h2>Timeline drives the scene</h2>
-      <button class="tl-opt" data-tl="registration" aria-pressed="true">Registration order<span class="badge">derived</span><small>The order a mapper adds photos: best pair first, then the photo sharing most points. Derived from the final model; PG-P1 does not log it yet.</small></button>
+      <button class="tl-opt" data-tl="registration" aria-pressed="true">Registration order<span class="badge">derived</span><small>The order a mapper adds photos: best pair first, then the photo sharing most points. Derived from the final model; RC-P1 does not log it yet.</small></button>
       <button class="tl-opt" data-tl="name" aria-pressed="false">Photo order<small>The order the files were shot, by name.</small></button>
       <button class="tl-opt" data-tl="support" aria-pressed="false">Weakest first<small>Photos sorted by how many points they hold, fewest first.</small></button>
     </section>
@@ -322,8 +322,8 @@ canvas.spark { width: 100%; height: 54px; display: block; }
   </section>
 
   <footer class="status">
-    <span>Mock-up PG-M1, phase 1</span>
-    <span>Data: ETH3D <i>kicker</i> (CC BY-NC-SA 4.0), registered by PG-P1 on the X3</span>
+    <span>Mock-up RC-M1, phase 1</span>
+    <span>Data: ETH3D <i>kicker</i> (CC BY-NC-SA 4.0), registered by RC-P1 on the X3</span>
     <span>Real: cameras, points, colours, ground truth · Derived: registration order · Not shown yet: what the solver believed at each step</span>
     <span class="grow"></span>
     <span><span class="kbd">space</span> play <span class="kbd">← →</span> step <span class="kbd">G</span> truth <span class="kbd">T</span> threads</span>
@@ -1012,7 +1012,7 @@ const stampsFor = () => {
     ["Web viewing", ok ? "pass" : "fail", `Needs 90% of photos registered and reprojection under 2 px: ${Math.round(r.registration_rate * 100)}%, ${r.reprojection_error_mean_px.toFixed(2)} px.`],
     ["Robot localisation", "fail", "Needs metric scale. This run has none: no pose priors, no markers."],
     ["Measurement", "fail", "Needs metric scale and a stated accuracy against control points."],
-    ["Game-engine asset", "unknown", "Needs a textured mesh; this run stops at sparse points (mesh comes with PG-P4)."],
+    ["Game-engine asset", "unknown", "Needs a textured mesh; this run stops at sparse points (mesh comes with RC-P4)."],
   ];
 };
 

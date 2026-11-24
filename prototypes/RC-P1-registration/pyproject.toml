@@ -1,5 +1,5 @@
 [project]
-name = "pg-p1-registration"
+name = "rc-p1-registration"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [

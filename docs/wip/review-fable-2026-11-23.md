@@ -22,18 +22,18 @@ the full findings are below by heading. External facts the reviewer did not chec
 
 1. "The laptop alone is a complete system" is false with the default stack: no COLMAP dense or
    gsplat on the M4 Pro (tools overview §18).
-2. PG-P3 tests the wrong input: fanning out features and matching on 60–150 iPhone photos takes
+2. RC-P3 tests the wrong input: fanning out features and matching on 60–150 iPhone photos takes
    seconds, so transfer dominates. The hours on large sets are dense depth and splat training, which
    run on one or two machines (GB10, X3 if HIP works). The riskiest unknowns — cutting and merging a
    view graph across machines (sketch Q5) and the X3 HIP dense build — are untested. "Matches a
    single-machine run" needs a tolerance: GPU SIFT is not bit-identical across CUDA, HIP and CPU.
 3. Splats in or out of the MVP: documents disagreed.
 4. The iPhone app contradicted the non-goals and stale "later" text in four places.
-5. Prototype dependencies inverted: PG-P4 needs ARKit poses (PG-P10 or a third-party export) and
-   MapAnything on CUDA (the GB10 build PG-P2 proves); PG-P5 depends on a Gazebo fixture
+5. Prototype dependencies inverted: RC-P4 needs ARKit poses (RC-P10 or a third-party export) and
+   MapAnything on CUDA (the GB10 build RC-P2 proves); RC-P5 depends on a Gazebo fixture
    robotics-lab has offered but not built.
-6. Untestable criteria: PG-P6 ("the owner agrees"), PG-P7 ("usable"), PG-P5 and PG-P9 ("a stated
-   tolerance", none stated); PG-P8 has none. Suggested PG-P6 test: remove a region's images, the
+6. Untestable criteria: RC-P6 ("the owner agrees"), RC-P7 ("usable"), RC-P5 and RC-P9 ("a stated
+   tolerance", none stated); RC-P8 has none. Suggested RC-P6 test: remove a region's images, the
    agent names the region, add them back, show the coverage metric moved.
 7. The capture-set format cannot yet carry an iPhone capture: per-sensor intrinsics (ARKit's vary
    per frame with focus *(unverified)*), PNG-only images (no DNG or HEIC), no specified conversion
@@ -80,7 +80,7 @@ the full findings are below by heading. External facts the reviewer did not chec
 2. **Chemigram as the develop stage:** darktable headless, gray-card white balance, state
    propagation across a set; reverse: range maps become a Sea-thru primitive in Chemigram. Days.
 3. **Open underwater benchmark with ground truth:** flat vs dome port, GoPro vs DSLR, scale bars and
-   tags; Brown vs Refractive COLMAP vs MapAnything. A research contribution; gives PG-P8 a
+   tags; Brown vs Refractive COLMAP vs MapAnything. A research contribution; gives RC-P8 a
    criterion.
 4. **Robotics-lab as the first real client**, closing the capture-advice loop.
 5. **A repeatable motorised object rig** for benchmark error bars.
@@ -109,7 +109,7 @@ give P8 a criterion and move it ahead of P7.
 5. Storage budget and retention rule for home scans?
 6. Will robotics-lab deliver a real capture set in the first quarter, or does this project make its
    own fixture?
-7. Metric tolerances for PG-P5 and PG-P9, in millimetres and as a percentage.
+7. Metric tolerances for RC-P5 and RC-P9, in millimetres and as a percentage.
 8. Licence: decide permissive now, or keep it open?
 9. Is the iOS app worth the weeks it displaces?
 10. Does the GB10's shared-GPU schedule leave enough CUDA time, or is a rented card the real CUDA worker?

@@ -1,6 +1,6 @@
 # UX inspiration research for the scene and the explanations
 
-Date: 2026-11-24. Method: web search and page fetches run on 2026-11-24, outside photogrammetry software on purpose, harvesting interaction concepts from current products and explanatory work. Every fetched page was summarised by a small model before it reached the author, so a [V] claim is accurate to that summary and not to the page's exact wording; a claim that needs exact wording needs a second read before it enters a UX spec. Frame and scene follow the "Two registers in one interface" paragraph of the [brief](../concept/PG-brief.md) §2 and the eight ideas in [visual ideas](visual-ideas.md).
+Date: 2026-11-24. Method: web search and page fetches run on 2026-11-24, outside photogrammetry software on purpose, harvesting interaction concepts from current products and explanatory work. Every fetched page was summarised by a small model before it reached the author, so a [V] claim is accurate to that summary and not to the page's exact wording; a claim that needs exact wording needs a second read before it enters a UX spec. Frame and scene follow the "Two registers in one interface" paragraph of the [brief](../concept/RC-brief.md) §2 and the eight ideas in [visual ideas](visual-ideas.md).
 
 Legend:
 
@@ -194,6 +194,6 @@ Limits of method:
 
 - Every [V] came through a model-generated summary of the fetched page, not a raw read. Counts, names and dates are likelier to be right than the nuance of a phrase. Trade-press items (Flow Studio 3D Editor) report on the vendor and are not the vendor's own words.
 - No product was run, so every statement about delight is an inference from a description, not an observation of use. No video, motion or interaction was seen; patterns such as the capture dial and Rerun's timeline are known only as text.
-- Nothing here was tested against Recce's data. PG-P6 is the place to test any of these on the ETH3D kicker scene; the mini-lab, evidence-handle and plural-timeline ideas need a mock before a UX spec.
+- Nothing here was tested against Recce's data. RC-P6 is the place to test any of these on the ETH3D kicker scene; the mini-lab, evidence-handle and plural-timeline ideas need a mock before a UX spec.
 - No claim was made about licensing. Several sources (Spline, Foxglove, Omniverse, Resolve) are proprietary; Rerun and Cesium are open source, and Recce takes concepts from all of them, not code.
 - The search tool is US-only and reported results as of today; snippets can be stale.

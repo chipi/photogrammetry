@@ -1,7 +1,7 @@
 # Visual ideas and the mock-up plan
 
 The catalogue of concepts for the 3D scene, the explanations and the frame, and the mock-ups that
-work them out. The direction behind them is in the [brief](../concept/PG-brief.md) §2 ("Two
+work them out. The direction behind them is in the [brief](../concept/RC-brief.md) §2 ("Two
 registers in one interface"); the mock-up track is in §5 ("Two tracks, one meeting point"). Every
 entry is a direction to mock, not a decision: a mock-up keeps, changes or drops it, with a reason.
 
@@ -53,7 +53,7 @@ of the same day, also approved as directions. Source tags `[V]` and `[U]` there 
 
 ## The mock-ups
 
-Each mock-up is a page in `mockups/PG-M<n>-<slug>/`, built to be looked at and critiqued. It uses
+Each mock-up is a page in `mockups/RC-M<n>-<slug>/`, built to be looked at and critiqued. It uses
 real prototype output wherever it exists; where it does not, it says plainly which data is
 stand-in. A mock-up ends with the owner's verdict per concept: kept, changed or dropped, with the
 reason.
@@ -61,16 +61,16 @@ reason.
 | Mock-up | Shows | Ideas | Data |
 |---|---|---|---|
 | **M0 — The frame** | The shell every view lives in: top bar, outliner, inspector, timeline, command palette, light and dark | 15, patterns | Any |
-| **M1 — The run** | A reconstruction replayed: cameras snapping in, threads, plural timelines, belief at step k, replay the moment | 1, 2, 9, 11, 19 | PG-P1 kicker (COLMAP and GLOMAP) |
-| **M2 — Coverage and confidence** | Light and shadow, ghost camera, the coverage glyph, confidence on the surface, honest colour | 3, 4, 13, 14 | PG-P1, then PG-P4 meshes |
-| **M3 — The debrief** | The agent's illustrated report with evidence handles, readiness stamps, agent-placed annotations | 5, 10, 16, 18 | PG-P1 and PG-P3 quality state |
-| **M4 — Recipes and comparison** | The recipe graph, swap-in-place, split-slider compare, cost before and after | 6, 20 | PG-P1's two strategies |
+| **M1 — The run** | A reconstruction replayed: cameras snapping in, threads, plural timelines, belief at step k, replay the moment | 1, 2, 9, 11, 19 | RC-P1 kicker (COLMAP and GLOMAP) |
+| **M2 — Coverage and confidence** | Light and shadow, ghost camera, the coverage glyph, confidence on the surface, honest colour | 3, 4, 13, 14 | RC-P1, then RC-P4 meshes |
+| **M3 — The debrief** | The agent's illustrated report with evidence handles, readiness stamps, agent-placed annotations | 5, 10, 16, 18 | RC-P1 and RC-P3 quality state |
+| **M4 — Recipes and comparison** | The recipe graph, swap-in-place, split-slider compare, cost before and after | 6, 20 | RC-P1's two strategies |
 | **M5 — Learn** | Mini-labs beside the terms of the primer | 12 | Synthetic, by design |
-| **M6 — Presentation** | Lighting, framing, camera path, shareable link | 7 | PG-P4 mesh and splat |
-| **M7 — Underwater** | Water colour against corrected colour, the refraction lens | 8 | PG-P12 public underwater sets |
-| **M8 — Capture** | The phone's coverage glyph and live registration | 13, 17 | PG-P11 iPhone app |
+| **M6 — Presentation** | Lighting, framing, camera path, shareable link | 7 | RC-P4 mesh and splat |
+| **M7 — Underwater** | Water colour against corrected colour, the refraction lens | 8 | RC-P12 public underwater sets |
+| **M8 — Capture** | The phone's coverage glyph and live registration | 13, 17 | RC-P11 iPhone app |
 
-Order: M0 and M1 first (they set the frame and use the data PG-P1 already has), then M2, M3 and M4;
+Order: M0 and M1 first (they set the frame and use the data RC-P1 already has), then M2, M3 and M4;
 M5–M8 follow the prototypes they depend on.
 
 ## Decided by the owner (2026-11-24)
@@ -85,4 +85,4 @@ M5–M8 follow the prototypes they depend on.
 
 | Mock-up | Phase | Where |
 |---|---|---|
-| M0 + M1, first passes at M2 and M3 | 1, built 2026-11-24; style approved from screenshots, concepts awaiting review | [mockups/PG-M1-run](https://github.com/chipi/photogrammetry/tree/main/mockups/PG-M1-run) |
+| M0 + M1, first passes at M2 and M3 | 1, built 2026-11-24; **owner verdict: kept, all concepts shown** ("we really love everything"; the gap list "exactly what I wanted"); phase 2 polish next | [mockups/RC-M1-run](https://github.com/chipi/recce/tree/main/mockups/RC-M1-run) |

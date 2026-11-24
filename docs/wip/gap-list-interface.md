@@ -4,7 +4,7 @@ Date: 2026-11-24. Status: draft. A design note, not a decision; nothing here is 
 
 Question from the owner: robots are a main consumer, and robotics-lab has a mission control and a planner. They need the gaps and shot cards through MCP (and the HTTP API and CLI) so their planning gets feedback from Recce. The human side is solved by shot cards ([visual ideas](visual-ideas.md), idea 21); this note solves it for other software.
 
-Sources read, in this repository: [brief](../concept/PG-brief.md) §2 and §4, [architecture sketch](../concept/PG-architecture-sketch.md) §2, §3, §5, §9, §10, [visual ideas](visual-ideas.md), [robotics-lab contract](robotics-lab-contract.md), [capture-set amendments](capture-set-amendments.md), and `mockups/PG-M1-run/README.md` (outside `docs/`, so not linked).
+Sources read, in this repository: [brief](../concept/RC-brief.md) §2 and §4, [architecture sketch](../concept/RC-architecture-sketch.md) §2, §3, §5, §9, §10, [visual ideas](visual-ideas.md), [robotics-lab contract](robotics-lab-contract.md), [capture-set amendments](capture-set-amendments.md), and `mockups/RC-M1-run/README.md` (outside `docs/`, so not linked).
 
 Sources read, in robotics-lab (read-only, `main` of 2026-11-24), under `https://github.com/chipi/robotics-lab/blob/main/`:
 
@@ -65,7 +65,7 @@ What changes here as a result:
 | Nothing reads a 3D model yet; a pleasing model is not collision-safe | RFC-0025 §3.5 ("do not build yet"), §5.1 | Gaps are advice. The consumer checks its own map. |
 | A goal refused for a robot says why, in a field a client can show | RFC-0014 §3.2.1 | Each viewpoint has `usable_as_goal` and `unusable_reason`. |
 | Agents are clients of one API; the MCP server exposes it with an allow-list, the client name is fixed, an agent runs on the simulator unless the operator allows more, and only the operator draws areas | RFC-0014 §3.2, §3.9; `mcp_server.py` (`ALLOWED`, `target` is `sim`); `auth.py` (a token names the client) | Recce copies the shape: tools are one call each, claims carry a client name, dismissing a gap is the operator's. |
-| Agent first: anything a page shows is a command, and the reverse | UXS-001 (principle at line 23); [brief](../concept/PG-brief.md) §2 | Section 4 gives one verb list for all faces. |
+| Agent first: anything a page shows is a command, and the reverse | UXS-001 (principle at line 23); [brief](../concept/RC-brief.md) §2 | Section 4 gives one verb list for all faces. |
 
 How results flow back today: they do not. RFC-0025 §5 draws a model job that moves data across the seam and receives `mesh.ply`, `cloud.ply` and `provenance.json`. Nothing in robotics-lab consumes them, and RFC-0025 is Accepted with "nothing in it built". There is no return path for gaps, and no robotics-lab object a gap attaches to except two candidates: a site (RFC-0014 §3.5.1: id, name, site frame, dock pose) with its operator-drawn areas (§3.5.3: polygons in the site frame, `GET /sites/{s}/areas/at`), and the goal run (a goal run holds `result` and a `run_key`). A gap attaches to a site by the frame, and to an area by geometry, which Mission Control computes (inferred; Recce knows no areas).
 
@@ -73,7 +73,7 @@ How results flow back today: they do not. RFC-0025 §5 draws a model job that mo
 
 ### 3.1 The example
 
-The kicker case: ETH3D, no pose priors, so the scale is arbitrary. All numbers below are illustrative, not engine output. Only the style of the photo ids (`DSC_6487.JPG`) comes from the PG-M1 mock-up.
+The kicker case: ETH3D, no pose priors, so the scale is arbitrary. All numbers below are illustrative, not engine output. Only the style of the photo ids (`DSC_6487.JPG`) comes from the RC-M1 mock-up.
 
 ```json
 {
@@ -207,8 +207,8 @@ Top level.
 - `gap_list` is the integer schema version. A reader accepts its own and older versions and refuses a newer one, the rule robotics-lab already applies to `manifest.json` (RFC-0025 §5.1). Fields are only added within a version; a reader ignores fields and `kind` values it does not know.
 - `id` is content-addressed from the reconstruction, the ruleset and the thresholds. The same input gives the same id and the same list, as `provenance.json` promises.
 - `capture_set` echoes the manifest: `id`, `manifest` version, `sha256`, the source `run_id`, an optional `site` (proposal, section 6) and `targets`, the gap ids this capture set was taken for.
-- `reconstruction` names the strategy, recipe, engine version and the `provenance.json` it belongs to. Two strategies on one capture are two reconstructions and two gap lists (the PG-M1 mock-up shows GLOMAP and incremental side by side); a gap never moves between them.
-- `ruleset` names the thresholds that produced the list (`gaps-1`: 15 degrees median angle, 3 photos, and so on; the values are placeholders until PG-P3 measures them (inferred)).
+- `reconstruction` names the strategy, recipe, engine version and the `provenance.json` it belongs to. Two strategies on one capture are two reconstructions and two gap lists (the RC-M1 mock-up shows GLOMAP and incremental side by side); a gap never moves between them.
+- `ruleset` names the thresholds that produced the list (`gaps-1`: 15 degrees median angle, 3 photos, and so on; the values are placeholders until RC-P3 measures them (inferred)).
 - `purpose`, `rankings`, `complete_for`: the list is ranked for all four purposes at once, so a consumer picks without a second call. `complete_for` is true when no gap of level major or above remains open for that purpose.
 - `pose_convention` states how a pose is read. It follows the manifest field proposed in [capture-set amendments](capture-set-amendments.md) §3.
 
@@ -217,7 +217,7 @@ Top level.
 - `name` and `id`: the id changes whenever the frame's definition changes. A consumer compares it with its own frame identity before using a position.
 - `axes`: `up` is `"+z"` when the frame is gravity-aligned and `null` when it is not (a pure structure-from-motion frame has no known up).
 - `units`: `"m"` or `"model"`.
-- `scale_state`: `metric`, `metric-from-priors`, `scaled-by-markers` or `arbitrary` ([architecture sketch](../concept/PG-architecture-sketch.md) §2).
+- `scale_state`: `metric`, `metric-from-priors`, `scaled-by-markers` or `arbitrary` ([architecture sketch](../concept/RC-architecture-sketch.md) §2).
 - `placement`: whether the frame is registered to a named external frame. `status` is `exact` (priors with `source: truth`), `estimated` (priors with `source: belief`, with `residual_rms_m`, `priors_used`, `priors_rejected`) or `none`.
 
 Each gap.
@@ -321,7 +321,7 @@ Notes on each.
 5. **Transform and plan.** The planner transforms into its goal frame: none when the frame ids match, else its own transform for that run, which Mission Control knows from the dock pose (`start_pose`, `dock_pose`: `CONTRACT.md`). It subtracts the camera mount to get a base pose (RFC-0025 §5), picks a reachable point inside `acceptance`, checks its map and guardrails, then creates a goal: today `point {x, y, frame}`, with no heading (robotics-lab answer a; RFC-0025's yaw line is stale), and `capture_view` once it exists. An agent's run goes to the simulator first (`target: sim`), and a real run needs the operator, so a gap list is rehearsed in Gazebo before it moves a real robot (RFC-0014 §3.4.2, `mcp_server.py`).
 6. **Claim.** The planner calls `mark_gap_planned(ids, plan_ref="mc:goal-run/123")`.
 7. **Execute and record.** The robot reaches the stand pose, takes the burst (`hints.photos`, `hints.baseline_deg`) with locked settings, and the model job writes a new capture set with `targets: [{"gap":"gap-0001","viewpoint":"vp-0001a","goal_run":123}]` and the same `site` and `frame` identity.
-8. **Re-run and report.** Recce ingests the set into the same project and sets the targeted gaps to `captured`. The cached stages are reused, so only what the new photos touch re-runs ([architecture sketch](../concept/PG-architecture-sketch.md) §3). It computes a new gap list with matched ids and a diff. The diff reports, per gap: `closed`, `still_open` with the evidence delta (for example median angle 6.1 to 11.8 degrees against 15 needed, so "one more photo from the far side"), `new` gaps the extra photos exposed, `regressed` gaps, and a `targets_report` per target: which new photos registered, `viewpoint_hit` (`position_error`, `look_at_error_deg` against the tolerance), and a `miss_reason` (`photo_not_joined`, `outside_tolerance`, `blurred`, `wrong_region`). The `targets_report` is the feedback for planning: a consistent 0.3 m stand-off error tells the planner that its mount or localisation has a bias.
+8. **Re-run and report.** Recce ingests the set into the same project and sets the targeted gaps to `captured`. The cached stages are reused, so only what the new photos touch re-runs ([architecture sketch](../concept/RC-architecture-sketch.md) §3). It computes a new gap list with matched ids and a diff. The diff reports, per gap: `closed`, `still_open` with the evidence delta (for example median angle 6.1 to 11.8 degrees against 15 needed, so "one more photo from the far side"), `new` gaps the extra photos exposed, `regressed` gaps, and a `targets_report` per target: which new photos registered, `viewpoint_hit` (`position_error`, `look_at_error_deg` against the tolerance), and a `miss_reason` (`photo_not_joined`, `outside_tolerance`, `blurred`, `wrong_region`). The `targets_report` is the feedback for planning: a consistent 0.3 m stand-off error tells the planner that its mount or localisation has a bias.
 9. **Notify.** `gap-diff-ready` on the event stream and the resource update. The planner reads `get_gap_diff`, updates its plan, and repeats until `complete_for[purpose]` is true or the operator dismisses what is left.
 
 ## 6. Changes needed
@@ -330,12 +330,12 @@ All proposals. Neither project writes into the other's repository; robotics-lab 
 
 Recce.
 
-- Gap computation as a stage that writes `gaps.json`, with the PG-P3 quality state as its input. Thresholds are data in the ruleset.
-- A `placement` result in the reconstruction's frame (fit of the priors to the reconstruction, residual, rejected priors) so `frame.placement` exists. This sits on PG-P9.
+- Gap computation as a stage that writes `gaps.json`, with the RC-P3 quality state as its input. Thresholds are data in the ruleset.
+- A `placement` result in the reconstruction's frame (fit of the priors to the reconstruction, residual, rejected priors) so `frame.placement` exists. This sits on RC-P9.
 - Gap lineage and status in the metadata store (open question 3 of the sketch).
 - The verbs of section 4 on the three faces, one implementation behind them.
 - The manifest reader accepts `site`, `frame`, `targets`, and writes them back into `gaps.json`.
-- Fixtures: the PG-P9 Blender room with exact poses (expected: planar viewpoints usable), the kicker (expected: nothing usable, `no_scale` present), and one capture set with deliberately wrong priors (expected: `no_scale` critical for robots).
+- Fixtures: the RC-P9 Blender room with exact poses (expected: planar viewpoints usable), the kicker (expected: nothing usable, `no_scale` present), and one capture set with deliberately wrong priors (expected: `no_scale` critical for robots).
 - Image scope for landmark photos; gap lists never embed pixels. Home scans hold faces and documents, and the lists reveal room layout, so the retention rules of the sketch's §8 apply to gap lists too.
 
 Robotics-lab (amendments to RFC-0025 §5.1, proposed).
@@ -358,8 +358,8 @@ Robotics-lab (amendments to RFC-0025 §5.1, proposed).
 
 ## 8. Open questions
 
-1. Gap matching across re-runs. Region overlap works while the frame is stable; after a re-solve in which the frame moves, matching can split or merge gaps. The rule needs evidence from PG-P1 runs of the same set with added photos.
-2. Gap thresholds and severity formulas (the 15 degrees and 3 photos are placeholders). PG-P3 sets them against ground truth; the `ruleset` field exists so changing them is visible.
+1. Gap matching across re-runs. Region overlap works while the frame is stable; after a re-solve in which the frame moves, matching can split or merge gaps. The rule needs evidence from RC-P1 runs of the same set with added photos.
+2. Gap thresholds and severity formulas (the 15 degrees and 3 photos are placeholders). RC-P3 sets them against ground truth; the `ruleset` field exists so changing them is visible.
 3. Actor profile format: Recce's own, or robotics-lab's robot file (VDA factsheet names, RFC-0014 §3.3.1) extended? One format would avoid a translation layer.
 4. MCP transport. *Answered by robotics-lab (d):* Recce's HTTP API on the tailnet with tokens, and a stdio MCP server on the agent's machine as its client.
 5. Whether the claim lease should be shorter for a robot than for a human, and whether Recce ever stops offering a gap a robot repeatedly missed (`attempts` is recorded; the policy is not).

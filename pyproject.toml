@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "recon"
 version = "0.0.0"
-description = "Open-source photogrammetry reconstruction engine."
+description = "Recce: open-source photogrammetry reconstruction engine."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
@@ -14,7 +14,7 @@ authors = [{ name = "Marko Mrdjenovic" }]
 dependencies = []
 
 [project.urls]
-Repository = "https://github.com/chipi/photogrammetry"
+Repository = "https://github.com/chipi/recce"
 
 [dependency-groups]
 dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.6"]

@@ -1,7 +1,7 @@
 # Public datasets
 
 Until the owner shoots their own sets, development and the Step 0 prototypes
-([PG-brief §5](../concept/PG-brief.md)) run on public datasets. This page lists which exist, what ground truth
+([RC-brief §5](../concept/RC-brief.md)) run on public datasets. This page lists which exist, what ground truth
 each carries, what the licence lets the project do, and which prototype each fits. The question it answers: which
 sets can we reuse easily, and which carry a wall.
 
@@ -222,7 +222,7 @@ wreck sets on Sketchfab. [U] The Eiffel Tower deep-sea set was not found.
 
 | Need | Dataset | Licence | Why |
 |---|---|---|---|
-| PG-P1 baseline registration (GLOMAP vs COLMAP) | ETH3D high-res training scenes (JPG, 4.7 GB) | CC BY-NC-SA 4.0 | GT poses and laser scans, no registration, direct link |
+| RC-P1 baseline registration (GLOMAP vs COLMAP) | ETH3D high-res training scenes (JPG, 4.7 GB) | CC BY-NC-SA 4.0 | GT poses and laser scans, no registration, direct link |
 | Dense and mesh accuracy vs laser GT; RAW (P7b) | ETH3D scan_eval (1.9 GB) plus NEF set (13.0 GB) | CC BY-NC-SA 4.0 | The only RAW-plus-laser public set found |
 | Splat quality, held-out views | Mip-NeRF 360 (12.5 GB) | unknown (code Apache-2.0) | Standard splat benchmark; no GT, so read the licence before any release |
 | ARKit-style pose priors (P4, P9, P10) | ARKitScenes | Apple custom, non-commercial | Closest analogue to the owner's iPhone capture; gated by licence terms; ScanNet++ is the alternative but needs approval |

@@ -1,7 +1,7 @@
-# PG-P1 — Registration on every machine
+# RC-P1 — Registration on every machine
 
 **Proves:** The registration core end to end on real photos, which machine runs it, and where the
-time goes. See the [brief](../../docs/concept/PG-brief.md) §5.
+time goes. See the [brief](../../docs/concept/RC-brief.md) §5.
 
 **Proven when:** GLOMAP and COLMAP each register at least two ETH3D scenes from the same verified
 matches on the M4 Pro, the X3 and the GB10; each machine × stage cell is pass, fail or CPU
@@ -15,16 +15,16 @@ ETH3D high-resolution multi-view training scenes, DSLR JPEGs with ground-truth c
 (CC BY-NC-SA 4.0, development use). Downloaded and extracted outside git:
 
 ```bash
-mkdir -p ~/.cache/photogrammetry/datasets/eth3d && cd $_
+mkdir -p ~/.cache/recce/datasets/eth3d && cd $_
 curl -LO https://www.eth3d.net/data/multi_view_training_dslr_jpg.7z
-uv run --project <repo>/prototypes/PG-P1-registration python -m py7zr x multi_view_training_dslr_jpg.7z .
+uv run --project <repo>/prototypes/RC-P1-registration python -m py7zr x multi_view_training_dslr_jpg.7z .
 ```
 
 ## Run
 
 ```bash
-cd prototypes/PG-P1-registration
-uv run python run_p1.py ~/.cache/photogrammetry/datasets/eth3d/<scene> ~/.cache/photogrammetry/runs/p1/<machine>/<scene>
+cd prototypes/RC-P1-registration
+uv run python run_p1.py ~/.cache/recce/datasets/eth3d/<scene> ~/.cache/recce/runs/p1/<machine>/<scene>
 ```
 
 The script extracts SIFT features once, matches exhaustively once, then runs COLMAP's incremental
@@ -55,5 +55,5 @@ point, about 47 m from its true place, and the least-squares alignment of camera
 every other camera to fit it. Relative rotations between camera pairs, which need no alignment,
 were close all along (median 0.54° for COLMAP, 0.77° for GLOMAP). Without the unsupported camera,
 the two strategies agree to within a few millimetres on position. GLOMAP's higher reprojection
-error (2.50 px against 1.23 px) is real and not yet explained. The [M1 mock-up](../../mockups/PG-M1-run/)
+error (2.50 px against 1.23 px) is real and not yet explained. The [M1 mock-up](../../mockups/RC-M1-run/)
 shows the unsupported camera and its line to the truth.

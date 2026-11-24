@@ -1,11 +1,11 @@
 # Architecture sketch — the logical shape
 
-*Working sketch for discussion. Input to the Step 0 prototypes and to PG-04 Technical
+*Working sketch for discussion. Input to the Step 0 prototypes and to RC-04 Technical
 Architecture. Written before any prototype exists, so every component here is a hypothesis the
 prototypes test, and every library choice is a candidate, not a decision.*
 
 **Version:** 0.1 · Draft · 2026-11-23
-**Inputs:** [brief](PG-brief.md) · [tools overview](../reference/tools-overview.md) ·
+**Inputs:** [brief](RC-brief.md) · [tools overview](../reference/tools-overview.md) ·
 [primer](../reference/photogrammetry-primer.md) · [hardware](../wip/hardware-and-parallelism.md) ·
 [robotics-lab contract](../wip/robotics-lab-contract.md)
 
@@ -178,7 +178,7 @@ only for Linux x86_64, macOS arm64 and Windows — none for the GB10 (Linux aarc
 wheels are Linux x86_64 only. So the GB10 needs source builds or containers for the core stack.
 (PyTorch, Open3D, rawpy and rerun-sdk ship no macOS x86_64 wheels either, one reason the Intel
 iMac Pro left the design on 2026-11-24.) Whether PyTorch's
-ROCm wheels cover the X3's GPU (gfx1151) is unknown. PG-P1 and PG-P2 turn these expectations into facts.
+ROCm wheels cover the X3's GPU (gfx1151) is unknown. RC-P1 and RC-P2 turn these expectations into facts.
 
 ### Configurability — strategies, recipes, evidence
 
@@ -319,7 +319,7 @@ open question (§10).
 | **HTTP API** | Programs, the iPhone app | Projects, uploads, runs, results, quality; an event stream for progress | Python ASGI service (FastAPI or Litestar), OpenAPI schema, server-sent events |
 | **MCP server** | Agents | Start and steer runs, read quality, compare, recommend captures — over the same engine service | Official MCP Python SDK |
 | **CLI `recon`** | Robots, scripts | The file contract: a capture set in, a model plus `provenance.json` out | Python entry point; no server required |
-| **iPhone capture app** (prototype PG-P11) | The person in the field | Capture with ARKit poses, intrinsics and LiDAR depth; write the shared capture-set format (the robots' format); send straight to the API | Swift, ARKit |
+| **iPhone capture app** (prototype RC-P11) | The person in the field | Capture with ARKit poses, intrinsics and LiDAR depth; write the shared capture-set format (the robots' format); send straight to the API | Swift, ARKit |
 
 The rule from robotics-lab's Observatory carries over: anything a page shows is something a
 command or tool answers, and the reverse. The coordinate frame and scale state appear on every view.
@@ -397,12 +397,12 @@ Recommendations for the prototypes to confirm, not locked decisions.
 - **Coordinator–worker plumbing: our own small pull-based protocol.** Workers register
   capabilities and pull leased tasks over HTTP; heartbeats and retries; data by hash. Placement
   (capabilities, GPU availability, cost, data gravity, may-leave-home) is the differentiator and no
-  framework's scheduler knows those concepts. PG-P7 builds the minimum; if it outgrows a small
+  framework's scheduler knows those concepts. RC-P7 builds the minimum; if it outgrows a small
   module, Ray is reconsidered on that evidence.
 - **One three.js scene for the product UI.** Cameras, points (LOD streaming for large clouds),
   meshes and splats (a three.js splat renderer; Spark the candidate) in one scene, so overlays,
   picking and measurement work once. A Rerun export as the engineering inspection view and the
-  bridge to robotics-lab. PG-P6 proves splat/mesh mixing and iPhone performance.
+  bridge to robotics-lab. RC-P6 proves splat/mesh mixing and iPhone performance.
 - **Capture advice, layered.** Regions in the model's frame with measured deficits are the stored
   fact; image ids are their evidence; viewpoints are derived on request per actor (person, robot,
   drone) and only when the scale is metric. MVP: regions + image evidence. v1: viewpoints,
@@ -412,10 +412,10 @@ Recommendations for the prototypes to confirm, not locked decisions.
   PSNR/SSIM as a quality metric. Brush on the laptop alone. Out of MVP: splat editing,
   mesh-from-splat, underwater splats, splat LOD/tiles.
 
-## 10. Open questions (feed PG-04 and the prototypes)
+## 10. Open questions (feed RC-04 and the prototypes)
 
 1. Engine language beyond the first version: Python throughout, or Rust for the coordinator and
-   worker agent? Closes on PG-P1, PG-P2 and PG-P7 evidence.
+   worker agent? Closes on RC-P1, RC-P2 and RC-P7 evidence.
 2. Artifact store: plain content-addressed files on the X3, an object store, or both? The
    retention classes and cache rules are settled (§8, *Storage and retention*); the backing store
    and the exact cache caps are open.
@@ -425,10 +425,10 @@ Recommendations for the prototypes to confirm, not locked decisions.
 5. Partitioning large registrations: how the view graph is cut into clusters, solved on
    different machines and merged through shared images, and whether GLOMAP's global approach
    changes the answer.
-6. Which stages actually run on Metal and ROCm today, and which fall back to CPU (PG-P1, PG-P2).
+6. Which stages actually run on Metal and ROCm today, and which fall back to CPU (RC-P1, RC-P2).
 7. Texturing: which permissive implementation is good enough, or whether texturing is built.
 8. Refraction: adopt Refractive COLMAP (New BSD; a separate C++ build without Python bindings, not merged upstream) or implement a refractive camera model.
-9. The develop step: own pipeline or darktable (PG-P5).
+9. The develop step: own pipeline or darktable (RC-P5).
 10. The UI's 3D stack — leaning: one three.js scene (section 9). Open: which splat renderer, and
     the LOD format for large clouds.
 11. Capture advice — leaning: layered (section 9). Open: how a viewpoint is computed
@@ -437,7 +437,7 @@ Recommendations for the prototypes to confirm, not locked decisions.
     Terraform or OpenTofu, and how data reaches them — from home over the uplink, or staged in
     object storage near them.
 13. When renting pays: the job size and stage mix where a rented GPU beats the homelab after
-    upload time and cost — a number PG-P7 can measure with one rented worker.
+    upload time and cost — a number RC-P7 can measure with one rented worker.
 14. Recipe selection: which evidence drives the proposal (EXIF/XMP, image count, sequence,
     priors, a tagged capture type), and how confident it must be before choosing without asking.
 15. The benchmark set: which captures, how reference dimensions are measured, which metrics gate a

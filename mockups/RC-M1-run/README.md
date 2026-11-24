@@ -1,4 +1,4 @@
-# PG-M1 — The run (with the M0 frame, and first passes at M2 and M3)
+# RC-M1 — The run (with the M0 frame, and first passes at M2 and M3)
 
 **Shows:** one page with three modes over the same real data.
 
@@ -24,17 +24,17 @@ direction.
 
 ## Data
 
-Real output from [PG-P1](../../prototypes/PG-P1-registration/) on ETH3D *kicker* (CC BY-NC-SA 4.0,
+Real output from [RC-P1](../../prototypes/RC-P1-registration/) on ETH3D *kicker* (CC BY-NC-SA 4.0,
 development use), both strategies. Nothing from the dataset is committed: `export_run.py` writes
 `data/run.json` and `data/thumbs/` (ignored by git) from the local run.
 
 | Shown | Status |
 |---|---|
-| Cameras, poses, focal lengths, points, point colours, tracks | Real (PG-P1) |
+| Cameras, poses, focal lengths, points, point colours, tracks | Real (RC-P1) |
 | Ground truth positions | Real (ETH3D), aligned on the cameras that hold points |
-| Registration order | **Derived** from the final model (best pair, then most shared points); PG-P1 does not log the mapper's real order yet |
+| Registration order | **Derived** from the final model (best pair, then most shared points); RC-P1 does not log the mapper's real order yet |
 | Biggest additions on the timeline | Derived from the order above |
-| What the solver believed at each step (idea 11) | Not shown; needs PG-P1 to log iterations |
+| What the solver believed at each step (idea 11) | Not shown; needs RC-P1 to log iterations |
 | Light and shadow, crisp and soft | Real: track length and the widest angle between a point's rays, computed by `export_run.py` |
 | Gaps and their coverage rings | Computed in the page from the real points: 0.9-unit cells; thin angle where the median ray angle is under 8°, few photos where over half the points have two views; at most two of each, 2 units apart |
 | Photo that did not join, missing scale | Real (from the registration and the absence of priors or markers) |
@@ -48,11 +48,11 @@ development use), both strategies. Nothing from the dataset is committed: `expor
 ## Run
 
 ```bash
-cd prototypes/PG-P1-registration
-uv run python ../../mockups/PG-M1-run/export_run.py \
-  ~/.cache/photogrammetry/datasets/eth3d/kicker ~/.cache/photogrammetry/runs/p1/x3/kicker \
-  ../../mockups/PG-M1-run/data
-cd ../../mockups/PG-M1-run && python3 -m http.server 8793 --bind 127.0.0.1
+cd prototypes/RC-P1-registration
+uv run python ../../mockups/RC-M1-run/export_run.py \
+  ~/.cache/recce/datasets/eth3d/kicker ~/.cache/recce/runs/p1/x3/kicker \
+  ../../mockups/RC-M1-run/data
+cd ../../mockups/RC-M1-run && python3 -m http.server 8793 --bind 127.0.0.1
 ```
 
 Open <http://127.0.0.1:8793/>. three.js loads from jsDelivr. A view is a link:
@@ -63,10 +63,10 @@ Keys: space play, ← → step, G ground truth, T threads, ⌘K or Ctrl+K comman
 ## What it already showed
 
 Switching to GLOMAP with the ground truth on revealed a camera posed with no 3D point, about 47 m
-from its true place; that camera had distorted PG-P1's first scoring
-([PG-P1 results](../../prototypes/PG-P1-registration/README.md#results)). The mock-up flags such
+from its true place; that camera had distorted RC-P1's first scoring
+([RC-P1 results](../../prototypes/RC-P1-registration/README.md#results)). The mock-up flags such
 a camera in the top bar and the inspector.
 
 ## Verdict
 
-*Pending the owner's review:* per concept, kept, changed or dropped, with the reason.
+**Kept, all concepts shown (owner, 2026-11-24):** the style ("I really like the style"), every concept in the three modes ("we really love everything"), and the gap list with site map and cards ("exactly what I wanted"). Phase 2 polishes the direction; the typeface (Inter, flagged as overused) is decided there.

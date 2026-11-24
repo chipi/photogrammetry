@@ -2,8 +2,8 @@
 
 Working note. The capture-set format in robotics-lab's RFC-0025 §5.1 (summarised in
 [robotics-lab contract](robotics-lab-contract.md)) was written for a robot's camera. This project's
-own iPhone capture app (PG-P11) and its ingest need a few additions. They are proposed here, and
-sent to the robotics-lab project once PG-P1 has shown what the ingest actually needs. All are
+own iPhone capture app (RC-P11) and its ingest need a few additions. They are proposed here, and
+sent to the robotics-lab project once RC-P1 has shown what the ingest actually needs. All are
 additive: a reader of the current version keeps working on sets that do not use them.
 
 **Status:** draft, not yet sent.

@@ -1,9 +1,9 @@
 # First use cases — a thought experiment
 
 *Working document. The owner's first real scans, walked through the
-[architecture sketch](PG-architecture-sketch.md) one by one, as a conceptual proof: does the shape
-hold, what breaks, which options and recipes each case needs. Input to the prototypes, to PG-02 and
-to PG-04.*
+[architecture sketch](RC-architecture-sketch.md) one by one, as a conceptual proof: does the shape
+hold, what breaks, which options and recipes each case needs. Input to the prototypes, to RC-02 and
+to RC-04.*
 
 **Version:** 0.1 · Draft · 2026-11-23
 
@@ -64,7 +64,7 @@ others describe only what differs.
 | Main camera, 48 MP sensor; the Camera app saves 24 MP HEIF by default, 48 MP only in HEIF Max, JPEG Max or RAW Max at 1× (verified 2026-11-24) | HEIC or JPEG, or ProRAW DNG | Web upload, or AirDrop to the laptop then upload |
 | EXIF | Focal length, lens id, exposure, GPS | Read at ingest |
 | Lens switching | The Camera app switches to the ultra-wide for close subjects (macro); it can be turned off with the Auto Macro button or Settings > Camera > Macro Control (verified 2026-11-24) | EXIF lens id per image — the engine groups images by lens and calibrates each separately |
-| LiDAR depth | Low-resolution metric depth | **Not in plain Camera photos.** Only through a capture app (Record3D, Polycam, Scaniverse) or our own capture app (PG-P11) |
+| LiDAR depth | Low-resolution metric depth | **Not in plain Camera photos.** Only through a capture app (Record3D, Polycam, Scaniverse) or our own capture app (RC-P11) |
 | ARKit camera poses | Metric camera positions, gravity | Same: only through a capture app's export |
 | Portrait-mode depth | A depth map embedded in the HEIC *(to verify)* | Possible at ingest, but portrait mode is not a capture mode for photogrammetry |
 
@@ -83,7 +83,7 @@ in as a folder: images, intrinsics, poses, depth.
 **3. Recipe.** Evidence: one device, 60–150 images, not sequential, no GPS worth trusting
 indoors, the owner tagged "object". The engine proposes `object-walkaround`: retrieval-plus-
 exhaustive pair selection (small set, so exhaustive is affordable), incremental COLMAP or GLOMAP
-(PG-P1 decides the default), automatic background mask. With a capture-app export, it proposes
+(RC-P1 decides the default), automatic background mask. With a capture-app export, it proposes
 `object-walkaround+priors`: ARKit poses as priors, LiDAR depth as a dense-stage prior.
 
 **4. Registration.** Shoes register cleanly. The book's covers alone would be near-degenerate;
@@ -143,7 +143,7 @@ time-lapse; GPMF gravity as "up".
 **Differs from A1:**
 - **Files.** NEF and ARW RAW, 45.7 MP and 50.1 MP, tens of MB each — 150 photos is several GB.
   LibRaw lists both cameras; whether the A1's compressed ARW variants decode correctly in rawpy is
-  unverified (PG-P5).
+  unverified (RC-P5).
 - **Develop.** This is the case the develop stage exists for: one white balance and one exposure
   across the set, a neutral tone curve, no per-photo look. Without it the texture shows seams.
 - **Resolution pyramid.** Matching at full 45–50 MP is slow and unnecessary; the engine extracts
@@ -263,7 +263,7 @@ advice.
 - The mesh of the spokes is expected to fail; the frame and wheels' rims work. The splat renders
   the spokes acceptably *(expected, not verified)*.
 
-**Verdict.** The stress test PG-P1's order puts last for a reason. **Options:** strong masking;
+**Verdict.** The stress test RC-P1's order puts last for a reason. **Options:** strong masking;
 turntable recipe; thin-structure handling is a later research item (mesh from splats).
 
 ---
@@ -329,12 +329,12 @@ turntable recipe; thin-structure handling is a later research item (mesh from sp
 
 | Case | Proven by |
 |---|---|
-| UC-A1 shoes, book | PG-P1 (baseline), PG-P8 (learned vs classical, with and without ARKit priors) |
-| UC-A1 Lego, camera | PG-P1 extended; PG-P6 (splat vs mesh in the viewer) |
-| UC-A2 | PG-P1 (fisheye model on every machine) |
-| UC-A3, UC-A4 | PG-P5 (RAW develop), PG-P7 (distribution over large images) |
-| UC-B1 | PG-P8 (priors), plus **PG-P10 — a room from inside** (TSDF from LiDAR, plain walls, components) |
-| UC-B2–B4 | PG-P10 |
+| UC-A1 shoes, book | RC-P1 (baseline), RC-P8 (learned vs classical, with and without ARKit priors) |
+| UC-A1 Lego, camera | RC-P1 extended; RC-P6 (splat vs mesh in the viewer) |
+| UC-A2 | RC-P1 (fisheye model on every machine) |
+| UC-A3, UC-A4 | RC-P5 (RAW develop), RC-P7 (distribution over large images) |
+| UC-B1 | RC-P8 (priors), plus **RC-P10 — a room from inside** (TSDF from LiDAR, plain walls, components) |
+| UC-B2–B4 | RC-P10 |
 | UC-C1, D1, E1 | After Step 0 — the first real tests of the v1 recipes |
 
 ## 9. The owner's kit and answers (2026-11-23)
@@ -351,4 +351,4 @@ turntable recipe; thin-structure handling is a later research item (mesh from sp
 - **Markers and scale bars:** acceptable in the first tests. A printed AprilTag board is the
   default scale and "up" source for object captures.
 - **iPhone pose-and-depth route:** the owner is ready to build an internal iPhone capture app now
-  rather than depend on a third-party app. See PG-P11 in the [brief](PG-brief.md).
+  rather than depend on a third-party app. See RC-P11 in the [brief](RC-brief.md).

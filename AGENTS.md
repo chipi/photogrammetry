@@ -1,29 +1,29 @@
-# AGENTS.md: photogrammetry
+# AGENTS.md: Recce
 
 Canonical, tool-agnostic instructions for any coding agent working in this repository. `CLAUDE.md` points here. This file layers on top of the owner's global agent rules, which live outside the repository and are loaded by the agent's own tooling; it never contradicts them.
 
 ## What this project is
 
-An open-source reconstruction engine that turns photographs into 3D models (camera poses, point clouds, meshes, gaussian splats) and reports what it knows and what it does not: scale, frame, coverage and uncertainty. Read [README.md](README.md) and [docs/concept/PG-brief.md](docs/concept/PG-brief.md) first. The project is in its concept phase; prototypes and code start next. "photogrammetry" is a working name.
+An open-source reconstruction engine that turns photographs into 3D models (camera poses, point clouds, meshes, gaussian splats) and reports what it knows and what it does not: scale, frame, coverage and uncertainty. Read [README.md](README.md) and [docs/concept/RC-brief.md](docs/concept/RC-brief.md) first. The project is Recce, in its concept phase: prototypes (the technology) and mock-ups (the product) run side by side. Domain terms come first; see "Terminology" in the brief.
 
 ## Repository layout
 
 | Path | Holds |
 |---|---|
-| `docs/concept/` | Concept package PG-00..PG-05, narrative docs |
+| `docs/concept/` | Concept package RC-00..RC-05, narrative docs |
 | `docs/reference/` | Standing reference: primer, tools, datasets, product analysis |
 | `docs/wip/` | Dated research, reviews and drafts; may be superseded |
 | `docs/LICENSING.md` | The licensing boundary rules |
 | `src/recon/` | The engine package (`recon`) |
 | `tests/` | Tests for `src/recon` |
-| `prototypes/PG-P<n>-<slug>/` | Step 0 prototypes, one folder each |
-| `mockups/PG-M<n>-<slug>/` | Step 0 UX mock-ups, one folder each ([plan](docs/wip/visual-ideas.md)) |
+| `prototypes/RC-P<n>-<slug>/` | Step 0 prototypes, one folder each |
+| `mockups/RC-M<n>-<slug>/` | Step 0 UX mock-ups, one folder each ([plan](docs/wip/visual-ideas.md)) |
 | `scripts/` | Repo tooling, such as `check_docs.sh` |
 | `apps/ios/`, `infra/` | Later; not created yet |
 
 ## Doc system
 
-- The concept package PG-00..PG-05 is narrative prose in `docs/concept/`.
+- The concept package RC-00..RC-05 is narrative prose in `docs/concept/`.
 - Formal artifacts come later: `docs/prd`, `docs/rfc`, `docs/adr`, `docs/uxs`, with reference docs PA, IA and TA.
 - Each PRD has a "Why this is a PRD" sentence.
 - Each RFC has "Why this is an RFC", "Alternatives considered" and "Closing evidence".
@@ -34,6 +34,8 @@ An open-source reconstruction engine that turns photographs into 3D models (came
 ## Voice rules
 
 Present tense, declarative, specific. Do not write "the user shall", "in order to", "it is worth noting" or "at this point in time". No emoji. `scripts/check_docs.sh` checks the banned phrases.
+
+Terminology: standard domain terms first (capture set, reconstruction, quality report, gap list). The mission words *sortie* and *debrief* appear only beside the standard term, never instead of it; no other military vocabulary. The rule is in the brief, "Name and terminology".
 
 ## Commit convention
 
@@ -57,7 +59,7 @@ Summary of [docs/LICENSING.md](docs/LICENSING.md); the file is authoritative.
 
 ## Data rules
 
-Datasets and captures live in a local cache outside git. The path comes from the environment variable `PG_DATA_DIR`, default `~/.cache/photogrammetry`. `.gitignore` blocks the common data and RAW extensions, and `make docs-check` fails if git tracks any.
+Datasets and captures live in a local cache outside git. The path comes from the environment variable `RECCE_DATA_DIR`, default `~/.cache/recce`. `.gitignore` blocks the common data and RAW extensions, and `make docs-check` fails if git tracks any.
 
 ## Python rules
 

@@ -1,4 +1,4 @@
-"""PG-P1: register one ETH3D scene with COLMAP (incremental) and GLOMAP (global) from the
+"""RC-P1: register one ETH3D scene with COLMAP (incremental) and GLOMAP (global) from the
 same verified matches, and measure both against ETH3D's ground-truth poses."""
 
 import argparse

@@ -2,7 +2,7 @@
 .PHONY: help setup lint format test docs docs-serve docs-check check clean
 
 help:
-	@echo "photogrammetry development targets:"
+	@echo "Recce development targets:"
 	@echo ""
 	@echo "  make setup        uv sync --all-groups (creates .venv)"
 	@echo "  make lint         ruff check + ruff format --check"

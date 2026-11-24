@@ -1,9 +1,9 @@
-# Working name: change site_name (and repo_name if the repo is renamed) here only.
-site_name: photogrammetry
-site_description: Open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.
-site_url: https://chipi.github.io/photogrammetry/
-repo_url: https://github.com/chipi/photogrammetry
-repo_name: chipi/photogrammetry
+# The site name lives here only.
+site_name: Recce
+site_description: Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.
+site_url: https://chipi.github.io/recce/
+repo_url: https://github.com/chipi/recce
+repo_name: chipi/recce
 edit_uri: edit/main/docs/
 copyright: MIT, Marko Mrdjenovic and contributors
 docs_dir: docs
@@ -58,9 +58,9 @@ nav:
   - Home: index.md
   - Concept:
       - concept/index.md
-      - Brief: concept/PG-brief.md
-      - Architecture sketch: concept/PG-architecture-sketch.md
-      - Use cases: concept/PG-use-cases.md
+      - Brief: concept/RC-brief.md
+      - Architecture sketch: concept/RC-architecture-sketch.md
+      - Use cases: concept/RC-use-cases.md
   - Reference:
       - reference/index.md
       - Photogrammetry primer: reference/photogrammetry-primer.md

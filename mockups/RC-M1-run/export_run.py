@@ -1,7 +1,7 @@
-"""Export a PG-P1 run (both strategies) and its photos as the mock-up's data, outside git.
+"""Export a RC-P1 run (both strategies) and its photos as the mock-up's data, outside git.
 
-Usage, from prototypes/PG-P1-registration (its uv project has pycolmap):
-    uv run python ../../mockups/PG-M1-run/export_run.py <scene_dir> <run_dir> <mockup_data_dir>
+Usage, from prototypes/RC-P1-registration (its uv project has pycolmap):
+    uv run python ../../mockups/RC-M1-run/export_run.py <scene_dir> <run_dir> <mockup_data_dir>
 """
 
 import json
