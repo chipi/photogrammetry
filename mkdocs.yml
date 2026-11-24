@@ -71,6 +71,7 @@ nav:
   - Working notes:
       - wip/index.md
       - Hardware and parallelism: wip/hardware-and-parallelism.md
+      - GPU rental for RC-P7: wip/gpu-rental-p7.md
       - Robotics-lab contract: wip/robotics-lab-contract.md
       - Research, landscape: wip/research-landscape-2026-11-23.md
       - Research, Metashape and underwater: wip/research-metashape-underwater-2026-11-23.md
