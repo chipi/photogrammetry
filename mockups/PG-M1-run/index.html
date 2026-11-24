@@ -99,6 +99,40 @@ canvas.spark { width: 100%; height: 54px; display: block; }
 .strip div.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
 .strip div span { position: absolute; left: 4px; bottom: 2px; font: 11px var(--mono); color: #fff; text-shadow: 0 1px 2px #000; }
 
+.app.wide { grid-template-columns: 248px minmax(0,1fr) 392px; }
+.viewsel { position: absolute; right: 16px; top: 14px; z-index: 3; }
+#map { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; background: var(--bg-app); cursor: pointer; }
+.purpose { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 12px; margin-bottom: 8px; background: var(--bg-raised); cursor: pointer; transition: border-color .15s; }
+.card:hover { border-color: var(--border-strong); }
+.card.sel { border-color: var(--new); box-shadow: inset 3px 0 0 var(--new); }
+.card.muted { opacity: .55; }
+.card header { display: flex; align-items: center; gap: 8px; }
+.card .num { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--new); color: #1a1206; font: 600 12px var(--ui); flex: none; }
+.card .num.off { background: transparent; border: 1.5px dashed var(--text-dim); color: var(--text-dim); }
+.card .kind { font: 500 11.5px var(--mono); text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); }
+.card .sev { margin-left: auto; font: 500 11.5px var(--mono); color: var(--new); }
+.card .sev.low { color: var(--text-dim); }
+.card h3 { margin: 8px 0 8px; font-size: 14px; font-weight: 600; line-height: 1.35; }
+.where { display: grid; grid-template-columns: 96px 1fr; gap: 10px; align-items: center; }
+.where .thumb { aspect-ratio: 3/2; border-radius: 5px; background: var(--bg-field) center/cover no-repeat; border: 1px solid var(--border); }
+.where small { display: block; color: var(--text-dim); font-size: 11.5px; }
+.where b { font: 500 12px var(--mono); }
+.where span { display: block; font-size: 12.5px; margin-top: 2px; }
+.facts { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: 52px 1fr; gap: 8px; font-size: 12.5px; line-height: 1.45; }
+.facts li i { font-style: normal; color: var(--text-dim); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; padding-top: 1px; }
+.minirow { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+.minirow svg { width: 64px; height: 64px; flex: none; }
+.minirow .acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.chipbtn { height: 26px; padding: 0 10px; border-radius: 13px; border: 1px solid var(--border-strong); background: var(--bg-field); cursor: pointer; font-size: 12px; }
+.chipbtn:hover { background: var(--bg-hover); }
+.chipbtn.on { border-color: var(--truth); color: var(--truth); }
+.palette .box.wide { width: 760px; }
+.briefhead { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.briefhead .iconbtn { margin-left: auto; }
+#brief-json { margin: 0; padding: 12px 14px; max-height: 56vh; overflow: auto; font: 12px/1.5 var(--mono); color: var(--text); white-space: pre-wrap; scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+.right { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 .ramp { display: flex; align-items: center; gap: 8px; color: var(--text-dim); font-size: 12px; }
 .ramp i { flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #29426e, #6d6f80, #d9c6a4, #fff0d2); }
 .ringwrap { position: relative; width: 184px; height: 184px; margin: 2px auto 10px; }
@@ -112,7 +146,7 @@ canvas.spark { width: 100%; height: 54px; display: block; }
 .faintnote { color: var(--text-dim); font-size: 11.5px; }
 .debrief .byline { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
 .debrief .byline small { display: block; color: var(--text-dim); }
-.avatar { width: 28px; height: 28px; border-radius: 50%; background: conic-gradient(from 120deg, var(--accent), var(--new), var(--truth), var(--accent)); box-shadow: 0 0 0 3px var(--bg-panel), 0 0 18px rgba(124,196,255,.35); }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: conic-gradient(from 120deg, var(--accent), var(--new), var(--truth), var(--accent)); box-shadow: 0 0 0 3px var(--bg-panel); }
 .debrief p.claim { margin: 0 0 12px; line-height: 1.55; font-size: 13.5px; }
 .debrief p.claim b { font-weight: 600; }
 .handle { display: inline-flex; align-items: center; gap: 5px; height: 21px; padding: 0 8px; margin-left: 4px; border-radius: 11px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); font: 500 11.5px var(--ui); cursor: pointer; vertical-align: 1px; }
@@ -207,6 +241,8 @@ canvas.spark { width: 100%; height: 54px; display: block; }
     </div>
     <div class="scalebar"><span class="mono" id="scale-label">1 m</span><div id="scale-bar"></div></div>
     <div id="labels"></div>
+    <canvas id="map" hidden></canvas>
+    <div class="seg viewsel" id="viewsel" hidden><button data-v="3d" aria-pressed="true">3D</button><button data-v="map" aria-pressed="false">Site map</button></div>
   </main>
 
   <aside class="right">
@@ -222,16 +258,13 @@ canvas.spark { width: 100%; height: 54px; display: block; }
         </dl>
       </section>
       <section class="sec">
-        <h2>Weakest region</h2>
-        <div class="ringwrap"><svg id="ring" viewBox="-60 -60 120 120"></svg><div class="ringcap"><b id="w-span">–</b><small>of directions<br>covered</small></div></div>
-        <dl class="kv">
-          <dt>Points</dt><dd id="w-points">–</dd>
-          <dt>Photos that see it</dt><dd id="w-photos">–</dd>
-          <dt>Median angle</dt><dd id="w-angle">–</dd>
-        </dl>
-        <p class="note" id="w-note"></p>
-        <div class="row2"><button class="btn" id="fly-weak">Fly to it</button><button class="btn primary" id="fly-ghost">Show the next shot</button></div>
-        <p class="note faintnote">The suggested shot is a heuristic: the middle of the widest gap in viewing directions, kept inside the area the cameras already walked.</p>
+        <h2>Gaps for the next session <span id="g-count" style="text-transform:none;letter-spacing:0"></span></h2>
+        <div class="purpose"><span class="dim">Plan for</span>
+          <div class="seg" id="purpose"><button data-p="web" aria-pressed="true">Web viewing</button><button data-p="measure" aria-pressed="false">Measurement</button><button data-p="robot" aria-pressed="false">Robot</button></div>
+        </div>
+        <div id="cards"></div>
+        <div class="row2"><button class="btn" id="print-cards">Print cards</button><button class="btn" id="to-phone">Send to phone</button><button class="btn primary" id="robot-brief">Robot brief</button></div>
+        <p class="note faintnote">Gaps are found in the sparse model: thin angle and few photos by region, photos that did not join, missing scale. Holes in surfaces, blurry photos and missing colour charts need later prototypes. Where to stand is a heuristic; distances use metres from the ground truth here, which a real capture gets only from scale.</p>
       </section>
     </div>
     <div data-panel="debrief" hidden>
@@ -303,6 +336,11 @@ canvas.spark { width: 100%; height: 54px; display: block; }
   <div class="foot">Every command here is also a CLI subcommand, an HTTP route and an MCP tool: one verb list for people and agents.</div>
 </div></div>
 <div class="toast" id="toast"></div>
+<div class="palette" id="brief"><div class="box wide">
+  <div class="briefhead"><b>Robot brief</b><span class="dim">the same gaps as the cards, as data · draft schema</span><button class="iconbtn" id="brief-close">Close</button></div>
+  <pre id="brief-json"></pre>
+  <div class="foot">What a mission planner reads through MCP (<code>recon gaps</code>, <code>gap_brief</code>) or HTTP. Positions are in the reconstruction's frame and units; with an arbitrary scale a planner may use them only after registering the model to its own map.</div>
+</div></div>
 
 <script type="module">
 import * as THREE from "three";
@@ -312,7 +350,7 @@ const $ = (id) => document.getElementById(id);
 const DATA = await (await fetch("data/run.json")).json();
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
-const state = { strategy: "colmap_incremental", timeline: "registration", t: 0, playing: false, speed: 1,
+const state = { purpose: "web", planned: new Set(), view: "3d", gap: -1, strategy: "colmap_incremental", timeline: "registration", t: 0, playing: false, speed: 1,
   layers: { points: true, cameras: true, photos: true, threads: true, truth: false },
   selected: -1, reduceMotion: matchMedia("(prefers-reduced-motion: reduce)").matches, drift: true };
 
@@ -340,10 +378,10 @@ let S, ranks, order, pointsObj, camGroups = [], threadObj, truthObj, groundObj, 
 const pointMat = new THREE.ShaderMaterial({
   transparent: true, depthWrite: false,
   uniforms: { uCut: { value: 1e9 }, uStep: { value: 0 }, uSize: { value: 2.6 }, uPR: { value: renderer.getPixelRatio() }, uNew: { value: new THREE.Color(css("--new")) }, uGlow: { value: 1 },
-    uMode: { value: 0 }, uWeakC: { value: new THREE.Vector3() }, uWeakR: { value: 0 }, uPulse: { value: 0 } },
+    uMode: { value: 0 }, uWeak: { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) }, uSel: { value: -1 }, uPulse: { value: 0 } },
   vertexShader: `
     attribute vec3 aColor; attribute float aAppear, aSupport, aAngle;
-    uniform float uStep, uSize, uPR, uGlow, uCut, uMode, uWeakR, uPulse; uniform vec3 uNew, uWeakC;
+    uniform float uStep, uSize, uPR, uGlow, uCut, uMode, uPulse, uSel; uniform vec3 uNew; uniform vec4 uWeak[4];
     varying vec3 vColor; varying float vAlpha, vSoft;
     void main() {
       float age = uStep - aAppear;
@@ -359,7 +397,12 @@ const pointMat = new THREE.ShaderMaterial({
         vec3 shadow = vec3(0.16, 0.26, 0.48);
         vec3 light = mix(aColor * 1.2 + 0.1, vec3(1.0, 0.9, 0.72), 0.55);
         vColor = mix(shadow, light, 0.12 + 0.88 * lit);
-        float inWeak = 1.0 - smoothstep(uWeakR * 0.8, uWeakR, distance(position, uWeakC));
+        float inWeak = 0.0;
+        for (int i = 0; i < 4; i++) {
+          if (uWeak[i].w <= 0.0) continue;
+          float w = 1.0 - smoothstep(uWeak[i].w * 0.8, uWeak[i].w, distance(position, uWeak[i].xyz));
+          inWeak = max(inWeak, w * (abs(float(i) - uSel) < 0.5 ? 1.0 : 0.55));
+        }
         vColor = mix(vColor, uNew, inWeak * (0.35 + 0.35 * uPulse));
         vSoft = 1.0 - sure;
         size = mix(0.9, 2.4, vSoft);
@@ -608,11 +651,11 @@ function setCut(f) {
   pointMat.uniforms.uCut.value = f >= 0.999 ? 1e9 : ys[Math.floor(f * (ys.length - 1))];
   $("cut-label").textContent = f >= 0.999 ? "nothing" : `top ${Math.round((1 - f) * 100)}% of points`;
 }
-$("cut").oninput = (e) => setCut(+e.target.value);
+$("cut").oninput = (e) => { setCut(+e.target.value); mapDirty = true; };
 $("motion").onclick = () => { state.reduceMotion = !state.reduceMotion; $("motion-state").textContent = state.reduceMotion ? "on" : "off"; };
 $("orbit").onclick = () => { state.drift = !state.drift; $("orbit-state").textContent = state.drift ? "on" : "off"; };
 $("motion-state").textContent = state.reduceMotion ? "on" : "off";
-$("theme").onclick = () => { const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light"; drawSpark(); };
+$("theme").onclick = () => { const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light"; drawSpark(); mapDirty = true; };
 function setPlayIcon() { $("play-icon").innerHTML = state.playing ? '<path d="M2 1h3v10H2zM7 1h3v10H7z" fill="currentColor"/>' : '<path d="M2 1l9 5-9 5z" fill="currentColor"/>'; }
 function togglePlay() { if (!state.playing && state.t >= S.cameras.length - 0.01) state.t = 0; state.playing = !state.playing; setPlayIcon(); }
 $("play").onclick = togglePlay;
@@ -724,6 +767,7 @@ function frame() {
   controls.update();
   renderer.render(scene, camera);
   drawLabels();
+  if (state.mode === "coverage" && state.view === "map") drawMap();
 
   if (state.mode !== "run" && lastK !== -2) {
     lastK = -2;
@@ -765,105 +809,200 @@ function frame() {
 const median = (a) => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
 const V = (a) => new THREE.Vector3(...a);
 let A = null, ghostObj = null;
+const col = (c, j) => new THREE.Vector3(c.rotation[0][j], c.rotation[1][j], c.rotation[2][j]);
+const KIND = { thin: "Thin angle", few: "Few photos", nojoin: "Did not join", scale: "No scale" };
+
+// One region: which directions saw it, where the widest gap in them is, and where to stand.
+function regionDetail(idx, kind) {
+  const pts = S.points, cams = S.cameras;
+  const centre = new THREE.Vector3();
+  idx.forEach((i) => centre.add(V(pts[i].p)));
+  centre.divideScalar(idx.length);
+  const radius = Math.max(0.45, median(idx.map((i) => V(pts[i].p).distanceTo(centre))) * 1.6);
+  const bins = new Array(36).fill(0), seers = new Map(), dists = [];
+  idx.forEach((i) => pts[i].t.forEach((c) => seers.set(c, (seers.get(c) || 0) + 1)));
+  for (const [c, w] of seers) {
+    const d = V(cams[c].center).sub(centre);
+    dists.push(Math.hypot(d.x, d.z));
+    bins[Math.floor(((Math.atan2(d.z, d.x) + Math.PI) / (2 * Math.PI)) * 36) % 36] += w;
+  }
+  let gap = { len: 0, start: 0 };
+  for (let s = 0; s < 36; s++) {
+    if (bins[s]) continue;
+    let len = 0; while (len < 36 && !bins[(s + len) % 36]) len++;
+    if (len > gap.len) gap = { len, start: s };
+  }
+  const covered = bins.filter((b) => b > 0).length;
+  const mid = gap.len ? gap.start + gap.len / 2 : bins.indexOf(Math.min(...bins)) + 0.5;
+  const az = (mid / 36) * 2 * Math.PI - Math.PI;
+  // Stay where people already walked: inside the footprint of the cameras, slightly widened.
+  const tied = cams.filter((c) => c.points > 0), xs = tied.map((c) => c.center[0]), zs = tied.map((c) => c.center[2]);
+  const inside = (p) => p.x > Math.min(...xs) - 0.3 && p.x < Math.max(...xs) + 0.3 && p.z > Math.min(...zs) - 0.3 && p.z < Math.max(...zs) + 0.3;
+  const ghost = new THREE.Vector3();
+  for (let dist = median(dists) || 2; dist > 0.4; dist *= 0.85) {
+    ghost.set(centre.x + Math.cos(az) * dist, median(cams.map((c) => c.center[1])), centre.z + Math.sin(az) * dist);
+    if (inside(ghost)) break;
+  }
+  // Landmark: the nearest photo already taken, and the way from it to the new spot.
+  let lm = -1, best = Infinity;
+  cams.forEach((c, i) => { if (c.points > 0) { const d = V(c.center).distanceTo(ghost); if (d < best) { best = d; lm = i; } } });
+  const L = cams[lm], diff = ghost.clone().sub(V(L.center)), look = centre.clone().sub(ghost);
+  const right = col(L, 0).setY(0).normalize(), fwd = col(L, 2).setY(0).normalize();
+  const mpu = S.metres_per_unit;
+  const way = { right: diff.dot(right) * mpu, fwd: diff.dot(fwd) * mpu, turn: THREE.MathUtils.radToDeg(Math.atan2(look.dot(right), look.dot(fwd))) };
+  const ang = median(idx.map((i) => pts[i].a)), sup = idx.reduce((s, i) => s + pts[i].t.length, 0) / idx.length;
+  const frac2 = idx.filter((i) => pts[i].t.length <= 2).length / idx.length;
+  return { kind, idx, centre, radius, bins, seers, covered, gap, az, ghost, lm, way, ang, sup, frac2, distM: ghost.distanceTo(centre) * mpu };
+}
 
 function analyse() {
   const pts = S.points, cams = S.cameras;
-  // Weakest region: voxel cells with enough points, ranked by how narrowly and how few photos saw them.
   const cs = 0.9, cells = new Map();
   pts.forEach((p, i) => {
     const key = p.p.map((v) => Math.floor(v / cs)).join(",");
     if (!cells.has(key)) cells.set(key, []);
     cells.get(key).push(i);
   });
-  let weak = null;
+  const cand = [];
   for (const idx of cells.values()) {
-    if (idx.length < 40) continue;
-    const ang = median(idx.map((i) => pts[i].a)), sup = idx.reduce((s, i) => s + pts[i].t.length, 0) / idx.length;
-    const score = ang * Math.sqrt(sup);
-    if (!weak || score < weak.score) weak = { idx, ang, sup, score };
+    if (idx.length < 30) continue;
+    const c = new THREE.Vector3(); idx.forEach((i) => c.add(V(pts[i].p))); c.divideScalar(idx.length);
+    cand.push({ idx, c, ang: median(idx.map((i) => pts[i].a)), sup: idx.reduce((s, i) => s + pts[i].t.length, 0) / idx.length,
+      frac2: idx.filter((i) => pts[i].t.length <= 2).length / idx.length });
   }
-  const centre = new THREE.Vector3();
-  weak.idx.forEach((i) => centre.add(V(pts[i].p)));
-  centre.divideScalar(weak.idx.length);
-  const radius = Math.max(0.5, median(weak.idx.map((i) => V(pts[i].p).distanceTo(centre))) * 1.6);
+  const chosen = [];
+  const pick = (list, n, kind) => {
+    for (const c of list) {
+      if (chosen.filter((x) => x.kind === kind).length >= n) break;
+      if (chosen.every((x) => x.c.distanceTo(c.c) > 2.0)) chosen.push({ ...c, kind });
+    }
+  };
+  pick(cand.filter((c) => c.ang < 8).sort((a, b) => a.ang * Math.sqrt(a.sup) - b.ang * Math.sqrt(b.sup)), 2, "thin");
+  pick(cand.filter((c) => c.frac2 > 0.5).sort((a, b) => b.frac2 - a.frac2), 2, "few");
+  const spatial = chosen.map((c) => regionDetail(c.idx, c.kind));
 
-  // Which directions the region was seen from: 36 bins of azimuth around it, weighted by points.
-  const bins = new Array(36).fill(0), seers = new Map();
-  weak.idx.forEach((i) => pts[i].t.forEach((c) => seers.set(c, (seers.get(c) || 0) + 1)));
-  const dists = [];
-  for (const [c, w] of seers) {
-    const d = V(cams[c].center).sub(centre);
-    dists.push(Math.hypot(d.x, d.z));
-    const b = Math.floor(((Math.atan2(d.z, d.x) + Math.PI) / (2 * Math.PI)) * 36) % 36;
-    bins[b] += w;
-  }
-  let best = { len: 0, start: 0 };
-  for (let s = 0; s < 36; s++) {
-    if (bins[s]) continue;
-    let len = 0; while (len < 36 && !bins[(s + len) % 36]) len++;
-    if (len > best.len) best = { len, start: s };
-  }
-  const covered = bins.filter((b) => b > 0).length;
-  const mid = best.len ? (best.start + best.len / 2) : bins.indexOf(Math.min(...bins)) + 0.5;
-  const az = (mid / 36) * 2 * Math.PI - Math.PI;
-  const camR = Math.max(...cams.map((c) => Math.hypot(c.center[0], c.center[2])));
-  let dist = median(dists) || 2;
-  const ghost = new THREE.Vector3();
-  for (; dist > 0.4; dist *= 0.85) {
-    ghost.set(centre.x + Math.cos(az) * dist, median(cams.map((c) => c.center[1])), centre.z + Math.sin(az) * dist);
-    if (Math.hypot(ghost.x, ghost.z) <= camR * 1.05) break;
-  }
+  const supported = new Set(cams.filter((c) => c.points > 0).map((c) => c.name));
+  const gaps = spatial.map((r) => ({ ...r, severity: r.kind === "thin" ? (r.ang < 5 ? "high" : "medium") : r.frac2 > 0.7 ? "high" : "medium" }));
+  DATA.images.filter((n) => !supported.has(n)).forEach((name) => gaps.push({ kind: "nojoin", name, severity: "high", posed: cams.findIndex((c) => c.name === name) }));
+  gaps.push({ kind: "scale", severity: "medium" });
 
-  // Ghost camera: a dashed frustum looking at the region, pulsing.
+  // Ghost cameras: one dashed frustum per spatial gap, looking at its region.
   if (ghostObj) scene.remove(ghostObj);
-  ghostObj = new THREE.Group();
-  const d = 0.42, hw = d * 0.75, hh = d * 0.5, cn = [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]], lp = [];
-  cn.forEach((q, k) => lp.push(0, 0, 0, ...q, ...q, ...cn[(k + 1) % 4]));
-  const gl = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)),
-    new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.04, gapSize: 0.03, transparent: true }));
-  gl.computeLineDistances();
-  const look = new THREE.Matrix4().lookAt(centre, ghost, new THREE.Vector3(0, 1, 0));
-  const flip = new THREE.Matrix4().makeRotationX(Math.PI);
-  ghostObj.add(gl);
-  ghostObj.matrixAutoUpdate = false;
-  ghostObj.matrix.copy(new THREE.Matrix4().makeTranslation(ghost.x, ghost.y, ghost.z).multiply(look).multiply(flip));
-  const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints([ghost, centre]),
-    new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.08, gapSize: 0.08, transparent: true, opacity: 0.6 }));
-  ray.computeLineDistances();
-  const gWrap = new THREE.Group(); gWrap.add(ghostObj, ray);
-  scene.add(gWrap); ghostObj = gWrap; ghostObj.userData.lines = [gl, ray];
+  ghostObj = new THREE.Group(); ghostObj.userData.lines = [];
+  spatial.forEach((r) => {
+    const d = 0.42, hw = d * 0.75, hh = d * 0.5, cn = [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]], lp = [];
+    cn.forEach((q, k) => lp.push(0, 0, 0, ...q, ...q, ...cn[(k + 1) % 4]));
+    const fr = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)),
+      new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.04, gapSize: 0.03, transparent: true }));
+    fr.computeLineDistances();
+    fr.matrixAutoUpdate = false;
+    fr.matrix.copy(new THREE.Matrix4().makeTranslation(r.ghost.x, r.ghost.y, r.ghost.z)
+      .multiply(new THREE.Matrix4().lookAt(r.centre, r.ghost, new THREE.Vector3(0, 1, 0))).multiply(new THREE.Matrix4().makeRotationX(Math.PI)));
+    const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints([r.ghost, r.centre]),
+      new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.08, gapSize: 0.08, transparent: true, opacity: 0.6 }));
+    ray.computeLineDistances();
+    ghostObj.add(fr, ray); ghostObj.userData.lines.push(fr, ray);
+  });
+  scene.add(ghostObj);
 
-  const two = pts.filter((p) => p.t.length <= 2).length / pts.length;
-  const narrow = pts.filter((p) => p.a < 5).length / pts.length;
+  const w = spatial[0];
   const holders = cams.map((c, i) => ({ i, n: c.points })).sort((a, b) => b.n - a.n);
-  const obs = cams.reduce((s, c) => s + c.points, 0);
-  A = { weak, centre, radius, bins, covered, gap: best, az, ghost, two, narrow, angle: median(pts.map((p) => p.a)), seers, holders, obs };
-  pointMat.uniforms.uWeakC.value.copy(centre);
-  pointMat.uniforms.uWeakR.value = radius;
-  fillCoverage(); fillDebrief();
+  A = { ...w, weak: { idx: w.idx, ang: w.ang }, spatial, gaps,
+    two: pts.filter((p) => p.t.length <= 2).length / pts.length, narrow: pts.filter((p) => p.a < 5).length / pts.length,
+    angle: median(pts.map((p) => p.a)), holders, obs: cams.reduce((s, c) => s + c.points, 0) };
+  pointMat.uniforms.uWeak.value.forEach((v, i) => { const r = spatial[i]; r ? v.set(r.centre.x, r.centre.y, r.centre.z, r.radius) : v.set(0, 0, 0, 0); });
+  state.gap = -1;
+  orderGaps(); fillCoverage(); fillDebrief(); mapDirty = true;
+}
+
+// Priority depends on what the model is for: scale first for measuring and robots, last for the web.
+const RANK = {
+  web: { nojoin: 0, thin: 1, few: 2, scale: 9 },
+  measure: { scale: 0, nojoin: 1, thin: 2, few: 3 },
+  robot: { scale: 0, nojoin: 1, few: 2, thin: 3 },
+};
+function orderGaps() {
+  const r = RANK[state.purpose];
+  A.gaps.sort((a, b) => r[a.kind] - r[b.kind] || (a.severity === "high" ? -1 : 1) - (b.severity === "high" ? -1 : 1));
+  A.gaps.forEach((g, i) => (g.no = i + 1));
+}
+
+function ringSVG(g, size) {
+  const max = Math.max(...g.bins), seg = [], r0 = 38;
+  g.bins.forEach((w, b) => {
+    const a0 = (b / 36) * 2 * Math.PI - Math.PI, a1 = a0 + (2 * Math.PI) / 36 - 0.03;
+    const r1 = r0 + (w ? 6 + 14 * (w / max) : 3);
+    const p = (r, a) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
+    const inGap = g.gap.len && ((b - g.gap.start + 36) % 36) < g.gap.len;
+    seg.push(`<path d="M${p(r0, a0)} L${p(r1, a0)} A${r1} ${r1} 0 0 1 ${p(r1, a1)} L${p(r0, a1)} A${r0} ${r0} 0 0 0 ${p(r0, a0)}Z" fill="${w ? "var(--accent)" : inGap ? "var(--new)" : "var(--border-strong)"}" opacity="${w ? 0.35 + 0.65 * (w / max) : inGap ? 0.6 : 0.6}"/>`);
+  });
+  seg.push(`<circle cx="${(54 * Math.cos(g.az)).toFixed(1)}" cy="${(54 * Math.sin(g.az)).toFixed(1)}" r="5" fill="var(--new)"/>`);
+  seg.push(`<text x="0" y="6" text-anchor="middle" font-size="18" font-weight="600" fill="var(--text)">${Math.round((g.covered / 36) * 100)}%</text>`);
+  return `<svg viewBox="-62 -62 124 124" width="${size}" height="${size}">${seg.join("")}</svg>`;
+}
+
+const fmtWay = (w) => {
+  const a = [];
+  if (Math.abs(w.right) >= 0.15) a.push(`${Math.abs(w.right).toFixed(1)} m to its ${w.right > 0 ? "right" : "left"}`);
+  if (Math.abs(w.fwd) >= 0.15) a.push(`${Math.abs(w.fwd).toFixed(1)} m ${w.fwd > 0 ? "ahead" : "back"}`);
+  const t = Math.round(w.turn / 5) * 5;
+  return `${a.length ? a.join(", ") : "right there"}; ${Math.abs(t) < 10 ? "face the same way" : `turn ${Math.abs(t)}° ${t > 0 ? "right" : "left"}`}`;
+};
+
+function cardHTML(g, i) {
+  const muted = g.kind === "scale" && state.purpose === "web";
+  const head = `<header><span class="num ${g.centre ? "" : "off"}">${g.no}</span><span class="kind">${KIND[g.kind]}</span><span class="sev ${muted ? "low" : ""}">${muted ? "not needed for this" : g.severity}</span></header>`;
+  const planned = state.planned.has(g.key) ? "on" : "";
+  if (g.kind === "thin" || g.kind === "few") {
+    const L = S.cameras[g.lm], m = Math.max(0.2, g.distM * Math.tan(THREE.MathUtils.degToRad(10)));
+    const title = g.kind === "thin" ? `A part seen only from one side` : `A part only two photos agree on`;
+    const why = g.kind === "thin"
+      ? `${g.idx.length} points seen by ${g.seers.size} photos, all from a ${g.covered * 10}° arc; their rays meet ${g.ang.toFixed(1)}° apart, so depth is uncertain.`
+      : `${Math.round(g.frac2 * 100)}% of its ${g.idx.length} points are seen by only two photos; one more view would confirm them.`;
+    const shoot = g.kind === "thin"
+      ? `4–6 photos from ${g.distM.toFixed(1)} m away, stepping about ${m.toFixed(1)} m sideways between them, all aimed at the gap.`
+      : `3–4 photos of it, each overlapping about 60% with ${L.name}.`;
+    return `<article class="card ${state.gap === i ? "sel" : ""}" data-g="${i}">${head}<h3>${title}</h3>
+      <div class="where"><div class="thumb" style="background-image:url(${thumbURL(L.name)})"></div><div><small>Start where you took</small><b>${L.name}</b><span>then ${fmtWay(g.way)}.</span></div></div>
+      <ul class="facts"><li><i>Shoot</i><span>${shoot}</span></li><li><i>Why</i><span>${why}</span></li><li><i>Gain</i><span>${g.kind === "thin" ? `A second angle pins the depth of ${g.idx.length} points.` : `Points confirmed by a third view; fewer false surfaces.`}</span></li></ul>
+      <div class="minirow">${ringSVG(g, 64)}<div class="acts"><button class="chipbtn" data-act="3d">Show in 3D</button><button class="chipbtn" data-act="map">On the map</button><button class="chipbtn ${planned}" data-act="plan">${planned ? "✓ planned" : "Plan it"}</button></div></div></article>`;
+  }
+  if (g.kind === "nojoin") {
+    return `<article class="card ${state.gap === i ? "sel" : ""}" data-g="${i}">${head}<h3>${g.name} did not join the model</h3>
+      <div class="where"><div class="thumb" style="background-image:url(${thumbURL(g.name)})"></div><div><small>Location</small><b>unknown</b><span>${g.posed >= 0 ? "The solver posed it with no point to confirm it; do not trust that place." : "Nothing in the model places it."} Find this view on site.</span></div></div>
+      <ul class="facts"><li><i>Shoot</i><span>3–4 photos walking from this view toward a part already in the model, each overlapping about 60% with the last.</span></li><li><i>Why</i><span>What this photo shows is missing from the model.</span></li></ul>
+      <div class="minirow"><div class="acts"><button class="chipbtn ${planned}" data-act="plan">${planned ? "✓ planned" : "Plan it"}</button></div></div></article>`;
+  }
+  return `<article class="card ${muted ? "muted" : ""} ${state.gap === i ? "sel" : ""}" data-g="${i}">${head}<h3>The model has no scale</h3>
+    <ul class="facts"><li><i>Do</i><span>Put two markers or a scale bar where at least three photos see them, or measure one distance on site and enter it.</span></li><li><i>Why</i><span>No pose priors and no markers: sizes and distances are arbitrary until one length is known.</span></li></ul>
+    <div class="minirow"><div class="acts"><button class="chipbtn ${planned}" data-act="plan">${planned ? "✓ planned" : "Plan it"}</button></div></div></article>`;
 }
 
 function fillCoverage() {
   $("c-two").textContent = `${(A.two * 100).toFixed(0)}%`;
   $("c-narrow").textContent = `${(A.narrow * 100).toFixed(0)}%`;
   $("c-angle").textContent = `${A.angle.toFixed(1)}°`;
-  $("w-points").textContent = A.weak.idx.length.toLocaleString();
-  $("w-photos").textContent = A.seers.size;
-  $("w-angle").textContent = `${A.weak.ang.toFixed(1)}°`;
-  $("w-span").textContent = `${Math.round((A.covered / 36) * 100)}%`;
-  $("w-note").innerHTML = `<b>Seen from one side.</b> ${A.seers.size} photos see this region, all from a ${A.covered * 10}° arc. One photo from the open side would pin its depth.`;
-  const max = Math.max(...A.bins), seg = [];
-  A.bins.forEach((w, b) => {
-    const a0 = (b / 36) * 2 * Math.PI - Math.PI, a1 = a0 + (2 * Math.PI) / 36 - 0.03;
-    const r0 = 38, r1 = 38 + (w ? 6 + 14 * (w / max) : 3);
-    const p = (r, a) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
-    const inGap = A.gap.len && ((b - A.gap.start + 36) % 36) < A.gap.len;
-    const fill = w ? "var(--accent)" : inGap ? "var(--new)" : "var(--border-strong)";
-    seg.push(`<path d="M${p(r0, a0)} L${p(r1, a0)} A${r1} ${r1} 0 0 1 ${p(r1, a1)} L${p(r0, a1)} A${r0} ${r0} 0 0 0 ${p(r0, a0)}Z" fill="${fill}" opacity="${w ? 0.35 + 0.65 * (w / max) : inGap ? 0.55 : 0.6}"/>`);
+  A.gaps.forEach((g) => (g.key = g.kind + (g.name || (g.centre ? g.centre.toArray().map((v) => v.toFixed(1)).join(",") : ""))));
+  $("g-count").textContent = `· ${A.gaps.length}`;
+  $("cards").innerHTML = A.gaps.map(cardHTML).join("");
+  [...$("cards").children].forEach((el) => {
+    const i = +el.dataset.g, g = A.gaps[i];
+    el.onclick = (e) => {
+      const act = e.target.dataset?.act;
+      if (act === "plan") { state.planned.has(g.key) ? state.planned.delete(g.key) : state.planned.add(g.key); }
+      selectGap(i);
+      if (act === "3d" && g.centre) { setView("3d"); flyTo(g.ghost, 2.4, g.centre); }
+      if (act === "map") setView("map");
+    };
   });
-  const gx = 54 * Math.cos(A.az), gy = 54 * Math.sin(A.az);
-  seg.push(`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="4" fill="var(--new)"/>`);
-  $("ring").innerHTML = seg.join("");
+}
+
+function selectGap(i) {
+  state.gap = i;
+  const g = A.gaps[i];
+  pointMat.uniforms.uSel.value = g && g.centre ? A.spatial.indexOf(A.spatial.find((s) => s.centre === g.centre)) : -1;
+  fillCoverage(); mapDirty = true;
+  $("cards").children[i]?.scrollIntoView({ block: "nearest", behavior: state.reduceMotion ? "auto" : "smooth" });
 }
 
 const stampsFor = () => {
@@ -924,16 +1063,169 @@ function setMode(m) {
   if (m !== "run") { state.layers.threads = false; applyLayers(); }
   if (m === "run") { state.layers.threads = true; applyLayers(); }
   ghostObj.visible = m !== "run";
+  document.querySelector(".app").classList.toggle("wide", m === "coverage");
+  $("viewsel").hidden = m !== "coverage";
+  setView(m === "coverage" ? state.view : "3d", true);
   lastK = -1;
 }
 document.querySelectorAll("#mode button").forEach((b) => (b.onclick = () => setMode(b.dataset.m)));
-$("fly-weak").onclick = () => flyTo(A.centre, 3.2);
-$("fly-ghost").onclick = () => flyTo(A.ghost, 2.4, A.centre);
+
+function setView(v, keep) {
+  if (!keep) state.view = v;
+  document.querySelectorAll("#viewsel button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === v));
+  $("map").hidden = v !== "map";
+  mapDirty = true;
+}
+document.querySelectorAll("#viewsel button").forEach((b) => (b.onclick = () => setView(b.dataset.v)));
+document.querySelectorAll("#purpose button").forEach((b) => (b.onclick = () => {
+  state.purpose = b.dataset.p;
+  document.querySelectorAll("#purpose button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  const cur = A.gaps[state.gap]; orderGaps(); state.gap = cur ? A.gaps.indexOf(cur) : -1; fillCoverage(); mapDirty = true;
+}));
+$("print-cards").onclick = () => toast("Prints one card per gap, with the site map on the first page");
+$("to-phone").onclick = () => toast("Sends the cards to the capture app; ghost cameras show on site");
+
+// The robot brief: the same gaps as data. Draft shape until the interface doc settles it.
+function briefJSON() {
+  const r3 = (v) => v.toArray().map((x) => +x.toFixed(3));
+  return {
+    schema: "recce.gap-list/0.1-draft",
+    reconstruction: { scene: DATA.scene, strategy: state.strategy, registered: DATA.results.strategies[state.strategy].registered, images: DATA.images.length },
+    frame: { name: "reconstruction", up: "+y", scale_state: "arbitrary", units: "model units",
+      note: "No metric scale and not registered to any robot map: positions are usable only after the planner aligns this model to its own map." },
+    purpose: state.purpose,
+    gaps: A.gaps.map((g) => {
+      const base = { id: `G${g.no}`, kind: g.kind, priority: g.no, severity: g.severity, status: state.planned.has(g.key) ? "planned" : "open" };
+      if (g.centre) return { ...base,
+        region: { centre: r3(g.centre), radius: +g.radius.toFixed(3) },
+        evidence: { points: g.idx.length, photos: [...g.seers.keys()].map((c) => S.cameras[c].name), median_ray_angle_deg: +g.ang.toFixed(1), azimuth_covered_deg: g.covered * 10 },
+        viewpoints: [{ position: r3(g.ghost), look_at: r3(g.centre), tolerance_deg: 15 }],
+        landmark_photo: S.cameras[g.lm].name,
+        shots: g.kind === "thin" ? { count: [4, 6], spread: "sideways" } : { count: [3, 4], overlap: 0.6 } };
+      if (g.kind === "nojoin") return { ...base, photo: g.name, location: "unknown" };
+      return { ...base, need: "one known length: two markers, a scale bar, or a measured distance" };
+    }),
+  };
+}
+$("robot-brief").onclick = () => { $("brief-json").textContent = JSON.stringify(briefJSON(), null, 2); $("brief").classList.add("open"); };
+$("brief-close").onclick = () => $("brief").classList.remove("open");
+$("brief").onclick = (e) => { if (e.target.id === "brief") $("brief").classList.remove("open"); };
+
+// The site map: top-down, from above. Points shaded by how many photos agree, cameras as wedges,
+// gaps numbered, the spot to shoot from as a dashed wedge, and the order to walk them.
+let mapDirty = true, mapBase = null, mapT = null;
+function mapTransform(w, h) {
+  const xs = [], zs = [];
+  S.cameras.forEach((c) => { if (c.points > 0) { xs.push(c.center[0]); zs.push(c.center[2]); } });
+  S.points.forEach((p, i) => { if (i % 4 === 0) { xs.push(p.p[0]); zs.push(p.p[2]); } });
+  const q = (a, f) => { const s = [...a].sort((x, y) => x - y); return s[Math.floor(f * (s.length - 1))]; };
+  const gx = A.spatial.map((r) => r.ghost.x), gz = A.spatial.map((r) => r.ghost.z);
+  const x0 = Math.min(q(xs, 0.01), ...gx), x1 = Math.max(q(xs, 0.99), ...gx), z0 = Math.min(q(zs, 0.01), ...gz), z1 = Math.max(q(zs, 0.99), ...gz);
+  const pad = 80, s = Math.min((w - 2 * pad) / (x1 - x0), (h - 2 * pad - 90) / (z1 - z0));
+  const ox = (w - s * (x1 - x0)) / 2 - s * x0, oz = (h - s * (z1 - z0)) / 2 - s * z0 + 45;
+  return { s, P: (x, z) => [ox + s * x, oz + s * z] };
+}
+function drawMap() {
+  const cv = $("map"); if (cv.hidden) return;
+  const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); mapDirty = true; }
+  const ctx = cv.getContext("2d");
+  if (mapDirty || !mapBase) {
+    mapT = mapTransform(w, h);
+    mapBase = document.createElement("canvas"); mapBase.width = cv.width; mapBase.height = cv.height;
+    const b = mapBase.getContext("2d"); b.scale(dpr, dpr);
+    const light = document.documentElement.dataset.theme === "light";
+    b.fillStyle = css("--bg-app"); b.fillRect(0, 0, w, h);
+    // One-metre grid.
+    const step = mapT.s / S.metres_per_unit;
+    b.strokeStyle = light ? "rgba(0,0,0,.06)" : "rgba(255,255,255,.04)"; b.lineWidth = 1;
+    const [gx, gy] = mapT.P(0, 0);
+    for (let x = gx % step; x < w; x += step) { b.beginPath(); b.moveTo(x, 0); b.lineTo(x, h); b.stroke(); }
+    for (let y = gy % step; y < h; y += step) { b.beginPath(); b.moveTo(0, y); b.lineTo(w, y); b.stroke(); }
+    const ramp = light ? ["#8aa1c9", "#7c7f8c", "#9b7a46", "#5a3c10"] : ["#29426e", "#6d6f80", "#d9c6a4", "#fff0d2"];
+    const cut = pointMat.uniforms.uCut.value;
+    S.points.forEach((p) => {
+      if (p.p[1] > cut) return;
+      const k = Math.min(3, Math.max(0, Math.round((p.t.length - 2) / 2)));
+      const [x, y] = mapT.P(p.p[0], p.p[2]);
+      b.fillStyle = ramp[k]; b.globalAlpha = 0.55; b.fillRect(x - 0.8, y - 0.8, 1.6, 1.6);
+    });
+    b.globalAlpha = 1;
+    S.cameras.forEach((c) => {
+      if (c.points === 0) return;
+      const f = col(c, 2), [x, y] = mapT.P(c.center[0], c.center[2]), a = Math.atan2(f.z, f.x), L = 16;
+      b.beginPath(); b.moveTo(x, y); b.lineTo(x + L * Math.cos(a - 0.4), y + L * Math.sin(a - 0.4)); b.lineTo(x + L * Math.cos(a + 0.4), y + L * Math.sin(a + 0.4)); b.closePath();
+      b.fillStyle = css("--accent"); b.globalAlpha = 0.22; b.fill(); b.globalAlpha = 0.8; b.strokeStyle = css("--accent"); b.stroke(); b.globalAlpha = 1;
+    });
+    mapDirty = false;
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(mapBase, 0, 0); ctx.scale(dpr, dpr);
+  const pulse = state.reduceMotion ? 0.5 : 0.5 + 0.5 * Math.sin(performance.now() / 420), nw = css("--new");
+  const sp = A.gaps.filter((g) => g.centre);
+  // The walking order: from the first gap's landmark photo through each spot to shoot from.
+  ctx.setLineDash([2, 6]); ctx.strokeStyle = css("--text-dim"); ctx.lineWidth = 1.5; ctx.beginPath();
+  sp.forEach((g, i) => { const [x, y] = mapT.P(g.ghost.x, g.ghost.z); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+  sp.forEach((g) => {
+    const sel = A.gaps[state.gap] === g;
+    const [cx, cy] = mapT.P(g.centre.x, g.centre.z), [gx2, gy2] = mapT.P(g.ghost.x, g.ghost.z), R = Math.max(14, g.radius * mapT.s);
+    ctx.setLineDash([]); ctx.fillStyle = nw; ctx.globalAlpha = sel ? 0.14 + 0.1 * pulse : 0.1;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = nw; ctx.lineWidth = sel ? 2 : 1.2; ctx.stroke();
+    // Dashed line and wedge: where to stand, looking at the gap.
+    ctx.beginPath(); ctx.moveTo(gx2, gy2); ctx.lineTo(cx, cy); ctx.globalAlpha = 0.7; ctx.stroke(); ctx.globalAlpha = 1;
+    const a = Math.atan2(cy - gy2, cx - gx2), L = 22;
+    ctx.beginPath(); ctx.moveTo(gx2, gy2); ctx.lineTo(gx2 + L * Math.cos(a - 0.45), gy2 + L * Math.sin(a - 0.45)); ctx.lineTo(gx2 + L * Math.cos(a + 0.45), gy2 + L * Math.sin(a + 0.45)); ctx.closePath();
+    ctx.setLineDash([3, 3]); ctx.lineWidth = sel ? 2 : 1.4; ctx.stroke();
+    if (sel) {
+      const Lm = S.cameras[g.lm], [lx, ly] = mapT.P(Lm.center[0], Lm.center[2]);
+      ctx.setLineDash([1, 4]); ctx.strokeStyle = css("--accent"); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(gx2, gy2); ctx.stroke();
+      ctx.setLineDash([]); ctx.beginPath(); ctx.arc(lx, ly, 7, 0, 7); ctx.stroke();
+      ctx.fillStyle = css("--accent"); ctx.font = "500 12px JetBrains Mono, monospace"; ctx.fillText(Lm.name, lx + 10, ly - 8);
+    }
+    ctx.setLineDash([]);
+    // Number badge, with a tick when planned.
+    ctx.fillStyle = nw; ctx.beginPath(); ctx.arc(cx, cy, sel ? 13 : 11, 0, 7); ctx.fill();
+    ctx.fillStyle = "#1a1206"; ctx.font = `600 ${sel ? 13 : 12}px Inter, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(state.planned.has(g.key) ? "✓" : String(g.no), cx, cy + 0.5);
+    ctx.fillStyle = css("--text"); ctx.textAlign = "left"; ctx.font = "500 12px Inter, sans-serif";
+    ctx.fillText(KIND[g.kind], cx + Math.max(R, 13) + 6, cy + 4);
+    g._xy = [cx, cy];
+  });
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  // Gaps with no place on the map, listed in the corner.
+  const off = A.gaps.filter((g) => !g.centre);
+  ctx.font = "600 11px Inter, sans-serif"; ctx.fillStyle = css("--text-dim"); ctx.fillText("NOT ON THE MAP", 18, 82);
+  off.forEach((g, i) => {
+    const y = 104 + i * 24;
+    ctx.strokeStyle = css("--text-dim"); ctx.setLineDash([2, 2]); ctx.beginPath(); ctx.arc(29, y - 4, 10, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = css("--text"); ctx.textAlign = "center"; ctx.font = "600 11px Inter, sans-serif"; ctx.fillText(String(g.no), 29, y);
+    ctx.textAlign = "left"; ctx.font = "13px Inter, sans-serif";
+    ctx.fillText(g.kind === "nojoin" ? `${g.name} did not join · location unknown` : "No scale · applies to the whole site", 46, y);
+  });
+  // Title, legend, scale bar.
+  ctx.fillStyle = css("--text"); ctx.font = "500 20px Inter, sans-serif"; ctx.fillText("The site, from above", 18, 34);
+  ctx.fillStyle = css("--text-dim"); ctx.font = "13px Inter, sans-serif";
+  ctx.fillText(`${sp.length} places to go back to, in walking order · cards on the right`, 18, 52);
+  const m1 = mapT.s / S.metres_per_unit, by = h - 22;
+  ctx.strokeStyle = css("--text-dim"); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(w - 18 - m1, by - 6); ctx.lineTo(w - 18 - m1, by); ctx.lineTo(w - 18, by); ctx.lineTo(w - 18, by - 6); ctx.stroke();
+  ctx.fillStyle = css("--text-dim"); ctx.font = "12px JetBrains Mono, monospace"; ctx.textAlign = "right"; ctx.fillText("1 m", w - 18, by - 10); ctx.textAlign = "left";
+  const lg = [["--accent", "photo taken, and where it looked"], ["--new", "gap, and where to stand"]];
+  lg.forEach(([c, t], i) => { ctx.fillStyle = css(c); ctx.beginPath(); ctx.arc(24, h - 44 + i * 20, 4, 0, 7); ctx.fill(); ctx.fillStyle = css("--text-dim"); ctx.fillText(t, 36, h - 40 + i * 20); });
+}
+$("map").addEventListener("click", (e) => {
+  const r = $("map").getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  const hit = A.gaps.findIndex((g) => g._xy && Math.hypot(g._xy[0] - x, g._xy[1] - y) < 18);
+  if (hit >= 0) selectGap(hit);
+});
 
 // Labels an agent places in the scene: world anchors projected to the screen each frame.
 function labels() {
   if (state.mode === "run") return [];
-  const out = [[A.centre, `<b>Thin coverage</b> · seen from ${A.covered * 10}°`, "--new"], [A.ghost, `<b>Shoot from here</b>`, "--new"]];
+  const out = [];
+  A.gaps.filter((g) => g.centre).forEach((g) => {
+    out.push([g.centre, `<b>${g.no} · ${KIND[g.kind]}</b>`, "--new"]);
+    if (A.gaps[state.gap] === g || state.mode === "debrief") out.push([g.ghost, `<b>Shoot ${g.no} from here</b>`, "--new"]);
+  });
   if (state.mode === "debrief") {
     const h = A.holders[0];
     out.push([V(S.cameras[h.i].center), `<b>${S.cameras[h.i].name}</b> · ${Math.round((h.n / A.obs) * 100)}% of the model`, "--accent"]);
@@ -962,8 +1254,12 @@ if (q.get("select")) select(S.cameras.findIndex((c) => c.name === q.get("select"
 if (q.has("at")) state.t = Math.min(S.cameras.length - 0.001, Math.max(0, +q.get("at") - 0.001));
 else { state.t = 0.999; setTimeout(() => { if (state.mode === "run") { state.playing = true; setPlayIcon(); } }, 900); }
 state.mode = "run"; setMode(q.get("mode") in MODES ? q.get("mode") : "run");
-if (q.get("theme") === "light") document.documentElement.dataset.theme = "light";
+if (q.get("theme") === "light") { document.documentElement.dataset.theme = "light"; mapDirty = true; }
 if (q.get("palette") === "1") openPalette();
+if (q.get("purpose") in RANK) document.querySelector(`#purpose button[data-p="${q.get("purpose")}"]`).click();
+if (q.get("view") === "map") setView("map");
+if (q.has("gap")) selectGap(+q.get("gap") - 1);
+if (q.get("brief") === "1") $("robot-brief").click();
 if (q.get("fly") === "weak") flyTo(A.centre, 3.2);
 if (q.get("fly") === "ghost") flyTo(A.ghost, 2.4, A.centre);
 requestAnimationFrame(frame);

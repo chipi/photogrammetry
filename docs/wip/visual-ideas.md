@@ -33,6 +33,7 @@ of the same day, also approved as directions. Source tags `[V]` and `[U]` there 
 | 18 | **The agent as a scene editor.** The agent places ghost cameras, labels and a camera path into the scene through MCP; the person moves or deletes them. | Agent and person working on one scene | Spline MCP | M3 |
 | 19 | **Replay the moment.** One click replays the iterations around the step with the largest residual jump, with camera positions before and after shown as a fading trail. | Where it went wrong, without searching | NASA Eyes replay; Flightradar24 trails | M1 |
 | 20 | **Frame the cost.** Every recipe shows a time and energy estimate before it runs and the measured figure after. | What a choice costs | Autodesk Flow Studio credits | M4 |
+| 21 | **The gap list for the next session.** After an upload, every gap is listed and ranked, not only the weakest: thin coverage, few photos, photos that did not join, pieces that did not connect, missing scale. Each gap becomes a shot card: where to stand (a ghost camera, and the nearest photo already taken as a reference to recognise the spot), what to shoot and why. A top-down map numbers the gaps; the next upload ticks closed gaps off. The same list goes to the phone app, and to a robot as a machine-readable brief. Not route planning. | What to do tomorrow, in the field | Owner, 2026-11-24 | M2 |
 
 ## Patterns for every surface
 
