@@ -72,9 +72,16 @@ reason.
 Order: M0 and M1 first (they set the frame and use the data PG-P1 already has), then M2, M3 and M4;
 M5–M8 follow the prototypes they depend on.
 
-## Open for the owner
+## Decided by the owner (2026-11-24)
 
-- The mock-ups' technology: plain HTML with three.js loaded from a CDN (fast, nothing installed),
-  or the SvelteKit stack the product will use (closer to the build, slower to start).
-- How polished a mock-up is before review: rough to settle the concept, or finished to judge the
-  look. Robotics-lab approved its page from a finished mock-up.
+- **Technology:** mock-ups are plain HTML with three.js; the product's UI moves to its own stack
+  later. Whether that stack is SvelteKit (the default in the owner's other projects) is reopened
+  and decided on evidence from the mock-ups, not by habit.
+- **Two passes:** phase 1 is rough but still good-looking, to settle the concepts; phase 2
+  polishes the chosen direction.
+
+## Status
+
+| Mock-up | Phase | Where |
+|---|---|---|
+| M0 + M1 | 1, built 2026-11-24, awaiting review | [mockups/PG-M1-run](https://github.com/chipi/photogrammetry/tree/main/mockups/PG-M1-run) |
