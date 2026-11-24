@@ -84,4 +84,4 @@ M5–M8 follow the prototypes they depend on.
 
 | Mock-up | Phase | Where |
 |---|---|---|
-| M0 + M1 | 1, built 2026-11-24, awaiting review | [mockups/PG-M1-run](https://github.com/chipi/photogrammetry/tree/main/mockups/PG-M1-run) |
+| M0 + M1, first passes at M2 and M3 | 1, built 2026-11-24; style approved from screenshots, concepts awaiting review | [mockups/PG-M1-run](https://github.com/chipi/photogrammetry/tree/main/mockups/PG-M1-run) |

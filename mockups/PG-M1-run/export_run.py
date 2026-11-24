@@ -82,11 +82,22 @@ def export(recon, gt):
                 "points": img.num_points3D,
             }
         )
+
+    def triangulation_angle(pid, xyz):
+        """Widest angle between two rays that see the point: the main driver of depth certainty."""
+        rays = [xyz - poses[i][1] for i in tracks[pid] if i in poses]
+        rays = np.array([r / np.linalg.norm(r) for r in rays])
+        if len(rays) < 2:
+            return 0.0
+        cos = np.clip(rays @ rays.T, -1.0, 1.0)
+        return float(np.degrees(np.arccos(cos.min())))
+
     points = [
         {
             "p": place(p.xyz),
             "c": [int(v) for v in p.color],
             "e": round(float(p.error), 3),
+            "a": round(triangulation_angle(pid, p.xyz), 2),
             "t": sorted(index[i] for i in tracks[pid] if i in index),
         }
         for pid, p in pts.items()
@@ -125,7 +136,8 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     gt = pycolmap.Reconstruction(str(scene / "dslr_calibration_jpg"))
     results = json.loads((run / "results.json").read_text())
-    data = {"scene": scene.name, "results": results, "strategies": {}}
+    names = sorted(p.name for p in (scene / "images").rglob("*.JPG"))
+    data = {"scene": scene.name, "images": names, "results": results, "strategies": {}}
     for name in results["strategies"]:
         recon = pycolmap.Reconstruction(str(run / name / "0"))
         data["strategies"][name] = export(recon, gt)

@@ -16,9 +16,10 @@
 :root[data-theme="light"] {
   --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
   --border: #dde1e7; --border-strong: #c9cfd8; --text: #161a21; --text-dim: #5b6474; --text-faint: #687080;
-  --accent: #1f7ad6; --accent-soft: rgba(31,122,214,.12); --new: #d9711c; --truth: #18a865;
+  --accent: #1f7ad6; --accent-soft: rgba(31,122,214,.12); --new: #d9711c; --truth: #18a865; --warn: #8a5a00;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; margin: 0; }
 body { background: var(--bg-app); color: var(--text); font: 13px/1.4 var(--ui); -webkit-font-smoothing: antialiased; overflow: hidden; }
 button, input, select { font: inherit; color: inherit; }
@@ -98,6 +99,38 @@ canvas.spark { width: 100%; height: 54px; display: block; }
 .strip div.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
 .strip div span { position: absolute; left: 4px; bottom: 2px; font: 11px var(--mono); color: #fff; text-shadow: 0 1px 2px #000; }
 
+.ramp { display: flex; align-items: center; gap: 8px; color: var(--text-dim); font-size: 12px; }
+.ramp i { flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #29426e, #6d6f80, #d9c6a4, #fff0d2); }
+.ringwrap { position: relative; width: 184px; height: 184px; margin: 2px auto 10px; }
+.ringwrap svg { width: 100%; height: 100%; }
+.ringcap { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ringcap b { font: 500 22px var(--ui); } .ringcap small { color: var(--text-dim); font-size: 11.5px; }
+.row2 { display: flex; gap: 8px; margin-top: 10px; }
+.btn { flex: 1; height: 32px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-field); cursor: pointer; }
+.btn:hover { background: var(--bg-hover); }
+.btn.primary { background: var(--accent-soft); border-color: var(--accent); }
+.faintnote { color: var(--text-dim); font-size: 11.5px; }
+.debrief .byline { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+.debrief .byline small { display: block; color: var(--text-dim); }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: conic-gradient(from 120deg, var(--accent), var(--new), var(--truth), var(--accent)); box-shadow: 0 0 0 3px var(--bg-panel), 0 0 18px rgba(124,196,255,.35); }
+.debrief p.claim { margin: 0 0 12px; line-height: 1.55; font-size: 13.5px; }
+.debrief p.claim b { font-weight: 600; }
+.handle { display: inline-flex; align-items: center; gap: 5px; height: 21px; padding: 0 8px; margin-left: 4px; border-radius: 11px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); font: 500 11.5px var(--ui); cursor: pointer; vertical-align: 1px; }
+.handle:hover { background: var(--accent); color: var(--bg-app); }
+.handle.unsupported { border-color: var(--warn); color: var(--warn); background: transparent; cursor: default; }
+.stamp { display: grid; grid-template-columns: 22px 1fr auto; gap: 2px 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.stamp:last-child { border-bottom: 0; }
+.stamp .dot { width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; font: 600 10px var(--ui); color: var(--bg-app); }
+.stamp .pass { background: var(--truth); } .stamp .fail { background: var(--error); } .stamp .unknown { background: transparent; border: 1.5px dashed var(--text-dim); }
+.stamp em { font-style: normal; font: 500 11.5px var(--mono); text-transform: uppercase; letter-spacing: .04em; }
+.stamp em.pass { color: var(--truth); background: none; } .stamp em.fail { color: var(--error); background: none; } .stamp em.unknown { color: var(--text-dim); border: 0; }
+.stamp small { grid-column: 2 / 4; color: var(--text-dim); font-size: 12px; }
+#labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.lbl { position: absolute; transform: translate(-50%, calc(-100% - 10px)); white-space: nowrap; padding: 4px 9px; border-radius: 12px; background: rgba(12,15,20,.82); border: 1px solid var(--border-strong); color: var(--text); font-size: 12px; backdrop-filter: blur(4px); }
+.lbl::after { content: ""; position: absolute; left: 50%; bottom: -10px; width: 1px; height: 10px; background: var(--border-strong); }
+.lbl::before { content: ""; position: absolute; left: calc(50% - 3px); bottom: -14px; width: 6px; height: 6px; border-radius: 50%; background: var(--c, var(--accent)); }
+.lbl b { color: var(--c, var(--accent)); font-weight: 600; }
+:root[data-theme="light"] .lbl { background: rgba(255,255,255,.9); }
 .strip { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 .status { grid-area: status; display: flex; gap: 16px; align-items: center; padding: 0 12px; border-top: 1px solid var(--border); background: var(--bg-panel); color: var(--text-dim); font-size: 12px; white-space: nowrap; overflow: hidden; }
 
@@ -126,6 +159,11 @@ canvas.spark { width: 100%; height: 54px; display: block; }
     <div class="seg" id="strategy">
       <button data-s="colmap_incremental" aria-pressed="true">Incremental</button>
       <button data-s="glomap_global" aria-pressed="false">Global</button>
+    </div>
+    <div class="seg" id="mode">
+      <button data-m="run" aria-pressed="true">Run</button>
+      <button data-m="coverage" aria-pressed="false">Coverage</button>
+      <button data-m="debrief" aria-pressed="false">Debrief</button>
     </div>
     <div class="grow"></div>
     <span class="chip">registered <b id="chip-reg">–</b></span>
@@ -168,9 +206,46 @@ canvas.spark { width: 100%; height: 54px; display: block; }
       <span style="--c:var(--accent)">camera</span><span style="--c:var(--new)">joins now</span><span style="--c:var(--truth)" id="legend-truth" hidden>where it really was</span>
     </div>
     <div class="scalebar"><span class="mono" id="scale-label">1 m</span><div id="scale-bar"></div></div>
+    <div id="labels"></div>
   </main>
 
   <aside class="right">
+    <div data-panel="coverage" hidden>
+      <section class="sec">
+        <h2>Coverage</h2>
+        <p class="note" style="margin:0 0 10px">Lit where many photos agree on a point, in shadow where few do. Crisp where the photos saw it from wide apart, soft where their rays nearly coincide and depth is uncertain.</p>
+        <div class="ramp"><span>1 photo pair</span><i></i><span>8+ photos</span></div>
+        <dl class="kv" style="margin-top:10px">
+          <dt>Seen by only 2 photos</dt><dd id="c-two">–</dd>
+          <dt>Depth uncertain <small>(&lt; 5° apart)</small></dt><dd id="c-narrow">–</dd>
+          <dt>Median angle between rays</dt><dd id="c-angle">–</dd>
+        </dl>
+      </section>
+      <section class="sec">
+        <h2>Weakest region</h2>
+        <div class="ringwrap"><svg id="ring" viewBox="-60 -60 120 120"></svg><div class="ringcap"><b id="w-span">–</b><small>of directions<br>covered</small></div></div>
+        <dl class="kv">
+          <dt>Points</dt><dd id="w-points">–</dd>
+          <dt>Photos that see it</dt><dd id="w-photos">–</dd>
+          <dt>Median angle</dt><dd id="w-angle">–</dd>
+        </dl>
+        <p class="note" id="w-note"></p>
+        <div class="row2"><button class="btn" id="fly-weak">Fly to it</button><button class="btn primary" id="fly-ghost">Show the next shot</button></div>
+        <p class="note faintnote">The suggested shot is a heuristic: the middle of the widest gap in viewing directions, kept inside the area the cameras already walked.</p>
+      </section>
+    </div>
+    <div data-panel="debrief" hidden>
+      <section class="sec debrief">
+        <div class="byline"><span class="avatar"></span><div><b>Debrief</b><small id="d-sub"></small></div></div>
+        <div id="d-body"></div>
+        <p class="note faintnote">Written here from this run's numbers by a template. In the product an agent writes it; every claim keeps a handle to its evidence, and a claim without one is flagged.</p>
+      </section>
+      <section class="sec">
+        <h2>Ready for</h2>
+        <div id="stamps"></div>
+      </section>
+    </div>
+    <div data-panel="run">
     <section class="sec">
       <h2>The moment</h2>
       <dl class="kv">
@@ -197,6 +272,7 @@ canvas.spark { width: 100%; height: 54px; display: block; }
       <h2>This run</h2>
       <dl class="kv" id="run-kv"></dl>
     </section>
+    </div>
   </aside>
 
   <section class="time">
@@ -263,27 +339,43 @@ let S, ranks, order, pointsObj, camGroups = [], threadObj, truthObj, groundObj, 
 
 const pointMat = new THREE.ShaderMaterial({
   transparent: true, depthWrite: false,
-  uniforms: { uCut: { value: 1e9 }, uStep: { value: 0 }, uSize: { value: 2.6 }, uPR: { value: renderer.getPixelRatio() }, uNew: { value: new THREE.Color(css("--new")) }, uGlow: { value: 1 } },
+  uniforms: { uCut: { value: 1e9 }, uStep: { value: 0 }, uSize: { value: 2.6 }, uPR: { value: renderer.getPixelRatio() }, uNew: { value: new THREE.Color(css("--new")) }, uGlow: { value: 1 },
+    uMode: { value: 0 }, uWeakC: { value: new THREE.Vector3() }, uWeakR: { value: 0 }, uPulse: { value: 0 } },
   vertexShader: `
-    attribute vec3 aColor; attribute float aAppear;
-    uniform float uStep, uSize, uPR, uGlow, uCut; uniform vec3 uNew;
-    varying vec3 vColor; varying float vAlpha;
+    attribute vec3 aColor; attribute float aAppear, aSupport, aAngle;
+    uniform float uStep, uSize, uPR, uGlow, uCut, uMode, uWeakR, uPulse; uniform vec3 uNew, uWeakC;
+    varying vec3 vColor; varying float vAlpha, vSoft;
     void main() {
       float age = uStep - aAppear;
       vAlpha = (age < 0.0 || position.y > uCut) ? 0.0 : clamp(age / 0.35 + 0.15, 0.0, 1.0);
       float glow = uGlow * (1.0 - clamp(age / 1.4, 0.0, 1.0));
       vColor = mix(aColor, uNew, glow * 0.85);
+      float size = 1.0 + glow * 1.6;
+      vSoft = 0.0;
+      if (uMode > 0.5) {
+        // Light and shadow: how many photos agree. Crisp or soft: how far apart they saw it.
+        float lit = clamp((aSupport - 2.0) / 6.0, 0.0, 1.0);
+        float sure = clamp((aAngle - 2.0) / 18.0, 0.0, 1.0);
+        vec3 shadow = vec3(0.16, 0.26, 0.48);
+        vec3 light = mix(aColor * 1.2 + 0.1, vec3(1.0, 0.9, 0.72), 0.55);
+        vColor = mix(shadow, light, 0.12 + 0.88 * lit);
+        float inWeak = 1.0 - smoothstep(uWeakR * 0.8, uWeakR, distance(position, uWeakC));
+        vColor = mix(vColor, uNew, inWeak * (0.35 + 0.35 * uPulse));
+        vSoft = 1.0 - sure;
+        size = mix(0.9, 2.4, vSoft);
+        vAlpha *= mix(1.0, 0.45, vSoft);
+      }
       vec4 mv = modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = uSize * uPR * (1.0 + glow * 1.6) * (7.0 / -mv.z);
+      gl_PointSize = uSize * uPR * size * (7.0 / -mv.z);
       gl_Position = projectionMatrix * mv;
     }`,
   fragmentShader: `
-    varying vec3 vColor; varying float vAlpha;
+    varying vec3 vColor; varying float vAlpha, vSoft;
     void main() {
       if (vAlpha < 0.01) discard;
       float d = length(gl_PointCoord - 0.5);
       if (d > 0.5) discard;
-      gl_FragColor = vec4(vColor, vAlpha * smoothstep(0.5, 0.32, d));
+      gl_FragColor = vec4(vColor, vAlpha * smoothstep(0.5, mix(0.32, 0.0, vSoft), d));
     }`,
 });
 
@@ -322,6 +414,8 @@ function build() {
   g.setAttribute("aColor", new THREE.BufferAttribute(col, 3));
   appearAttr = new THREE.BufferAttribute(appearSteps(), 1);
   g.setAttribute("aAppear", appearAttr);
+  g.setAttribute("aSupport", new THREE.BufferAttribute(Float32Array.from(S.points, (p) => p.t.length), 1));
+  g.setAttribute("aAngle", new THREE.BufferAttribute(Float32Array.from(S.points, (p) => p.a), 1));
   pointsObj = new THREE.Points(g, pointMat);
   scene.add(pointsObj);
 
@@ -373,6 +467,7 @@ function build() {
 
   frameView();
   buildStrip(); buildMarks(); buildRunPanel(); drawSpark();
+  analyse();
   $("n-points").textContent = S.points.length.toLocaleString();
   $("n-cams").textContent = S.cameras.length;
   const r = DATA.results.strategies[state.strategy];
@@ -503,7 +598,7 @@ function setTimeline(tl) {
 function setStrategy(s) {
   state.strategy = s; state.selected = -1;
   document.querySelectorAll("#strategy button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.s === s));
-  build(); select(-1);
+  build(); select(-1); setMode(state.mode || "run");
 }
 document.querySelectorAll("#strategy button").forEach((b) => (b.onclick = () => setStrategy(b.dataset.s)));
 document.querySelectorAll("#speed button").forEach((b) => (b.onclick = () => { state.speed = +b.dataset.v; document.querySelectorAll("#speed button").forEach((x) => x.setAttribute("aria-pressed", x === b)); }));
@@ -613,10 +708,31 @@ function frame() {
   threadObj.material.opacity = state.layers.threads ? (state.selected >= 0 ? 0.16 : 0.2 * (1 - frac * 0.7)) : 0;
 
   if (state.playing && state.drift && !state.reduceMotion) { controls.autoRotate = true; controls.autoRotateSpeed = 0.35; } else controls.autoRotate = false;
+  if (fly) {
+    const u = Math.min(1, (performance.now() - fly.s) / 900), e = ease(u);
+    camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e);
+    if (u >= 1) fly = null;
+  }
+  // Light theme: threads blend normally (additive turns white on white) and the grid recedes.
+  const light = document.documentElement.dataset.theme === "light";
+  const blend = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+  if (threadObj.material.blending !== blend) { threadObj.material.blending = blend; threadObj.material.needsUpdate = true; }
+  groundObj.material.opacity = light ? 0.18 : 0.55;
+  const pulse = state.reduceMotion ? 0.5 : 0.5 + 0.5 * Math.sin(performance.now() / 420);
+  pointMat.uniforms.uPulse.value = pulse;
+  if (ghostObj) ghostObj.userData.lines.forEach((l, i) => (l.material.opacity = i ? 0.35 + 0.35 * pulse : 0.55 + 0.45 * pulse));
   controls.update();
   renderer.render(scene, camera);
+  drawLabels();
 
-  if (k !== lastK || state.playing) {
+  if (state.mode !== "run" && lastK !== -2) {
+    lastK = -2;
+    $("cap-big").innerHTML = state.mode === "coverage" ? `Where the model is <em>sure</em>, and where it is not` : `Debrief: what this run is <em>good for</em>`;
+    $("cap-small").textContent = state.mode === "coverage" ? "Lit where many photos agree, in shadow where few do; soft where the photos saw a point from nearly the same place." : "Every claim on the right opens its evidence in the scene.";
+    $("t-label").textContent = `all ${n} steps`;
+    [...$("strip").children].forEach((d) => { d.classList.add("in"); d.classList.remove("now"); });
+  }
+  if (state.mode === "run" && (k !== lastK || state.playing)) {
     lastK = k;
     const ci = order[k], c = S.cameras[ci];
     const sofar = counts.slice(0, k + 1).reduce((a, b) => a + b, 0);
@@ -645,6 +761,196 @@ function frame() {
   requestAnimationFrame(frame);
 }
 
+// ---------- coverage, the next shot, the debrief ----------
+const median = (a) => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+const V = (a) => new THREE.Vector3(...a);
+let A = null, ghostObj = null;
+
+function analyse() {
+  const pts = S.points, cams = S.cameras;
+  // Weakest region: voxel cells with enough points, ranked by how narrowly and how few photos saw them.
+  const cs = 0.9, cells = new Map();
+  pts.forEach((p, i) => {
+    const key = p.p.map((v) => Math.floor(v / cs)).join(",");
+    if (!cells.has(key)) cells.set(key, []);
+    cells.get(key).push(i);
+  });
+  let weak = null;
+  for (const idx of cells.values()) {
+    if (idx.length < 40) continue;
+    const ang = median(idx.map((i) => pts[i].a)), sup = idx.reduce((s, i) => s + pts[i].t.length, 0) / idx.length;
+    const score = ang * Math.sqrt(sup);
+    if (!weak || score < weak.score) weak = { idx, ang, sup, score };
+  }
+  const centre = new THREE.Vector3();
+  weak.idx.forEach((i) => centre.add(V(pts[i].p)));
+  centre.divideScalar(weak.idx.length);
+  const radius = Math.max(0.5, median(weak.idx.map((i) => V(pts[i].p).distanceTo(centre))) * 1.6);
+
+  // Which directions the region was seen from: 36 bins of azimuth around it, weighted by points.
+  const bins = new Array(36).fill(0), seers = new Map();
+  weak.idx.forEach((i) => pts[i].t.forEach((c) => seers.set(c, (seers.get(c) || 0) + 1)));
+  const dists = [];
+  for (const [c, w] of seers) {
+    const d = V(cams[c].center).sub(centre);
+    dists.push(Math.hypot(d.x, d.z));
+    const b = Math.floor(((Math.atan2(d.z, d.x) + Math.PI) / (2 * Math.PI)) * 36) % 36;
+    bins[b] += w;
+  }
+  let best = { len: 0, start: 0 };
+  for (let s = 0; s < 36; s++) {
+    if (bins[s]) continue;
+    let len = 0; while (len < 36 && !bins[(s + len) % 36]) len++;
+    if (len > best.len) best = { len, start: s };
+  }
+  const covered = bins.filter((b) => b > 0).length;
+  const mid = best.len ? (best.start + best.len / 2) : bins.indexOf(Math.min(...bins)) + 0.5;
+  const az = (mid / 36) * 2 * Math.PI - Math.PI;
+  const camR = Math.max(...cams.map((c) => Math.hypot(c.center[0], c.center[2])));
+  let dist = median(dists) || 2;
+  const ghost = new THREE.Vector3();
+  for (; dist > 0.4; dist *= 0.85) {
+    ghost.set(centre.x + Math.cos(az) * dist, median(cams.map((c) => c.center[1])), centre.z + Math.sin(az) * dist);
+    if (Math.hypot(ghost.x, ghost.z) <= camR * 1.05) break;
+  }
+
+  // Ghost camera: a dashed frustum looking at the region, pulsing.
+  if (ghostObj) scene.remove(ghostObj);
+  ghostObj = new THREE.Group();
+  const d = 0.42, hw = d * 0.75, hh = d * 0.5, cn = [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]], lp = [];
+  cn.forEach((q, k) => lp.push(0, 0, 0, ...q, ...q, ...cn[(k + 1) % 4]));
+  const gl = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)),
+    new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.04, gapSize: 0.03, transparent: true }));
+  gl.computeLineDistances();
+  const look = new THREE.Matrix4().lookAt(centre, ghost, new THREE.Vector3(0, 1, 0));
+  const flip = new THREE.Matrix4().makeRotationX(Math.PI);
+  ghostObj.add(gl);
+  ghostObj.matrixAutoUpdate = false;
+  ghostObj.matrix.copy(new THREE.Matrix4().makeTranslation(ghost.x, ghost.y, ghost.z).multiply(look).multiply(flip));
+  const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints([ghost, centre]),
+    new THREE.LineDashedMaterial({ color: css("--new"), dashSize: 0.08, gapSize: 0.08, transparent: true, opacity: 0.6 }));
+  ray.computeLineDistances();
+  const gWrap = new THREE.Group(); gWrap.add(ghostObj, ray);
+  scene.add(gWrap); ghostObj = gWrap; ghostObj.userData.lines = [gl, ray];
+
+  const two = pts.filter((p) => p.t.length <= 2).length / pts.length;
+  const narrow = pts.filter((p) => p.a < 5).length / pts.length;
+  const holders = cams.map((c, i) => ({ i, n: c.points })).sort((a, b) => b.n - a.n);
+  const obs = cams.reduce((s, c) => s + c.points, 0);
+  A = { weak, centre, radius, bins, covered, gap: best, az, ghost, two, narrow, angle: median(pts.map((p) => p.a)), seers, holders, obs };
+  pointMat.uniforms.uWeakC.value.copy(centre);
+  pointMat.uniforms.uWeakR.value = radius;
+  fillCoverage(); fillDebrief();
+}
+
+function fillCoverage() {
+  $("c-two").textContent = `${(A.two * 100).toFixed(0)}%`;
+  $("c-narrow").textContent = `${(A.narrow * 100).toFixed(0)}%`;
+  $("c-angle").textContent = `${A.angle.toFixed(1)}°`;
+  $("w-points").textContent = A.weak.idx.length.toLocaleString();
+  $("w-photos").textContent = A.seers.size;
+  $("w-angle").textContent = `${A.weak.ang.toFixed(1)}°`;
+  $("w-span").textContent = `${Math.round((A.covered / 36) * 100)}%`;
+  $("w-note").innerHTML = `<b>Seen from one side.</b> ${A.seers.size} photos see this region, all from a ${A.covered * 10}° arc. One photo from the open side would pin its depth.`;
+  const max = Math.max(...A.bins), seg = [];
+  A.bins.forEach((w, b) => {
+    const a0 = (b / 36) * 2 * Math.PI - Math.PI, a1 = a0 + (2 * Math.PI) / 36 - 0.03;
+    const r0 = 38, r1 = 38 + (w ? 6 + 14 * (w / max) : 3);
+    const p = (r, a) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
+    const inGap = A.gap.len && ((b - A.gap.start + 36) % 36) < A.gap.len;
+    const fill = w ? "var(--accent)" : inGap ? "var(--new)" : "var(--border-strong)";
+    seg.push(`<path d="M${p(r0, a0)} L${p(r1, a0)} A${r1} ${r1} 0 0 1 ${p(r1, a1)} L${p(r0, a1)} A${r0} ${r0} 0 0 0 ${p(r0, a0)}Z" fill="${fill}" opacity="${w ? 0.35 + 0.65 * (w / max) : inGap ? 0.55 : 0.6}"/>`);
+  });
+  const gx = 54 * Math.cos(A.az), gy = 54 * Math.sin(A.az);
+  seg.push(`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="4" fill="var(--new)"/>`);
+  $("ring").innerHTML = seg.join("");
+}
+
+const stampsFor = () => {
+  const r = DATA.results.strategies[state.strategy];
+  const ok = r.registration_rate >= 0.9 && r.reprojection_error_mean_px < 2;
+  return [
+    ["Web viewing", ok ? "pass" : "fail", `Needs 90% of photos registered and reprojection under 2 px: ${Math.round(r.registration_rate * 100)}%, ${r.reprojection_error_mean_px.toFixed(2)} px.`],
+    ["Robot localisation", "fail", "Needs metric scale. This run has none: no pose priors, no markers."],
+    ["Measurement", "fail", "Needs metric scale and a stated accuracy against control points."],
+    ["Game-engine asset", "unknown", "Needs a textured mesh; this run stops at sparse points (mesh comes with PG-P4)."],
+  ];
+};
+
+function fillDebrief() {
+  const r = DATA.results.strategies[state.strategy], cams = S.cameras, names = new Set(cams.filter((c) => c.points > 0).map((c) => c.name));
+  const missing = DATA.images.filter((n) => !names.has(n));
+  const top = A.holders.slice(0, 3), share = top.reduce((s, h) => s + h.n, 0) / A.obs;
+  const pe = r.pose_error;
+  const unsup = cams.findIndex((c) => c.points === 0);
+  const claims = [
+    [`<b>${r.registered} of ${DATA.images.length} photos</b> are tied into one model.${missing.length ? ` <b>${missing.join(", ")}</b> is not${unsup >= 0 ? ": the solver posed it, but no point ties it to the model" : ""}.` : ""}`,
+      missing.length ? { label: `${missing.length} photo`, act: () => (unsup >= 0 ? flyToCamera(unsup) : toast(`${missing[0]}: not registered`)) } : null],
+    [`The model is weakest at the <b>region of ${A.weak.idx.length} points</b> that ${A.seers.size} photos saw from a ${A.covered * 10}° arc; its depth rests on rays a median <b>${A.weak.ang.toFixed(1)}°</b> apart.`,
+      { label: "region", act: () => { setMode("coverage"); flyTo(A.centre, 3.2); } }],
+    [`Three photos hold <b>${Math.round(share * 100)}%</b> of what the model knows: ${top.map((h) => cams[h.i].name).join(", ")}.`,
+      { label: "3 photos", act: () => flyToCamera(top[0].i) }],
+    [`Against ETH3D's survey the cameras sit a median <b>${(pe.position_m_median * 100).toFixed(1)} cm</b> from where they really were, turned by a median ${pe.rotation_deg_median.toFixed(2)}°.`,
+      { label: "ground truth", act: () => { state.layers.truth = true; applyLayers(); toast("ground truth on"); } }],
+    [`<b>The scale is arbitrary.</b> Metres on this page come from the ground truth, which a real capture will not have.`, null],
+    [`One more photo from the open side of the weak region would close its widest gap of ${A.gap.len * 10}°.`,
+      { label: "next shot", act: () => { setMode("coverage"); flyTo(A.ghost, 2.4, A.centre); } }],
+  ];
+  $("d-sub").textContent = `kicker · ${state.strategy === "colmap_incremental" ? "COLMAP incremental" : "GLOMAP global"} · ${cams.length} cameras`;
+  $("d-body").innerHTML = claims.map(([html, ev], i) => `<p class="claim">${html}${ev ? `<button class="handle" data-i="${i}">↗ ${ev.label}</button>` : `<span class="handle unsupported" title="This claim has no evidence handle">no evidence</span>`}</p>`).join("");
+  [...$("d-body").querySelectorAll("button.handle")].forEach((b) => (b.onclick = () => claims[+b.dataset.i][1].act()));
+  $("stamps").innerHTML = stampsFor().map(([name, s, why]) => `<div class="stamp"><span class="dot ${s}">${s === "pass" ? "✓" : s === "fail" ? "×" : ""}</span><span>${name}</span><em class="${s}">${s}</em><small>${why}</small></div>`).join("");
+}
+
+// Flying the view: a short eased move of the orbit camera and its target.
+let fly = null;
+function flyTo(target, dist, from) {
+  const to = target.clone();
+  const dir = from ? target.clone().sub(from).normalize().multiplyScalar(-1) : camera.position.clone().sub(controls.target).normalize();
+  const pos = to.clone().add(dir.multiplyScalar(dist)).add(new THREE.Vector3(0, dist * 0.35, 0));
+  if (from) { pos.copy(target).add(target.clone().sub(from).normalize().multiplyScalar(0.9)).add(new THREE.Vector3(0, 0.6, 0)); to.copy(from); }
+  fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos, t1: to, s: performance.now() };
+  if (state.reduceMotion) fly.s -= 1e6;
+}
+function flyToCamera(ci) { select(ci); const c = V(S.cameras[ci].center); flyTo(c, 2.2); }
+
+const MODES = { run: 0, coverage: 1, debrief: 2 };
+function setMode(m) {
+  state.mode = m;
+  document.querySelectorAll("#mode button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.m === m));
+  document.querySelectorAll("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== m));
+  pointMat.uniforms.uMode.value = MODES[m];
+  if (m !== "run") { state.playing = false; setPlayIcon(); state.t = S.cameras.length - 0.001; }
+  if (m !== "run") { state.layers.threads = false; applyLayers(); }
+  if (m === "run") { state.layers.threads = true; applyLayers(); }
+  ghostObj.visible = m !== "run";
+  lastK = -1;
+}
+document.querySelectorAll("#mode button").forEach((b) => (b.onclick = () => setMode(b.dataset.m)));
+$("fly-weak").onclick = () => flyTo(A.centre, 3.2);
+$("fly-ghost").onclick = () => flyTo(A.ghost, 2.4, A.centre);
+
+// Labels an agent places in the scene: world anchors projected to the screen each frame.
+function labels() {
+  if (state.mode === "run") return [];
+  const out = [[A.centre, `<b>Thin coverage</b> · seen from ${A.covered * 10}°`, "--new"], [A.ghost, `<b>Shoot from here</b>`, "--new"]];
+  if (state.mode === "debrief") {
+    const h = A.holders[0];
+    out.push([V(S.cameras[h.i].center), `<b>${S.cameras[h.i].name}</b> · ${Math.round((h.n / A.obs) * 100)}% of the model`, "--accent"]);
+    const u = S.cameras.findIndex((c) => c.points === 0);
+    if (u >= 0) out.push([V(S.cameras[u].center), `<b>Posed, no points</b> · ${S.cameras[u].name}`, "--warn"]);
+  }
+  return out;
+}
+function drawLabels() {
+  const box = $("labels"), w = view.clientWidth, h = view.clientHeight, items = labels();
+  box.innerHTML = items.map(([p, html, c]) => {
+    const v = p.clone().project(camera);
+    if (v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1) return "";
+    return `<div class="lbl" style="--c:var(${c});left:${((v.x + 1) / 2) * w}px;top:${((1 - v.y) / 2) * h}px">${html}</div>`;
+  }).join("");
+}
+
 // A view is a link: ?strategy=glomap_global&timeline=name&at=12&truth=1&select=DSC_6511.JPG
 const q = new URLSearchParams(location.search);
 if (q.get("strategy") in DATA.strategies) state.strategy = q.get("strategy");
@@ -654,7 +960,12 @@ if (q.get("timeline")) setTimeline(q.get("timeline"));
 if (q.get("truth") === "1") { state.layers.truth = true; applyLayers(); }
 if (q.get("select")) select(S.cameras.findIndex((c) => c.name === q.get("select")));
 if (q.has("at")) state.t = Math.min(S.cameras.length - 0.001, Math.max(0, +q.get("at") - 0.001));
-else { state.t = 0.999; setTimeout(() => { state.playing = true; setPlayIcon(); }, 900); }
+else { state.t = 0.999; setTimeout(() => { if (state.mode === "run") { state.playing = true; setPlayIcon(); } }, 900); }
+state.mode = "run"; setMode(q.get("mode") in MODES ? q.get("mode") : "run");
+if (q.get("theme") === "light") document.documentElement.dataset.theme = "light";
+if (q.get("palette") === "1") openPalette();
+if (q.get("fly") === "weak") flyTo(A.centre, 3.2);
+if (q.get("fly") === "ghost") flyTo(A.ghost, 2.4, A.centre);
 requestAnimationFrame(frame);
 </script>
 </body>
