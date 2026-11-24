@@ -6,9 +6,9 @@
 **Prefix:** PG
 **Working name:** photogrammetry (final name open)
 **Date:** 2026-11-23
-**Inputs:** [landscape research](../docs/wip/research-landscape-2026-11-23.md) ·
-[robotics-lab contract](../docs/wip/robotics-lab-contract.md) ·
-[hardware and parallelism](../docs/wip/hardware-and-parallelism.md)
+**Inputs:** [landscape research](../wip/research-landscape-2026-11-23.md) ·
+[robotics-lab contract](../wip/robotics-lab-contract.md) ·
+[hardware and parallelism](../wip/hardware-and-parallelism.md)
 
 ---
 
@@ -55,9 +55,15 @@ engine is developed against public datasets with published ground truth (candida
 licence and fit: COLMAP's sample scenes, ETH3D, Tanks and Temples, Mip-NeRF 360, and the public
 underwater sets published with Sea-thru and SeaThru-NeRF).
 
-**Everything else is the learning path.** The objects, rooms, car and bikes in the
-[use cases](PG-use-cases.md) are where the engine is built and proven, step by step; they are not
-the destination. The destination is robots and massive underwater sites.
+**Two horizons.** The project is shaped for where it should be, not only for its next step.
+
+- **In six months: three equal pillars.** All the hardware as one pool, rented GPUs included;
+  robots and agents as first-class clients; a photographer's tool from RAW to model, from Lego to
+  reefs. No pillar is subordinate.
+- **In the first month: three starting points.** Small objects (the learning path where the
+  engine is built and measured), underwater sites (the case that exposes the compute and quality
+  problem), and robots (the first real client). The car, the bikes and the rest of the
+  [use cases](PG-use-cases.md) follow once those three work.
 
 *Vision sentence under consideration* (from the 2026-11-23 review): "A reconstruction engine that
 always says what it knows and what it does not — scale, frame, coverage, uncertainty — so that a
@@ -86,7 +92,7 @@ photos agree with each other before they are stitched, so the model's colour and
 together.
 
 Underneath sits a coordinator and a pool of workers. A worker runs on any machine — Apple silicon,
-an NVIDIA ARM64 box, an AMD Linux box, an old Intel Mac — and advertises what it can do. The
+an NVIDIA ARM64 box, an AMD Linux box, a rented cloud GPU — and advertises what it can do. The
 coordinator splits a reconstruction into stages and pieces and places each one where it runs best.
 The laptop alone runs the system end to end as far as its hardware allows: ingest, develop,
 registration and a splat (Brush on Metal) today; dense depth and meshing need a CUDA or HIP worker
@@ -183,11 +189,11 @@ subjects are the conditions the owner shoots in, not an edge case to ignore.
 $3,499 for the Professional edition with network processing. Its distribution splits work per
 task onto workers sharing one storage path; it documents CUDA and OpenCL but not Metal; and its
 2.3 release trains no gaussian splats and models no underwater refraction
-([research](../docs/wip/research-metashape-underwater-2026-11-23.md)). Those four gaps are this
+([research](../wip/research-metashape-underwater-2026-11-23.md)). Those four gaps are this
 project's openings.
 
 *Pending:* the minimal feature set — table stakes versus differentiators — is drafted in the
-[product feature analysis](../docs/reference/product-feature-analysis.md) §6 and decided in the
+[product feature analysis](../reference/product-feature-analysis.md) §6 and decided in the
 interview. Agreed so far: splats are in the MVP, bounded.
 
 ## 4. Scope boundary
@@ -208,8 +214,14 @@ A reconstruction tool: photographs and poses in, models with provenance out.
 
 ### Settled in the interview (2026-11-23)
 
-- **Three pillars, equal.** All the hardware as one pool; robots and agents as first-class
-  clients; a photographer's tool from RAW to model. No pillar is subordinate.
+- **Three pillars, equal — the six-month shape.** All the hardware as one pool; robots and agents
+  as first-class clients; a photographer's tool from RAW to model. No pillar is subordinate. The
+  first month starts from small objects, underwater sites and robots (§0, *Two horizons*).
+- **The iMac Pro is out** (2026-11-24). The design and the prototypes use the M4 Pro, the X3,
+  the GB10 and rented GPUs.
+- **Storage stays conservative** (2026-11-24). Keep what cannot be recomputed, evict what can, and
+  add external disks to a machine when space runs short; the rule is in the
+  [architecture sketch](PG-architecture-sketch.md) §8.
 - **The X3 is home.** The coordinator runs on the X3, always on. The laptop is a client and a
   worker, and runs the whole system alone when offline in the field.
 - **RAW pipeline: prototype both.** A minimal own pipeline (rawpy/LibRaw, set-wide white balance,
@@ -222,7 +234,7 @@ A reconstruction tool: photographs and poses in, models with provenance out.
 - **Open source from the start, MIT** (decided 2026-11-24; first answer was "open source later").
   The default stack stays permissive (BSD, MIT, Apache). Copyleft tools run only as external
   processes, restricted weights are never shipped, and no dataset lives in the repository — the
-  rules are in [Licensing](../docs/LICENSING.md).
+  rules are in [Licensing](../LICENSING.md).
 - **Assets land in Unreal Engine, Unity, Godot and Blender.** All four are targets for the
   game-engine use case.
 - **First scans, easiest to hardest:** a matte household object (clean baseline), a Lego model
@@ -252,12 +264,12 @@ The hard parts here are computational and distributed; the architecture cannot b
 until they are proven. A prototype counts as **proven** when it meets its stated criterion — not
 when it looks plausible. A failure with its evidence is also a result.
 
-*Restructured 2026-11-24* after the [advisor review](../docs/wip/review-fable-2026-11-23.md): the
+*Restructured 2026-11-24* after the [advisor review](../wip/review-fable-2026-11-23.md): the
 platform matrix merged into the baseline; the iMac Pro dropped from the prototypes; distribution
 moved onto a large set with dense depth as its unit of work; quality state moved early with a
 hold-out test; every criterion made measurable. Development runs on
-[public datasets](../docs/reference/public-datasets.md) until the owner's own captures and the
-friend's dive set arrive. Numeric tolerances marked *(proposed)* await the owner's confirmation.
+[public datasets](../reference/public-datasets.md) until the owner's own captures and the
+friend's dive set arrive. Numeric tolerances were agreed with the owner on 2026-11-24.
 
 **Old numbers → new:** P1 and P2 → P1 · new P2 · P6 → P3 · new P4 · P7b → P5 · P7 → P6 · P3 → P7 ·
 P4 → P8 · P5 → P9 · P9 → P10 · P10 → P11 · P8 → P12.
@@ -292,7 +304,7 @@ worker and the architecture sketch says so.
 **Proven when:** `quality.json` v0 (registration rate, connected components, per-image verdict and
 reason, reprojection mean and tail, coverage per region, scale state) is produced from PG-P1 and
 served through three MCP read tools; then a **hold-out test**: all images seeing one region of an
-ETH3D scene are removed, the region's coverage metric drops by at least half *(proposed)*, an agent
+ETH3D scene are removed, the region's coverage metric drops by at least half *(agreed 2026-11-24)*, an agent
 with only the MCP tools names that region among the scene's regions, and when the images return the
 metric recovers.
 
@@ -324,7 +336,7 @@ chosen on those numbers.
 iPhone.
 **Proven when:** A PG-P4 mesh and a splat of about one million gaussians load together in one
 three.js scene from the result's files, render at 60 fps or more on the M4 Pro and 30 fps or more on
-the iPhone 15 Pro *(proposed)*, and the same result also exports to Rerun as the engineering view.
+the iPhone 15 Pro *(agreed 2026-11-24)*, and the same result also exports to Rerun as the engineering view.
 
 ### C — Scale: the reason the project exists
 
@@ -337,7 +349,7 @@ arrives.
 **Proven when:** Dense depth per view runs split across the GB10, the X3 and one rented GPU, and the
 registration is cut into clusters solved on different machines and merged; the merged poses match a
 single-machine run within 0.1° rotation and 0.1% of the scene's extent in position, and dense depth
-maps match within 1% median relative difference *(proposed)*; wall-clock time, transfer time and
+maps match within 1% median relative difference *(agreed 2026-11-24)*; wall-clock time, transfer time and
 rental cost are recorded against the fastest single machine. If splitting does not pay, the set size
 at which it would is the number recorded.
 
@@ -360,7 +372,7 @@ error; the result decides whether the learned first pass enters a recipe.
 the capture-set format; a Gazebo set from robotics-lab when it exists.
 **Proven when:** `recon` reads the set, writes a model and `provenance.json`, and with exact poses
 the model's scale error is under 0.5% and its placement error under 1% of the scene's extent in the
-given frame *(proposed)*; the frame conversions (axes, handedness, camera-to-world) are checked by
+given frame *(agreed 2026-11-24)*; the frame conversions (axes, handedness, camera-to-world) are checked by
 the render's known geometry.
 
 #### PG-P10 — A room from inside
@@ -368,7 +380,7 @@ the render's known geometry.
 **Proves:** That an interior registers as one model, and what LiDAR and ARKit add.
 **Input:** ARKitScenes first; the owner's room later ([use cases](PG-use-cases.md) UC-B1).
 **Proven when:** With poses and depth, the room gives one metric model (TSDF mesh plus splat) whose
-wall lengths match the reference within 2% or 2 cm, whichever is larger *(proposed)*; photos-only,
+wall lengths match the reference within 2% or 2 cm, whichever is larger *(agreed 2026-11-24)*; photos-only,
 the room either registers as one model or the engine reports its separate components and where the
 links are missing.
 
@@ -376,7 +388,7 @@ links are missing.
 
 **Proves:** That a small internal app captures what the Camera app cannot — ARKit poses, intrinsics
 and LiDAR depth with each photo — in the shared capture-set format.
-**Timebox:** one week *(proposed)*; it starts once PG-P8 or PG-P10 shows that pose priors improve
+**Timebox:** one week *(agreed 2026-11-24)*; it starts once PG-P8 or PG-P10 shows that pose priors improve
 the result.
 **Proven when:** The app writes a capture set that the engine's ingest reads unchanged, alongside a
 PG-P9 robot set; per-frame intrinsics, the image format and the ARKit-to-capture-set axis

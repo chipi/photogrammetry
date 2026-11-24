@@ -19,9 +19,9 @@ set of prototypes that test its riskiest assumptions first.
 
 | Document | What it holds |
 |---|---|
-| [Brief](concept/PG-brief.md) | Where the project comes from, what it is, what is settled, the prototype plan |
-| [Architecture sketch](concept/PG-architecture-sketch.md) | The logical architecture: faces, engine, workers, the reconstruction model, configurability, distribution |
-| [Use cases](concept/PG-use-cases.md) | The first captures walked through the architecture as a thought experiment |
+| [Brief](docs/concept/PG-brief.md) | Where the project comes from, what it is, what is settled, the prototype plan |
+| [Architecture sketch](docs/concept/PG-architecture-sketch.md) | The logical architecture: faces, engine, workers, the reconstruction model, configurability, distribution |
+| [Use cases](docs/concept/PG-use-cases.md) | The first captures walked through the architecture as a thought experiment |
 | [Photogrammetry primer](docs/reference/photogrammetry-primer.md) | The theory behind every stage |
 | [Tools overview](docs/reference/tools-overview.md) | Libraries, models, formats and products, with licences and platform support |
 | [Product feature analysis](docs/reference/product-feature-analysis.md) | What Metashape and others offer; MVP tiers |
@@ -33,7 +33,7 @@ Working notes and research live in [`docs/wip/`](docs/wip/).
 ## Layout
 
 ```text
-concept/          concept package (PG-NN documents) and its working sketches
+docs/concept/     concept package (PG-NN documents) and its working sketches
 docs/reference/   standing reference: theory, tools, products, datasets
 docs/wip/         research notes, reviews, working notes
 ```

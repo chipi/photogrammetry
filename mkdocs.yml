@@ -1,0 +1,78 @@
+# Working name: change site_name (and repo_name if the repo is renamed) here only.
+site_name: photogrammetry
+site_description: Open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.
+site_url: https://chipi.github.io/photogrammetry/
+repo_url: https://github.com/chipi/photogrammetry
+repo_name: chipi/photogrammetry
+edit_uri: edit/main/docs/
+copyright: MIT, Marko Mrdjenovic and contributors
+docs_dir: docs
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  - tables
+  - admonition
+  - attr_list
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Concept:
+      - concept/index.md
+      - Brief: concept/PG-brief.md
+      - Architecture sketch: concept/PG-architecture-sketch.md
+      - Use cases: concept/PG-use-cases.md
+  - Reference:
+      - reference/index.md
+      - Photogrammetry primer: reference/photogrammetry-primer.md
+      - Tools overview: reference/tools-overview.md
+      - Product feature analysis: reference/product-feature-analysis.md
+      - Public datasets: reference/public-datasets.md
+  - Licensing: LICENSING.md
+  - Working notes:
+      - wip/index.md
+      - Hardware and parallelism: wip/hardware-and-parallelism.md
+      - Robotics-lab contract: wip/robotics-lab-contract.md
+      - Research, landscape: wip/research-landscape-2026-11-23.md
+      - Research, Metashape and underwater: wip/research-metashape-underwater-2026-11-23.md
+      - Review of the concept-phase start: wip/review-fable-2026-11-23.md
+      - Capture-set amendments: wip/capture-set-amendments.md

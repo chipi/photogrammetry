@@ -1,0 +1,51 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+build/
+dist/
+
+# MkDocs
+site/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Data: never committed (see docs/LICENSING.md)
+data/
+datasets/
+captures/
+outputs/
+runs/
+*.NEF
+*.ARW
+*.DNG
+*.dng
+*.nef
+*.arw
+*.HEIC
+*.heic
+*.7z
+*.zip
+*.ply
+*.glb
+*.splat
+*.spz
+*.mcap
+
+# Secrets
+.env
+.env.*
+!.env.example

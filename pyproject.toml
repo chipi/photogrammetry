@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "recon"
+version = "0.0.0"
+description = "Open-source photogrammetry reconstruction engine."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Marko Mrdjenovic" }]
+# No runtime dependencies yet; pycolmap and friends arrive with the first prototype.
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/chipi/photogrammetry"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.6"]
+docs = ["mkdocs>=1.6", "mkdocs-material>=9.5"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/recon"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "UP", "B", "S", "C90", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--strict-config"]
+markers = [
+    "unit: pure-logic tests, no I/O (fast)",
+    "integration: tests touching the filesystem or external processes",
+    "slow: tests that need datasets or GPUs; skipped unless selected",
+]
+
+[tool.coverage.run]
+source = ["src/recon"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "raise NotImplementedError", "if TYPE_CHECKING:"]

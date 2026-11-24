@@ -392,7 +392,7 @@ Raw depth maps contain errors: occlusions, textureless regions, reflections. Eac
 
 Dense cost scales with the number of pixels processed and the number of views used per pixel. Halving the resolution cuts the work by roughly four, and the point count of the result likewise. A fifty-megapixel image set processed at full resolution is expensive in GPU memory and time, and the benefit has a ceiling: the geometry cannot be more accurate than the pose and the calibration allow. Depth maps are usually computed at a reduced resolution that matches the accuracy of the poses, then fused.
 
-COLMAP's dense stereo requires an NVIDIA GPU with CUDA. This is a property of its implementation, not of the algorithm; the algorithm is portable, and other implementations exist for other backends.
+COLMAP's dense stereo needs a GPU: CUDA on NVIDIA, or a HIP build on AMD; its documentation describes no CPU or Metal path. This is a property of its implementation, not of the algorithm; the algorithm is portable, and other implementations exist for other backends.
 
 ### Why good poses matter
 

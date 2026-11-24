@@ -9,7 +9,7 @@ Input to the brief. From the operator on 2026-11-23, plus what was read off the 
 | MacBook Pro M4 Pro | Apple silicon | 48 GB | Metal | Daily driver; the field machine. Apple Object Capture runs only here (and on iOS). |
 | DGX Spark (GB10) | ARM64 + Blackwell, compute capability 12.1 | 128 GB unified | CUDA 13 | GPU shared with other workloads on a schedule, so its availability varies. ARM64 wheels missing for much of the stack. |
 | X3 (GMKtec EVO-X3) | AMD Ryzen AI Max+ 395, 32 threads, Radeon 8060S (RDNA 3.5) | 128 GB | ROCm/HIP or Vulkan | Linux. The likely coordinator. |
-| iMac Pro | Intel Xeon W (core count unknown), AMD Vega | ≥ 64 GB | Metal only, no CUDA | Often powered off. A CPU worker that comes and goes. |
+| ~~iMac Pro~~ | Intel Xeon W, AMD Vega | ≥ 64 GB | Metal only, no CUDA | **Out of the design (2026-11-24).** Most of the stack ships no macOS x86_64 wheels; its cost exceeds its contribution. |
 
 Four GPU platforms: CUDA, Metal, HIP/Vulkan and an older Metal-on-Intel. Existing tools mostly
 assume one NVIDIA box.

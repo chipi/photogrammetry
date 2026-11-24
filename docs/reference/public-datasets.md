@@ -1,7 +1,7 @@
 # Public datasets
 
 Until the owner shoots their own sets, development and the Step 0 prototypes
-([PG-brief §5](../../concept/PG-brief.md)) run on public datasets. This page lists which exist, what ground truth
+([PG-brief §5](../concept/PG-brief.md)) run on public datasets. This page lists which exist, what ground truth
 each carries, what the licence lets the project do, and which prototype each fits. The question it answers: which
 sets can we reuse easily, and which carry a wall.
 

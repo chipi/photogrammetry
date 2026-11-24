@@ -5,9 +5,9 @@ Architecture. Written before any prototype exists, so every component here is a 
 prototypes test, and every library choice is a candidate, not a decision.*
 
 **Version:** 0.1 · Draft · 2026-11-23
-**Inputs:** [brief](PG-brief.md) · [tools overview](../docs/reference/tools-overview.md) ·
-[primer](../docs/reference/photogrammetry-primer.md) · [hardware](../docs/wip/hardware-and-parallelism.md) ·
-[robotics-lab contract](../docs/wip/robotics-lab-contract.md)
+**Inputs:** [brief](PG-brief.md) · [tools overview](../reference/tools-overview.md) ·
+[primer](../reference/photogrammetry-primer.md) · [hardware](../wip/hardware-and-parallelism.md) ·
+[robotics-lab contract](../wip/robotics-lab-contract.md)
 
 ---
 
@@ -43,7 +43,6 @@ flowchart TB
     W1[M4 Pro<br/>Metal / CPU]
     W2[GB10<br/>CUDA]
     W3[X3<br/>HIP / Vulkan / CPU]
-    W4[iMac Pro<br/>CPU]
     W5[Rented cloud GPUs<br/>CUDA, ephemeral]
   end
 
@@ -60,8 +59,8 @@ flowchart TB
   SVC --> GRAPH
   SVC --> QUAL
   GRAPH --> COORD
-  COORD <--> W1 & W2 & W3 & W4 & W5
-  W1 & W2 & W3 & W4 & W5 <--> STORE
+  COORD <--> W1 & W2 & W3 & W5
+  W1 & W2 & W3 & W5 <--> STORE
   MODEL <--> STORE
   QUAL --> MODEL
 ```
@@ -171,14 +170,14 @@ is also where distribution pays most. Its outputs are not only poses but a verdi
 (registered, rejected and why) and the shape of the view graph (connected components, weak
 links), which the quality module and capture advice read.
 
-Licences come from the [tools overview](../docs/reference/tools-overview.md); anything still
+Licences come from the [tools overview](../reference/tools-overview.md); anything still
 unverified there is confirmed before it becomes a default.
 
 **The packaging reality (tools overview, 2026-11-23).** The current pycolmap (4.2.1) ships wheels
-only for Linux x86_64, macOS arm64 and Windows — none for the GB10 (Linux aarch64) or the iMac Pro
-(macOS x86_64); its CUDA wheels are Linux x86_64 only. PyTorch, Open3D, rawpy and rerun-sdk ship no
-macOS x86_64 wheels either. So the GB10 and the iMac Pro need source builds or containers for the
-core stack, and the iMac Pro may end up a worker for a narrow set of stages only. Whether PyTorch's
+only for Linux x86_64, macOS arm64 and Windows — none for the GB10 (Linux aarch64); its CUDA
+wheels are Linux x86_64 only. So the GB10 needs source builds or containers for the core stack.
+(PyTorch, Open3D, rawpy and rerun-sdk ship no macOS x86_64 wheels either, one reason the Intel
+iMac Pro left the design on 2026-11-24.) Whether PyTorch's
 ROCm wheels cover the X3's GPU (gfx1151) is unknown. PG-P1 and PG-P2 turn these expectations into facts.
 
 ### Configurability — strategies, recipes, evidence
@@ -280,7 +279,7 @@ coordinator never sends work a machine cannot run.
 **Data moves by hash, not by shared path.** Metashape's workers need shared storage mounted at the
 same path on every machine. Here a worker fetches inputs from the artifact store by content hash
 and caches them; a second task on the same images costs no transfer. This is what lets a laptop on
-a weak connection, a box on the tailnet and an occasional iMac join one pool.
+a weak connection, a box on the tailnet and a rented GPU join one pool.
 
 **Rented workers burst the pool.** When a job is bigger than the homelab — a reef survey, a
 building — the owner rents GPUs from a cloud provider and they join the pool for the job's
@@ -309,7 +308,7 @@ duration, then go away. This shapes the design in six ways:
 offline; nothing in the design requires a second machine. What a pool of one can do is bounded by
 its hardware: on the M4 Pro today that is ingest, develop, registration and a Brush splat, but not
 COLMAP dense depth (CUDA or HIP only) or gsplat (CUDA) — see the
-[tools overview](../docs/reference/tools-overview.md) platform matrix. A portable dense path is an
+[tools overview](../reference/tools-overview.md) platform matrix. A portable dense path is an
 open question (§10).
 
 ## 5. The faces
@@ -360,12 +359,36 @@ command or tool answers, and the reverse. The coordinate frame and scale state a
 - **Determinism and provenance.** Every product records input hashes, implementation, version,
   parameters, machine and time; randomness is seeded.
 - **Frames and scale never hidden.** Every product carries its frame and scale state.
-- **Observability.** Engine and workers send logs, metrics and traces to an existing
-  observability stack; a run's trace shows which machine did what and how long transfers took.
+- **Observability, without the content.** Engine and workers send logs, metrics and traces to an
+  existing observability stack; a run's trace shows which machine did what and how long transfers
+  took. Telemetry carries ids, hashes, stage names, sizes, timings and error classes — never file
+  names, paths, EXIF, GPS, image content or capture notes. A file name from a home scan ("kids
+  bedroom.heic") is content. Telemetry never leaves the owner's machines.
 - **Security.** Workers and faces are reachable on the tailnet only; no public exposure in the
   concept phase.
-- **Privacy and retention.** Interior and robot captures hold faces, screens and documents;
-  retention is per project, and deletion removes every artifact by hash.
+
+### Storage and retention — conservative by default
+
+Storage is budgeted by what can be recomputed. Three classes:
+
+| Class | What | Rule |
+|---|---|---|
+| **Keep** | Original captures; capture-set manifests; final products (poses, sparse model, mesh, texture, splat, exports); provenance and quality records | Kept on the coordinator until the owner deletes the project. Never evicted automatically. |
+| **Cache** | Decoded and developed images, features, matches, depth maps, intermediate clouds | Content-addressed and recomputable. Evicted least-recently-used under a per-machine cap; a project's cache can be dropped after its products are final. |
+| **Scratch** | A task's working files on a worker | Deleted when the task finishes. Rented workers hold only scratch and cache and are destroyed with their disks. |
+
+Defaults are small and raised deliberately: a cache cap per machine (starting point: 10% of the
+volume's free space, at most 200 GB), a warning when a project's keep-class data passes a set size,
+and a dry-run report before any eviction. More space comes from an external disk attached to a
+machine and registered as a storage volume — the store does not care which disk holds an object,
+only its hash.
+
+**Deletion reaches every copy.** The coordinator records which workers hold which hashes. Deleting a
+project removes its keep-class objects, purges the matching cache entries on every worker that
+reports holding them, and lists any worker that was offline so the purge completes when it returns.
+Rented workers are destroyed, not purged. Deletion produces a receipt: what was removed, where, and
+what is pending. Interior and robot captures hold faces, screens and documents, so their projects
+default to "stays home" (§4) and deletion is the expected end of their life, not an exception.
 
 ## 9. Leanings agreed with the owner (2026-11-23)
 
@@ -393,8 +416,9 @@ Recommendations for the prototypes to confirm, not locked decisions.
 
 1. Engine language beyond the first version: Python throughout, or Rust for the coordinator and
    worker agent? Closes on PG-P1, PG-P2 and PG-P7 evidence.
-2. Artifact store: plain content-addressed files on the X3, an object store, or both? What does a
-   worker cache, and for how long?
+2. Artifact store: plain content-addressed files on the X3, an object store, or both? The
+   retention classes and cache rules are settled (§8, *Storage and retention*); the backing store
+   and the exact cache caps are open.
 3. Metadata store: SQLite per project, or one Postgres for the engine?
 4. Coordinator–worker protocol — leaning: own pull-based protocol (section 9). Open: lease
    length, transport details, and the evidence threshold for revisiting Ray.
