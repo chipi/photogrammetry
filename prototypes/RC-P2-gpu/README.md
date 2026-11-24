@@ -9,8 +9,9 @@ recorded with the error and what was tried. The GB10's available CUDA time under
 schedule is recorded. If neither GPU path works, the rented GPU becomes the planned CUDA worker and
 the architecture sketch says so.
 
-Status: **not proven yet.** The GB10 half is done (2026-11-24): dense depth through CUDA and a gsplat
-training run both pass on `courtyard`. The X3 HIP half has not run.
+Status: **proven** (2026-11-24). Both halves pass. The GB10 half (dense depth through CUDA, gsplat
+training) passed first; the X3 half (dense depth through a HIP build for gfx1151, in Docker) is also a
+pass, not a recorded failure, with one intermittent GPU abort recorded in its section.
 
 ## Data
 
@@ -132,11 +133,93 @@ beside the live vLLMs has not been tried, and sharing the GPU would slow product
 prototype does not test it. Elapsed GPU time of this session: about 20 min dense depth plus about 11
 min gsplat, 31 min in total.
 
+## X3 half: dense depth through HIP on gfx1151
+
+Docker only; nothing installed on the host. Files in `x3/`: `Dockerfile`, `build.sh`, `run_dense.sh`
+(host wrapper), `dense_in_container.sh` (stages, timing, GPU sampling).
+
+```bash
+bash x3/build.sh                      # image recce-p2-colmap-hip (JOBS defaults to half the cores)
+bash x3/run_dense.sh courtyard 2000   # container recce-p2-dense; outputs in ~/.cache/recce/runs/p2/x3/
+```
+
+### What was used
+
+- Machine: AMD Ryzen AI MAX+ 395 with Radeon 8060S (Strix Halo, gfx1151), 32 threads, 124 GB unified
+  memory (BIOS VRAM carve-out 1 GiB, GTT 62 GB). Host Docker 29.7.2; the user is in the `docker` group.
+- Base image `rocm/dev-ubuntu-24.04:7.2.4` (ROCm 7.2.4, hipcc clang 22), run with
+  `--device=/dev/kfd --device=/dev/dri --group-add video --group-add render
+  --security-opt seccomp=unconfined`. `rocminfo` lists `gfx1151` ("Radeon 8060S Graphics").
+- COLMAP has no official HIP release, but upstream `main` has the backend (colmap/colmap PR 4635,
+  merged as PR 4795 on 2026-10-01): the `.cu` files of `src/colmap/mvs` compile unmodified through
+  `src/colmap/util/cuda_to_hip.h` with `-DHIP_ENABLED=ON`. No hipify and no port were needed. The image
+  builds commit `57ded392` (`colmap -h` prints "COLMAP 4.3.0.dev0 ... with HIP").
+- Configure flags: `-DCUDA_ENABLED=OFF -DHIP_ENABLED=ON -DCMAKE_HIP_ARCHITECTURES=gfx1151
+  -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ -DGUI_ENABLED=OFF -DOPENGL_ENABLED=OFF
+  -DONNX_ENABLED=OFF -DCGAL_ENABLED=OFF`. The build takes about 3.5 min with 16 jobs.
+- Input: RC-P1's X3 incremental model and the `courtyard` images, mounted read-only. Dense options match
+  the GB10 run: `max_image_size` 2000, defaults otherwise (geometric consistency on). The container is
+  pinned to cores 16-31 (`--cpuset-cpus`, the `CPUSET` variable in `run_dense.sh`).
+
+### Result: pass
+
+| Stage | X3 (HIP) | GB10 (CUDA) |
+|---|---|---|
+| `image_undistorter` | 6 s | 3.2 s |
+| `patch_match_stereo` photometric pass | 1,541 s (about 40 s per view) | about 14 s per view |
+| `patch_match_stereo` geometric pass | 1,616 s (about 43 s per view) | about 18 s per view |
+| `patch_match_stereo` total | 3,205 s (53.4 min) | 1,168.7 s |
+| `stereo_fusion` | 9 s | 17.0 s |
+
+Output: 38 photometric and 38 geometric depth maps; `fused.ply` with 725,221 points (19.6 MB; the GB10
+run fused 734,016 from a different sparse model). The workspace is 3.1 GB. PatchMatch on the X3 took
+about 2.7 times the GB10's time on the same scene and settings.
+
+GPU used: the PatchMatch log prints per-sweep `cudacc.cc` timings (the HIP build reuses that file
+name). `rocm-smi` inside the container, sampled every 5 s (631 samples), reports GPU use averaging
+97.6% (maximum 100%). The 1 GiB VRAM carve-out stayed at about 0.94 GB used, so the working memory is
+GTT (shared system memory): GTT in use ranged from 26.0 to 27.6 GB, part of it from other workloads
+on the machine. Host memory available stayed between 25 and 43 GB.
+
+### Failure recorded: an intermittent GPU abort
+
+The first full run aborted at view 27 of 38 of the photometric pass, 993 s into `patch_match_stereo`
+(exit 134):
+
+```
+rocdevice.cpp :3721: Callback: Queue 0x798c08600000 aborting with error :
+HSA_STATUS_ERROR_MEMORY_APERTURE_VIOLATION: The agent attempted to access memory beyond the largest
+legal address. code: 0x29
+*** SIGABRT received by PID 163
+```
+
+Tried: running that view (`DSC_0316.JPG`) alone, photometric pass only, same settings, completes
+(exit 0, about 45 s). A second full run with the same image, flags and inputs passed all 38 views in
+both passes. The abort is not tied to that view and has not reproduced; its cause is not investigated.
+It happened while other workloads were using the machine's GPU and unified memory, which may be a
+factor but was not tested. Logs of the aborted run are in `~/.cache/recce/runs/p2/x3-fail1/`.
+
+### Other failures on the way
+
+- First configure failed with `Imported target "GLEW::GLEW" includes non-existent path
+  ".../GLEW_INCLUDE_DIRS-NOTFOUND"`: SiftGPU needs GLEW even with `OPENGL_ENABLED=OFF`. Adding
+  `libglew-dev` to the image fixed it.
+- The first dense run was stopped about 11 minutes in and restarted with the container pinned to cores
+  16-31, so another job could keep cores 0-3.
+- `dense_in_container.sh` first counted depth maps with a non-recursive glob and reported 0; the maps
+  are in the `dslr_images/` subfolder and the count now uses `find`.
+
+### Images and containers
+
+Image `recce-p2-colmap-hip:latest` (9.32 GB) built on `rocm/dev-ubuntu-24.04:7.2.4` (5.16 GB, pulled
+for this), and the stopped container `recce-p2-dense` (492 kB writable layer). Remove with
+`docker rm recce-p2-dense; docker rmi recce-p2-colmap-hip rocm/dev-ubuntu-24.04:7.2.4`.
+
 ## Not covered
 
-- **The X3 HIP half.** Not run yet: COLMAP's dense depth through a HIP build for gfx1151 on the X3,
-  with its error and what was tried if it fails. This is the open part of the criterion, so the
-  prototype stays not proven.
+- X3: one successful run and one aborted run only; the abort is not root-caused (see the X3 section).
+  No second scene, no full-resolution run, no accuracy check of the fused cloud, and no run on an idle
+  GPU (other workloads were using the X3's GPU memory and cores).
 - One scene only (`courtyard`); `kicker` and `pipes` are not run. One setting only
   (`max_image_size` 2000); no full-resolution (6048×4032) dense run, so its time and memory are
   unknown.

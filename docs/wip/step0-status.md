@@ -9,7 +9,7 @@ page is the summary. Updated 2026-11-24; work paused until 2026-11-25 on the own
 | Prototype | Status | Result in one line |
 |---|---|---|
 | [RC-P1 Registration on every machine](https://github.com/chipi/recce/tree/main/prototypes/RC-P1-registration) | **Proven** | COLMAP and GLOMAP register kicker, courtyard and pipes on the X3, the M4 Pro and the GB10 |
-| [RC-P2 The expensive stages on the GPUs](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu) | GB10 half passes; X3 half running | CUDA dense depth (734k fused points on courtyard) and a gsplat splat (3.3M gaussians) on the GB10 |
+| [RC-P2 The expensive stages on the GPUs](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu) | **Proven** | Dense depth on courtyard through CUDA on the GB10 (1,169 s) and through HIP on the X3 in a ROCm container (3,205 s, about 2.7 times slower); a gsplat splat on the GB10 |
 | [RC-P3 Quality state an agent can read](https://github.com/chipi/recce/tree/main/prototypes/RC-P3-quality) | **Proven** | An agent with only three MCP read tools names the held-out region on both scenes |
 | [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Running | Setup done; GPU phase in progress |
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
@@ -41,7 +41,7 @@ a 0.6° result into 13°. Every score now counts only cameras that hold points.
 - Registration of a 38-image scene peaks at 28 GB resident memory (courtyard, M4 Pro).
 - Poisson meshing in the conda-forge pycolmap build for the GB10 aborts ("Failed to close loop"),
   even on a synthetic sphere. Delaunay meshing works and is used.
-- The X3 has no ROCm. COLMAP has no official HIP backend; the X3 attempt runs in a ROCm container.
+- COLMAP upstream has a HIP backend since 2026-10 (PR #4795). Built from `main` in a ROCm 7.2.4 container for gfx1151, it runs dense depth on the X3 at about 2.7 times the GB10's time, at 98% GPU use; one run aborted with a memory-aperture violation and a repeat passed (not root-caused). Nothing is installed on the host.
 
 **GB10 GPU time.** The DGX serves production LLMs in gpu-mode `prod`, which leaves about 15 GB of
 memory. Recce GPU work runs in a `free` window: by day under the owner's standing go, switched by

@@ -25,8 +25,8 @@ assume one NVIDIA box.
   session switches back to `prod` and verifies). CUDA dense depth plus a gsplat run peaked at
   50 GB used ([RC-P2](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu)).
 - **Memory.** Registering a 38-image ETH3D scene peaks at 28 GB resident (M4 Pro).
-- **The X3's GPU.** No ROCm on the host; COLMAP has no official HIP backend. The attempt runs in a
-  ROCm container, nothing installed on the host.
+- **The X3's GPU.** No ROCm on the host. COLMAP main (HIP backend since 2026-10) built in a ROCm 7.2.4
+  container runs dense depth on gfx1151 at about 2.7 times the GB10's time; one intermittent abort.
 - **Mapping speed.** On the busy X3 COLMAP's incremental mapper took 57 s on kicker, the M4 Pro
   17 s, the GB10 22 s; GLOMAP 3–4 times faster on every machine.
 
