@@ -12,8 +12,9 @@ joining when a job outgrows them.
 
 ## Status
 
-Concept phase. There is no code yet. The project is being shaped through a concept package and a
-set of prototypes that test its riskiest assumptions first.
+Step 0: prototypes (the technology) and mock-ups (the product) run side by side. Four of twelve
+prototypes are proven; see [Step 0 status and findings](docs/wip/step0-status.md). The engine package
+`recon` holds its first code, a capture-set reader with its tests.
 
 ## Read first
 

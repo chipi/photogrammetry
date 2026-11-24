@@ -2,7 +2,7 @@
 
 An open-source reconstruction engine that turns photographs into 3D models (camera poses, point clouds, meshes and gaussian splats) and says what it knows and what it does not: scale, frame, coverage and uncertainty.
 
-The project is in its concept phase. There is no engine code yet; the concept package and a set of prototypes test the riskiest assumptions first.
+The project is in Step 0: prototypes test the riskiest assumptions and mock-ups work out the product, side by side. The engine package `recon` holds its first code, a capture-set reader. Progress: [Step 0 status and findings](wip/step0-status.md).
 
 | Section | What it holds |
 |---|---|

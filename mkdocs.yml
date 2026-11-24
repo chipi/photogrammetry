@@ -71,6 +71,7 @@ nav:
   - Working notes:
       - wip/index.md
       - Hardware and parallelism: wip/hardware-and-parallelism.md
+      - Step 0 status and findings: wip/step0-status.md
       - GPU rental for RC-P7: wip/gpu-rental-p7.md
       - Robotics-lab contract: wip/robotics-lab-contract.md
       - Research, landscape: wip/research-landscape-2026-11-23.md

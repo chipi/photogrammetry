@@ -85,4 +85,4 @@ M5–M8 follow the prototypes they depend on.
 
 | Mock-up | Phase | Where |
 |---|---|---|
-| M0 + M1, first passes at M2 and M3 | 1, built 2026-11-24; **owner verdict: kept, all concepts shown** ("we really love everything"; the gap list "exactly what I wanted"); phase 2 polish next | [mockups/RC-M1-run](https://github.com/chipi/recce/tree/main/mockups/RC-M1-run) |
+| M0 + M1, first passes at M2 and M3 | Phase 1 built 2026-11-24, **owner verdict: kept, all concepts shown** ("we really love everything"; the gap list "exactly what I wanted"). Phase 2 done the same day: IBM Plex, tokens, AA contrast, field shot cards; photos hang in the air with faint rays (owner feedback) | [mockups/RC-M1-run](https://github.com/chipi/recce/tree/main/mockups/RC-M1-run) |

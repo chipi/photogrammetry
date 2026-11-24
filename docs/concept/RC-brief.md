@@ -311,6 +311,9 @@ hold-out test; every criterion made measurable. Development runs on
 [public datasets](../reference/public-datasets.md) until the owner's own captures and the
 friend's dive set arrive. Numeric tolerances were agreed with the owner on 2026-11-24.
 
+**Progress** is kept in [Step 0 status and findings](../wip/step0-status.md); each prototype's
+README holds its numbers.
+
 **Old numbers → new:** P1 and P2 → P1 · new P2 · P6 → P3 · new P4 · P7b → P5 · P7 → P6 · P3 → P7 ·
 P4 → P8 · P5 → P9 · P9 → P10 · P10 → P11 · P8 → P12.
 

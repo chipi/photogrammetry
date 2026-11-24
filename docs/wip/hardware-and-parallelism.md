@@ -14,6 +14,24 @@ Input to the brief. From the operator on 2026-11-23, plus what was read off the 
 Four GPU platforms: CUDA, Metal, HIP/Vulkan and an older Metal-on-Intel. Existing tools mostly
 assume one NVIDIA box.
 
+### Measured in Step 0 (2026-11-24)
+
+- **pycolmap packaging.** PyPI's pycolmap 4.2.1 has wheels for x86_64 Linux, Apple silicon and
+  Windows, all CPU only: no CUDA, no Metal, no Linux ARM. On the GB10, conda-forge's CUDA build
+  (through micromamba, user-level) runs SIFT extraction and matching on the GPU, about three times
+  faster than the CPU on the X3 or the M4 Pro ([RC-P1](https://github.com/chipi/recce/tree/main/prototypes/RC-P1-registration)).
+- **The GB10's schedule.** In gpu-mode `prod` the production LLMs leave about 15 GB of the 121 GB
+  free. Recce GPU work runs in a `free` window (by day under the owner's standing go; the homelab
+  session switches back to `prod` and verifies). CUDA dense depth plus a gsplat run peaked at
+  50 GB used ([RC-P2](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu)).
+- **Memory.** Registering a 38-image ETH3D scene peaks at 28 GB resident (M4 Pro).
+- **The X3's GPU.** No ROCm on the host; COLMAP has no official HIP backend. The attempt runs in a
+  ROCm container, nothing installed on the host.
+- **Mapping speed.** On the busy X3 COLMAP's incremental mapper took 57 s on kicker, the M4 Pro
+  17 s, the GB10 22 s; GLOMAP 3–4 times faster on every machine.
+
+Summary of all findings: [Step 0 status and findings](step0-status.md).
+
 ## The operator's goal, in their words (paraphrased)
 
 Large photo sets in large formats need parallelism, and existing projects don't use the hardware
