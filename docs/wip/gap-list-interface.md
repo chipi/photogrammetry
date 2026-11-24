@@ -21,12 +21,42 @@ Marked "(inferred)": a statement I conclude rather than read.
 
 The gap list is a versioned JSON document, `gaps.json`, written next to `provenance.json` by every reconstruction. Every face serves that one document and a small set of verbs over it. A gap carries its frame and scale state, a machine check that says whether a consumer may use its viewpoints as goals, and a stable id. The next capture set cites those ids. After the re-run, Recce returns a diff that says which gaps closed, which stayed open and why, and how far each new photo landed from the viewpoint it was meant to fill. Recce advises and never commands: reachability, no-go areas and the decision to move stay with the consumer.
 
+### Robotics-lab's answers (2026-11-24)
+
+Sent to the robotics-lab session on 2026-11-24; its reply, with the facts it cites checked in its
+`mission-control` working copy (commit b84eea8). Decisions on its side are the operator's: the
+amendments in section 6 and answers c, e and f are recommendations, not acceptances, and are
+deferred to MVP 2 (MVP 1 is in wrap-up).
+
+| Question | Answer | Kind |
+|---|---|---|
+| a. Does `point` take a yaw? | No. `point` is `{x, y, frame?: "site" \| "map"}` (`apps/mission-control/CONTRACT.md` line 99). RFC-0025's "contract 1.3: point gets yaw" is stale (1.3 shipped as calibration; the navigator contract is at 1.7); robotics-lab fixes that line. Yaw exists only on `start_pose {x, y, yaw}` and the `go_to_object` result `stand {x, y, yaw, frame}`. | Fact |
+| a. Conventions | Yaw in radians about +z, zero along +x, counter-clockwise positive (REP-103; robotics-lab's `docs/wip/SENSORS-VS-ROS.md`). Quaternions: runfiles store `[w, x, y, z]` (ADR-0016); the wire to Foxglove and ROS uses named `{x, y, z, w}` (`libs/runfile/src/runfile/wire.py`). | Fact |
+| b. Who mints a frame identity? | Nobody today: frames are names (`site`, `map`). Since navigator contract 1.5 a goal's frame is set per goal by `start_pose`, and the answer's `placed {pose, frame}` gives mapd's frame in the map's. A site has `dock_pose {x, y, yaw, frame, robot, set_from}`. Nothing proves two maps are one frame after relocalisation; that is an open MVP 2 question. | Fact |
+| c. Actor profile | Recommend robotics-lab's robot file: `capabilities.sensors` already lists `[{id, kind, ...}]` and the duck has a `camera` block; a camera entry (mount, height, pitch range, field of view) extends it. | Recommendation |
+| d. MCP transport | Robotics-lab's MCP is stdio only, a client of a local HTTP API with bearer tokens; remote access is `tailscale serve` plus tokens (`docs/wip/STAGING-CUTOVER.md`). Recommend: Recce serves its own HTTP API on the tailnet with a token, and a stdio MCP server on the agent's machine is its client. | Recommendation |
+| e. `capture_view` or `point` with a burst | A separate `capture_view` kind: each goal kind has one done-condition, and "a burst recorded" differs from "within 0.25 m". Needs a navigator contract bump and the capture trigger. | Recommendation |
+| f. Robot claim lease | Shorter than a human's; the only precedent is Mission Control's drive lock lease (`lock/renew`). | Recommendation |
+
+What changes here as a result:
+
+- Viewpoints keep `planar.yaw` in REP-103 terms (radians, zero along +x, counter-clockwise), and
+  any quaternion is named field by field (`{x, y, z, w}`), never a bare array.
+- Until `capture_view` exists, a planner can send only a position (`point` has no heading), so a
+  viewpoint's heading reaches the robot only through a human or a later goal kind. The loop in
+  section 5 works for position today and for heading after the amendment.
+- `frame.id` is minted by Recce from what the capture set states (run, site, dock pose), not
+  read from robotics-lab; a match between two ids is a claim Recce cannot verify until the MVP 2
+  frame question is answered. `usable_as_goal` stays false across frame ids.
+- Recce's transport follows answer d: its HTTP API on the tailnet with tokens, a stdio MCP
+  client beside the agent. Open question 4 below is answered by that.
+
 ## 2. What robotics-lab needs, in its own terms
 
 | Need | Where robotics-lab says it | What follows for the gap list |
 |---|---|---|
 | Goals are small typed records with a validated schema; an unknown kind is refused | RFC-0014 §3.4.1; `CONTRACT.md`, Goals. Kinds: `point {x, y, frame?}`, `go_to_object`, `go_to_area`, `explore`, `inventory` | No kind takes a camera viewpoint. A planner turns a viewpoint into a `point` goal (position plus heading) or waits for a new kind (section 6). |
-| A robot pose in a goal is planar: `{x, y, yaw}`, site frame, metres and radians | `CONTRACT.md`, `start_pose`; `libs/runner/CONTRACT.md`, `start_pose`. The yaw zero direction is not stated (inferred: counter-clockwise from +x, as in ROS) | Each viewpoint carries a `planar` projection in that shape, with the 3D pose beside it. |
+| A robot pose in a goal is planar: `{x, y, yaw}`, site frame, metres and radians | `CONTRACT.md`, `start_pose`; `libs/runner/CONTRACT.md`, `start_pose`. Yaw is radians, zero along +x, counter-clockwise positive (REP-103; robotics-lab answer a) | Each viewpoint carries a `planar` projection in that shape, with the 3D pose beside it. |
 | Frames have names (`world`, `map`, `site`, robot frames); every response with a position names its `frame` | RFC-0025 §3.6; `CONTRACT.md` header; RFC-0014 §3.2.1 | The gap list names its frame on every position. |
 | A run's `map` frame equals the site frame only when the robot starts at the dock; otherwise `localisation.frame` is `run` | RFC-0014 §3.5.1, §3.5.4, §3.3.2 | A frame needs an identity, not only a name: two `map` frames of two runs differ. |
 | The scale trap: a model is metric in the poses' frame, or an explicit transform with the scale stated, or "arbitrary" | RFC-0025 §5, §5.1 | The gap list repeats the scale state and gates its own viewpoints on it. |
@@ -288,7 +318,7 @@ Notes on each.
 2. **Reconstruct.** `recon` or the API runs the stages and writes `gaps.json` beside `provenance.json`. The frame block carries the placement result.
 3. **Fetch.** The planner (an outside agent holding both the `mission-control` and a `recon` MCP server, or Mission Control's model job) calls `gap_brief(project, purpose="robot_localisation", actor=<profile>, frame_id=<site frame id>)`.
 4. **Check the frame.** If every returned viewpoint has `usable_as_goal: true`, the planner proceeds. If not, it uses the qualitative parts only (`text`, `relative`, counts) and either asks the operator for a capture by hand or raises a scale gap to the operator. No guess substitutes for the flag.
-5. **Transform and plan.** The planner transforms into its goal frame: none when the frame ids match, else its own transform for that run, which Mission Control knows from the dock pose (`start_pose`, `dock_pose`: `CONTRACT.md`). It subtracts the camera mount to get a base pose (RFC-0025 §5), picks a reachable point inside `acceptance`, checks its map and guardrails, then creates a goal: today `point {x, y, yaw, frame}` (yaw per navigator contract 1.3, RFC-0025 §3.3; the Mission Control `CONTRACT.md` lists `point` without it, which is a mismatch to confirm (inferred)). An agent's run goes to the simulator first (`target: sim`), and a real run needs the operator, so a gap list is rehearsed in Gazebo before it moves a real robot (RFC-0014 §3.4.2, `mcp_server.py`).
+5. **Transform and plan.** The planner transforms into its goal frame: none when the frame ids match, else its own transform for that run, which Mission Control knows from the dock pose (`start_pose`, `dock_pose`: `CONTRACT.md`). It subtracts the camera mount to get a base pose (RFC-0025 §5), picks a reachable point inside `acceptance`, checks its map and guardrails, then creates a goal: today `point {x, y, frame}`, with no heading (robotics-lab answer a; RFC-0025's yaw line is stale), and `capture_view` once it exists. An agent's run goes to the simulator first (`target: sim`), and a real run needs the operator, so a gap list is rehearsed in Gazebo before it moves a real robot (RFC-0014 §3.4.2, `mcp_server.py`).
 6. **Claim.** The planner calls `mark_gap_planned(ids, plan_ref="mc:goal-run/123")`.
 7. **Execute and record.** The robot reaches the stand pose, takes the burst (`hints.photos`, `hints.baseline_deg`) with locked settings, and the model job writes a new capture set with `targets: [{"gap":"gap-0001","viewpoint":"vp-0001a","goal_run":123}]` and the same `site` and `frame` identity.
 8. **Re-run and report.** Recce ingests the set into the same project and sets the targeted gaps to `captured`. The cached stages are reused, so only what the new photos touch re-runs ([architecture sketch](../concept/PG-architecture-sketch.md) §3). It computes a new gap list with matched ids and a diff. The diff reports, per gap: `closed`, `still_open` with the evidence delta (for example median angle 6.1 to 11.8 degrees against 15 needed, so "one more photo from the far side"), `new` gaps the extra photos exposed, `regressed` gaps, and a `targets_report` per target: which new photos registered, `viewpoint_hit` (`position_error`, `look_at_error_deg` against the tolerance), and a `miss_reason` (`photo_not_joined`, `outside_tolerance`, `blurred`, `wrong_region`). The `targets_report` is the feedback for planning: a consistent 0.3 m stand-off error tells the planner that its mount or localisation has a bias.
@@ -331,7 +361,7 @@ Robotics-lab (amendments to RFC-0025 §5.1, proposed).
 1. Gap matching across re-runs. Region overlap works while the frame is stable; after a re-solve in which the frame moves, matching can split or merge gaps. The rule needs evidence from PG-P1 runs of the same set with added photos.
 2. Gap thresholds and severity formulas (the 15 degrees and 3 photos are placeholders). PG-P3 sets them against ground truth; the `ruleset` field exists so changing them is visible.
 3. Actor profile format: Recce's own, or robotics-lab's robot file (VDA factsheet names, RFC-0014 §3.3.1) extended? One format would avoid a translation layer.
-4. MCP transport: robotics-lab's server is stdio and a client of a local API; Recce's may run on the X3 and be reached over the tailnet. Streamable HTTP with the same bearer tokens, or a stdio proxy on the agent's machine?
+4. MCP transport. *Answered by robotics-lab (d):* Recce's HTTP API on the tailnet with tokens, and a stdio MCP server on the agent's machine as its client.
 5. Whether the claim lease should be shorter for a robot than for a human, and whether Recce ever stops offering a gap a robot repeatedly missed (`attempts` is recorded; the policy is not).
 6. Frame identity: who mints `frame_id` for a run's `map`, and how a planner proves two ids describe the same frame after a relocalisation (RFC-0025 §3.6 "map <- world epochs" is not verified in code).
 7. Gaps on geometry that exists only in products (holes need a mesh). The schema is open-ended in `kind`; whether holes are listed by region or by mesh face ids is undecided.
