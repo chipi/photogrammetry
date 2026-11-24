@@ -35,9 +35,20 @@ posed but tied to no 3D point does not count as registered: it is reported as
 `posed_without_points` and left out of the alignment. `--score-only` re-scores the models already
 in the output folder without running the mappers again.
 
+On Linux ARM (the GB10) PyPI has no pycolmap wheel; conda-forge has a CUDA build. There the
+environment comes from micromamba instead of `uv`:
+
+```bash
+micromamba create -p ~/.cache/recce/p1env -c conda-forge python=3.12 pycolmap=4.2.1 numpy
+~/.cache/recce/p1env/bin/python run_p1.py <scene folder> <output folder>
+```
+
 ## Results
 
-Status: **not proven yet.** Three scenes pass on two machines (X3, M4 Pro); the GB10 is not run.
+Status: **proven (2026-11-24).** Both strategies register three ETH3D scenes on all three
+machines, each strategy from the same matches on its machine. Two limits: each machine computed
+its own features and matches, and the GB10 ran a different pycolmap build (conda-forge, CUDA)
+from the X3 and the M4 Pro (PyPI, CPU).
 
 | Machine | Scene | Strategy | Registered | Posed, no points | Reproj. mean / p95 (px) | Rot. err. median (°) | Pos. err. median (m, % extent) | Mapping (s) |
 |---|---|---|---|---|---|---|---|---|
@@ -53,21 +64,37 @@ Status: **not proven yet.** Three scenes pass on two machines (X3, M4 Pro); the 
 | M4 Pro (CPU) | courtyard, 38 images | GLOMAP global | 38/38 | 0 | 2.22 / 3.67 | 0.423 | 0.054, 0.36% | 9.2 |
 | M4 Pro (CPU) | pipes, 14 images | COLMAP incremental | 14/14 | 0 | 1.09 / 2.36 | 0.960 | 0.021, 0.66% | 2.2 |
 | M4 Pro (CPU) | pipes, 14 images | GLOMAP global | 14/14 | 0 | 2.18 / 8.20 | 0.989 | 0.019, 0.61% | 0.7 |
+| GB10 (GPU SIFT) | kicker, 31 images | COLMAP incremental | 30/31 | 0 | 1.22 / 2.29 | 0.349 | 0.018, 0.22% | 22.4 |
+| GB10 (GPU SIFT) | kicker, 31 images | GLOMAP global | 31/31 | 0 | 2.53 / 9.19 | 0.558 | 0.025, 0.30% | 7.2 |
+| GB10 (GPU SIFT) | courtyard, 38 images | COLMAP incremental | 38/38 | 0 | 1.28 / 2.34 | 0.343 | 0.061, 0.41% | 48.2 |
+| GB10 (GPU SIFT) | courtyard, 38 images | GLOMAP global | 38/38 | 0 | 2.88 / 13.85 | 0.259 | 0.051, 0.34% | 12.9 |
+| GB10 (GPU SIFT) | pipes, 14 images | COLMAP incremental | 14/14 | 0 | 1.05 / 2.24 | 0.844 | 0.022, 0.71% | 3.0 |
+| GB10 (GPU SIFT) | pipes, 14 images | GLOMAP global | 14/14 | 0 | 1.89 / 4.93 | 0.892 | 0.019, 0.60% | 0.9 |
 
-Shared stages (feature extraction, exhaustive matching), X3 / M4 Pro: kicker 22.4 + 7.4 s /
-24.3 + 7.4 s; courtyard 27.9 + 6.7 s / 25.9 + 10.6 s; pipes 8.0 + 0.9 s / 9.2 + 1.8 s. SIFT runs on
-the CPU on both: pycolmap 4.2.1 from PyPI has no CUDA, and has no Metal path on the Mac. The X3
-runs shared the machine with other workloads, so its timings are an upper bound; the M4 Pro ran
-on mains power with no other heavy work.
+Shared stages (feature extraction + exhaustive matching), X3 / M4 Pro / GB10:
 
-Each cell, per machine × stage: X3 and M4 Pro, extraction, matching, COLMAP mapping and GLOMAP
-mapping all **pass** on CPU; GPU stages are a **CPU fallback** on both. The GB10 has no result.
+| Scene | X3 (CPU) | M4 Pro (CPU) | GB10 (GPU) |
+|---|---|---|---|
+| kicker | 22.4 + 7.4 s | 24.3 + 7.4 s | 7.6 + 3.1 s |
+| courtyard | 27.9 + 6.7 s | 25.9 + 10.6 s | 7.8 + 4.6 s |
+| pipes | 8.0 + 0.9 s | 9.2 + 1.8 s | 3.3 + 0.7 s |
 
-**What three scenes show (2026-11-24).** On every scene and both machines, GLOMAP maps 3–4× faster
+SIFT runs on the CPU on the X3 and the M4 Pro: pycolmap 4.2.1 from PyPI has no CUDA, and has no
+Metal path on the Mac. On the GB10 the conda-forge build runs SIFT extraction and matching on the
+GPU (its log: "Creating SIFT GPU feature extractor", "Creating SIFT GPU feature matcher"), about
+3× faster. The X3 runs shared the machine with other workloads, so its timings are an upper bound;
+the M4 Pro ran on mains power with no other heavy work; the GB10 ran with its serving vLLMs
+stopped (`gpu-mode free`). Peak memory, measured on the M4 Pro for courtyard: 28 GB resident.
+
+Each cell, per machine × stage: on the X3 and the M4 Pro, extraction, matching, COLMAP mapping and
+GLOMAP mapping all **pass** on CPU, with feature stages a **CPU fallback**; on the GB10 extraction
+and matching **pass** on the GPU, and both mappers **pass** (whether their bundle adjustment used the GPU is not checked).
+
+**What three scenes show (2026-11-24).** On every scene and all three machines, GLOMAP maps 3–4× faster
 than COLMAP and its poses are as good: rotation and position errors agree within a few tenths of a
 degree and under a centimetre. GLOMAP's reprojection error is about twice COLMAP's on every scene
-(2.1–2.6 px against 1.1–1.3 px), with a far longer 95th-percentile tail; the cause is not known.
-The two machines give the same quality, but not identical models: on the M4 Pro GLOMAP registered
+(1.9–2.9 px against 1.1–1.3 px), with a far longer 95th-percentile tail; the cause is not known.
+The machines give the same quality, but not identical models: on the M4 Pro and the GB10 GLOMAP registered
 kicker's `DSC_6487.JPG` with points, where on the X3 it posed it with none. Runs are not bit-for-bit
 reproducible across machines.
 
