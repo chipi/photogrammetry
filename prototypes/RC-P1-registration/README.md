@@ -37,16 +37,39 @@ in the output folder without running the mappers again.
 
 ## Results
 
-Status: **not proven yet.** One scene on one machine; the criterion needs two scenes on three.
+Status: **not proven yet.** Three scenes pass on two machines (X3, M4 Pro); the GB10 is not run.
 
 | Machine | Scene | Strategy | Registered | Posed, no points | Reproj. mean / p95 (px) | Rot. err. median (°) | Pos. err. median (m, % extent) | Mapping (s) |
 |---|---|---|---|---|---|---|---|---|
 | X3 (CPU) | kicker, 31 images | COLMAP incremental | 30/31 | 0 | 1.23 / 2.30 | 0.447 | 0.023, 0.28% | 57.2 |
 | X3 (CPU) | kicker, 31 images | GLOMAP global | 30/31 | 1 | 2.50 / 9.21 | 0.609 | 0.025, 0.30% | 20.7 |
+| X3 (CPU) | courtyard, 38 images | COLMAP incremental | 38/38 | 0 | 1.26 / 2.29 | 0.328 | 0.059, 0.39% | 50.4 |
+| X3 (CPU) | courtyard, 38 images | GLOMAP global | 38/38 | 0 | 2.59 / 11.23 | 0.332 | 0.056, 0.37% | 13.6 |
+| X3 (CPU) | pipes, 14 images | COLMAP incremental | 14/14 | 0 | 1.06 / 2.22 | 0.752 | 0.014, 0.45% | 3.8 |
+| X3 (CPU) | pipes, 14 images | GLOMAP global | 14/14 | 0 | 2.07 / 6.46 | 0.961 | 0.017, 0.53% | 1.2 |
+| M4 Pro (CPU) | kicker, 31 images | COLMAP incremental | 30/31 | 0 | 1.20 / 2.25 | 0.318 | 0.023, 0.29% | 17.2 |
+| M4 Pro (CPU) | kicker, 31 images | GLOMAP global | 31/31 | 0 | 2.45 / 9.26 | 0.590 | 0.022, 0.27% | 5.1 |
+| M4 Pro (CPU) | courtyard, 38 images | COLMAP incremental | 38/38 | 0 | 1.27 / 2.30 | 0.338 | 0.063, 0.42% | 38.2 |
+| M4 Pro (CPU) | courtyard, 38 images | GLOMAP global | 38/38 | 0 | 2.22 / 3.67 | 0.423 | 0.054, 0.36% | 9.2 |
+| M4 Pro (CPU) | pipes, 14 images | COLMAP incremental | 14/14 | 0 | 1.09 / 2.36 | 0.960 | 0.021, 0.66% | 2.2 |
+| M4 Pro (CPU) | pipes, 14 images | GLOMAP global | 14/14 | 0 | 2.18 / 8.20 | 0.989 | 0.019, 0.61% | 0.7 |
 
-Shared stages on the X3 for kicker: feature extraction 22.4 s, exhaustive matching 7.4 s (SIFT on
-CPU; pycolmap 4.2.1 from PyPI has no CUDA). Timings were taken while other workloads ran on the
-X3, so they are an upper bound, not a clean measurement.
+Shared stages (feature extraction, exhaustive matching), X3 / M4 Pro: kicker 22.4 + 7.4 s /
+24.3 + 7.4 s; courtyard 27.9 + 6.7 s / 25.9 + 10.6 s; pipes 8.0 + 0.9 s / 9.2 + 1.8 s. SIFT runs on
+the CPU on both: pycolmap 4.2.1 from PyPI has no CUDA, and has no Metal path on the Mac. The X3
+runs shared the machine with other workloads, so its timings are an upper bound; the M4 Pro ran
+on mains power with no other heavy work.
+
+Each cell, per machine × stage: X3 and M4 Pro, extraction, matching, COLMAP mapping and GLOMAP
+mapping all **pass** on CPU; GPU stages are a **CPU fallback** on both. The GB10 has no result.
+
+**What three scenes show (2026-11-24).** On every scene and both machines, GLOMAP maps 3–4× faster
+than COLMAP and its poses are as good: rotation and position errors agree within a few tenths of a
+degree and under a centimetre. GLOMAP's reprojection error is about twice COLMAP's on every scene
+(2.1–2.6 px against 1.1–1.3 px), with a far longer 95th-percentile tail; the cause is not known.
+The two machines give the same quality, but not identical models: on the M4 Pro GLOMAP registered
+kicker's `DSC_6487.JPG` with points, where on the X3 it posed it with none. Runs are not bit-for-bit
+reproducible across machines.
 
 **What the first scene showed (2026-11-24).** The first scoring gave GLOMAP a 13.1° rotation
 error and a 1.76 m position error against COLMAP's 0.45° and 0.023 m. The cause was the scoring,
