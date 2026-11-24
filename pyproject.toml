@@ -13,6 +13,9 @@ authors = [{ name = "Marko Mrdjenovic" }]
 # No runtime dependencies yet; pycolmap and friends arrive with the first prototype.
 dependencies = []
 
+[project.scripts]
+recon = "recon.cli:main"
+
 [project.urls]
 Repository = "https://github.com/chipi/recce"
 

@@ -1,0 +1,12 @@
+[project]
+name = "rc-p9-robot-capture"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.5.5",
+    "pycolmap>=4.2.1",
+    "recon",
+]
+
+[tool.uv.sources]
+recon = { path = "../../", editable = true }
