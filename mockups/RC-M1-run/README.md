@@ -19,8 +19,8 @@ The frame around them (M0): outliner, inspector, timeline with a filmstrip, comm
 each command's CLI line (idea 15), light and dark. Ideas are numbered as in the
 [catalogue](../../docs/wip/visual-ideas.md).
 
-**Phase:** 1 — rough but good-looking, to settle the concepts. Phase 2 polishes the chosen
-direction.
+**Phase:** 2 — polish of the direction chosen in phase 1 (see "Phase 2" below). Concepts, modes,
+URL parameters and the gap-list brief JSON are unchanged.
 
 ## Data
 
@@ -70,3 +70,14 @@ a camera in the top bar and the inspector.
 ## Verdict
 
 **Kept, all concepts shown (owner, 2026-11-24):** the style ("I really like the style"), every concept in the three modes ("we really love everything"), and the gap list with site map and cards ("exactly what I wanted"). Phase 2 polishes the direction; the typeface (Inter, flagged as overused) is decided there.
+
+## Phase 2 (2026-11-24)
+
+- **Typeface:** IBM Plex Sans (UI) and IBM Plex Mono (values, numbers, kinds), both from Google Fonts only. Plex is built for instruments and engineering tools, the two cuts share proportions, and Plex Mono has a slashed zero and distinct 1/l/I, which suits label-left, value-right inspector rows.
+- **Spacing:** 4 px scale as tokens (`--sp-1` to `--sp-8`); panels, cards, top bar and chips re-padded to it; every bordered or filled element with text has at least 8 px horizontal inset; every side-panel section has the same 16 px frame and header (title left, optional mono meta right); `.kv` rows align on the text baseline. Bars: top 48 px, status 28 px, left panel 264 px.
+- **Type scale:** six size tokens (11, 12, 13, 14, 16, 20 px); nothing below 11 px, including the canvas map text and the ring percentages; numbers in mono or tabular figures.
+- **Colour:** ad-hoc colours collapsed into tokens (surfaces, on-fill, scrims, grid, coverage ramp, swatches, label background). Fill colours stay as in phase 1 so the scene is unchanged; new `-ink` twins (accent, new, truth, warn, error) carry text and pass WCAG AA (4.5:1) on every panel surface in both themes (lowest computed 4.66:1, faint text on a hovered row in the light theme; most are above 5). Dim and faint text in the dark theme lifted slightly (now 7.3:1 and 6.0:1 on the panel).
+- **Gap cards and site map:** a card reads as a field shot card: large number, kind and priority tag, then labelled rows Stand (nearest photo with thumbnail and directions), Shoot, Why, Gain, Seen (the coverage ring with a plain sentence), then actions. The map repeats the card number at the badge and at the spot to stand ("Stand N" on the selected gap), and names gaps with the same kind text as the card.
+- **Motion:** transitions 120 ms (hover, press) and 180 ms (opacity, strip); no glow added. Reduce motion now also zeroes the CSS transitions (and follows the system setting); the scene behaviour it already controlled is unchanged.
+- Also: visible keyboard focus ring, a dead style block removed, status line says phase 2.
+- **Not done:** the top bar clips crumbs below about 1,400 px wide (no responsive layout); contrast was computed from the token values, not measured on pixels of the 3D scene or the point-cloud shader colours; the theme button glyph (◐) comes from a fallback font.
