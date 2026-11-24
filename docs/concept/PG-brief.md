@@ -144,8 +144,27 @@ products of their own. The principle carries over from robotics-lab's Observator
 human friendly* — anything a page shows is something a command answers, and the reverse. The
 coordinate frame and the scale are never hidden.
 
-The interface is ultra-modern: built to the standard of the best current 3D and creative tools,
-not of the scientific GUIs this field is used to.
+**Two registers in one interface** *(owner, 2026-11-24)*. The frame — panels, lists, inspectors,
+settings, the timeline of a run — is a professional tool in the family of Lightroom, Autodesk's
+products, Blender and Rerun, and follows robotics-lab's look (its Observatory and Mission Control:
+dark by default, an outliner, a read-only inspector, label-left and value-right in mono, shared
+design tokens). The 3D scene and everything that explains a reconstruction is where the project
+sets out to be different: illustrative, not technical; beautiful at every step, not only at the
+end; explaining what the engine did and why, with imagery good enough to show to someone who does
+not know the field. Existing tools present photogrammetry as a technical process that ends in a
+mediocre model; this one shows each stage as something to look at and understand — the cameras
+finding each other, the matches that hold the model together, where coverage is thin, what a
+recipe changed. Agents and multimodal models make this reachable: an agent can look at the
+intermediate products, describe them and point at what matters. Beauty here is not decoration: the
+interface is the connection between a person and the machine, and software that looks right is
+simpler and more intuitive, which is what makes a complex concept understandable. That is why the
+3D scenes and the explanations carry so much weight. Inspiration reaches past Rerun, Blender and
+Foxglove to the most refined professional and explanatory software: colour and finishing tools
+such as DaVinci Resolve, design tools such as Figma and Linear, 3D tools such as Cinema 4D and
+Spline, and explanatory work such as Bartosz Ciechanowski's interactive articles and NASA's Eyes
+on the Solar System. The owner's taste drives this register; the agent's part is to propose
+boldly, build quickly to look at, and take critique.
+The design system (PG-05) and the UX specs carry the detail.
 
 **Upload and it lines up.** The heart of the engine is registration: a thousand unordered photos
 of a wreck go in, and the engine finds features, chooses which photos to compare, verifies matches
@@ -181,6 +200,10 @@ and the result states its scale and frame, or says plainly that the scale is arb
 **Quality is visible, not implied.** Registration, reprojection error, coverage and the
 differences between pipelines are state the UI shows and an agent can read — not a log file
 behind a "done" flag.
+
+**It explains as it goes.** Every stage has a picture worth looking at, not only the final model:
+the reconstruction is shown as a story of how it was made, with the evidence for each claim on
+screen. The 3D presentation is designed, not a default viewer with a grid.
 
 **Underwater is a first-class case.** Refraction, colour loss with depth, backscatter and moving
 subjects are the conditions the owner shoots in, not an edge case to ignore.
@@ -273,6 +296,16 @@ friend's dive set arrive. Numeric tolerances were agreed with the owner on 2026-
 
 **Old numbers → new:** P1 and P2 → P1 · new P2 · P6 → P3 · new P4 · P7b → P5 · P7 → P6 · P3 → P7 ·
 P4 → P8 · P5 → P9 · P9 → P10 · P10 → P11 · P8 → P12.
+
+**Two tracks, one meeting point** *(owner, 2026-11-24)*. Step 0 runs two tracks side by side. Below,
+the **prototypes** (PG-P1..P12) prove how the technology works. Above, the **mock-ups** (PG-M<n>,
+in `mockups/`) work out how the product looks and behaves: every concept in the
+[visual ideas](../wip/visual-ideas.md) catalogue is mocked, looked at and critiqued before anything
+is built. A mock-up is proven when the owner has judged it on screen and the concepts it carries
+are kept, changed or dropped with a reason. Mock-ups use real outputs from the prototypes wherever
+they exist (PG-P1's cameras and points first), so the picture shows real data, not invented data.
+The two tracks meet in the first build phase, where the PRDs, RFCs and UX specs draw on both, and
+the build starts from a worked-out design rather than discovering one.
 
 ### A — Foundation
 
@@ -417,5 +450,5 @@ baseline. Both join the benchmark set.
 
 ## 6. Sequence after Step 0
 
-Prototypes → PG-01 Vision → PG-03 Data Catalog → PG-04 Technical Architecture → PG-05 Design
+Prototypes and mock-ups → PG-01 Vision → PG-03 Data Catalog → PG-04 Technical Architecture → PG-05 Design
 System → PG-02 Project Concept → PG-00 Introduction → audit → PDF.

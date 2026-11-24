@@ -17,6 +17,7 @@ An open-source reconstruction engine that turns photographs into 3D models (came
 | `src/recon/` | The engine package (`recon`) |
 | `tests/` | Tests for `src/recon` |
 | `prototypes/PG-P<n>-<slug>/` | Step 0 prototypes, one folder each |
+| `mockups/PG-M<n>-<slug>/` | Step 0 UX mock-ups, one folder each ([plan](docs/wip/visual-ideas.md)) |
 | `scripts/` | Repo tooling, such as `check_docs.sh` |
 | `apps/ios/`, `infra/` | Later; not created yet |
 
