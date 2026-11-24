@@ -11,7 +11,7 @@ page is the summary. Updated 2026-11-24; work paused until 2026-11-25 on the own
 | [RC-P1 Registration on every machine](https://github.com/chipi/recce/tree/main/prototypes/RC-P1-registration) | **Proven** | COLMAP and GLOMAP register kicker, courtyard and pipes on the X3, the M4 Pro and the GB10 |
 | [RC-P2 The expensive stages on the GPUs](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu) | **Proven** | Dense depth on courtyard through CUDA on the GB10 (1,169 s) and through HIP on the X3 in a ROCm container (3,205 s, about 2.7 times slower); a gsplat splat on the GB10 |
 | [RC-P3 Quality state an agent can read](https://github.com/chipi/recce/tree/main/prototypes/RC-P3-quality) | **Proven** | An agent with only three MCP read tools names the held-out region on both scenes |
-| [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Running | Setup done; GPU phase in progress |
+| [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Not proven yet | Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; six of seven complaint measurements have a first number. Open: underwater colour (needs SQUID, RC-P12) and a 30,000-step courtyard splat |
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
 | RC-P6 Mesh and splat in the browser | Not started | Needs RC-P4's mesh and splat; the owner checks frame rate on the iPhone |
 | RC-P7 Distribution on a large set | Spec written | [GPU rental spec](gpu-rental-p7.md); renting waits for the owner |
@@ -61,8 +61,18 @@ neutral, so the cause lies in Chemigram's presets or the recipe used. Not invest
 the frame conversion (OpenGL camera axes, z-up world, `{x, y, z, w}` quaternions) is checked by
 render, and both wrong-convention controls fail.
 
-**Splat quality.** The first gsplat run (courtyard, 7,000 steps) scored PSNR 18.8 on held-out
-views, low for the method; not investigated yet (RC-P4 runs 30,000 steps on Mip-NeRF 360).
+**Poses decide dense quality.** On courtyard the same dense stage scores F1 0.35 at 5 cm from
+RC-P1's poses and 0.88 from ETH3D's ground-truth poses; RC-P1's cameras sit a median 6.1 cm from
+the truth after alignment. Pose refinement before dense is the first lever, ahead of any dense
+setting. Why RC-P1's poses are that far off is not investigated.
+
+**Splat quality.** gsplat at 30,000 steps reaches PSNR 27.7 on Mip-NeRF 360 garden and 29.2 on
+counter, in line with published gsplat figures. On courtyard (7,000 steps) it stays low: 18.4 dB
+from RC-P1's poses, 20.9 from ground-truth poses, so poses explain part of it. Garden used
+14.3 GiB of GPU memory, close to what `prod` mode leaves free.
+
+**Texture.** texrecon (BSD; dependencies BSD and MPL-2.0) textures the courtyard mesh in 52 s on
+the GB10; 16% of the faces are seen by no photo.
 
 ## Mock-ups
 
