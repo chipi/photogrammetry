@@ -41,7 +41,7 @@ development use), both strategies. Nothing from the dataset is committed: `expor
 | Where to stand | **Heuristic**: the middle of the widest gap in viewing directions, kept inside the footprint of the cameras tied to points |
 | Directions from the landmark photo | Computed from its pose; metres come from the ground-truth alignment, which a real capture has only with scale |
 | Priorities per purpose | Rules written for the mock-up |
-| Robot brief | **Draft** shape, to be aligned with the gap-list interface (docs/wip/gap-list-interface.md) |
+| Robot brief | The shape of the gap-list interface draft (`gap_list` 1, docs/wip/gap-list-interface.md), filled from the page's gaps; rankings follow the mock-up's rules |
 | Debrief text | **Template** filled from the run's numbers; an agent writes it in the product |
 | Readiness stamps | Rules written for the mock-up; their requirements are stated next to each stamp |
 

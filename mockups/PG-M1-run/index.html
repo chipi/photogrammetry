@@ -337,9 +337,9 @@ canvas.spark { width: 100%; height: 54px; display: block; }
 </div></div>
 <div class="toast" id="toast"></div>
 <div class="palette" id="brief"><div class="box wide">
-  <div class="briefhead"><b>Robot brief</b><span class="dim">the same gaps as the cards, as data · draft schema</span><button class="iconbtn" id="brief-close">Close</button></div>
+  <div class="briefhead"><b>Robot brief</b><span class="dim">the same gaps as the cards, as <code>gaps.json</code> (gap_list 1, draft)</span><button class="iconbtn" id="brief-close">Close</button></div>
   <pre id="brief-json"></pre>
-  <div class="foot">What a mission planner reads through MCP (<code>recon gaps</code>, <code>gap_brief</code>) or HTTP. Positions are in the reconstruction's frame and units; with an arbitrary scale a planner may use them only after registering the model to its own map.</div>
+  <div class="foot">What a mission planner reads through MCP (<code>gap_brief</code>, <code>list_gaps</code>), HTTP or <code>recon gaps</code>. Scale is arbitrary here, so every viewpoint says <code>usable_as_goal: false</code>: a planner may use the kind, counts, text and the landmark photo, never the positions as goals.</div>
 </div></div>
 
 <script type="module">
@@ -1085,25 +1085,43 @@ document.querySelectorAll("#purpose button").forEach((b) => (b.onclick = () => {
 $("print-cards").onclick = () => toast("Prints one card per gap, with the site map on the first page");
 $("to-phone").onclick = () => toast("Sends the cards to the capture app; ghost cameras show on site");
 
-// The robot brief: the same gaps as data. Draft shape until the interface doc settles it.
+// The robot brief: the same gaps as data, in the shape of docs/wip/gap-list-interface.md (gap_list 1).
+const PURPOSE = { web: "web_viewing", measure: "measurement", robot: "robot_localisation" };
+const KIND_ID = { thin: "thin_angle", few: "few_photos", nojoin: "photo_not_joined", scale: "no_scale" };
+const SEV = { high: "major", medium: "minor" };
 function briefJSON() {
-  const r3 = (v) => v.toArray().map((x) => +x.toFixed(3));
+  const r3 = (v) => v.toArray().map((x) => +x.toFixed(3)), id = (g) => `gap-${String(A.gaps.indexOf(g) + 1).padStart(4, "0")}`;
+  const ranked = (p) => { const r = RANK[p]; return [...A.gaps].sort((a, b) => r[a.kind] - r[b.kind] || (a.severity === "high" ? -1 : 1) - (b.severity === "high" ? -1 : 1)); };
+  const rankings = Object.fromEntries(Object.entries(PURPOSE).map(([k, name]) => [name, ranked(k).map(id)]));
   return {
-    schema: "recce.gap-list/0.1-draft",
-    reconstruction: { scene: DATA.scene, strategy: state.strategy, registered: DATA.results.strategies[state.strategy].registered, images: DATA.images.length },
-    frame: { name: "reconstruction", up: "+y", scale_state: "arbitrary", units: "model units",
-      note: "No metric scale and not registered to any robot map: positions are usable only after the planner aligns this model to its own map." },
-    purpose: state.purpose,
+    gap_list: 1,
+    project: DATA.scene,
+    reconstruction: { strategy: state.strategy, registered: DATA.results.strategies[state.strategy].registered, images: DATA.images.length },
+    ruleset: "mockup-m1",
+    frame: { name: "model", id: `frm-${state.strategy}`, axes: { handedness: "right", up: null, units: "model" },
+      scale_state: "arbitrary", placement: { status: "none", reason: "no pose priors, no markers" } },
+    purpose: PURPOSE[state.purpose],
+    rankings,
     gaps: A.gaps.map((g) => {
-      const base = { id: `G${g.no}`, kind: g.kind, priority: g.no, severity: g.severity, status: state.planned.has(g.key) ? "planned" : "open" };
+      const base = { id: id(g), kind: KIND_ID[g.kind], scope: g.centre ? "region" : g.kind === "nojoin" ? "photo" : "reconstruction",
+        status: { state: state.planned.has(g.key) ? "planned" : "open" }, severity: { level: SEV[g.severity] },
+        priority: Object.fromEntries(Object.entries(rankings).map(([p, list]) => [p, { rank: list.indexOf(id(g)) + 1 }])) };
       if (g.centre) return { ...base,
-        region: { centre: r3(g.centre), radius: +g.radius.toFixed(3) },
-        evidence: { points: g.idx.length, photos: [...g.seers.keys()].map((c) => S.cameras[c].name), median_ray_angle_deg: +g.ang.toFixed(1), azimuth_covered_deg: g.covered * 10 },
-        viewpoints: [{ position: r3(g.ghost), look_at: r3(g.centre), tolerance_deg: 15 }],
-        landmark_photo: S.cameras[g.lm].name,
-        shots: g.kind === "thin" ? { count: [4, 6], spread: "sideways" } : { count: [3, 4], overlap: 0.6 } };
-      if (g.kind === "nojoin") return { ...base, photo: g.name, location: "unknown" };
-      return { ...base, need: "one known length: two markers, a scale bar, or a measured distance" };
+        region: { shape: "sphere", centre: r3(g.centre), radius: +g.radius.toFixed(3), units: "model" },
+        evidence: { points: g.idx.length, photos: [...g.seers.keys()].map((c) => S.cameras[c].name),
+          triangulation_angle_deg: { median: +g.ang.toFixed(1) }, ring: { bins: 36, bin_deg: 10, seen: g.bins } },
+        close_when: g.kind === "thin" ? { median_angle_deg_min: 15, photos_min: 3 } : { observations_per_point_median_min: 3 },
+        viewpoints: [{ id: `vp-${id(g).slice(4)}a`, role: "primary",
+          pose: { position: r3(g.ghost), look_at: r3(g.centre), up: null }, planar: null,
+          relative: { to_photo: S.cameras[g.lm].name, orbit_deg: { yaw: Math.round(g.way.turn) }, distance_ratio: 1.0 },
+          tolerance: { position_m: null, position_ratio: 0.12, look_at_cone_deg: 12 },
+          usable_as_goal: false, unusable_reason: "scale_state_arbitrary" }],
+        landmark: { photo: S.cameras[g.lm].name, why: "nearest photo to the suggested viewpoint" },
+        hints: g.kind === "thin" ? { photos: { min: 4, target: 6 }, baseline_deg: { min: 10, target: 20 } } : { photos: { min: 3, target: 4 }, overlap_min: 0.6 } };
+      if (g.kind === "nojoin") return { ...base, region: null, evidence: { photo: { id: g.name } }, close_when: { photo_registered: true }, viewpoints: [],
+        hints: { photos: { min: 3, target: 4 }, overlap_min: 0.6, retake_of: g.name } };
+      return { ...base, region: null, evidence: { pose_priors: 0, markers: 0 }, close_when: { scale_state_not: "arbitrary" }, viewpoints: [],
+        hints: { reference: { kind: "known_length", min_visible_in_photos: 3 }, alternatives: ["pose_priors", "marker", "scale_hint"] } };
     }),
   };
 }
