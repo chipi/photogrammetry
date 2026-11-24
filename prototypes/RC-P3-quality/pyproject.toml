@@ -1,0 +1,9 @@
+[project]
+name = "rc-p3-quality"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp>=2.3.0",
+    "numpy>=2.5.5",
+    "pycolmap>=4.2.1",
+]
