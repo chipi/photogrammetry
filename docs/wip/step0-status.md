@@ -15,7 +15,7 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
 | RC-P6 Mesh and splat in the browser | Not started | Needs RC-P4's mesh and splat; the owner checks frame rate on the iPhone |
 | RC-P7 Distribution on a large set | Spec written | [GPU rental spec](gpu-rental-p7.md); renting waits for the owner |
-| RC-P8 Learned and classical, compared | Not started | Approved: MapAnything on the GB10, ARKitScenes subset |
+| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | Code checked on the CPU | Four routes, two variants, three ETH3D scenes and five ARKitScenes videos; the GPU run waits for a `free` window. On the CPU, MapAnything fails on a low-texture ARKit video (relative rotation 119° median on 16 frames, the same through its own demo code) and holds on a textured one (2.9°) |
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
 | RC-P10 A room from inside | Not started | Approved: ARKitScenes, Open3D |
 | RC-P11 The iPhone capture app | Not started | Starts once RC-P8 or RC-P10 shows pose priors help |
@@ -88,12 +88,9 @@ runs on the X3 or the DGX, the DGX is in gpu-mode `prod`, and `main` holds every
 
 **Next, in order**
 
-1. **RC-P8 learned and classical.** Restarted from scratch: no code was written. On the DGX
-   (user `claude`) a partial setup remains: `~/.cache/recce/mapanyenv` (6 GB, MapAnything
-   environment, unverified) and `~/.cache/recce/datasets/arkitscenes` (652 MB, partial; one
-   interrupted download was removed). Reuse after checking, or delete and redo. Plan: setup in
-   `prod` mode without the GPU, then a `free` window for the runs, together with RC-P4's
-   30,000-step courtyard splat.
+1. **RC-P8 learned and classical.** Setup done and the code checked on the CPU (see its README).
+   Next: a `free` window on the DGX for `run_gpu.sh`, which runs every scene and variant and then
+   RC-P4's 30,000-step courtyard splat (`gsplat_courtyard30k`).
 2. **RC-P12 underwater.** Restarted from scratch: no code was written. On the X3,
    `~/.cache/recce/datasets/aquamvs` (548 MB, the ground-truth core and published result folders)
    and `~/.cache/recce/datasets/squid` (781 MB, partial) remain. SQUID is non-commercial: develop
