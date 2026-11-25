@@ -76,6 +76,7 @@ All in linear camera RGB from the registered RAW, with the SQUID stereo range ma
 | `grey_world` | One global grey-world white balance, no range |
 | `backscatter` | Backscatter `B(d) = B∞ (1 − e^(−b d))` per channel, fitted to the darkest 1% of pixels in 12 range bins, subtracted; then grey-world |
 | `range` | As `backscatter`, then attenuation `e^(−β d)` per channel, fitted log-linearly to the mean remaining signal per range bin, divided out; then grey-world |
+| `seathru` | Sea-thru's backscatter form `B∞ (1 − e^(−b d)) + J′ e^(−b′ d)` per channel, fitted to the same dark pixels, subtracted; then grey-world. The second term carries the direct light the darkest pixels still reflect |
 
 ### Measures
 
@@ -117,6 +118,7 @@ RGT_4376 chart 3 has no contrast value: its white patch is the one dropped.
 | `grey_world` | 1.37 | 1.41 | 0.207 | −0.024 | 4.0 |
 | `backscatter` | 4.38 | 8.21 | 0.474 | −0.052 | 9.2 |
 | `range` | 3.39 | 7.55 | 0.474 | −0.053 | 9.0 |
+| `seathru` | 4.68 | 6.76 (3 grey patches subtracted to zero, not scored) | 0.487 | −0.065 | 12.6 |
 
 The chart pair angle per image (grey-world against backscatter): RGT_4336 2.6 / 3.7, RGT_4376
 6.1 / 17.3, RGT_4381 2.5 / 3.7, RGT_4382 2.2 / 3.2, RGT_4318 6.4 / 17.9.
@@ -144,11 +146,21 @@ The chart pair angle per image (grey-world against backscatter): RGT_4336 2.6 / 
 5. **The attenuation step adds nothing measurable**: the fit returns β = 0 for every channel on
    two of five images (RGT_4336, RGT_4381) and near zero on a third (RGT_4318); contrast is
    unchanged against backscatter alone.
+6. **Sea-thru's backscatter form does not fix it.** Checked against each chart's black patch, an
+   upper bound on backscatter that no fit sees, the simple fit is over it on two charts (1.06 and
+   1.08, both RGT_4318) and Sea-thru's form on three (1.05–1.26, the three nearest charts of
+   RGT_4318 and RGT_4376). Three grey patches are subtracted to zero and identical charts
+   disagree more (chart pair angle 12.6° against 9.2°). The model form is not the problem; the
+   premise is: near the camera this deck holds no dark objects, so the darkest 1% of pixels per
+   range bin are not dark, and any curve through them overestimates backscatter there.
 
 The answer for Recce, so far: on this water and range span, a global white balance from the RAW
-already holds colour; haze is what range-based correction has to remove, and the simple per-image
-backscatter fit used here removes it unevenly. Sea-thru's local illuminant estimate and a
-backscatter fit that is checked against a known dark target are the next things to try.
+already holds colour; haze is what range-based correction has to remove; and a backscatter fit
+from the image alone removes it unevenly, whichever model is fitted. A known dark target in the
+scene (a chart's black patch at several ranges, as the
+[benchmark spec](../../docs/wip/underwater-benchmark-spec.md) places) gives the fit what the image
+cannot; on SQUID that would score the correction on the targets that built it, so it waits for a
+set with more targets than it scores on.
 
 ### Not covered
 
@@ -157,8 +169,9 @@ backscatter fit that is checked against a known dark target are the next things 
 - Five images, one site (Satil), 15 charts. Katzaa, Michmoret and Nachsholim are not downloaded.
 - Only the grey ramp and patch vectors are compared; the colour patches have no reference values
   (the DGK chart's published colour values are not used).
-- Sea-thru proper (local space average illuminant, the revised model with separate backscatter and
-  direct coefficients) is not implemented; the fit here is the simplest range-based form.
+- Sea-thru's backscatter form is tried; its local space average illuminant (per-pixel
+  attenuation from the neighbourhood) is not. With backscatter already overestimated near the
+  camera, an attenuation estimate built on top of it inherits the error.
 - The TIF linearity check is on one image (LFT_3875) and the green channel; red had too little
   signal to fit (correlation 0.52).
 - The registration's 1.2–1.4 px residual is at TIF scale; on far charts a patch is about 5 px wide,

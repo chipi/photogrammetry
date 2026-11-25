@@ -88,7 +88,8 @@ videos. MapAnything needs 42–59 GiB of GPU memory for 90–218 views, more tha
 underwater needs the RAW: SQUID's published TIFs clip red to zero on 78–99.9% of pixels. Over 6–19 m
 on the Satil wreck the colour cast is nearly one global tint, which a single white balance removes;
 what changes with range is contrast (0.39 to 0.07 on the grey ramp), and the simple per-image
-backscatter fit restores it unevenly. Our own pipeline gets no depth from SQUID's few hazy stereo
+backscatter fit restores it unevenly, whichever model is fitted (simple or Sea-thru's form): near
+the camera the deck holds no dark objects, so the dark-pixel estimate overshoots. Our own pipeline gets no depth from SQUID's few hazy stereo
 pairs without the rig calibration. SQUID's chart annotations sit a few pixels off its published
 undistorted images and are snapped before use.
 
@@ -113,9 +114,11 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 **Next, in order**
 
 1. **RC-P12 underwater, the rest.** Both measurements, the failed attempt at our own ranges and
-   the [benchmark spec](underwater-benchmark-spec.md) are done. Left: a better backscatter fit
-   (Sea-thru's local illuminant, a check against a dark target); the owner's call on whether the
-   "ranges from the reconstruction" clause moves to the benchmark's site scene. Data on the
+   the [benchmark spec](underwater-benchmark-spec.md) are done; Sea-thru's backscatter form was
+   tried and does not fix the near-chart tint (the dark-pixel premise fails on this deck; a known
+   dark target is the fix, which needs a set with more targets than it scores on). Left: the
+   owner's call on whether the "ranges from the reconstruction" clause moves to the benchmark's
+   site scene. Data on the
    X3: SQUID Satil (MD5 matches Zenodo's) and its evaluation code, AquaMVS core and `data.zip` (MD5
    matches). SQUID is non-commercial: develop only, never redistribute.
 2. **RC-P6: the owner's frame-rate checks.** `./serve.sh` in `prototypes/RC-P6-viewer`, then

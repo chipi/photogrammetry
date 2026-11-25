@@ -46,7 +46,7 @@ SETS = {
 SNAP_PX = 6
 RANGE_BINS = 12
 DARK_FRAC = 0.01
-METHODS = ("tif", "raw", "camera_wb", "grey_world", "backscatter", "range")
+METHODS = ("tif", "raw", "camera_wb", "grey_world", "backscatter", "range", "seathru")
 
 
 def srgb_to_linear(v):
@@ -70,15 +70,44 @@ def backscatter_model(d, b_inf, b):
     return b_inf * (1 - np.exp(-b * d))
 
 
-def fit_backscatter(img, rng, mask):
-    """B(d) = B_inf * (1 - exp(-b * d)) per channel, fitted to the darkest pixels per range bin."""
+def seathru_model(d, b_inf, b, j_res, b_res):
+    """Sea-thru's backscatter fit (Akkaynak and Treibitz, CVPR 2019): the second term carries the
+    direct light that the darkest pixels still reflect, which the simple model counts as
+    backscatter."""
+    return b_inf * (1 - np.exp(-b * d)) + j_res * np.exp(-b_res * d)
+
+
+def dark_pixels(img, rng, mask):
     lum = img.sum(-1)
     ds, dark = [], []
     for m in range_bins(rng, mask):
         sel = m & (lum <= np.quantile(lum[m], DARK_FRAC))
         ds.append(rng[sel].mean())
         dark.append(img[sel].mean(0))
-    ds, dark = np.array(ds), np.array(dark)
+    return np.array(ds), np.array(dark)
+
+
+def fit_seathru(img, rng, mask):
+    ds, dark = dark_pixels(img, rng, mask)
+    params = []
+    for c in range(3):
+        top = dark[:, c].max()
+        params.append(
+            opt.curve_fit(
+                seathru_model,
+                ds,
+                dark[:, c],
+                p0=(top, 0.2, top / 2, 0.2),
+                bounds=([0, 0, 0, 0], [1, 5, 1, 5]),
+                maxfev=20000,
+            )[0]
+        )
+    return np.array(params)
+
+
+def fit_backscatter(img, rng, mask):
+    """B(d) = B_inf * (1 - exp(-b * d)) per channel, fitted to the darkest pixels per range bin."""
+    ds, dark = dark_pixels(img, rng, mask)
     params = [
         opt.curve_fit(
             backscatter_model,
@@ -110,8 +139,30 @@ def correct_range(img, rng, mask):
     beta = np.clip(fit_attenuation(direct, rng, mask), 0, None)
     attenuated = np.where(mask[..., None], direct * np.exp(beta * d), img)
     no_back = np.where(mask[..., None], direct, img)
-    fit = {"b_inf": bs[:, 0].tolist(), "b": bs[:, 1].tolist(), "beta": beta.tolist()}
-    return grey_world(no_back, mask), grey_world(attenuated, mask), fit
+    st = fit_seathru(img, rng, mask)
+    st_back = seathru_model(d, st[:, 0], st[:, 1], st[:, 2], st[:, 3])
+    st_direct = np.where(mask[..., None], np.clip(img - st_back, 0, None), img)
+    fit = {
+        "b_inf": bs[:, 0].tolist(),
+        "b": bs[:, 1].tolist(),
+        "beta": beta.tolist(),
+        "seathru": st.tolist(),
+    }
+    corrected = {
+        "backscatter": grey_world(no_back, mask),
+        "range": grey_world(attenuated, mask),
+        "seathru": grey_world(st_direct, mask),
+    }
+    return corrected, fit
+
+
+def backscatter_over_black(fit, rng_m, black):
+    """Fitted backscatter at a chart's range over the chart's black patch, worst channel: above
+    1 the fit removes more light than the black patch reflects. A check only; no fit sees it."""
+    simple = backscatter_model(rng_m, np.array(fit["b_inf"]), np.array(fit["b"]))
+    st = np.array(fit["seathru"])
+    sea = seathru_model(rng_m, st[:, 0], st[:, 1], st[:, 2], st[:, 3])
+    return float(np.max(simple / black)), float(np.max(sea / black))
 
 
 def snap_shifts(green, charts):
@@ -158,7 +209,11 @@ def chart_scores(img, charts, rng, shifts):
         all_px = np.full((len(xa), 3), np.nan)
         all_px[ok] = crop[ya[ok], xa[ok]]
         ramp = all_px[:6][ok[:6]]
-        cos = ramp.sum(1) / (np.linalg.norm(ramp, axis=1) * np.sqrt(3))
+        # a patch a correction drives to zero in every channel has no colour left to score; it is
+        # counted as clipped instead of averaged in as NaN
+        norm = np.linalg.norm(ramp, axis=1)
+        lit = norm > 0
+        cos = ramp[lit].sum(1) / (norm[lit] * np.sqrt(3))
         ang = np.degrees(np.arccos(np.clip(cos, -1, 1)))
         white, black = all_px[0], all_px[5]
         # channels with no signal (the TIF's clipped red) are left out rather than read as 0/0
@@ -166,7 +221,8 @@ def chart_scores(img, charts, rng, shifts):
         ratio = (white - black) / np.where(live, white + black, 1)
         out.append(
             {
-                "angle_deg": float(ang.mean()),
+                "angle_deg": float(ang.mean()) if ang.size else np.nan,
+                "clipped": int((~lit).sum()),
                 "range_m": float(np.nanmedian(rng[y0 : y1 + 1, x0 : x1 + 1])),
                 "contrast": float(ratio[live].mean()) if live.any() else np.nan,
                 "patches": int(ok[:6].sum()),
@@ -218,7 +274,8 @@ def score_image(set_name, num, rng):
         "camera_wb": img * cam_wb,
         "grey_world": grey_world(img, mask),
     }
-    methods["backscatter"], methods["range"], fit = correct_range(img, rng, mask)
+    corrected, fit = correct_range(img, rng, mask)
+    methods.update(corrected)
     shifts = snap_shifts(tif[..., 1], charts)
     reg["snap_shifts_px"] = shifts
     scores = {k: chart_scores(v, charts, rng, shifts) for k, v in methods.items()}
@@ -234,6 +291,10 @@ def score_image(set_name, num, rng):
         for k in methods:
             row[k] = scores[k][i]["angle_deg"]
             row[f"{k}_contrast"] = scores[k][i]["contrast"]
+            row[f"{k}_clipped"] = scores[k][i]["clipped"]
+        row["b_over_black"], row["seathru_b_over_black"] = backscatter_over_black(
+            fit, first["range_m"], first["all_px"][5]
+        )
         rows.append(row)
     pairs = {"charts": len(charts), **{k: chart_pair_angles(v) for k, v in scores.items()}}
     return rows, fit, reg, pairs
@@ -262,8 +323,13 @@ def report(rows, pairs):
     )
     for k in METHODS:
         v = np.array([r[k] for r in rows])
-        slope = np.polyfit(dist, v, 1)[0]
-        print(f"{k}: mean {v.mean():.2f}, median {np.median(v):.2f}, slope {slope:+.2f}/m")
+        ok = np.isfinite(v)
+        slope = np.polyfit(dist[ok], v[ok], 1)[0]
+        clipped = sum(r[f"{k}_clipped"] for r in rows)
+        print(
+            f"{k}: mean {v[ok].mean():.2f}, median {np.median(v[ok]):.2f}, "
+            f"slope {slope:+.2f}/m, grey patches clipped to zero {clipped}"
+        )
     print("\nGrey-ramp contrast (white - black) / (white + black), mean over channels")
     table(
         [*lead, *METHODS],
@@ -278,6 +344,20 @@ def report(rows, pairs):
         ok = np.isfinite(c)
         slope = np.polyfit(dist[ok], c[ok], 1)[0]
         print(f"{k}: mean {c[ok].mean():.3f}, slope {slope:+.4f}/m")
+    print("\nFitted backscatter over the chart's black patch (worst channel; above 1 is too much)")
+    table(
+        [*lead, "Simple fit", "Sea-thru fit"],
+        [
+            [
+                r["image"],
+                str(r["chart"]),
+                f"{r['range_m']:.1f}",
+                f"{r['b_over_black']:.2f}",
+                f"{r['seathru_b_over_black']:.2f}",
+            ]
+            for r in rows
+        ],
+    )
     print("\nChart-pair angle within an image (degrees; identical charts at different ranges)")
     table(
         ["Image", "Charts", *METHODS],
