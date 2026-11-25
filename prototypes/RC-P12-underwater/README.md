@@ -14,7 +14,9 @@ model measures the board to +0.017% scale and 1.15 mm rigid RMSE against −1.50
 the pinhole model; on SQUID, range-based correction is compared with uncorrected and globally
 balanced images, with SQUID's stereo ranges. Ranges from our own reconstruction were tried and
 fail on SQUID Satil (see "Ranges from our reconstruction"), so that clause cannot be met on this
-data. The open underwater benchmark is not specified yet.
+data. The open underwater benchmark is specified in
+[underwater-benchmark-spec.md](../../docs/wip/underwater-benchmark-spec.md); its site scene (S1) is
+where the ranges clause can be met, if the owner moves it there.
 
 ## Data
 

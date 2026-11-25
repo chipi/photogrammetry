@@ -5,6 +5,7 @@ Research, reviews and drafts that are not yet settled documents. Content here is
 - [Hardware and parallelism](hardware-and-parallelism.md)
 - [Step 0 status and findings](step0-status.md)
 - [GPU rental spec for RC-P7](gpu-rental-p7.md)
+- [Underwater benchmark spec (RC-P12)](underwater-benchmark-spec.md)
 - [Robotics-lab contract](robotics-lab-contract.md)
 - [Research: the photogrammetry landscape](research-landscape-2026-11-23.md)
 - [Research: Metashape, other tools, underwater, cameras](research-metashape-underwater-2026-11-23.md)

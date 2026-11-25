@@ -19,7 +19,7 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
 | RC-P10 A room from inside | Not started | Approved: ARKitScenes, Open3D |
 | RC-P11 The iPhone capture app | Not started | Starts once RC-P8 or RC-P10 shows pose priors help |
-| [RC-P12 Underwater](https://github.com/chipi/recce/tree/main/prototypes/RC-P12-underwater) | Not proven yet | AquaMVS: the refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE, the pinhole model to −1.50% and 5.83 mm (−4.8% on one frame). SQUID: one global white balance on the RAW makes the grey patches grey at 6–19 m (median 1.4°); haze is what remains, and range-based backscatter removal raises contrast (mean 0.21 to 0.47) but tints the near charts. Ranges from our own reconstruction fail on SQUID (8 barely overlapping hazy stereo pairs: 0–1.1% of pixels pass PatchMatch's consistency check), so that clause cannot be met on this data. Open: the open underwater benchmark spec |
+| [RC-P12 Underwater](https://github.com/chipi/recce/tree/main/prototypes/RC-P12-underwater) | Not proven yet | AquaMVS: the refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE, the pinhole model to −1.50% and 5.83 mm (−4.8% on one frame). SQUID: one global white balance on the RAW makes the grey patches grey at 6–19 m (median 1.4°); haze is what remains, and range-based backscatter removal raises contrast (mean 0.21 to 0.47) but tints the near charts. Ranges from our own reconstruction fail on SQUID (8 barely overlapping hazy stereo pairs: 0–1.1% of pixels pass PatchMatch's consistency check), so that clause cannot be met on this data. The open underwater benchmark is [specified](underwater-benchmark-spec.md). Open: the owner's call on the ranges clause |
 
 ## Findings
 
@@ -112,11 +112,10 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 
 **Next, in order**
 
-1. **RC-P12 underwater, the rest.** Both measurements and the failed attempt at our own ranges
-   are in its README. Left: the open underwater benchmark spec (what the public sets lack: many
-   overlapping views with charts, RAW with intact colour, a dome port); a better backscatter fit
-   (Sea-thru's local illuminant, a check against a dark target); deciding whether the criterion's
-   "ranges from the reconstruction" clause moves to the owner's own dive set. Data on the
+1. **RC-P12 underwater, the rest.** Both measurements, the failed attempt at our own ranges and
+   the [benchmark spec](underwater-benchmark-spec.md) are done. Left: a better backscatter fit
+   (Sea-thru's local illuminant, a check against a dark target); the owner's call on whether the
+   "ranges from the reconstruction" clause moves to the benchmark's site scene. Data on the
    X3: SQUID Satil (MD5 matches Zenodo's) and its evaluation code, AquaMVS core and `data.zip` (MD5
    matches). SQUID is non-commercial: develop only, never redistribute.
 2. **RC-P6: the owner's frame-rate checks.** `./serve.sh` in `prototypes/RC-P6-viewer`, then
