@@ -9,11 +9,13 @@ either registers as one model or the engine reports its separate components and 
 are missing.
 
 **Result (2026-11-25): partly met.**
-- **With poses and depth:** the TSDF mesh meets the wall-length limit on 385 of 389 wall-to-wall
-  distances, pooled over five RANSAC seeds and five scenes.
-  - Four seeds pass every distance. The fifth fails 4 of 91, on two wall planes 1.05–1.24 m from
-    their partners, by 2.6–3.1 cm against the 2 cm limit.
-  - One scene has a scorable pair in only three of the five seeds.
+- **With poses and depth:**
+  - **Against the Faro scan's own distances** (one visit, independent of ARKit): the TSDF mesh
+    meets the wall-length limit on 85 of 85 wall-to-wall distances over five RANSAC seeds, with a
+    median error of +0.07%.
+  - **Against the ARKit-posed laser reference** (five videos): 329 of 332 distances are within the
+    limit. The three failures are 1.01–1.09 m pairs in one video, off by 2.4–2.6 cm against the
+    2 cm limit. On the visit with Faro scans, this reference itself reads a median 0.51% long.
 - **Splat:** not trained yet. Its input is ready and needs a daytime GPU window.
 - **Photos only:** one scene registers as one component, 179 of 218 frames. The other four split
   into 2–4 components. This prototype reports each break with the frames on either side and where
@@ -29,10 +31,11 @@ Five ARKitScenes Training videos, the ones RC-P8 used (one per visit, picked by 
 - **`lowres_depth`:** the iPhone's LiDAR at 256x192 and 60 Hz, with `confidence`.
 - **`lowres_wide.traj`:** ARKit's poses at 10 Hz.
 - **`vga_wide`:** colour at 640x480 and 30 Hz.
+- **Faro scans of visit 421012** (video 42444793): six scans, 11.4 GB, downloaded with the
+  owner's go (2026-11-25). This visit was chosen because it has the most wall pairs per seed.
 
-Downloaded only the assets listed: about 340 MB of `highres_depth` and `confidence` from Apple,
-the rest copied from RC-P8's DGX cache. The Faro scans themselves (58 GB for the five visits) are
-not downloaded.
+`highres_depth` and `confidence` (about 340 MB) come from Apple; the rest is copied from RC-P8's
+DGX cache. The other four visits' Faro scans are not downloaded.
 
 **Frame.** ARKitScenes' world frame is z-up, not ARKit's native y-up. `walls` takes up from the
 camera (the mean image-up direction over the video, which the "sky direction Up" filter makes
@@ -47,7 +50,8 @@ the floor check failed on 42444821 and the run was discarded.
 | align | `uv run python room.py align` | Compares each laser depth frame with the LiDAR depth of the same timestamp, at the LiDAR's pixels (laser intrinsics: `lowres_wide` scaled by 7.5) |
 | fuse | `uv run python room.py fuse` | TSDF of every 2nd LiDAR frame (30 Hz), confidence 2 only, 2 cm voxels, 8 cm truncation, 4 m depth limit, with the ARKit pose interpolated at each frame's timestamp (RC-P8's interpolation); colour from the nearest `vga_wide` frame. Writes `tsdf.ply` |
 | reference | `uv run python room.py reference` | The laser depth frames back-projected with the same poses, every 4th pixel, 1 cm voxel grid. Writes `reference.ply` |
-| walls | `uv run python room.py walls` | Wall-to-wall distances, laser against TSDF (below) |
+| walls | `uv run python room.py walls --seed N` | Wall-to-wall distances, laser reference against TSDF (below) |
+| faro | `uv run python faro.py merge`, `register`, `walls` | The same wall pairs measured in the Faro scans (below) |
 | components | `uv run --project ../RC-P1-registration python components.py` | Photos-only components from RC-P8's `none` runs (below) |
 | splat_prep | `uv run --project ../RC-P1-registration python splat_prep.py` | COLMAP model of RC-P8's posed frames (every 12th `vga_wide` frame) with 3-D points seeded from the TSDF vertices |
 | run_splat.sh | on the DGX, in a `free` window | gsplat's trainer with `--no-normalize-world-space`, so the splat stays in ARKit's frame in metres |
@@ -57,6 +61,7 @@ Outputs go to `$RECCE_DATA_DIR/runs/p10/`. Wall time on the workstation (32 thre
 - `fuse`: 57 s for the five videos.
 - `reference`: 41 s.
 - `walls`: 34 s per seed.
+- `faro.py`: merge 44 s, register 7 s, walls 32 s for five seeds.
 
 **Open3D.** Open3D 0.20's legacy `ScalableTSDFVolume` returned no surface: 0 points after one
 frame at the identity pose, where `UniformTSDFVolume` on the same frame gave 15,159. The cause is
@@ -65,23 +70,52 @@ not found. `fuse` uses the tensor `VoxelBlockGrid` instead.
 ## Wall lengths
 
 **The measure.**
-- **Walls:** up to 40 planes are found in the laser cloud by repeated RANSAC (2 cm). A wall is a
-  vertical plane (within 5°) whose points span at least 1.8 m in height and 0.8 m along it.
-- **Refit in the TSDF:** each wall's plane is refitted in points sampled from the TSDF mesh, inside
-  the wall's footprint and within 5 cm of its plane, then again within 2 cm.
+- **Walls:** up to 40 planes are found in the laser reference by repeated RANSAC (2 cm). A wall is
+  a vertical plane (within 5°) whose points span at least 1.8 m in height and 0.8 m along it.
+- **Refit:** each wall's plane is refitted in another cloud (points sampled from the TSDF mesh, or
+  the Faro scan). The refit uses points inside the wall's footprint and within 5 cm of its plane,
+  then again within 2 cm.
 - **Distances:** every two parallel walls (within 5°) at least 1 m apart give one distance. It is
-  measured at the laser walls' centroids, for both clouds.
+  measured at the laser walls' centroids, for every cloud.
 
 These are wall-to-wall distances, not the sides of one box room. ARKitScenes videos cross doorways
 and corridors, and an "outermost walls" rule picked the two faces of one interior wall on 42444873.
 That rule was dropped after it was seen to fail, before any distance was compared.
 
 **Seeds.** Open3D's RANSAC draws at random, so the planes found, and with them the pairs, change
-from run to run. `walls --seed N` seeds it; a seeded run is byte-for-byte repeatable (checked on
-seed 0). Seeds 0–4 are reported. The first, unseeded runs are discarded. One of them failed a pair
-that no seeded run produces (finding 3).
+from run to run.
+- `walls --seed N` seeds it once per video. A seeded run is byte-for-byte repeatable (checked on
+  seed 0), and `faro.py walls` reproduces the same pairs (checked: the same 18 distances on seed 0).
+- Seeds 0–4 are reported. Earlier runs (unseeded, or seeded once for all videos) are discarded.
+- One unseeded run failed a pair that no seeded run produces (finding 3).
 
-Laser against LiDAR, per frame (`align`):
+### Against the Faro scan (42444793, visit 421012)
+
+The six scans are stored already registered to each other. As stored, 60% of one scan's points lie
+within 2 cm of another's; with either `_pose.txt` applied, 0–7%. They are merged on a 1 cm grid
+(972,987 points).
+
+The merged scan is then fitted onto the ARKit-frame reference rigidly, without scale, so its
+distances stay the scanner's own:
+- **Fit:** FPFH features and RANSAC, then point-to-plane ICP at 5, 2 and 1 cm.
+- **Result:** ICP RMSE is 9.7 mm. Of the reference's points, 94% lie within 5 cm of the Faro scan
+  and 72% within 2 cm (median 1.24 cm). The transform only says which Faro surface is which wall.
+
+| Seed | Pairs | TSDF vs Faro, median (min, max) | Within limit | Laser reference vs Faro, median (min, max) |
+|---|---|---|---|---|
+| 0 | 18 | +0.10% (−0.83, +0.85) | 18/18 | +0.57% (−0.16, +1.56) |
+| 1 | 17 | −0.08% (−0.99, +0.67) | 17/17 | +0.30% (−0.31, +1.01) |
+| 2 | 14 | −0.04% (−0.53, +0.54) | 14/14 | +0.44% (−0.37, +1.17) |
+| 3 | 21 | +0.08% (−0.82, +0.47) | 21/21 | +0.56% (−1.07, +2.12) |
+| 4 | 15 | +0.08% (−0.63, +0.45) | 15/15 | +0.55% (−0.92, +2.00) |
+
+Pooled over the five seeds, the distances span 1.12–3.39 m:
+- **TSDF:** 85 of 85 within the limit, median +0.07%, 90% of absolute errors under 0.93 cm.
+- **Laser reference:** median +0.51%, and 84% of its errors are long.
+
+### Against the ARKit-posed laser reference (five videos)
+
+Laser against LiDAR depth, per frame (`align`):
 
 | Video | Laser frames | LiDAR minus laser depth, median abs / signed |
 |---|---|---|
@@ -96,25 +130,23 @@ Distances within the limit, of those scored, per seed:
 | Video | Seed 0 | Seed 1 | Seed 2 | Seed 3 | Seed 4 |
 |---|---|---|---|---|---|
 | 42444515 | 4/4 | 4/4 | 9/9 | 4/4 | 7/7 |
-| 42444793 | 19/19 | 29/29 | 24/24 | 18/18 | 16/18 |
-| 42444821 | 28/28 | 32/32 | 29/29 | 38/38 | 37/37 |
-| 42444858 | 11/11 | 17/17 | 15/15 | 14/14 | 27/29 |
-| 42444873 | 0/0 | 1/1 | 1/1 | 1/1 | 0/0 |
+| 42444793 | 18/18 | 17/17 | 14/14 | 21/21 | 15/15 |
+| 42444821 | 28/28 | 30/30 | 24/24 | 24/24 | 35/35 |
+| 42444858 | 14/15 | 9/9 | 14/16 | 20/20 | 17/17 |
+| 42444873 | 0/0 | 0/0 | 0/0 | 1/1 | 0/0 |
 
 | Seed | Within / scored | Failed pairs | Error, min / median / max | Median abs error | Wall RMS, laser / TSDF (mm) |
 |---|---|---|---|---|---|
-| 0 | 62/62 | none | −1.41 / −0.35 / +0.46% | 0.9 cm | 9.2 / 9.1 |
-| 1 | 83/83 | none | −1.63 / −0.26 / +1.64% | 0.8 cm | 9.4 / 9.2 |
-| 2 | 78/78 | none | −1.95 / −0.26 / +0.83% | 0.7 cm | 9.2 / 9.2 |
-| 3 | 75/75 | none | −1.39 / −0.40 / +0.63% | 1.0 cm | 9.0 / 8.8 |
-| 4 | 87/91 | 42444793 1.24 m, +2.08% and +2.10%; 42444858 1.08 m, −2.84%; 1.05 m, −2.89% | −2.89 / −0.37 / +2.10% | 0.9 cm | 9.2 / 9.0 |
+| 0 | 64/65 | 42444858 1.07 m, −2.64% | −2.64 / −0.39 / +0.67% | 1.0 cm | 8.9 / 9.1 |
+| 1 | 60/60 | none | −1.18 / −0.39 / +0.63% | 0.9 cm | 9.3 / 9.3 |
+| 2 | 61/63 | 42444858 1.09 m, −2.39%; 1.01 m, −2.36% | −2.39 / −0.40 / +0.46% | 1.0 cm | 9.4 / 9.4 |
+| 3 | 70/70 | none | −1.87 / −0.38 / +1.02% | 1.0 cm | 9.2 / 9.0 |
+| 4 | 74/74 | none | −1.85 / −0.41 / +1.15% | 1.0 cm | 9.0 / 9.0 |
 
 Pooled over all seeds:
-- 385 of 389 distances are within the limit.
-- The median error is −0.33%, and 79% of errors are negative.
-- 90% of absolute errors are under 2.0 cm.
-
-The 42444873 distance, when found (seeds 1–3), is 3.97–4.00 m and off by −0.05 to −0.10%.
+- 329 of 332 distances are within the limit.
+- The median error is −0.40%, and 83% of errors are negative.
+- 90% of absolute errors are under 2.1 cm.
 
 ## Photos only
 
@@ -143,26 +175,30 @@ Breaks, from `components.py`:
 
 ## Findings
 
-1. **The LiDAR reads short, and the TSDF inherits it.**
-   - LiDAR depth is 1.09–1.61% shorter than the laser depth of the same frame (median, per frame,
-     five videos).
-   - TSDF wall distances are a median 0.33% short, and 79% of them are short.
-   - The two short failures (−2.84%, −2.89%) are about twice that bias.
-   - Whether the bias is the LiDAR's or comes from Apple's laser-to-ARKit registration is not
-     separated here. The Faro scans' own distances would separate them.
-2. **Failures sit at short distances, where the 2 cm floor binds.**
-   - All four seeded failures are 1.05–1.24 m pairs. They come from two wall planes, each about
-     1.5 m wide: one in 42444793 (+2.6 cm) and one in 42444858 (−3.0 cm).
+1. **The ARKit-posed laser reference reads long; the TSDF does not.** On the one visit with Faro
+   scans:
+   - The TSDF's wall distances match the Faro scan's own to a median +0.07%.
+   - The ARKit-posed laser reference reads +0.51% long against the same scan.
+   - So most of the TSDF's −0.40% against that reference comes from the reference.
+   - The per-frame depth comparison points the same way: the LiDAR depth is 1.09–1.61% shorter
+     than Apple's rendered laser depth of the same frame.
+   - Why the rendered and back-projected laser reads long is not established. Candidates are
+     Apple's laser-to-ARKit registration, its rendering, or my 7.5x scaling of the intrinsics.
+   - This is one visit; the other four have no Faro check.
+2. **Failures against the ARKit-posed reference sit at short distances, where the 2 cm floor
+   binds.**
+   - All three seeded failures are 1.01–1.09 m pairs in 42444858, 2.4–2.6% short. That is the
+     reference's own bias plus a few millimetres.
    - An unseeded run also failed a 1.17 m pair in 42444515 at +3.71%. That pair is between a wall
      and a closed door at the end of a corridor, 2.6 m from the camera that sees the door most
      squarely (`vga_wide/42444515_3700.880.png`).
      - At the door, the laser points lie mostly within ±3 cm of the plane. The TSDF surface in the
        same footprint spreads 0–15 cm in front of it.
      - No seeded run has a 42444515 pair near 1.17 m. The cause is not established.
-3. **42444873 is barely scorable.** It yields one parallel pair at least 1 m apart in three seeds
-   (3.97–4.00 m, error −0.05 to −0.10%) and none in two. Its laser cloud spans 15 m by 10 m, so the
-   rule finds few of its walls. Why is not checked; non-parallel walls (more than 5° apart) and
-   pieces of one wall closer than 1 m are both excluded by the rule.
+3. **42444873 is barely scorable.** It yields one parallel pair at least 1 m apart in one seed of
+   five. Its laser cloud spans 15 m by 10 m, so the rule finds few of its walls. Why is not
+   checked; non-parallel walls (more than 5° apart) and pieces of one wall closer than 1 m are
+   both excluded by the rule.
 4. **Photos-only registration of these videos is poor.**
    - COLMAP registers 23–71% of frames in four videos, and 82% in 42444873.
    - The breaks are either long unregistered runs (11–19 s) or turns between adjacent frames.
@@ -173,12 +209,11 @@ Breaks, from `components.py`:
 
 ## Not covered
 
-- **The reference is not independent of ARKit.** The laser frames are back-projected with the
-  same ARKit poses as the TSDF:
-  - A pose error common to both is not seen. The laser walls' RMS (median 9.0–9.4 mm per seed)
-    bounds pose inconsistency across the frames that see one wall, not drift across the room.
-  - The Faro scans' own frame (58 GB, about 5.6–15.3 GB per visit) would give an independent
-    distance. Not downloaded; it needs the owner's go.
+- **Only one visit has an independent reference.** The Faro check covers 42444793 (85 distances
+  over five seeds). The other four videos are scored only against the ARKit-posed laser
+  reference, which shares the TSDF's poses: a pose error common to both is not seen there.
+- **The Faro walls come from the reference's planes.** The reference picks and places each wall,
+  and the Faro scan is refitted there. A wall the reference misses is not measured in the scan.
 - **No splat yet.** The splat half of the first clause is not tested. Inputs are ready for all five
   videos (90–218 images each, 100–200k seed points); `run_splat.sh` waits for a daytime GPU window.
   - Not checked: whether the splat stays metric (its Gaussians against the TSDF) and its held-out

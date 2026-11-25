@@ -333,11 +333,11 @@ def separation(a, b, plane_a, plane_b):
 
 
 def cmd_walls(args):
-    # segment_plane draws at random; the seed makes a run repeatable, and several seeds show
-    # how much the plane set (and so the pairs) depends on the draw.
-    o3d.utility.random.seed(args.seed)
     rows = {}
     for vid in args.videos:
+        # segment_plane draws at random; seeding per video makes each video's planes repeatable
+        # on their own, and several seeds show how much the pairs depend on the draw.
+        o3d.utility.random.seed(args.seed)
         traj = np.loadtxt(RAW / vid / "lowres_wide.traj")
         ref = np.asarray(o3d.io.read_point_cloud(str(RUNS / vid / "reference.ply")).points)
         mesh = o3d.io.read_triangle_mesh(str(RUNS / vid / "tsdf.ply"))
