@@ -12,8 +12,9 @@ the seven complaint measurements of §0 each have a first number.
 Status: **not proven yet.** The GPU phase ran on 2026-11-24 on the GB10 in `free` mode. Three clauses
 have numbers: the dense cloud and the mesh are scored at all six tolerances (two pose sources), the
 splat has held-out PSNR and SSIM on garden and counter at 30,000 steps, and the textured mesh and
-the courtyard splat share one pose set. Two things keep it open: measurement 5 (underwater colour)
-has no number and no data, and the texture-side parts of measurements 1 and 4 are not computed. The
+the courtyard splat share one pose set. Measurement 5 (underwater colour) has its first number
+from RC-P12 (2026-11-25). What keeps it open: the texture-side parts of measurements 1 and 4 are
+not computed. The
 courtyard splat, open until 2026-11-25, now has 30,000 steps (18.21 dB; more steps do not lift it).
 See "Not covered".
 
@@ -119,7 +120,7 @@ All on courtyard unless noted; `measure.py` produces rows 2 and 3 from the cropp
 | 2 | Noisy or melted geometry | Distance of fused points to the nearest scan point (points within 10 cm of a scan: 87.8% for `p1`, 94.9% for `gt`): median 2.75 cm and MAD 1.13 cm (`p1`); 1.20 cm and 0.56 cm (`gt`). Depth-map consistency, geometric over photometric valid pixels, median across 38 views: 0.32 (`p1`), 0.71 (`gt`) | KD-tree of a 4 M-point subsample of the two scans in the scan frame; depth maps counted from the COLMAP `.bin` files | ETH3D's accuracy (above) is the occlusion-aware version of the distance |
 | 3 | Holes | Completeness: the table above (for example 0.24 at 5 cm for `p1`, 0.82 for `gt`). Per 1 m cell, share of scan points with a fused point within 5 cm: median 0.4% for `p1` (325 of 474 cells below 10%), 85.5% for `gt` (87 of 474 below 10%) | Same KD-tree, 474 cells of the scans' footprint with at least 100 sampled points | Cells are in the scan frame, not images; RC-P3's coverage on this model is not joined |
 | 4 | Colour seams | Exposure spread: standard deviation of log2 mean linear luminance across the 38 images, 0.276 stops. White balance: standard deviation of log2 R/G 0.060, of log2 B/G 0.039 | Per-image mean of linearised sRGB over the whole image | Seam contrast in the texture: not computed (the textured mesh exists now; the script is not written) |
-| 5 | Wrong colour underwater | None. Grey-world cast of the above-water set, as a control only: mean R/G 1.066, B/G 0.983 | Mean of per-image channel ratios | No colour target and no water in ETH3D or Mip-NeRF 360; needs an underwater set with a chart (Sea-thru or SQUID, 38 to 46 GB, not downloaded). A decision for the owner |
+| 5 | Wrong colour underwater | SQUID Satil, 15 grey ramps at 5.8–18.9 m ([RC-P12](../RC-P12-underwater/README.md)): the published TIFs sit 37.9–40.8° from grey (red clipped to zero); the RAW with one global grey-world balance, median 1.4°; ramp contrast falls from 0.39–0.41 at 6–7 m to 0.07–0.09 at 18–19 m and only range-based backscatter removal raises it (mean 0.21 to 0.47). Above-water control: mean R/G 1.066, B/G 0.983 | SQUID's grey-patch angle and ramp contrast on the charts, RAW registered to the undistorted TIFs | On images, not on a textured mesh or splat; ranges from SQUID's stereo, not from our reconstruction |
 | 6 | Untrustworthy scale | Photos alone give no scale: the Sim(3) to ETH3D's frame is 1.3513 m per model unit. Against measured distances (all 703 camera pairs, ground-truth centres): median error 0.90%, 95th percentile 6.1%, maximum 23.1%; camera-centre residual median 6.1 cm | `align_model.py` on RC-P1's model; `runs/p4/courtyard_3000_p1/align/sim3.json` | Distances measured on the final model's surface, not between camera centres |
 | 7 | Slow | Wall-clock on the GB10 (table above and below); transfer: the 28 MB fused cloud copied in 3.0 s through the Mac mini hop (about 9 MB/s); cost per run in GPU time, no money figure (owned hardware) | The scripts' timers, `status.txt`, `wall.txt`; one timed `scp` | No second machine (X3, M4 Pro) was timed, no rented-GPU cost |
 
@@ -186,7 +187,8 @@ for garden) stay on the DGX under `~/.cache/recce/runs/p4/`.
 
 - **The `gt`-pose courtyard splat at 30,000 steps.** The `p1` splat ran 30,000 steps on 2026-11-25;
   the `gt` one ran 7,000 only.
-- **Measurement 5** has no number (no data). **Measurements 1 and 4** lack the texture-side numbers:
+- **Measurement 5** is measured on SQUID images (RC-P12), not on a textured mesh or splat.
+  **Measurements 1 and 4** lack the texture-side numbers:
   per-face texture resolution, texel blend count, seam contrast. The texture exists; no script
   reads it. Measurements 2 and 3 use a KD-tree on a 4 M-point scan subsample, not ETH3D's
   occlusion-aware metric, and measure 6 only camera centres.

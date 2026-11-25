@@ -1,0 +1,11 @@
+[project]
+name = "rc-p12-underwater"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.5.5",
+    "opencv-python-headless>=5.1.0.95",
+    "rawpy>=0.28.0",
+    "scipy>=1.18.1",
+    "tifffile>=2026.11.16",
+]

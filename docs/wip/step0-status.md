@@ -11,15 +11,15 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P1 Registration on every machine](https://github.com/chipi/recce/tree/main/prototypes/RC-P1-registration) | **Proven** | COLMAP and GLOMAP register kicker, courtyard and pipes on the X3, the M4 Pro and the GB10 |
 | [RC-P2 The expensive stages on the GPUs](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu) | **Proven** | Dense depth on courtyard through CUDA on the GB10 (1,169 s) and through HIP on the X3 in a ROCm container (3,205 s, about 2.7 times slower); a gsplat splat on the GB10 |
 | [RC-P3 Quality state an agent can read](https://github.com/chipi/recce/tree/main/prototypes/RC-P3-quality) | **Proven** | An agent with only three MCP read tools names the held-out region on both scenes |
-| [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Not proven yet | Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; six of seven complaint measurements have a first number. The courtyard splat at 30,000 steps reaches 18.2 dB, no better than at 7,000, so steps are not the cause. Open: underwater colour (needs SQUID, RC-P12) and the texture-side parts of measurements 1 and 4 |
+| [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Not proven yet | Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; all seven complaint measurements have a first number (underwater colour from RC-P12, on images). The courtyard splat at 30,000 steps reaches 18.2 dB, no better than at 7,000, so steps are not the cause. Open: the texture-side parts of measurements 1 and 4 |
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
-| RC-P6 Mesh and splat in the browser | Not started | Needs RC-P4's mesh and splat; the owner checks frame rate on the iPhone |
+| [RC-P6 Mesh and splat in the browser](https://github.com/chipi/recce/tree/main/prototypes/RC-P6-viewer) | Not proven yet | The RC-P4 courtyard mesh and a 1,000,000-gaussian splat load together in three.js + Spark at 59.9 fps (display-limited) in Chromium on the X3's iGPU; the Rerun export is verified with Rerun's CLI. Open: the owner's frame-rate checks on the M4 Pro (60 fps) and the iPhone 15 Pro (30 fps); Safari not run |
 | RC-P7 Distribution on a large set | Spec written | [GPU rental spec](gpu-rental-p7.md); renting waits for the owner |
-| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | Comparison done; decision for the owner | MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Proposed: a second route beside COLMAP, not a replacement and not a source of scale |
+| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | **Proven** | MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Owner's decision: an optional second route beside COLMAP, kept only after an agreement check (not built yet), never the source of scale |
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
 | RC-P10 A room from inside | Not started | Approved: ARKitScenes, Open3D |
 | RC-P11 The iPhone capture app | Not started | Starts once RC-P8 or RC-P10 shows pose priors help |
-| RC-P12 Underwater | Not started | Approved: AquaMVS and SQUID |
+| [RC-P12 Underwater](https://github.com/chipi/recce/tree/main/prototypes/RC-P12-underwater) | Not proven yet | AquaMVS: the refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE, the pinhole model to −1.50% and 5.83 mm (−4.8% on one frame). SQUID: one global white balance on the RAW makes the grey patches grey at 6–19 m (median 1.4°); haze is what remains, and range-based backscatter removal raises contrast (mean 0.21 to 0.47) but tints the near charts. Open: SQUID ranges from our own reconstruction; the open underwater benchmark spec |
 
 ## Findings
 
@@ -83,6 +83,14 @@ MapAnything's camera centres. On ARKitScenes it fails on one low-texture video (
 is wrong in parts on a textured one; COLMAP registers 10–18% of the frames of the low-texture
 videos. MapAnything needs 42–59 GiB of GPU memory for 90–218 views, more than `prod` mode leaves.
 
+**Underwater.** Refraction is a scale error, not noise: on AquaMVS a pinhole calibration is off by
+−0.03% to −4.8% depending on where the board is, and a refractive model by at most ±0.28%. Colour
+underwater needs the RAW: SQUID's published TIFs clip red to zero on 78–99.9% of pixels. Over 6–19 m
+on the Satil wreck the colour cast is nearly one global tint, which a single white balance removes;
+what changes with range is contrast (0.39 to 0.07 on the grey ramp), and the simple per-image
+backscatter fit restores it unevenly. SQUID's chart annotations sit a few pixels off its published
+undistorted images and are snapped before use.
+
 ## Mock-ups
 
 | Mock-up | Status |
@@ -99,17 +107,16 @@ courtyard splat are in their READMEs.
 
 **Next, in order**
 
-1. **RC-P8 learned and classical.** Comparison done on the GB10 (see its README); the owner decides
-   whether the learned first pass enters a recipe, on the proposal there. Not built: the
-   agreement check against the classical model that the proposal needs.
-2. **RC-P12 underwater.** Restarted from scratch: no code was written. On the X3,
-   `~/.cache/recce/datasets/aquamvs` (548 MB, the ground-truth core and published result folders)
-   and `~/.cache/recce/datasets/squid` (781 MB, partial) remain. SQUID is non-commercial: develop
-   only, never redistribute. RC-P12 also gives RC-P4 its underwater-colour measurement. If ChArUco
-   detection needs OpenCV, that is a dependency to ask about.
-3. **RC-P6 mesh and splat in the browser.** Waiting on the owner: a three.js splat renderer from a
-   CDN (Spark, MIT, preferred) and `rerun-sdk` in RC-P6's own environment. Then the owner checks the
-   frame rate on the iPhone.
+1. **RC-P12 underwater, the rest.** Both measurements are in its README. Left: SQUID ranges from
+   our own reconstruction of the stereo pair instead of SQUID's; a better backscatter fit (Sea-thru's
+   local illuminant, a check against a dark target); the open underwater benchmark spec. Data on the
+   X3: SQUID Satil (MD5 matches Zenodo's) and its evaluation code, AquaMVS core and `data.zip` (MD5
+   matches). SQUID is non-commercial: develop only, never redistribute.
+2. **RC-P6: the owner's frame-rate checks.** `./serve.sh` in `prototypes/RC-P6-viewer`, then
+   `http://omarchy:8806/?auto=1` on the M4 Pro (60 fps) and the iPhone 15 Pro (30 fps); Safari and
+   iOS are untested. If the phone cannot connect, TCP 8806 on `tailscale0` is closed.
+3. **RC-P8's agreement check** (owner's decision: optional second route, kept only after a check
+   against the classical model): build and test it.
 4. **RC-P10 a room from inside.** Approved (ARKitScenes, Open3D); shares RC-P8's ARKitScenes data.
 5. **RC-P11** after RC-P8 or RC-P10 shows pose priors help; **RC-P7** when the owner decides to rent
    ([spec](gpu-rental-p7.md)).
@@ -118,7 +125,9 @@ courtyard splat are in their READMEs.
 
 - Approved downloads and installs (user-level only): ETH3D and Mip-NeRF 360 data, MapAnything
   (Apache weights only), PyTorch, gsplat, texrecon, micromamba, Open3D, ARKitScenes subset,
-  AquaMVS, SQUID, Blender, rawpy, the MCP SDK (RC-P3). Anything else is asked first.
+  AquaMVS, SQUID, Blender, rawpy, the MCP SDK (RC-P3); three.js and Spark from a CDN and
+  `rerun-sdk` (RC-P6's environment); scipy, tifffile and `opencv-python-headless` (RC-P12's
+  environment). Anything else is asked first.
 - **DGX GPU windows:** standing go by day. Message the homelab session before switching; switch with
   `ssh markodragoljevic@dgx-llm-1 '~/bin/gpu-mode-swap.sh free --json'`; when the work's processes
   have exited, send it "done"; it switches back to `prod` and verifies both vLLMs. The `claude`
@@ -133,4 +142,4 @@ courtyard splat are in their READMEs.
 ## Open, for the owner
 
 - Renting a GPU for RC-P7 (spec ready).
-- The iPhone frame-rate check for RC-P6, once it exists.
+- The M4 Pro and iPhone frame-rate checks for RC-P6 (ready to run).

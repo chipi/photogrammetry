@@ -185,7 +185,13 @@ non-commercial, and the RAW files are not in the public download.
   https://zenodo.org/records/5744037]
 - Zips: Katzaa 12.1 GB, Michmoret 16.9 GB, Nachsolim 10.5 GB, Satil 6.2 GB, 45.8 GB total. Licence CC-BY-NC-SA 4.0.
   [V same page]
-- Camera model unknown (not read). Only stereo pairs, so not a full SfM set; the distance maps are the value.
+- Satil, read 2026-11-25 (RC-P12): Nikon NEFs of 7380 x 4928; the TIFs are sRGB-encoded (not linear) and
+  clip red to zero on 78-99.9% of pixels, so colour work needs the RAW. Chart annotations (corners and patch
+  centres) for right-camera images ship with the evaluation code
+  (`underwater-dataset-evaluation-undisorted-params.zip` on the project page), not in the dataset zips; they sit
+  a few pixels off the published undistorted TIFs. The calibration is a MATLAB `stereoParameters` object,
+  unreadable outside MATLAB. [V RC-P12 README]
+- Only stereo pairs, so not a full SfM set; the distance maps are the value.
 - Fits: P8 scale and colour checks, RAW decode test for P7b-style handling underwater.
 
 ### SeaThru-NeRF scenes

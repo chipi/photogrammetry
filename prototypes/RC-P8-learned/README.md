@@ -128,8 +128,9 @@ processed intrinsics MapAnything made from the prior (`pixel_map_check_max_px`).
 
 ## Results
 
-Status: **comparison done (2026-11-25, GB10 in a `free` window); the recipe decision is the
-owner's.** A proposed decision is at the end of this section.
+Status: **proven (2026-11-25, GB10 in a `free` window).** The comparison is done on both sets,
+with and without priors, and the owner has decided: MapAnything + BA enters as an optional second
+route (decision at the end of this section).
 
 All runs on the GB10: MapAnything in bf16 on CUDA, SIFT and matching on CUDA (conda-forge
 pycolmap). Small results (JSON, logs, `table.md`; 127 files, 5.6 MB) are copied to
@@ -267,6 +268,12 @@ warning on some scenes (42444515, 42444873), and BA drift does not show it, so a
 classical model is needed before its poses are kept; that check is not built or tested here. Its
 metric scale is off by up to 29% on ETH3D (courtyard) and up to 41% on the usable ARKit runs
 (MapAnything alone on 42444793), so it is not a source of scale on its own.
+
+**Decision (owner, 2026-11-25).** Yes, as an optional second route beside COLMAP. It runs where
+COLMAP registers too little, its poses are kept only after the agreement check against the
+classical model on the frames both register, and it is never the source of metric scale. Above
+about 30 views it needs a `free` GPU window on the GB10. Only the Apache checkpoint is used. Next
+for this route: build and test the agreement check.
 
 ## Not covered
 
