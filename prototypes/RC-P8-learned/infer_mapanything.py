@@ -59,7 +59,8 @@ def collect(paths, sizes, preds, processed, k_priors, target):
     for p, size, pred, view, k_prior in zip(paths, sizes, preds, processed, k_priors, strict=True):
         sx, ox, sy, oy = maps[p.name] = pixel_map(size, target, k_prior)
         if k_prior is not None and "intrinsics" in view:
-            kp = np.asarray(view["intrinsics"]).reshape(-1, 3, 3)[0]
+            # infer() moves the views to the GPU in place.
+            kp = torch.as_tensor(view["intrinsics"]).detach().cpu().numpy().reshape(-1, 3, 3)[0]
             mapped = (
                 sx * k_prior[0][0],
                 sx * k_prior[0][2] + ox,

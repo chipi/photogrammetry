@@ -512,12 +512,68 @@ def learned_routes(results, out, db, image_dir, gt, ma, priors):
     }
     try:
         rec, t = learned_then_ba(out, db, image_dir, ma, priors, results["variant"])
-        results["routes"]["mapanything_ba"] = {
-            "timings": {**ma["timings"], **t},
-            **score_route({0: rec}, gt, n, True),
-        }
+        results["routes"]["mapanything_ba"] = score_learned_ba(out, rec, ma, gt, n, t)
     except Exception as e:
         results["routes"]["mapanything_ba"] = {"error": repr(e)}
+
+
+def anchor_to_learned(rec, ma):
+    """Bundle adjustment leaves the gauge free and lets the scale drift (on the GB10: kicker
+    -39.6%, courtyard with priors -75.4%, against MapAnything's +4.1% and -5.3%). Map the
+    adjusted model onto MapAnything's camera centres with a Sim(3): the scale comes from the
+    learned pass, the shape from the adjustment. Returns how far the adjustment had drifted."""
+    learned = ma_as_reconstruction_poses(ma)
+    names = [
+        Path(i.name).name
+        for i in rec.images.values()
+        if i.has_pose and Path(i.name).name in learned
+    ]
+    by_name = {Path(i.name).name: i for i in rec.images.values()}
+    src = np.array([world_from_cam(by_name[n])[1] for n in names])
+    dst = np.array([learned[n][1] for n in names])
+    s, rot, t = umeyama(src, dst)
+    rec.transform(pycolmap.Sim3d(s, pycolmap.Rotation3d(rot), t))
+    return {"images": len(names), "ba_scale_drift_pct": round(100 * (1 / s - 1), 3)}
+
+
+def drop_outlier_points(rec, max_error=BA_THRESHOLDS_PX[-1]):
+    """The last adjustment can push a few points far off (mean error 1e150 px on 42444858 and
+    42444873), and pycolmap keeps the errors from triangulation until asked. Recompute, then
+    drop points above the loop's last threshold, as the loop's own filter would have."""
+    rec.update_point_3d_errors()
+    bad = [i for i, p in rec.points3D.items() if not np.isfinite(p.error) or p.error > max_error]
+    for i in bad:
+        rec.delete_point3D(i)
+    rec.update_point_3d_errors()
+    return len(bad)
+
+
+def score_learned_ba(out, rec, ma, gt, n, timings):
+    dropped = drop_outlier_points(rec)
+    anchor = anchor_to_learned(rec, ma)
+    anchor["points_dropped_after_last_ba"] = dropped
+    anchored = out / "learned_ba" / "anchored"
+    anchored.mkdir(parents=True, exist_ok=True)
+    rec.write(str(anchored))
+    return {
+        "timings": {**ma["timings"], **timings},
+        "anchor_to_learned": anchor,
+        **score_route({0: rec}, gt, n, True),
+    }
+
+
+def cmd_rescore_ba(args):
+    """Re-score the saved learned + BA model (learned_ba/0) without running anything again."""
+    out = args.out / args.variant
+    results = json.loads((out / "results.json").read_text())
+    ma = json.loads((out / "mapanything.json").read_text())
+    gt = pycolmap.Reconstruction(str(args.out / "reference"))
+    rec = pycolmap.Reconstruction(str(out / "learned_ba" / "0"))
+    old = results["routes"].get("mapanything_ba", {})
+    t = {k: v for k, v in old.get("timings", {}).items() if k not in ma["timings"]}
+    results["routes"]["mapanything_ba"] = score_learned_ba(out, rec, ma, gt, results["images"], t)
+    (out / "results.json").write_text(json.dumps(results, indent=2))
+    print(json.dumps(results["routes"]["mapanything_ba"], indent=2))
 
 
 def main():
@@ -534,13 +590,21 @@ def main():
     p.add_argument("out", type=Path)
     p.add_argument("--every", type=int, default=12, help="every Nth vga_wide frame (30 Hz)")
     p.add_argument("--max-gap", type=float, default=0.15, help="max gap between the two poses, s")
+    p = sub.add_parser("rescore-ba")
+    p.add_argument("out", type=Path)
+    p.add_argument("--variant", choices=["none", "prior"], required=True)
     p = sub.add_parser("colmap")
     p.add_argument("out", type=Path)
     p.add_argument("--variant", choices=["none", "prior"], required=True)
     p.add_argument("--cpu", action="store_true", help="SIFT on the CPU (GPU hidden)")
     args = ap.parse_args()
     start = time.perf_counter()
-    commands = {"prep-eth3d": cmd_prep_eth3d, "prep-arkit": cmd_prep_arkit, "colmap": cmd_colmap}
+    commands = {
+        "prep-eth3d": cmd_prep_eth3d,
+        "prep-arkit": cmd_prep_arkit,
+        "colmap": cmd_colmap,
+        "rescore-ba": cmd_rescore_ba,
+    }
     commands[args.cmd](args)
     print(f"{args.cmd} done in {time.perf_counter() - start:.1f}s")
 

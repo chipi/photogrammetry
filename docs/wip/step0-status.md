@@ -11,11 +11,11 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P1 Registration on every machine](https://github.com/chipi/recce/tree/main/prototypes/RC-P1-registration) | **Proven** | COLMAP and GLOMAP register kicker, courtyard and pipes on the X3, the M4 Pro and the GB10 |
 | [RC-P2 The expensive stages on the GPUs](https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu) | **Proven** | Dense depth on courtyard through CUDA on the GB10 (1,169 s) and through HIP on the X3 in a ROCm container (3,205 s, about 2.7 times slower); a gsplat splat on the GB10 |
 | [RC-P3 Quality state an agent can read](https://github.com/chipi/recce/tree/main/prototypes/RC-P3-quality) | **Proven** | An agent with only three MCP read tools names the held-out region on both scenes |
-| [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Not proven yet | Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; six of seven complaint measurements have a first number. Open: underwater colour (needs SQUID, RC-P12) and a 30,000-step courtyard splat |
+| [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | Not proven yet | Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; six of seven complaint measurements have a first number. The courtyard splat at 30,000 steps reaches 18.2 dB, no better than at 7,000, so steps are not the cause. Open: underwater colour (needs SQUID, RC-P12) and the texture-side parts of measurements 1 and 4 |
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
 | RC-P6 Mesh and splat in the browser | Not started | Needs RC-P4's mesh and splat; the owner checks frame rate on the iPhone |
 | RC-P7 Distribution on a large set | Spec written | [GPU rental spec](gpu-rental-p7.md); renting waits for the owner |
-| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | Code checked on the CPU | Four routes, two variants, three ETH3D scenes and five ARKitScenes videos; the GPU run waits for a `free` window. On the CPU, MapAnything fails on a low-texture ARKit video (relative rotation 119° median on 16 frames, the same through its own demo code) and holds on a textured one (2.9°) |
+| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | Comparison done; decision for the owner | MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Proposed: a second route beside COLMAP, not a replacement and not a source of scale |
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
 | RC-P10 A room from inside | Not started | Approved: ARKitScenes, Open3D |
 | RC-P11 The iPhone capture app | Not started | Starts once RC-P8 or RC-P10 shows pose priors help |
@@ -68,11 +68,20 @@ setting. Why RC-P1's poses are that far off is not investigated.
 
 **Splat quality.** gsplat at 30,000 steps reaches PSNR 27.7 on Mip-NeRF 360 garden and 29.2 on
 counter, in line with published gsplat figures. On courtyard (7,000 steps) it stays low: 18.4 dB
-from RC-P1's poses, 20.9 from ground-truth poses, so poses explain part of it. Garden used
+from RC-P1's poses, 20.9 from ground-truth poses, so poses explain part of it; 30,000 steps from
+RC-P1's poses give 18.2 dB, so the step count does not. Garden used
 14.3 GiB of GPU memory, close to what `prod` mode leaves free.
 
 **Texture.** texrecon (BSD; dependencies BSD and MPL-2.0) textures the courtyard mesh in 52 s on
 the GB10; 16% of the faces are seen by no photo.
+
+**Learned poses.** MapAnything's Apache checkpoint alone is 0.9–1.7° and 12–37 cm off on ETH3D;
+bundle-adjusted from the same SIFT matches it comes close to COLMAP (0.36–0.82° relative against
+0.40–0.69°). The adjustment
+lets the scale drift (−41% and −74% on two ETH3D runs), so the adjusted model is anchored to
+MapAnything's camera centres. On ARKitScenes it fails on one low-texture video (82° relative) and
+is wrong in parts on a textured one; COLMAP registers 10–18% of the frames of the low-texture
+videos. MapAnything needs 42–59 GiB of GPU memory for 90–218 views, more than `prod` mode leaves.
 
 ## Mock-ups
 
@@ -83,14 +92,16 @@ the GB10; 16% of the faces are seen by no photo.
 
 ## Resume here (handover, 2026-11-25)
 
-A fresh session starts from this page. Work stopped cleanly on the owner's instruction: no process
-runs on the X3 or the DGX, the DGX is in gpu-mode `prod`, and `main` holds everything finished.
+A fresh session starts from this page. Updated after the RC-P8 GPU window (2026-11-25, 15:15 to
+17:14): no Recce process runs on the X3 or the DGX, the homelab session has switched the DGX back to
+gpu-mode `prod`, and `main` holds everything finished. RC-P8's results and the 30,000-step
+courtyard splat are in their READMEs.
 
 **Next, in order**
 
-1. **RC-P8 learned and classical.** Setup done and the code checked on the CPU (see its README).
-   Next: a `free` window on the DGX for `run_gpu.sh`, which runs every scene and variant and then
-   RC-P4's 30,000-step courtyard splat (`gsplat_courtyard30k`).
+1. **RC-P8 learned and classical.** Comparison done on the GB10 (see its README); the owner decides
+   whether the learned first pass enters a recipe, on the proposal there. Not built: the
+   agreement check against the classical model that the proposal needs.
 2. **RC-P12 underwater.** Restarted from scratch: no code was written. On the X3,
    `~/.cache/recce/datasets/aquamvs` (548 MB, the ground-truth core and published result folders)
    and `~/.cache/recce/datasets/squid` (781 MB, partial) remain. SQUID is non-commercial: develop

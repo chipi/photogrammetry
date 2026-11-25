@@ -12,9 +12,10 @@ the seven complaint measurements of §0 each have a first number.
 Status: **not proven yet.** The GPU phase ran on 2026-11-24 on the GB10 in `free` mode. Three clauses
 have numbers: the dense cloud and the mesh are scored at all six tolerances (two pose sources), the
 splat has held-out PSNR and SSIM on garden and counter at 30,000 steps, and the textured mesh and
-the courtyard splat share one pose set. Three things keep it open: measurement 5 (underwater colour)
-has no number and no data, the texture-side parts of measurements 1 and 4 are not computed, and the
-courtyard splat ran 7,000 steps, not 30,000 (the 4-hour GPU budget ran out). See "Not covered".
+the courtyard splat share one pose set. Two things keep it open: measurement 5 (underwater colour)
+has no number and no data, and the texture-side parts of measurements 1 and 4 are not computed. The
+courtyard splat, open until 2026-11-25, now has 30,000 steps (18.21 dB; more steps do not lift it).
+See "Not covered".
 
 ## Results (ETH3D `courtyard`, 38 DSLR images, scans in the scan frame)
 
@@ -87,6 +88,8 @@ runs it.
 | counter | | | 7,000 | 27.56 | 0.892 | 0.183 | 1,299,084 | | |
 | courtyard (38 images) | `p1`, same as mesh and texture | 2 | 7,000 | 18.39 | 0.638 | 0.348 | 3,203,741 | 556 s | 4.77 GB / 6.7 GiB |
 | courtyard | `gt` (diagnostic) | 2 | 7,000 | 20.93 | 0.823 | 0.238 | 2,538,886 | 507 s | not recorded |
+| courtyard (2026-11-25) | `p1`, same as mesh and texture | 2 | 30,000 | 18.21 | 0.596 | 0.333 | 6,190,555 | 5,689 s | 9.17 GB / 12.9 GiB |
+| courtyard (2026-11-25) | | | 7,000 | 17.97 | 0.624 | 0.354 | 4,620,130 | | |
 
 Held-out PSNR and SSIM on two Mip-NeRF 360 scenes are recorded (garden, counter), with the trainer's
 default densification and no tuning. The garden run reaches 14.3 GiB of GPU process memory, close to
@@ -97,8 +100,13 @@ Courtyard: the `p1` splat trains on the same undistorted workspace as the mesh a
 "the textured mesh and the splat come from the same poses" holds. Its PSNR is low (18.39 dB, as in
 RC-P2's 18.83 dB at 2000 px). The `gt`-pose splat, same 7,000 steps and settings, reaches 20.93 dB
 and SSIM 0.823 against 0.638, which ties part of the low quality to the RC-P1 poses. 20.9 dB is
-still low for a splat; 38 images of an outdoor scene and 7,000 steps are possible causes, none
-tested.
+still low for a splat; 38 images of an outdoor scene and 7,000 steps are possible causes.
+
+Steps tested (2026-11-25, `gsplat_courtyard30k`, run after RC-P8 in the same `free` window): at
+30,000 steps the `p1` splat reaches 18.21 dB, against 17.97 dB at 7,000 steps in the same run, and
+SSIM falls from 0.624 to 0.596; LPIPS improves a little (0.354 to 0.333). More steps do not lift
+courtyard: the step count is not the cause of the low quality. The same settings at 7,000 steps gave
+18.39 dB on 2026-11-24 and 17.97 dB here, so run-to-run spread is about 0.4 dB.
 
 ## The seven measurements: first numbers
 
@@ -176,9 +184,8 @@ for garden) stay on the DGX under `~/.cache/recce/runs/p4/`.
 
 ## Not covered
 
-- **The courtyard splat at 30,000 steps.** Only 7,000 steps ran, for both `p1` and `gt` poses; the
-  4-hour budget (3.7 h spent) left no room. Its PSNR is not comparable with the 30,000-step garden
-  and counter numbers.
+- **The `gt`-pose courtyard splat at 30,000 steps.** The `p1` splat ran 30,000 steps on 2026-11-25;
+  the `gt` one ran 7,000 only.
 - **Measurement 5** has no number (no data). **Measurements 1 and 4** lack the texture-side numbers:
   per-face texture resolution, texel blend count, seam contrast. The texture exists; no script
   reads it. Measurements 2 and 3 use a KD-tree on a 4 M-point scan subsample, not ETH3D's
