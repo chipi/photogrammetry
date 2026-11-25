@@ -9,14 +9,16 @@ BSD-licensed ETH3D multi-view-evaluation tool); the textured mesh and the splat 
 poses; the splat's PSNR and SSIM on held-out views of at least two Mip-NeRF 360 scenes are recorded;
 the seven complaint measurements of §0 each have a first number.
 
-Status: **not proven yet.** The GPU phase ran on 2026-11-24 on the GB10 in `free` mode. Three clauses
-have numbers: the dense cloud and the mesh are scored at all six tolerances (two pose sources), the
-splat has held-out PSNR and SSIM on garden and counter at 30,000 steps, and the textured mesh and
-the courtyard splat share one pose set. Measurement 5 (underwater colour) has its first number
-from RC-P12 (2026-11-25). What keeps it open: the texture-side parts of measurements 1 and 4 are
-not computed. The
-courtyard splat, open until 2026-11-25, now has 30,000 steps (18.21 dB; more steps do not lift it).
-See "Not covered".
+Status: **proven (2026-11-25).** Every clause has its numbers:
+- **Dense cloud and mesh:** scored at all six tolerances, for two pose sources.
+- **Splat:** held-out PSNR and SSIM on garden and counter at 30,000 steps.
+- **Shared poses:** the textured mesh and the courtyard splat use one pose set.
+- **The seven measurements:** each has a first number. Measurement 5 (underwater colour) comes
+  from RC-P12. The texture-side parts of measurements 1 and 4 were the last open items, measured
+  on 2026-11-25 (`measure_texture.py`).
+
+The courtyard splat now has 30,000 steps (18.21 dB; more steps do not lift it). Proven here means
+each clause has a number, not that the numbers are good: see "Not covered".
 
 ## Results (ETH3D `courtyard`, 38 DSLR images, scans in the scan frame)
 
@@ -79,6 +81,23 @@ build: `-mfpmath=sse` and MVE's `-msse2 -msse3 -msse4 -mpopcnt` removed (x86-onl
 jobs against `~/.cache/recce/texenv`. The converter is `make_texrecon_scene.py`; `run_texture.sh`
 runs it.
 
+**Measured (2026-11-25, `measure_texture.py`, on the workstation from a copy of the output).**
+- **Matching faces to labels:** the OBJ keeps the input mesh's vertex numbering. Each of its
+  463,017 faces is matched to one of the input mesh's 502,902 faces, and so to its label in
+  `textured_labeling.vec` (0 unseen, k view k − 1). All 38 views are used.
+- **What is kept:** 421,323 seen faces (1,728 m²), plus 41,694 unseen faces filled by texrecon's
+  hole filling (210 m²). The remaining 39,885 unseen faces are dropped.
+- **Seams:** edges between faces from different photos, sampled 2 texels inside each face.
+  - **Baselines:** edges inside one patch (the texture's own detail over the same 4-texel gap), and
+    edges between seen and hole-filled faces.
+  - **Lookup check:** 0.15–0.21% of samples read black (atlas padding).
+  - **Texture coordinates:** texrecon writes `vt` as (x, 1 − y), with y counted down the atlas;
+    read from its `obj_model.cpp`.
+- **Result:** after texrecon's global and local seam levelling, seams sit close to the texture's
+  own variation. The median ΔE is 2.48 across seams against 2.14 inside patches, and 29.0% of seam
+  edges exceed ΔE 5 against 26.6% inside. Hole borders read lower (1.92 median), since filled
+  colours are interpolated.
+
 ## Splats (gsplat 1.5.3, `simple_trainer.py default`, every 8th image held out)
 
 | Scene | Poses | data_factor | Steps | PSNR (dB) | SSIM | LPIPS | Gaussians | Wall time | Torch memory / GPU process |
@@ -116,10 +135,10 @@ All on courtyard unless noted; `measure.py` produces rows 2 and 3 from the cropp
 
 | # | Complaint | First number | How it was computed | Missing |
 |---|---|---|---|---|
-| 1 | Blurry, smeared textures | Sharpness: variance of the Laplacian of the grey image at 2000 px width, median 802, minimum 363, 10th percentile 432 (38 images). Texture: 16.2% of faces unseen by any image | Photos resized to 2000 px wide; 3×3 Laplacian variance. Unseen faces from texrecon's log | Texture resolution per surface area (per-face ground sampling distance) and texel blend count: not computed |
+| 1 | Blurry, smeared textures | Sharpness: variance of the Laplacian of the grey image at 2000 px width, median 802, minimum 363, 10th percentile 432 (38 images). Texture resolution: one texel covers a median 10.2 mm side on seen faces (10th–90th percentile by area 4.7–15.1 mm, about 9,600 texels per m²), 13.8 mm on hole-filled faces (5.5–61.7 mm). Texel sources: 89.2% of the textured area comes from exactly one photo; the other 10.8% (41,694 hole-filled faces) from none, by interpolation; 39,885 unseen faces are dropped | Photos resized to 2000 px wide; 3×3 Laplacian variance. Texture: `measure_texture.py`, atlas texels over each face's area, area-weighted; sources from texrecon's labelling (one view per face) | Texel size is not compared with each photo's ground sampling distance |
 | 2 | Noisy or melted geometry | Distance of fused points to the nearest scan point (points within 10 cm of a scan: 87.8% for `p1`, 94.9% for `gt`): median 2.75 cm and MAD 1.13 cm (`p1`); 1.20 cm and 0.56 cm (`gt`). Depth-map consistency, geometric over photometric valid pixels, median across 38 views: 0.32 (`p1`), 0.71 (`gt`) | KD-tree of a 4 M-point subsample of the two scans in the scan frame; depth maps counted from the COLMAP `.bin` files | ETH3D's accuracy (above) is the occlusion-aware version of the distance |
 | 3 | Holes | Completeness: the table above (for example 0.24 at 5 cm for `p1`, 0.82 for `gt`). Per 1 m cell, share of scan points with a fused point within 5 cm: median 0.4% for `p1` (325 of 474 cells below 10%), 85.5% for `gt` (87 of 474 below 10%) | Same KD-tree, 474 cells of the scans' footprint with at least 100 sampled points | Cells are in the scan frame, not images; RC-P3's coverage on this model is not joined |
-| 4 | Colour seams | Exposure spread: standard deviation of log2 mean linear luminance across the 38 images, 0.276 stops. White balance: standard deviation of log2 R/G 0.060, of log2 B/G 0.039 | Per-image mean of linearised sRGB over the whole image | Seam contrast in the texture: not computed (the textured mesh exists now; the script is not written) |
+| 4 | Colour seams | Exposure spread: standard deviation of log2 mean linear luminance across the 38 images, 0.276 stops. White balance: standard deviation of log2 R/G 0.060, of log2 B/G 0.039. Seam contrast in the texture: CIE76 ΔE across the 39,845 edges between faces from different photos, median 2.48 and 90th percentile 12.3, 29.0% above 5; across edges inside one patch (the texture's own detail), 2.14 and 13.2, 26.6% above 5 | Per-image mean of linearised sRGB over the whole image. Seams: `measure_texture.py`, the atlas colour 2 texels inside each face from the edge's midpoint, after texrecon's global and local seam levelling | One inset distance (2 texels) and one leveling setting; seams are not checked by eye |
 | 5 | Wrong colour underwater | SQUID Satil, 15 grey ramps at 5.8–18.9 m ([RC-P12](../RC-P12-underwater/README.md)): the published TIFs sit 37.9–40.8° from grey (red clipped to zero); the RAW with one global grey-world balance, median 1.4°; ramp contrast falls from 0.39–0.41 at 6–7 m to 0.07–0.09 at 18–19 m and only range-based backscatter removal raises it (mean 0.21 to 0.47). Above-water control: mean R/G 1.066, B/G 0.983 | SQUID's grey-patch angle and ramp contrast on the charts, RAW registered to the undistorted TIFs | On images, not on a textured mesh or splat; ranges from SQUID's stereo, not from our reconstruction |
 | 6 | Untrustworthy scale | Photos alone give no scale: the Sim(3) to ETH3D's frame is 1.3513 m per model unit. Against measured distances (all 703 camera pairs, ground-truth centres): median error 0.90%, 95th percentile 6.1%, maximum 23.1%; camera-centre residual median 6.1 cm | `align_model.py` on RC-P1's model; `runs/p4/courtyard_3000_p1/align/sim3.json` | Distances measured on the final model's surface, not between camera centres |
 | 7 | Slow | Wall-clock on the GB10 (table above and below); transfer: the 28 MB fused cloud copied in 3.0 s through the Mac mini hop (about 9 MB/s); cost per run in GPU time, no money figure (owned hardware) | The scripts' timers, `status.txt`, `wall.txt`; one timed `scp` | No second machine (X3, M4 Pro) was timed, no rented-GPU cost |
@@ -163,7 +182,7 @@ Why these scenes: `garden` is the outdoor scene splat papers report, so the numb
 (align, dense, fusion, mesh, crop, score), `run_gpu_rest.sh` (the control run, then the three
 splats, with the 4-hour budget), `run_gsplat.sh`, `run_texture.sh`; `align_model.py`,
 `run_dense.py`, `run_mesh.py`, `crop.py`, `sample_mesh.py`, `run_eval.py`, `make_texrecon_scene.py`,
-`downscale_images.py`, `measure.py`, `summarize.py`, `apply_sim3.py`. Small results (JSON, logs,
+`downscale_images.py`, `measure.py`, `measure_texture.py`, `summarize.py`, `apply_sim3.py`. Small results (JSON, logs,
 GPU samples, trainer stats, 115 files, 2.2 MB) are copied to `~/.cache/recce/runs/p4/` on the
 workstation; the clouds, meshes, textures, depth maps and splat PLYs (7 GB per courtyard run, 3.2 GB
 for garden) stay on the DGX under `~/.cache/recce/runs/p4/`.
@@ -188,10 +207,16 @@ for garden) stay on the DGX under `~/.cache/recce/runs/p4/`.
 - **The `gt`-pose courtyard splat at 30,000 steps.** The `p1` splat ran 30,000 steps on 2026-11-25;
   the `gt` one ran 7,000 only.
 - **Measurement 5** is measured on SQUID images (RC-P12), not on a textured mesh or splat.
-  **Measurements 1 and 4** lack the texture-side numbers:
-  per-face texture resolution, texel blend count, seam contrast. The texture exists; no script
-  reads it. Measurements 2 and 3 use a KD-tree on a 4 M-point scan subsample, not ETH3D's
-  occlusion-aware metric, and measure 6 only camera centres.
+  Measurements 2 and 3 use a KD-tree on a 4 M-point scan subsample, not ETH3D's occlusion-aware
+  metric, and measure 6 only camera centres.
+- **Texture measurements (1 and 4):**
+  - One textured mesh (`p1`), one texrecon setting (data term `gmi`, both seam-levelling stages).
+  - Seam contrast at one inset (2 texels). A seam levelled right at the edge but visible further
+    in is not caught, and no seam was checked by eye.
+  - Texel size is not set against each photo's ground sampling distance.
+  - "Texel blend count" is answered from texrecon's design: one view per face, so one photo per
+    texel. The local seam levelling still adjusts colours near patch borders, and how far that
+    reaches is not measured.
 - **Mesh scoring is weak.** The Delaunay mesh is untrimmed beyond the crop box: after the crop it
   still covers 2,333 m², so 5 M area-uniform samples give about 2.2 cm spacing, and most samples sit
   on faces far from the photographed surface. The mesh F1 at 1 and 2 cm is not a clean figure. The
