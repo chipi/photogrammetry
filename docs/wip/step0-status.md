@@ -15,7 +15,7 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
 | [RC-P6 Mesh and splat in the browser](https://github.com/chipi/recce/tree/main/prototypes/RC-P6-viewer) | Not proven yet | The RC-P4 courtyard mesh and a 1,000,000-gaussian splat load together in three.js + Spark at 59.9 fps (display-limited) in Chromium on the X3's iGPU; the Rerun export is verified with Rerun's CLI. Open: the owner's frame-rate checks on the M4 Pro (60 fps) and the iPhone 15 Pro (30 fps); Safari not run |
 | RC-P7 Distribution on a large set | Spec written | [GPU rental spec](gpu-rental-p7.md); renting waits for the owner |
-| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | **Proven** | MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Owner's decision: an optional second route beside COLMAP, kept only after an agreement check (not built yet), never the source of scale |
+| [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | **Proven** | MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Owner's decision: an optional second route beside COLMAP, kept only after an agreement check, never the source of scale. The check (built 2026-11-25) gets 15 of 16 runs right with no wrong pass; once checked, the route keeps 1–13 frames COLMAP lacks, since on the low-texture videos the learned model is wrong and is rejected |
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
 | RC-P10 A room from inside | Not started | Approved: ARKitScenes, Open3D |
 | RC-P11 The iPhone capture app | Not started | Starts once RC-P8 or RC-P10 shows pose priors help |
@@ -82,6 +82,10 @@ lets the scale drift (−41% and −74% on two ETH3D runs), so the adjusted mode
 MapAnything's camera centres. On ARKitScenes it fails on one low-texture video (82° relative) and
 is wrong in parts on a textured one; COLMAP registers 10–18% of the frames of the low-texture
 videos. MapAnything needs 42–59 GiB of GPU memory for 90–218 views, more than `prod` mode leaves.
+The agreement check (learned against each COLMAP component, within 2° relative rotation and 2% of
+extent, no ground truth) passes all six ETH3D runs and rejects every broken learned model; its one
+miss is a COLMAP component that is itself 13.8° off. It can confirm the learned model only where
+COLMAP also registered, and on these runs the frames only the learned model has are where it fails.
 
 **Underwater.** Refraction is a scale error, not noise: on AquaMVS a pinhole calibration is off by
 −0.03% to −4.8% depending on where the board is, and a refractive model by at most ±0.28%. Colour
@@ -124,9 +128,9 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 2. **RC-P6: the owner's frame-rate checks.** `./serve.sh` in `prototypes/RC-P6-viewer`, then
    `http://omarchy:8806/?auto=1` on the M4 Pro (60 fps) and the iPhone 15 Pro (30 fps); Safari and
    iOS are untested. If the phone cannot connect, TCP 8806 on `tailscale0` is closed.
-3. **RC-P8's agreement check** (owner's decision: optional second route, kept only after a check
-   against the classical model): build and test it.
-4. **RC-P10 a room from inside.** Approved (ARKitScenes, Open3D); shares RC-P8's ARKitScenes data.
+3. **RC-P10 a room from inside.** Approved (ARKitScenes, Open3D); shares RC-P8's ARKitScenes data.
+4. **RC-P4's texture-side measurements 1 and 4** (texture resolution per face, texel blend count,
+   seam contrast).
 5. **RC-P11** after RC-P8 or RC-P10 shows pose priors help; **RC-P7** when the owner decides to rent
    ([spec](gpu-rental-p7.md)).
 

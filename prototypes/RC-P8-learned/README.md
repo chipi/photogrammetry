@@ -265,15 +265,71 @@ routes. It enters a recipe as a second route beside COLMAP, used where COLMAP re
 on 42444793 it is the only route that registers most frames at under 2°, and on 42444858 it
 registers 81% of the frames against COLMAP's 51% at the same relative rotation. It fails without
 warning on some scenes (42444515, 42444873), and BA drift does not show it, so a check against the
-classical model is needed before its poses are kept; that check is not built or tested here. Its
+classical model is needed before its poses are kept; that check is built and tested below. Its
 metric scale is off by up to 29% on ETH3D (courtyard) and up to 41% on the usable ARKit runs
 (MapAnything alone on 42444793), so it is not a source of scale on its own.
 
 **Decision (owner, 2026-11-25).** Yes, as an optional second route beside COLMAP. It runs where
 COLMAP registers too little, its poses are kept only after the agreement check against the
 classical model on the frames both register, and it is never the source of metric scale. Above
-about 30 views it needs a `free` GPU window on the GB10. Only the Apache checkpoint is used. Next
-for this route: build and test the agreement check.
+about 30 views it needs a `free` GPU window on the GB10. Only the Apache checkpoint is used.
+
+## Agreement check
+
+```
+uv run --project ../RC-P1-registration python agreement.py   # CPU; models copied from the GB10
+```
+
+`agreement.py` decides, without ground truth, whether the learned model (`learned_ba/anchored`)
+is kept. Every COLMAP component (`colmap_incremental/<n>`) that shares at least 3 registered
+frames with it is compared on those frames: the median disagreement of camera-pair relative
+rotations, and the median camera-centre residual after a Sim(3) fit as a fraction of the
+component's extent. The learned model passes only if it agrees with every component it
+overlaps, within 2° and 2%; frames only it registers are then kept. The reference (ETH3D's poses,
+ARKit's tracking) scores the check: the same two thresholds applied against the reference say
+whether it should have passed. The thresholds were set before any run was checked.
+
+| Scene | Variant | Learned / classical frames | Gained | Check | Reference: rel. rotation / position | Verdict |
+|---|---|---|---|---|---|---|
+| pipes | none | 14 / 14 | 0 | pass | 0.48° / 0.53% | right pass |
+| pipes | prior | 14 / 14 | 0 | pass | 0.08° / 0.04% | right pass |
+| kicker | none | 31 / 30 | 1 | pass | 0.82° / 0.27% | right pass |
+| kicker | prior | 31 / 30 | 1 | pass | 0.03° / 0.02% | right pass |
+| courtyard | none | 38 / 38 | 0 | pass | 0.36° / 0.40% | right pass |
+| courtyard | prior | 38 / 38 | 0 | pass | 0.05° / 0.04% | right pass |
+| 42444515 | none | 78 / 28 | 50 | reject | 77.7° / 26.3% | right reject |
+| 42444515 | prior | 81 / 40 | 41 | reject | 82.8° / 28.6% | right reject |
+| 42444821 | none | 60 / 24 | 36 | reject | 8.7° / 6.3% | right reject |
+| 42444821 | prior | 64 / 25 | 39 | reject | 17.7° / 7.6% | right reject |
+| 42444793 | none | 121 / 66 | 55 | reject | 1.80° / 2.39% | right reject |
+| 42444793 | prior | 121 / 66 | 55 | reject | 1.98° / 2.37% | right reject |
+| 42444858 | none | 108 / 95 | 13 | reject | 1.48° / 0.57% | **missed gain** |
+| 42444858 | prior | 108 / 95 | 13 | pass | 1.48° / 0.66% | right pass |
+| 42444873 | none | 202 / 179 | 23 | reject | 6.3° / 11.9% | right reject |
+| 42444873 | prior | 200 / 181 | 20 | reject | 9.2° / 13.5% | right reject |
+
+1. **15 of 16 verdicts are right and none is a wrong pass.** Every run the check keeps is within
+   the thresholds against the reference; every broken learned model (up to 82.8° and 28.6%) is
+   rejected, each by at least one component that disagrees by 2.6–34.2° in relative rotation.
+2. **The one miss is a broken classical component.** On 42444858 without priors, COLMAP's
+   component 0 disagrees with the learned model by 13.8°, while the learned model is within 1.48°
+   of ARKit's tracking: the classical side is the one that is off. The check fails closed, as the
+   decision asks, and loses 13 good frames.
+3. **The route gains little once checked.** Kept frames that COLMAP did not register: 1 on kicker
+   in each variant (0.25% of extent and 1.3° from the reference with priors; 1.1% and 7.4° without)
+   and 13 on 42444858 with priors (1.1% of extent, 4.6° after the centre alignment, which RC-P8
+   found unreliable on near-straight paths). A frame that passes is not checked itself, since no
+   classical pose exists for it; it rides on the agreement of the frames around it.
+   On the low-texture videos, where COLMAP registers least and the route was meant to help, the
+   learned model is wrong and the check rejects it (42444515, 42444821, 42444873).
+4. **42444793 is rejected at the edge**: 1.80–1.98° and 2.37–2.39% against the reference, just
+   over the 2% position threshold. The check rejects it without priors through component 3 (15.0°,
+   15.6%) and with priors through components 0 (26.7°, 12.6%) and 2 (2.6°, 6.7%).
+
+So the agreement check does its job: it keeps a learned model only where the classical model
+confirms it. What it confirms is the learned model on frames COLMAP already has; it cannot vouch
+for frames in a part of the scene COLMAP never registered, and on these runs those are where the
+learned model fails.
 
 ## Not covered
 
