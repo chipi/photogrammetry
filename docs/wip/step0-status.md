@@ -106,6 +106,10 @@ A fresh session starts from this page. Updated after the RC-P8 GPU window (2026-
 gpu-mode `prod`, and `main` holds everything finished. RC-P8's results and the 30,000-step
 courtyard splat are in their READMEs.
 
+**Tracker.** The owner follows progress on a private page,
+[Recce Step 0 Tracker](https://claude.ai/artifact/L5nUn48i3hDqYkxz9frQE5), which mirrors this page.
+Republish it (read it first, then publish to the same link) whenever a row here changes.
+
 **Next, in order**
 
 1. **RC-P12 underwater, the rest.** Both measurements and the failed attempt at our own ranges
