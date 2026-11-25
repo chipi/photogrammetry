@@ -2,7 +2,7 @@
 
 Where the prototypes and mock-ups of [Step 0](../concept/RC-brief.md) stand, and what they found.
 Each prototype's README in `prototypes/` holds its full numbers and its "Not covered" list; this
-page is the summary. Updated 2026-11-24; work paused until 2026-11-25 on the owner's instruction.
+page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 
 ## Prototypes
 
@@ -80,6 +80,47 @@ the GB10; 16% of the faces are seen by no photo.
 |---|---|
 | [RC-M1 the run](https://github.com/chipi/recce/tree/main/mockups/RC-M1-run) (with first passes at M2 and M3) | Phase 2 done: IBM Plex, tokens, AA contrast, field shot cards; photos hang in the air with faint rays (owner feedback, 2026-11-24) |
 | M2–M8 | Later, as their prototypes produce data |
+
+## Resume here (handover, 2026-11-25)
+
+A fresh session starts from this page. Work stopped cleanly on the owner's instruction: no process
+runs on the X3 or the DGX, the DGX is in gpu-mode `prod`, and `main` holds everything finished.
+
+**Next, in order**
+
+1. **RC-P8 learned and classical.** Restarted from scratch: no code was written. On the DGX
+   (user `claude`) a partial setup remains: `~/.cache/recce/mapanyenv` (6 GB, MapAnything
+   environment, unverified) and `~/.cache/recce/datasets/arkitscenes` (652 MB, partial; one
+   interrupted download was removed). Reuse after checking, or delete and redo. Plan: setup in
+   `prod` mode without the GPU, then a `free` window for the runs, together with RC-P4's
+   30,000-step courtyard splat.
+2. **RC-P12 underwater.** Restarted from scratch: no code was written. On the X3,
+   `~/.cache/recce/datasets/aquamvs` (548 MB, the ground-truth core and published result folders)
+   and `~/.cache/recce/datasets/squid` (781 MB, partial) remain. SQUID is non-commercial: develop
+   only, never redistribute. RC-P12 also gives RC-P4 its underwater-colour measurement. If ChArUco
+   detection needs OpenCV, that is a dependency to ask about.
+3. **RC-P6 mesh and splat in the browser.** Waiting on the owner: a three.js splat renderer from a
+   CDN (Spark, MIT, preferred) and `rerun-sdk` in RC-P6's own environment. Then the owner checks the
+   frame rate on the iPhone.
+4. **RC-P10 a room from inside.** Approved (ARKitScenes, Open3D); shares RC-P8's ARKitScenes data.
+5. **RC-P11** after RC-P8 or RC-P10 shows pose priors help; **RC-P7** when the owner decides to rent
+   ([spec](gpu-rental-p7.md)).
+
+**Standing rules that carry over**
+
+- Approved downloads and installs (user-level only): ETH3D and Mip-NeRF 360 data, MapAnything
+  (Apache weights only), PyTorch, gsplat, texrecon, micromamba, Open3D, ARKitScenes subset,
+  AquaMVS, SQUID, Blender, rawpy, the MCP SDK (RC-P3). Anything else is asked first.
+- **DGX GPU windows:** standing go by day. Message the homelab session before switching; switch with
+  `ssh markodragoljevic@dgx-llm-1 '~/bin/gpu-mode-swap.sh free --json'`; when the work's processes
+  have exited, send it "done"; it switches back to `prod` and verifies both vLLMs. The `claude`
+  account (reached through the Mac mini) runs the jobs and cannot switch modes.
+- **The X3** is shared with eval-harness, which announces its test runs; heavy Recce work stays
+  sequential and off cores it pins. The HIP build is the Docker image `recce-p2-colmap-hip:latest`.
+- **Gate:** `make check; echo EXIT=$?` before every commit, never a filtered line; commits land on
+  `main` and CI is watched to a verdict.
+- Two parallel streams at most, on sonnet subagents; each writes only its own prototype folder and
+  never commits.
 
 ## Open, for the owner
 
