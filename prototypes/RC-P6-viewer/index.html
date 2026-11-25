@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RC-P6: mesh and splat</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #101214; overflow: hidden; }
+  canvas { display: block; touch-action: none; }
+  #hud {
+    position: fixed; top: env(safe-area-inset-top, 0); left: 0; padding: 8px 10px;
+    font: 12px/1.4 ui-monospace, Menlo, monospace; color: #e8e8e8;
+    background: rgba(0, 0, 0, 0.55); border-radius: 0 0 6px 0; user-select: none;
+  }
+  #hud label { margin-right: 10px; }
+  #fps { font-size: 16px; font-weight: 600; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "@sparkjsdev/spark": "https://cdn.jsdelivr.net/npm/@sparkjsdev/spark@2.4.0/dist/spark.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="hud">
+  <div id="fps">fps --</div>
+  <div id="info">starting</div>
+  <label><input type="checkbox" id="showMesh" checked> mesh</label>
+  <label><input type="checkbox" id="showSplat" checked> splat</label>
+</div>
+<script type="module" src="viewer.js"></script>
+</body>
+</html>
