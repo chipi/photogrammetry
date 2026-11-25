@@ -12,8 +12,9 @@ underwater benchmark is specified from what the public sets lack.
 **Status (2026-11-25): not proven yet.** Both measurements are done: on AquaMVS the refractive
 model measures the board to +0.017% scale and 1.15 mm rigid RMSE against −1.50% and 5.83 mm for
 the pinhole model; on SQUID, range-based correction is compared with uncorrected and globally
-balanced images. Two parts are open: the SQUID ranges come from SQUID's stereo, not from our
-reconstruction, and the open underwater benchmark is not specified yet.
+balanced images, with SQUID's stereo ranges. Ranges from our own reconstruction were tried and
+fail on SQUID Satil (see "Ranges from our reconstruction"), so that clause cannot be met on this
+data. The open underwater benchmark is not specified yet.
 
 ## Data
 
@@ -29,7 +30,8 @@ Everything lives under `$RECCE_DATA_DIR/datasets/` (default `~/.cache/recce`); r
 ## SQUID colour
 
 ```
-uv run python colour.py      # writes runs/p12/colour.json, prints the tables below
+uv run python colour.py                 # SQUID's ranges; writes runs/p12/colour_squid.json
+uv run python colour.py --ranges ours   # ranges from recon.py, where a model exists
 ```
 
 ### What the published files hold
@@ -148,8 +150,8 @@ backscatter fit that is checked against a known dark target are the next things 
 
 ### Not covered
 
-- **Ranges come from SQUID's stereo, not from our reconstruction**, which the criterion asks for.
-  A reconstruction of the left and right pair (two views) is the next step.
+- **Ranges come from SQUID's stereo, not from our reconstruction**, which the criterion asks for;
+  ours fail on this data (next section).
 - Five images, one site (Satil), 15 charts. Katzaa, Michmoret and Nachsholim are not downloaded.
 - Only the grey ramp and patch vectors are compared; the colour patches have no reference values
   (the DGK chart's published colour values are not used).
@@ -161,6 +163,41 @@ backscatter fit that is checked against a known dark target are the next things 
   so samples may touch patch edges there despite the shift.
 - The annotation shifts were checked by eye, not against an independent detection.
 - RGT_4384, RGT_4388 and RGT_4351 have no annotated charts and are not used.
+
+### Ranges from our reconstruction
+
+```
+uv run python recon.py prep                                         # 16 PNGs
+uv run --project ../RC-P1-registration python recon.py register     # pycolmap, CPU
+./run_dense.sh                                                      # RC-P2 HIP container, X3
+uv run python recon.py ranges                                       # depth -> range, vs SQUID
+```
+
+All 16 Satil images (8 stereo pairs) are registered together, left and right each with one
+shared SIMPLE_PINHOLE camera (the images are already undistorted), from a focal prior of
+2,661 px. That is the in-air focal length of the NEFs' Nikon D810 and 35 mm lens at this image
+scale. Dense depth is COLMAP PatchMatch with geometric consistency at full size.
+
+- **Registration:** the sets barely overlap. Left and right of one set match well (164–3,603
+  verified matches); across sets only 03 with 04 match well (579–1,303), the rest under 70.
+  With the default 16° initial triangulation angle only sets 03+04 form a model; at 2° sets
+  02+06 do too. Sets 01, 05, 07 and 08 register
+  in no model, so their right images (RGT_4336 among them, with 3 charts) get no range.
+- **Focal length:** bundle adjustment moves it from 2,661 to 3,637–4,008 px (1.37–1.51 times
+  the in-air value) on both models. A flat port would give about 1.33 times; which port SQUID
+  used is not verified.
+- **Dense depth fails.** Geometric consistency keeps 0.0% of pixels on sets 03/04 and
+  0.4–1.1% on 02/06; fusion yields 0 points. The photometric maps fill 98.5–100% of pixels,
+  but they do not follow SQUID's ranges: Spearman correlation −0.07 to 0.22, 5–8% of pixels
+  within 10% after the best single scale. Where geometric depth exists, it differs from
+  SQUID's by a median 5.6–21% after scaling, and the two images of one model need scales 0.157
+  and 0.257, so the model's own scale is not consistent either.
+
+So the colour comparison has no ranges of ours to run on. For Recce this says: a stereo pair
+(or a few hazy, barely overlapping pairs) is not a multi-view capture set. Without the rig's
+calibration (baseline, rectification), the general SfM and PatchMatch route gives no depth
+here, where SQUID's calibrated stereo does. A capture underwater needs either many overlapping
+views or a calibrated rig with a stereo-matching path.
 
 ## AquaMVS refraction
 

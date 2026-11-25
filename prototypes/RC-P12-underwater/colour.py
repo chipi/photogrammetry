@@ -188,7 +188,15 @@ def chart_pair_angles(scored):
     return angs
 
 
-def score_image(set_name, num):
+def load_ranges(set_name, source):
+    """SQUID's stereo range map, or ours from recon.py (None where we have no model)."""
+    if source == "squid":
+        return scipy.io.loadmat(DATA / "Satil" / set_name / "distanceFromCamera.mat")["dist_map_r"]
+    path = RECCE / "runs/p12/recon/ranges" / f"{set_name}_range_r.npy"
+    return np.load(path).astype(np.float64) if path.exists() else None
+
+
+def score_image(set_name, num, rng):
     d = DATA / "Satil" / set_name
     params = scipy.io.loadmat(
         PARAMS / f"RGT_{num}_params.mat", squeeze_me=True, struct_as_record=False
@@ -203,7 +211,6 @@ def score_image(set_name, num):
     log_pair = np.log(img[ok, 1] + 1e-4), np.log(tif[ok, 1] + 1e-4)
     reg["log_corr_green"] = float(np.corrcoef(*log_pair)[0, 1])
     img = np.nan_to_num(img)
-    rng = scipy.io.loadmat(d / "distanceFromCamera.mat")["dist_map_r"]
     mask = ok & np.isfinite(rng) & (rng > 0)
     methods = {
         "tif": tif,
@@ -284,12 +291,26 @@ def report(rows, pairs):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", type=Path, default=RECCE / "runs/p12/colour.json")
+    ap.add_argument(
+        "--ranges",
+        choices=["squid", "ours"],
+        default="squid",
+        help="SQUID's stereo ranges, or ours from recon.py (images without a model are skipped)",
+    )
+    ap.add_argument("--out", type=Path)
     args = ap.parse_args()
+    out = args.out or RECCE / f"runs/p12/colour_{args.ranges}.json"
     rows, fits, regs, pairs = [], {}, {}, {}
     for set_name, num in SETS.items():
-        r, fits[f"RGT_{num}"], regs[f"RGT_{num}"], pairs[f"RGT_{num}"] = score_image(set_name, num)
+        rng = load_ranges(set_name, args.ranges)
+        if rng is None:
+            print(f"RGT_{num}: no range map from {args.ranges}, skipped")
+            continue
+        r, fits[f"RGT_{num}"], regs[f"RGT_{num}"], pairs[f"RGT_{num}"] = score_image(
+            set_name, num, rng
+        )
         rows.extend(r)
+    args.out = out
     args.out.parent.mkdir(parents=True, exist_ok=True)
     result = {"rows": rows, "fits": fits, "registration": regs, "chart_pairs": pairs}
     args.out.write_text(json.dumps(result, indent=1))

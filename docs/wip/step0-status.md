@@ -19,7 +19,7 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
 | RC-P10 A room from inside | Not started | Approved: ARKitScenes, Open3D |
 | RC-P11 The iPhone capture app | Not started | Starts once RC-P8 or RC-P10 shows pose priors help |
-| [RC-P12 Underwater](https://github.com/chipi/recce/tree/main/prototypes/RC-P12-underwater) | Not proven yet | AquaMVS: the refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE, the pinhole model to −1.50% and 5.83 mm (−4.8% on one frame). SQUID: one global white balance on the RAW makes the grey patches grey at 6–19 m (median 1.4°); haze is what remains, and range-based backscatter removal raises contrast (mean 0.21 to 0.47) but tints the near charts. Open: SQUID ranges from our own reconstruction; the open underwater benchmark spec |
+| [RC-P12 Underwater](https://github.com/chipi/recce/tree/main/prototypes/RC-P12-underwater) | Not proven yet | AquaMVS: the refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE, the pinhole model to −1.50% and 5.83 mm (−4.8% on one frame). SQUID: one global white balance on the RAW makes the grey patches grey at 6–19 m (median 1.4°); haze is what remains, and range-based backscatter removal raises contrast (mean 0.21 to 0.47) but tints the near charts. Ranges from our own reconstruction fail on SQUID (8 barely overlapping hazy stereo pairs: 0–1.1% of pixels pass PatchMatch's consistency check), so that clause cannot be met on this data. Open: the open underwater benchmark spec |
 
 ## Findings
 
@@ -88,7 +88,8 @@ videos. MapAnything needs 42–59 GiB of GPU memory for 90–218 views, more tha
 underwater needs the RAW: SQUID's published TIFs clip red to zero on 78–99.9% of pixels. Over 6–19 m
 on the Satil wreck the colour cast is nearly one global tint, which a single white balance removes;
 what changes with range is contrast (0.39 to 0.07 on the grey ramp), and the simple per-image
-backscatter fit restores it unevenly. SQUID's chart annotations sit a few pixels off its published
+backscatter fit restores it unevenly. Our own pipeline gets no depth from SQUID's few hazy stereo
+pairs without the rig calibration. SQUID's chart annotations sit a few pixels off its published
 undistorted images and are snapped before use.
 
 ## Mock-ups
@@ -107,9 +108,11 @@ courtyard splat are in their READMEs.
 
 **Next, in order**
 
-1. **RC-P12 underwater, the rest.** Both measurements are in its README. Left: SQUID ranges from
-   our own reconstruction of the stereo pair instead of SQUID's; a better backscatter fit (Sea-thru's
-   local illuminant, a check against a dark target); the open underwater benchmark spec. Data on the
+1. **RC-P12 underwater, the rest.** Both measurements and the failed attempt at our own ranges
+   are in its README. Left: the open underwater benchmark spec (what the public sets lack: many
+   overlapping views with charts, RAW with intact colour, a dome port); a better backscatter fit
+   (Sea-thru's local illuminant, a check against a dark target); deciding whether the criterion's
+   "ranges from the reconstruction" clause moves to the owner's own dive set. Data on the
    X3: SQUID Satil (MD5 matches Zenodo's) and its evaluation code, AquaMVS core and `data.zip` (MD5
    matches). SQUID is non-commercial: develop only, never redistribute.
 2. **RC-P6: the owner's frame-rate checks.** `./serve.sh` in `prototypes/RC-P6-viewer`, then
