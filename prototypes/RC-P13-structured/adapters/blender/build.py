@@ -163,6 +163,39 @@ def height_grid(el):
     return obj
 
 
+def prism(el):
+    """A footprint of cells extruded from z0 to z1: the roof as one quad per cell, a wall on every
+    cell edge the footprint does not share."""
+    g = el["geometry"]
+    s, (ox, oy), z0, z1 = g["cell_m"], g["origin"], g["z0"], g["z1"]
+    cells = {tuple(c) for c in g["cells"]}
+    bm = bmesh.new()
+    index = {}
+
+    def v(i, j, z):
+        if (i, j, z) not in index:
+            index[(i, j, z)] = bm.verts.new((ox + i * s, oy + j * s, z))
+        return index[(i, j, z)]
+
+    edges = {(1, 0): ((1, 0), (1, 1)), (-1, 0): ((0, 1), (0, 0)),
+             (0, 1): ((1, 1), (0, 1)), (0, -1): ((0, 0), (1, 0))}  # fmt: skip
+    for i, j in cells:
+        bm.faces.new((v(i, j, z1), v(i + 1, j, z1), v(i + 1, j + 1, z1), v(i, j + 1, z1)))
+        for (di, dj), ((a0, b0), (a1, b1)) in edges.items():
+            if (i + di, j + dj) not in cells:
+                bm.faces.new(
+                    (v(i + a0, j + b0, z0), v(i + a1, j + b1, z0),
+                     v(i + a1, j + b1, z1), v(i + a0, j + b0, z1))
+                )  # fmt: skip
+    me = bpy.data.meshes.new(el["id"])
+    bm.to_mesh(me)
+    bm.free()
+    obj = bpy.data.objects.new(el["id"], me)
+    obj.data.materials.append(material(el["source"], "wall"))
+    link(obj, el["source"])
+    return obj
+
+
 def label(text, location, collection, size=0.12):
     curve = bpy.data.curves.new(text, "FONT")
     curve.body = text
@@ -216,6 +249,7 @@ def build_elements(s):
         "cells": lambda el: cells(el, el["source"]),
         "polyline": polyline,
         "height_grid": height_grid,
+        "prism": prism,
     }
     objs = []
     for el in s["elements"]:
