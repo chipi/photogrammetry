@@ -124,7 +124,7 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 2. **RC-P6: the M4 Pro frame rate (60 fps).** `./serve.sh` in `prototypes/RC-P6-viewer` on the
    workstation, then on the M4 Pro open `http://100.92.54.65:8806/?auto=1` in Safari and Chrome.
    The iPhone 15 Pro passed on 2026-11-26 (50.0 fps against 30, Firefox for iOS, 1024 px atlases).
-3. **RC-P13: the drone and cave segments.** The drone reconstruction (EuroSDR P4 RTK, flight 100_0004) runs with and without RTK priors. The cave segment is built (2026-11-26); its tolerance (2% or 5 cm proposed) is the owner's call.
+3. **RC-P13: the drone and cave segments.** The drone reconstruction is done (RC-P8, "Drone with RTK priors", 2026-11-26): RTK priors on half the photos fix scale (+0.025%) and the held-out half lands 0.31 m median from RTK with the OPENCV lens; a 0.2 m dome remains. Next: the structured terrain model. The cave segment is built (2026-11-26); its tolerance (2% or 5 cm proposed) is the owner's call.
 4. **RC-P11** after RC-P8 or RC-P10 shows pose priors help. RC-P10's result (with poses and depth the
    rooms meet the wall limit; photos only, four of five split) is a finding; the owner puts it in
    context later (2026-11-25).

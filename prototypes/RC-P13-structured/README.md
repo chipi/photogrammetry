@@ -16,7 +16,7 @@ is recorded.
 **Result (2026-11-26): not proven yet.**
 - **Room:** built and checked. All 13 measured dimensions are within 2% or 2 cm of the Faro scan.
   The floor-area part of the criterion is not yet compared as an area.
-- **Drone:** not built. Its reconstruction runs now; see RC-P8, drone.
+- **Drone:** not built. Its reconstruction is done; see RC-P8, "Drone with RTK priors".
 - **Cave:** built and checked on the authors' photogrammetric cloud. On covered sections, 11 of 17
   widths and heights are within 2% or 5 cm (a proposed tolerance), median −0.9 cm, p95 12 cm. The
   fork is marked unknown.
@@ -134,7 +134,8 @@ render, a look and a fix):**
 ## Drone segment
 
 EuroSDR RPAS Phase 2, Phantom 4 RTK, flight 100_0004 (430 photos, CC BY 4.0). The reconstruction
-runs as RC-P8's drone test (`prototypes/RC-P8-learned/drone_rtk.py`). The structured model
+is RC-P8's drone test (`prototypes/RC-P8-learned/drone_rtk.py`): 430 of 430 photos, 0.22 m median
+from RTK with half the priors and the OPENCV lens. The structured model
 (terrain cells, building footprints) is built after it.
 
 ## Cave segment (Grotta di Monte Intraleo, LiDAR reference)

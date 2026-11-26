@@ -331,8 +331,55 @@ confirms it. What it confirms is the learned model on frames COLMAP already has;
 for frames in a part of the scene COLMAP never registered, and on these runs those are where the
 learned model fails.
 
+## Drone with RTK priors (2026-11-26)
+
+```
+uv run --project ../RC-P1-registration python drone_rtk.py prep FLIGHT OUT
+taskset -c 16-31 uv run --project ../RC-P1-registration python drone_rtk.py run OUT [--variants prior_half] [--camera OPENCV]
+```
+
+EuroSDR RPAS Phase 2, DJI Phantom 4 RTK, flight 100_0004: 430 nadir photos over about
+440 × 430 m, CC BY 4.0. The flight's `.MRK` file gives each photo an RTK fix; the camera centre is
+the antenna plus the logged lever arm, in a local ENU frame. COLMAP's incremental mapper runs on
+the X3 CPU (pycolmap 4.2.1), features and matches shared by every variant.
+
+- **Camera:** one camera for all photos, at the DJI calibrated focal (3666.67 px) and centre,
+  held fixed; distortion is refined. With the focal free, the first run grew models of about 20
+  photos that collapsed five times in 13 minutes: nadir photos of flat ground leave focal length
+  and height entangled.
+- **Variants:** no priors; RTK priors on every photo; priors on the odd photos only, so the 215
+  even ones are an independent check.
+- **The score:** camera-centre error against RTK, after a similarity fit and as the model stands
+  (no fit, which only a model with priors can be scored on).
+
+| Variant | Lens | Scale error | After fit: median / p95 | As is, with prior | As is, held out | Mapping |
+|---|---|---|---|---|---|---|
+| none | k1 | −97.4% | 7.91 / 17.64 m | — | — | 2353 s |
+| prior (430) | k1 | −0.009% | 0.28 / 0.54 m | 0.39 m | — | 2440 s |
+| prior_half (215) | k1 | +0.058% | 0.44 / 0.88 m | 0.78 m | 0.79 m | 1941 s |
+| prior_half (215) | OPENCV | +0.025% | 0.22 / 0.40 m | 0.30 m | 0.31 m | 690 s |
+
+All four register 430 of 430 photos in one component.
+
+1. **RTK priors fix the scale and most of the shape.** Without them the model has no metric
+   scale and domes: after the fit, the error is 7.9 m median.
+2. **Half the priors are enough for the held-out photos.** The 215 photos without a prior land as
+   close to RTK as the 215 with one (0.31 against 0.30 m with OPENCV).
+3. **What remains is a dome, and the lens model is most of it.** The vertical residual follows a
+   quadratic in distance from the block centre (83–96% of its variance). With half the priors and
+   k1 only, the centre sits 0.67 m high and the outer ring 0.20 m low; with OPENCV (k1, k2 and
+   tangential terms) 0.24 m and 0.09 m. The after-fit error halves, 0.44 to 0.22 m.
+4. **The remaining 0.2–0.3 m is far above RTK's centimetres.** OPENCV on every prior is not run.
+
 ## Not covered
 
+- **Drone, the ground.** The EuroSDR ground control points are not used: the reference is the
+  flight's own RTK, which is also the prior, so only the held-out half is independent of it.
+- **Drone, the cause of the residual dome.** It is not found. Richer models (FULL_OPENCV), the
+  OPENCV lens with every prior, and a second flight are not run.
+- **Drone, mapping time.** The OPENCV run mapped in 690 s against 1941 s with k1 only; why is not
+  checked.
+- **Drone, the learned route.** MapAnything is not run on the drone flight.
 - ARKitScenes pose error is agreement with ARKit's tracking, which has its own drift; the laser
   scans that could check it are not downloaded.
 - `lowres_depth` (LiDAR) is downloaded but not used, neither as a depth prior nor as a check.
