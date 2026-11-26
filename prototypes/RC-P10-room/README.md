@@ -8,14 +8,15 @@ wall lengths match the reference within 2% or 2 cm, whichever is larger; photos-
 either registers as one model or the engine reports its separate components and where the links
 are missing.
 
-**Result (2026-11-26): not proven yet.** The mesh and the splat form one metric model. The wall-length limit holds on every distance against the Faro scan (one visit). Against the ARKit-posed laser reference, 3 of 332 TSDF distances and 8 of 331 splat distances fail, all pairs 1.0–1.5 m apart. The photos-only clause is met by the engine: `recon components` reports the components and every break. The remaining question is whether those 3 and 8 failures against a reference that itself reads 0.51% long count against the clause; that is the owner's call.
+**Result (2026-11-26): not proven.** Against the Faro scans of three visits (190 distances over five seeds), the TSDF mesh fails the wall-length limit on 7. All seven are in 42444858, on walls 1.0–1.1 m apart, 2.2–3.8 cm short. The decision rule was set before the two new visits were scored: proven only if every mesh pair met the limit against Faro. In that room the ARKit-posed reference agrees with Faro (median −0.08%), so the failures are the mesh's own. The photos-only clause is met by the engine: `recon components` reports the components and every break.
+- **Correction (2026-11-26):** "the ARKit-posed reference reads long", stated from one visit, does not hold everywhere. It read long in 42444793 (+0.51%) and 42444515 (+0.73%), and not in 42444858 (−0.08%). The earlier reading that the reference explains the failures was wrong for the room where they are.
 - **With poses and depth:**
-  - **Against the Faro scan's own distances** (one visit, independent of ARKit): the TSDF mesh
-    meets the wall-length limit on 85 of 85 wall-to-wall distances over five RANSAC seeds, with a
-    median error of +0.07%.
+  - **Against the Faro scans' own distances** (three visits, independent of ARKit): the TSDF mesh
+    meets the wall-length limit on 183 of 190 wall-to-wall distances over five RANSAC seeds. Per
+    room: 85/85 (median +0.07%), 70/77 (−0.54%), 28/28 (+0.47%).
   - **Against the ARKit-posed laser reference** (five videos): 329 of 332 distances are within the
-    limit. The three failures are 1.01–1.09 m pairs in one video, off by 2.4–2.6 cm against the
-    2 cm limit. On the visit with Faro scans, this reference itself reads a median 0.51% long.
+    limit. The three failures are 1.01–1.09 m pairs in 42444858, the room that also fails against
+    Faro. Against Faro this reference reads +0.51%, −0.08% and +0.73% in the three rooms.
 - **Splat:** trained per room in ARKit's frame (2026-11-26). Its gaussian centres sit a median 1.9–3.9 cm from the TSDF surface, and walls refitted in them meet the limit on 323 of 331 distances (median −0.44%), so mesh and splat are one metric model.
 - **Photos only:** one scene registers as one component, 179 of 218 frames. The other four split
   into 2–4 components. `recon components` reports each break with the frames on either side, and
@@ -33,9 +34,13 @@ Five ARKitScenes Training videos, the ones RC-P8 used (one per visit, picked by 
 - **`vga_wide`:** colour at 640x480 and 30 Hz.
 - **Faro scans of visit 421012** (video 42444793): six scans, 11.4 GB, downloaded with the
   owner's go (2026-11-25). This visit was chosen because it has the most wall pairs per seed.
+- **Faro scans of visits 421009 (42444858, six scans) and 421061 (42444515, three scans):**
+  downloaded with the owner's go (2026-11-26) to test whether the first visit's reading held.
+  42444858 holds all three failures against the ARKit reference; 42444515 holds the unexplained
+  wall-to-door failure.
 
 `highres_depth` and `confidence` (about 340 MB) come from Apple; the rest is copied from RC-P8's
-DGX cache. The other four visits' Faro scans are not downloaded.
+DGX cache. Visits 42444821 and 42444873 have no Faro scans downloaded.
 
 **Frame.** ARKitScenes' world frame is z-up, not ARKit's native y-up. `walls` takes up from the
 camera (the mean image-up direction over the video, which the "sky direction Up" filter makes
@@ -113,6 +118,19 @@ distances stay the scanner's own:
 Pooled over the five seeds, the distances span 1.12–3.39 m:
 - **TSDF:** 85 of 85 within the limit, median +0.07%, 90% of absolute errors under 0.93 cm.
 - **Laser reference:** median +0.51%, and 84% of its errors are long.
+
+### Against the Faro scans of two more visits (2026-11-26)
+
+The same `faro.py merge`, `register` and `walls`, five seeds each.
+
+| Video (visit) | Scans, merged points | ICP at 1 cm: fitness, RMSE | Pairs | TSDF within limit | TSDF vs Faro, median | Reference vs Faro, median |
+|---|---|---|---|---|---|---|
+| 42444858 (421009) | 6, 2,628,257 | 0.228, 9.3 mm | 77 | 70 | −0.54% | −0.08% |
+| 42444515 (421061) | 3, 479,796 | 0.538, 8.8 mm | 28 | 28 | +0.47% | +0.73% |
+
+The seven failures in 42444858 are all walls 1.01–1.10 m apart (Faro), with the TSDF 2.2–3.8 cm
+(2.1–3.5%) short. The reference is short on the same pairs, but by less (−0.4 to −2.6%). Its
+global fitness is low (0.20 before ICP, 0.23 after); why is not checked.
 
 ### Against the ARKit-posed laser reference (five videos)
 
@@ -234,20 +252,22 @@ so the places above come from `components.py`.
 
 ## Findings
 
-1. **The ARKit-posed laser reference reads long; the TSDF does not.** On the one visit with Faro
-   scans:
-   - The TSDF's wall distances match the Faro scan's own to a median +0.07%.
-   - The ARKit-posed laser reference reads +0.51% long against the same scan.
-   - So most of the TSDF's −0.40% against that reference comes from the reference.
-   - The per-frame depth comparison points the same way: the LiDAR depth is 1.09–1.61% shorter
-     than Apple's rendered laser depth of the same frame.
-   - Why the rendered and back-projected laser reads long is not established. Candidates are
-     Apple's laser-to-ARKit registration, its rendering, or my 7.5x scaling of the intrinsics.
-   - This is one visit; the other four have no Faro check.
-2. **Failures against the ARKit-posed reference sit at short distances, where the 2 cm floor
-   binds.**
-   - All three seeded failures are 1.01–1.09 m pairs in 42444858, 2.4–2.6% short. That is the
-     reference's own bias plus a few millimetres.
+1. **The TSDF's bias against Faro differs by room, and in one room it fails.** Over three visits:
+   - **The TSDF against Faro:** +0.07% (42444793), −0.54% (42444858), +0.47% (42444515).
+   - **The ARKit-posed reference against Faro:** +0.51%, −0.08% and +0.73% in the same rooms.
+   - **Withdrawn:** the first visit's reading, that "the reference reads long, so most of the
+     TSDF's error against it is the reference's", held in two rooms. In 42444858, where the
+     failures are, the reference agrees with Faro and the TSDF is short.
+   - **The LiDAR depth** reads 1.09–1.61% shorter than Apple's rendered laser depth in all five
+     videos. How that turns into a room-dependent wall error is not established.
+   - **Candidates for the room dependence:** the TSDF's surface at short range, ARKit's scale per
+     session, or the planes RANSAC picks. None is tested.
+2. **Failures sit at short distances, where the 2 cm floor binds.**
+   - **Against Faro:** all seven failures are 1.01–1.10 m pairs in 42444858, 2.2–3.8 cm short.
+   - **Against the ARKit reference:** all three seeded failures are 1.01–1.09 m pairs in the same
+     room, 2.4–2.6% short.
+   - **Elsewhere:** the other two Faro rooms have 17 pairs under 1.3 m (from 1.00 m); the TSDF
+     error on them is at most 1.01%.
    - An unseeded run also failed a 1.17 m pair in 42444515 at +3.71%. That pair is between a wall
      and a closed door at the end of a corridor, 2.6 m from the camera that sees the door most
      squarely (`vga_wide/42444515_3700.880.png`).
@@ -268,9 +288,12 @@ so the places above come from `components.py`.
 
 ## Not covered
 
-- **Only one visit has an independent reference.** The Faro check covers 42444793 (85 distances
-  over five seeds). The other four videos are scored only against the ARKit-posed laser
-  reference, which shares the TSDF's poses: a pose error common to both is not seen there.
+- **Two videos have no independent reference.** Faro covers 42444793, 42444858 and 42444515
+  (190 distances over five seeds). 42444821 and 42444873 are scored only against the ARKit-posed
+  laser reference, which shares the TSDF's poses: a pose error common to both is not seen there.
+- **The splat is not checked against Faro.** Its walls are scored only against the ARKit-posed
+  reference.
+- **The cause of 42444858's short walls** is not found (finding 1).
 - **The Faro walls come from the reference's planes.** The reference picks and places each wall,
   and the Faro scan is refitted there. A wall the reference misses is not measured in the scan.
 - **The splat:** 7,000 steps only, default densification, no seed repeat. Floaters are not filtered or counted beyond the opacity cut, and the splat is not viewed in the browser.

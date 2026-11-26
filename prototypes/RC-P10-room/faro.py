@@ -24,7 +24,7 @@ import room
 
 RECCE = Path(os.environ.get("RECCE_DATA_DIR", Path.home() / ".cache/recce"))
 LASER = RECCE / "datasets/arkitscenes/laser"
-VISITS = {"42444793": "421012"}
+VISITS = {"42444793": "421012", "42444858": "421009", "42444515": "421061"}
 MERGE_VOXEL_M = 0.01
 GLOBAL_VOXEL_M = 0.05
 ICP_STEPS_M = (0.05, 0.02, 0.01)
