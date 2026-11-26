@@ -102,4 +102,4 @@ Every measure already exists in a prototype, so the benchmark adds no new scorin
 - Whether to capture S1–S4, and when: one or two dives, plus a pool session for S4.
 - The licence for the owner's captures; CC BY 4.0 is the proposal.
 - Whether the friend's dive set (S5) can be published, or stays a private baseline.
-- Whether RC-P12's "ranges from the reconstruction" clause moves to S1, where it can be met.
+- RC-P12's "ranges from the reconstruction" clause moved to S1 (owner, 2026-11-26); S1 is where it is tested.

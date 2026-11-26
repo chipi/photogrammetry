@@ -9,14 +9,14 @@ correction with ranges from the reconstruction is compared with uncorrected imag
 reference targets (identical DGK Color Tools charts placed at several distances); the open
 underwater benchmark is specified from what the public sets lack.
 
-**Status (2026-11-25): not proven yet.** Both measurements are done: on AquaMVS the refractive
-model measures the board to +0.017% scale and 1.15 mm rigid RMSE against −1.50% and 5.83 mm for
-the pinhole model; on SQUID, range-based correction is compared with uncorrected and globally
-balanced images, with SQUID's stereo ranges. Ranges from our own reconstruction were tried and
-fail on SQUID Satil (see "Ranges from our reconstruction"), so that clause cannot be met on this
-data. The open underwater benchmark is specified in
-[underwater-benchmark-spec.md](../../docs/wip/underwater-benchmark-spec.md); its site scene (S1) is
-where the ranges clause can be met, if the owner moves it there.
+**Status (2026-11-26): proven, with one clause moved.** Both measurements are done: on AquaMVS the
+refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE against −1.50% and
+5.83 mm for the pinhole model; on SQUID, range-based correction is compared with uncorrected and
+globally balanced images, with SQUID's stereo ranges. The open underwater benchmark is specified
+in [underwater-benchmark-spec.md](../../docs/wip/underwater-benchmark-spec.md). Ranges from our
+own reconstruction were tried and fail on SQUID Satil (see "Ranges from our reconstruction"); the
+owner moved that clause to the benchmark's site scene S1 (2026-11-26), where it is tested once S1
+is captured. Step 0 does not test it.
 
 ## Data
 

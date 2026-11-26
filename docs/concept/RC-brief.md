@@ -404,7 +404,7 @@ registration is cut into clusters solved on different machines and merged; the m
 single-machine run within 0.1° rotation and 0.1% of the scene's extent in position, and dense depth
 maps match within 1% median relative difference *(agreed 2026-11-24)*; wall-clock time, transfer time and
 rental cost are recorded against the fastest single machine. If splitting does not pay, the set size
-at which it would is the number recorded.
+at which it would is the number recorded. *Deferred to the build phase (owner, 2026-11-26): important, but not piloted in Step 0.*
 
 #### RC-P8 — Learned and classical, compared
 
@@ -460,7 +460,7 @@ distance maps; non-commercial); SeaThru-NeRF scenes for splats.
 model and with a refractive model, and the error of each is recorded; on SQUID, range-based colour
 correction with ranges from the reconstruction is compared with uncorrected images on the scene's
 reference targets (identical DGK Color Tools charts placed at several distances); the open underwater benchmark is
-specified from what the public sets lack.
+specified from what the public sets lack. *The "ranges from the reconstruction" part moved to the open benchmark's site scene S1 (owner, 2026-11-26): on SQUID it cannot be met, and Step 0 does not test it.*
 
 ### After Step 0 — the owner's data
 
