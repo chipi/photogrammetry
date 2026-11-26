@@ -321,6 +321,19 @@ in a throwaway container; outliers reach −225 m and +215 m around a site near 
     cells, ground and roof height) with its area as a measurement. The Blender adapter's `prism`
     builder extrudes them.
 
+**Tolerance (fixed on 2026-11-26, before any check against a clean reference).** The brief names
+control points for footprints; this flight has none, so the owner agreed that a tolerance is set
+here and recorded before the next check runs. On buildings of 100 m² or more in the reference,
+within the area the photos cover:
+- **Footprint:** a building passes when its IoU with the model building it overlaps most is 0.5
+  or more.
+- **Detection:** 80% or more of those buildings pass.
+- **Area:** each passing building's area is within the model's stated 2σ of the reference area.
+- **Height:** each passing building's height is within 2σ, once the roof height carries a σ.
+
+The segment's clause is met when all four hold. The reference is the OpenStreetMap building
+footprints for the site; the LiDAR rule stays as a second, independent check.
+
 **Against the LiDAR (133,990 compared cells):**
 
 | Quantity | Result |
@@ -374,8 +387,6 @@ in a throwaway container; outliers reach −225 m and +215 m around a site near 
 **Not covered:**
 - **A clean building reference.** The LiDAR has no building class; a cadastral or mapped
   footprint set would give recall without trees in it.
-- **The tolerance.** The brief names control points for footprints, and this flight has none in
-  hand; IoU ≥ 0.3 and the LiDAR rule are proposals for the owner.
 - **The footprint undersize's cause.** Eaves, walls caught in edge cells, and the 1 m cell are
   candidates; none is tested.
 - **The height uncertainty.** The roof height carries none; it is not calibrated.
