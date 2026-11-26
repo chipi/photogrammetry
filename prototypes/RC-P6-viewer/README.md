@@ -19,7 +19,7 @@ Status: **not proven yet; the iPhone clause is met.**
 
 | Device | Browser | URL parameters | fps median (window of 240) | Loaded | Measured by |
 |---|---|---|---|---|---|
-| iPhone 15 Pro | Firefox for iOS (WebKit, as every iOS browser) | `auto=1&maxtex=1024`, `dpr` 2 | 50.0 | 1,000,000 gaussians, 463,017 faces, 115 atlases | Owner, 2026-11-26, screenshot |
+| iPhone 15 Pro | Firefox for iOS (WebKit, as every iOS browser) | `auto=1&maxtex=1024`, `dpr` 2 | 50.0 at 09:06, 55.6 at 09:08 (one session; the server log shows no reload between) | 1,000,000 gaussians, 463,017 faces, 115 atlases | Owner, 2026-11-26, two screenshots |
 
 **First attempt on the iPhone.** The page first stopped at "EncodingError: Loading error."
 - **Cause:** the page decoded all 115 atlases at once, most of them 4096×4096, and WebKit refuses
