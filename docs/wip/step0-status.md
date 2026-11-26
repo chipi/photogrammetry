@@ -145,7 +145,17 @@ Republish it (read it first, then publish to the same link) whenever a row here 
   (Apache weights only), PyTorch, gsplat, texrecon, micromamba, Open3D, ARKitScenes subset,
   AquaMVS, SQUID, Blender, rawpy, the MCP SDK (RC-P3); three.js and Spark from a CDN and
   `rerun-sdk` (RC-P6's environment); scipy, tifffile and `opencv-python-headless` (RC-P12's
-  environment). Anything else is asked first.
+  environment). In throwaway Docker containers only (nothing on the host): CloudCompare, RTKLIB
+  and `laspy` (2026-11-26). Datasets added 2026-11-26: the Etna lava tube (CC BY 4.0), two more
+  ARKitScenes Faro visits, EuroSDR RPAS Phase 2/3 (CC BY 4.0) and UseGeo Dataset-1 (CC BY-NC-SA
+  4.0; fetched with certificate checks off by the owner's decision, the host's certificate having
+  expired in 2024). Anything else is asked first.
+- **Recipes and profiles stay private (owner, 2026-11-26).** What evaluation teaches (per-device
+  corrections such as a focal-length fix, calibrated uncertainty models, tuned settings per capture
+  scenario, the evaluation corpus and its scores) will live as data files in a separate private
+  repository, next to the owner's data; the public engine loads them from a path and falls back to
+  public defaults. Not built yet; new work keeps engine code generic and tuned values separable,
+  so they can move there.
 - **DGX GPU windows:** standing go by day. Message the homelab session before switching; switch with
   `ssh markodragoljevic@dgx-llm-1 '~/bin/gpu-mode-swap.sh free --json'`; when the work's processes
   have exited, send it "done"; it switches back to `prod` and verifies both vLLMs. The `claude`
