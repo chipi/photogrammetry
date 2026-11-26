@@ -16,7 +16,10 @@ is recorded.
 **Result (2026-11-26): not proven yet.**
 - **Room:** built and checked. All 13 measured dimensions are within 2% or 2 cm of the Faro scan.
   The floor-area part of the criterion is not yet compared as an area.
-- **Drone:** not built. Its reconstruction is done; see RC-P8, "Drone with RTK priors".
+- **Drone:** built and checked against 58 survey points. As the model stands (RTK only), the
+  ground reads 1.05 m low and 18 of 57 heights are within its stated 2σ; after one shift
+  fitted on 7 control points, 50 of 50 check points are, std 0.27 m. The site has no
+  buildings, so the footprint clause is not tested.
 - **Cave:** built and checked on the authors' photogrammetric cloud. On covered sections, 11 of 17
   widths and heights are within 2% or 5 cm (a proposed tolerance), median −0.9 cm, p95 12 cm. The
   fork is marked unknown.
@@ -28,6 +31,7 @@ is recorded.
 | `scene.py` | The tool-neutral description: schema `recce-structured/0.1`, its rules, read and write. Pure standard library, so Blender's Python imports it |
 | `room/build_room.py` | Room segment: RC-P10's TSDF mesh to a scene, then the scene against the Faro scan. Runs in RC-P10's environment (Open3D) |
 | `cave/build_cave.py` | Cave segment: a lava tube's cloud to stations, cross-sections and LRUD, then against the LiDAR. Runs in RC-P10's environment |
+| `drone/build_drone.py` | Drone segment: RC-P8's drone model to a terrain grid, then the grid against the survey points. Runs in RC-P1's environment (pycolmap) |
 | `adapters/blender/build.py` | The Blender adapter: a scene to `.blend`, `.glb` (with the tags as glTF extras), a plan and perspective renders. Blender 4.5.17 LTS, headless |
 
 Outputs go to `$RECCE_DATA_DIR/runs/p13/<segment>/<id>/`.
@@ -131,12 +135,77 @@ render, a look and a fix):**
 - **The glTF in the RC-P6 viewer.** It is written, but not yet opened there.
 - **Drone and cave segments:** below.
 
-## Drone segment
+## Drone segment (EuroSDR P4 RTK, survey check points)
 
-EuroSDR RPAS Phase 2, Phantom 4 RTK, flight 100_0004 (430 photos, CC BY 4.0). The reconstruction
-is RC-P8's drone test (`prototypes/RC-P8-learned/drone_rtk.py`): 430 of 430 photos, 0.22 m median
-from RTK with half the priors and the OPENCV lens. The structured model
-(terrain cells, building footprints) is built after it.
+**Data.** EuroSDR RPAS benchmark, Phase 2: a DJI Phantom 4 RTK, flight 100_0004, 430 nadir
+photos from 55 m over upland pasture and a quarry (CC BY 4.0). There are no buildings on the
+site, so no building footprints are built or checked.
+- **The reconstruction:** RC-P8's drone test, `prior_half_opencv`: RTK priors on the 215 odd
+  photos, the OPENCV lens, 430 of 430 photos, 436,892 points. It stands in the RTK frame as
+  mapped; no ground information goes into it.
+- **The reference:** the benchmark's 58 survey points (`GCPsandCPs_coords.xlsx`): 8 ground
+  control points (GA1 … GF8), 47 check points (A1 … F8) and 3 more (S1 … S3), in ETRS89 with
+  ellipsoidal heights.
+
+**What `drone/build_drone.py` does.** It follows a surveyor's terrain model:
+- **Cells:** a 2 m grid over the ground the flight saw (within 25 m of a camera). A cell's height
+  is the median height of its points; it is measured with at least 4 points.
+- **Steep faces:** measured cells sloping more than 45° (the quarry walls) are a separate element.
+- **Gaps:** a cell short of points whose 8 neighbours are mostly seen (6 or more) is inferred, at
+  their mean height. Other gaps are unknown.
+- **Uncertainty:** σ 0.41 m, the RMS vertical error of the 215 photos without a prior against
+  their RTK centres. It is the only check of the frame the model carries without ground
+  information, and it checks the cameras, not the ground.
+- **The check:** each survey point's cell height against its surveyed height. Twice: as the model
+  stands, and after one vertical shift fitted on the control points, checked on the rest.
+
+| Element | Source | Cells | Area |
+|---|---|---|---|
+| Terrain | measured | 26,623 | 106,492 m² |
+| Steep faces | measured | 369 | 1,476 m² |
+| Gaps closed from neighbours | inferred | 1,648 | 6,592 m² |
+| Gaps | unknown | 1,192 | 4,768 m² |
+
+**Against the survey points:**
+
+| Check | Heights | Mean error | Std | p95 abs | Within the stated 2σ (0.82 m) |
+|---|---|---|---|---|---|
+| As the model stands (RTK only) | 57 measured | −1.05 m | 0.29 m | 1.60 m | 18 of 57 |
+| After a −1.15 m shift fitted on 7 control points | 50 check points | +0.12 m | 0.27 m | 0.50 m | 50 of 50 |
+
+GC6 falls in an inferred cell: −2.04 m as it stands. It is left out of the fit.
+
+**Agent iterations:**
+1. **37% of the grid was unknown.** The grid covered the cameras' bounding box, whose corners the
+   flight never saw. Fix: only cells within 25 m of a camera.
+2. **Single unknown cells were scattered over the pasture.** Grass gives few points; a 2 m cell
+   with 3 points between seen neighbours is not a hole. Fix: such cells are inferred from their
+   neighbours; the unknown cells left are the flight's edges and one patch in the south-east.
+3. **The first check mixed sources.** GC6's inferred height entered the control-point fit. Fix:
+   only measured heights are fitted and scored; inferred ones are reported apart.
+
+**Findings:**
+1. **The stated uncertainty is wrong without ground information.** The ground reads 1.05 m low
+   against the survey, while the cameras' own check gives σ 0.41 m: 18 of 57 heights are within
+   the stated 2σ. The structured model claims more than it knows here.
+2. **The error is mostly one offset.** After one shift fitted on 7 control points, the check
+   points are 0.27 m std, all within 2σ. The spread is larger at the block's edges, as the
+   residual dome in RC-P8 predicts.
+3. **The cause of the offset is not found.** As mapped, the cameras sit 0.30 m below their RTK
+   centres; after a similarity fit of the cameras to RTK, the ground is still 0.70 m below the
+   survey (std 0.19 m). Two candidates are not separated: the RTK link's frame against ETRS89
+   (the base the drone used in flight is not documented), and the camera-to-ground distance
+   (the focal length is held at DJI's value). The benchmark's local base station (RINEX, ETRS89
+   precise coordinates) would allow a PPK solution that separates them.
+
+**Not covered:**
+- **Buildings.** The site has none. The criterion's footprint clause needs another flight.
+- **The tolerance.** The brief sets none for the drone. 2σ of the model's own uncertainty is the
+  measure used here; a fixed tolerance is the owner's call.
+- **PPK.** It needs RTKLIB, a new dependency.
+- **Horizontal position.** Only heights are checked; the targets are not located in the photos.
+- **Dense surface.** Heights come from the sparse model (about 2.3 points per m²).
+- **The steep-face uncertainty.** A cell on a quarry wall reuses the open-ground σ.
 
 ## Cave segment (Grotta di Monte Intraleo, LiDAR reference)
 

@@ -28,7 +28,7 @@ COLOURS = {
     "label": (0.05, 0.05, 0.05, 1.0),
 }
 # Within a source, surfaces get their own shade so a plan reads: floor light, walls dark.
-SHADES = {"floor": 1.45, "ceiling": 1.25, "wall": 0.7}
+SHADES = {"floor": 1.45, "ceiling": 1.25, "wall": 0.7, "terrain": 1.3, "steep_face": 0.6}
 
 
 def args():
@@ -130,6 +130,39 @@ def cells(el, source):
     return obj
 
 
+def height_grid(el):
+    """One quad per cell the element holds; a corner's height is the mean of the element's cells
+    around it, so the surface is continuous and every cell is drawn."""
+    g = el["geometry"]
+    h, s, (ox, oy) = g["heights_m"], g["cell_m"], g["origin"]
+    nx, ny = g["shape"]
+    bm = bmesh.new()
+    index = {}
+
+    def v(i, j):
+        if (i, j) not in index:
+            near = [
+                h[a][b]
+                for a in (i - 1, i)
+                for b in (j - 1, j)
+                if 0 <= a < nx and 0 <= b < ny and h[a][b] is not None
+            ]
+            index[(i, j)] = bm.verts.new((ox + i * s, oy + j * s, sum(near) / len(near)))
+        return index[(i, j)]
+
+    for i in range(nx):
+        for j in range(ny):
+            if h[i][j] is not None:
+                bm.faces.new((v(i, j), v(i + 1, j), v(i + 1, j + 1), v(i, j + 1)))
+    me = bpy.data.meshes.new(el["id"])
+    bm.to_mesh(me)
+    bm.free()
+    obj = bpy.data.objects.new(el["id"], me)
+    obj.data.materials.append(material(el["source"], el["kind"]))
+    link(obj, el["source"])
+    return obj
+
+
 def label(text, location, collection, size=0.12):
     curve = bpy.data.curves.new(text, "FONT")
     curve.body = text
@@ -182,6 +215,7 @@ def build_elements(s):
         "wall_face": wall,
         "cells": lambda el: cells(el, el["source"]),
         "polyline": polyline,
+        "height_grid": height_grid,
     }
     objs = []
     for el in s["elements"]:
