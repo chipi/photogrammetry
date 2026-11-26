@@ -43,6 +43,9 @@ STEEP_DEG = 45.0
 FOOTPRINT_M = 25.0
 # Iteration 2: a gap whose 8 neighbours are mostly seen is a cell short of points, not a hole.
 MIN_SEEN_NEIGHBOURS = 6
+# The brief sets no drone tolerance. Default: a height is within it when inside twice the
+# model's own stated uncertainty, so the check scores the claim the model makes.
+TOL_SIGMA = 2.0
 XLSX = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 
 
@@ -253,9 +256,11 @@ def build(rec, rtk, cps):
     return elements, measurements, sigma
 
 
-def check(measurements, cps, sigma):
+def check(measurements, cps, sigma, tol_sigma=TOL_SIGMA, tol_m=None):
     """Model heights against the survey: as the model stands (RTK only, no ground information),
-    and after one vertical shift fitted on the 8 ground control points, checked on the rest."""
+    and after one vertical shift fitted on the 8 ground control points, checked on the rest. The
+    tolerance is `tol_m` when given, else `tol_sigma` times the stated uncertainty."""
+    tol = tol_m if tol_m is not None else tol_sigma * sigma
     rows = []
     for m in measurements:
         name = m["id"].removeprefix("height-")
@@ -282,12 +287,16 @@ def check(measurements, cps, sigma):
             "mean_m": round(float(e.mean()), 3),
             "std_m": round(float(e.std()), 3),
             "abs_p95_m": round(float(np.percentile(np.abs(e), 95)), 3),
-            "within_2_sigma": int((np.abs(e) <= 2 * sigma).sum()),
+            "within_tolerance": int((np.abs(e) <= tol).sum()),
         }
 
     return {
         "reference": "EuroSDR survey points, ETRS89 ellipsoidal heights, in the RTK frame's ENU",
         "sigma_m": round(sigma, 3),
+        "tolerance_m": round(tol, 3),
+        "tolerance": f"{tol_m} m, fixed"
+        if tol_m is not None
+        else f"{tol_sigma} x the stated sigma",
         "as_is_measured": stats([r["error_m"] for r in meas]),
         "gcps_used": len(gcp),
         "inferred": [
@@ -303,6 +312,10 @@ def check(measurements, cps, sigma):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--variant", default="prior_half_opencv")
+    ap.add_argument(
+        "--tol-sigma", type=float, default=TOL_SIGMA, help="tolerance in stated sigmas (default)"
+    )
+    ap.add_argument("--tol-m", type=float, default=None, help="a fixed tolerance in metres instead")
     a = ap.parse_args()
     meta = json.loads((RUN / "rtk.json").read_text())
     rec = pycolmap.Reconstruction(str(RUN / a.variant / "sparse/0"))
@@ -324,7 +337,7 @@ def main():
     out = OUT / a.variant
     out.mkdir(parents=True, exist_ok=True)
     sc.write(s, out / "scene.json")
-    result = check(measurements, cps, sigma)
+    result = check(measurements, cps, sigma, a.tol_sigma, a.tol_m)
     (out / "check.json").write_text(json.dumps(result, indent=1))
     print(json.dumps({k: v for k, v in result.items() if k != "rows"}, indent=1))
     cells = {
