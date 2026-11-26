@@ -22,9 +22,9 @@ is recorded.
   buildings, so the footprint clause is not tested.
 - **Buildings:** built and checked on UseGeo, from the providers' poses (our own mapping bends
   on this flight), against a tolerance fixed beforehand. Not met: against OpenStreetMap, 31 of 49
-  buildings pass IoU 0.5 (80% needed) and 18 of 31 areas are within their stated 2σ; heights are
-  within 2σ for 29 of 31. Every mapped building is found; merged neighbours and roof-versus-wall
-  outlines fail it.
+  buildings pass IoU 0.5 (80% needed). With the eaves stated, 30 of 31 areas are within their
+  2σ (σ a median 29% of the area); heights within 2σ for 29 of 31. Every mapped building is
+  found; merged neighbours and outlines fail it.
 - **Cave:** built and checked on the authors' photogrammetric cloud. On covered sections, 11 of 17
   widths and heights are within 2% or 5 cm (a proposed tolerance), median −0.9 cm, p95 12 cm. The
   fork is marked unknown.
@@ -320,8 +320,9 @@ throwaway container; outliers reach −225 m and +215 m around a site near 190 m
     one-cell gaps closed and specks opened away, connected where neighbouring roof heights differ
     by 1.5 m or less, at least 20 m².
   - **Each building:** a measured prism (footprint cells, ground, roof as the median cell height).
-    The area's σ is half a cell on each edge cell; the roof's σ is its cells' spread (1.4826 ×
-    median absolute deviation).
+    Its area is the roof outline's; it states a bias (the eaves: 0.32 m per metre of outline) to
+    the area within the walls, and a σ combining half a cell and the eaves' spread (0.75 m per
+    metre of outline). The roof's σ is its cells' spread (1.4826 × median absolute deviation).
   - **The LiDAR rule:** the same, with vegetation from the class-4 share (> 0.3) or a canopy (a
     cell whose LiDAR heights spread more than 1 m, 10th to 90th percentile, with all eight
     neighbours).
@@ -347,8 +348,9 @@ footprints for the site; the LiDAR rule stays as a second, independent check.
 
 | Against | Buildings of 100 m² or more | IoU ≥ 0.5 | Areas within 2σ | Heights within 2σ |
 |---|---|---|---|---|
-| OpenStreetMap | 49 | 31 (63%; 80% needed) | 18 of 31 | 29 of 31 |
-| LiDAR rule | 77 | 35 (45%) | 23 of 35 | 34 of 35 |
+| OpenStreetMap | 49 | 31 (63%; 80% needed) | 30 of 31 | 29 of 31 |
+| OpenStreetMap, odd ids only (held out from the eaves calibration) | 23 | 16 (70%) | 15 of 16 | 16 of 16 |
+| LiDAR rule | 77 | 35 (45%) | 31 of 35 | 34 of 35 |
 
 | Quantity | Against OpenStreetMap | Against the LiDAR rule |
 |---|---|---|
@@ -386,6 +388,11 @@ The ground reads +0.30 m against the LiDAR's (median). The model has 65 building
    building spanning several mapped houses. Fix: neighbours more than 1.5 m apart in roof height
    are separate buildings (0.6, 1.0 and 1.5 m tried; 1.5 m passes most). Passing buildings rose
    from 28 to 31 of 49, areas within 2σ from 13 to 18.
+7. **The area claimed a wall footprint it cannot see.** Passing buildings read a median 19% larger
+   than their mapped outline. Fix: the area is stated as the roof outline's, with the eaves as a
+   bias and their spread in the σ, calibrated on the even OpenStreetMap ids (14 buildings) and
+   tested on the odd ones: 15 of 16 there, 30 of 31 overall, within 2σ. The one outside
+   (OpenStreetMap way 294275681, 949 m² mapped, 626 m² modelled) is a building the model cuts short.
 
 **Findings:**
 1. **Every mapped building is found, and heights are right.** Each of the 49 OpenStreetMap
@@ -394,11 +401,13 @@ The ground reads +0.30 m against the LiDAR's (median). The model has 65 building
 2. **Outlines fail the tolerance.** 31 of 49 pass IoU 0.5 (63%, 80% needed). Of the 18 that fail,
    7 are houses merged with a neighbour at nearly the same roof height, and 11 are one-to-one
    with an IoU of 0.21–0.49 (9 of them 0.41 or more).
-3. **Nadir photos see roofs, maps draw walls.** Passing buildings read a median 19% larger than
-   their mapped outline. Eaves overhanging the walls would do that; it is not checked. A
-   footprint from nadir photos is a roof outline, and the model does not say so.
-4. **The stated area σ is too small.** 18 of 31 passing areas are within 2σ. Half a cell per edge
-   cell covers the grid, not the roof-to-wall difference or a wrong split.
+3. **Nadir photos see roofs, maps draw walls.** The roof outline reaches a median 0.32 m beyond the
+   mapped walls per metre of outline. The model now says its area is the roof outline's and
+   states that offset.
+4. **The area clause is met by claiming less.** With the eaves' spread in it, the stated area σ
+   is a median 29% of the area, against a median error of 17% after the correction; 30 of 31 are
+   within 2σ, one short of "each". The claim is now honest and wide; a tighter one needs walls
+   the photos do not show.
 5. **Our own reconstruction fails on this flight.** The structure is built on the providers'
    poses, as the cave segment is built on the authors' cloud. Why the mapper bends a nadir block
    with 5 cm priors is open; it belongs to RC-P8 and RC-P1.
@@ -406,8 +415,8 @@ The ground reads +0.30 m against the LiDAR's (median). The model has 65 building
 **Not covered:**
 - **Splitting houses of one height.** Terraced houses under one roof level stay one building;
   splitting them needs roof lines or the map itself.
-- **The roof-to-wall offset.** No eaves model and no oblique views; the cause of the +19% is not
-  tested.
+- **The eaves themselves.** The offset is a calibrated average, not measured per building; no
+  oblique views. That it is eaves, and not the map's tracing, is not checked.
 - **OpenStreetMap's own accuracy.** Its outlines are taken as truth; their source (survey,
   cadastre or tracing) is not checked, and buildings missing from the map count as extra.
 - **The roof σ.** It is the roof's spread, not calibrated against a reference.

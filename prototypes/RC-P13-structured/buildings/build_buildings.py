@@ -57,6 +57,11 @@ ROOF_STEP_M = 1.5
 TOL_MIN_AREA_M2 = 100.0
 TOL_IOU = 0.5
 TOL_DETECTED = 0.8
+# Nadir photos see the roof's outline; a map draws the walls. The roof reaches this far beyond
+# the walls per metre of outline, with this spread (1.4826 x MAD), calibrated on the mapped
+# buildings with even OpenStreetMap ids (14 passing one-to-one); the odd ids are the test.
+EAVES_M = 0.32
+EAVES_SIGMA_M = 0.75
 OSM_IN_VIEW = 0.9  # an OSM building is compared when this share of it lies where the photos see
 
 
@@ -232,6 +237,15 @@ def osm_reference(lo, shape, covered, ltop, lgnd):
     return found, skipped
 
 
+def wall_area(b):
+    """The footprint area within the walls: the roof outline's area less the eaves, with the
+    sigma of the cell edge and of the eaves combined. Returns (area, sigma, eaves bias)."""
+    outline_m = boundary_cells(b["cells"]) * CELL_M
+    bias = outline_m * EAVES_M
+    sigma = float(np.hypot(outline_m * CELL_M / 2, outline_m * EAVES_SIGMA_M))
+    return b["area_m2"] - bias, sigma, bias
+
+
 def verdict(rows, model):
     """The README's tolerance on reference buildings of 100 m2 or more."""
     big = [r for r in rows if r["ref_area_m2"] >= TOL_MIN_AREA_M2]
@@ -239,8 +253,8 @@ def verdict(rows, model):
     area_ok = height_ok = 0
     for r in passed:
         b = model[r["model"]]
-        sigma_area = boundary_cells(b["cells"]) * CELL_M * CELL_M / 2
-        area_ok += abs(r["model_area_m2"] - r["ref_area_m2"]) <= 2 * sigma_area
+        area, sigma_area, _ = wall_area(b)
+        area_ok += abs(area - r["ref_area_m2"]) <= 2 * sigma_area
         height_ok += abs(r["model_height_m"] - r["ref_height_m"]) <= 2 * b["roof_sigma_m"]
     detected = len(passed) / len(big) if big else 0.0
     return {
@@ -282,7 +296,9 @@ def match(model, ref):
             if c in owner:
                 hits[owner[c]] = hits.get(owner[c], 0) + 1
         if not hits:
-            rows.append({"ref": r_id, "model": None, "ref_area_m2": r["area_m2"]})
+            rows.append(
+                {"ref": r_id, "ref_id": r.get("osm_id"), "model": None, "ref_area_m2": r["area_m2"]}
+            )
             continue
         k, inter = max(hits.items(), key=lambda kv: kv[1])
         union = len(r["cells"]) + len(model[k]["cells"]) - inter
@@ -291,6 +307,7 @@ def match(model, ref):
         rows.append(
             {
                 "ref": r_id,
+                "ref_id": r.get("osm_id"),
                 "model": k,
                 "iou": round(iou, 3),
                 "matched": iou >= IOU_MATCH,
@@ -323,6 +340,7 @@ def summary(model, ref):
         "area_error_pct_median": med([r["area_error_pct"] for r in matched], 1),
         "height_error_m_median": med([r["model_height_m"] - r["ref_height_m"] for r in matched], 2),
         "tolerance": verdict(rows, model),
+        "tolerance_odd_ids": verdict([r for r in rows if (r.get("ref_id") or 0) % 2], model),
         "rows": rows,
     }
 
@@ -453,8 +471,11 @@ def write_scene(model, top, gnd, seen, lo, model_dir, rec, n_points):
                 [bid],
                 b["area_m2"],
                 "measured",
-                sigma_m=round(nb * CELL_M * sigma_cell, 1),
-                sigma_basis="boundary cells x cell edge x half a cell, in m2",
+                sigma_m=round(wall_area(b)[1], 1),
+                bias_m=round(wall_area(b)[2], 1),
+                sigma_basis="roof outline area, in m2; it exceeds the area within the walls by the "
+                "bias (eaves, calibrated against mapped walls); sigma combines the cell edge and "
+                "the eaves spread",
                 evidence={"cells": len(b["cells"])},
             )
         )
