@@ -7,8 +7,10 @@ adjustment), all in a local frame (UTM minus the mean camera position).
 
 Two ways to the cameras. `--poses given` (the default) keeps the providers' orientations and only
 triangulates our matches from them, into `given/`. `--poses mapped` runs the incremental mapper
-with the positions as CARTESIAN pose priors, as RC-P8 did with RTK, into `sparse/`; on this flight
-it bends (camera heights spread 13.8 m against the given 4.1 m), and the README has the numbers.
+with the positions as CARTESIAN pose priors, as RC-P8 did with RTK, into `sparse/`. Its lens is
+OPENCV, started at the published interior with focal and distortion free: the DxO-undistorted
+photos still carry distortion (k1 about -0.06), and with the published pinhole held the model
+bends (camera heights spread 13.8 m against the given 4.1 m). The README has the numbers.
 Runs in RC-P1's environment (pycolmap, CPU):
 
     uv run --project ../../RC-P1-registration python reconstruct.py [--poses given] [--threads 16]
@@ -17,6 +19,7 @@ Runs in RC-P1's environment (pycolmap, CPU):
 import argparse
 import json
 import os
+import shutil
 import time
 from pathlib import Path
 
@@ -159,11 +162,22 @@ def main():
         timings["triangulation_s"] = round(time.perf_counter() - t0, 1)
         print("RECONSTRUCT", json.dumps({"given": res, "timings": timings}))
         return
+    # The mapper's lens differs from the given-pose path's, so it works on a copy of the database.
+    mapped_db = OUT / "database_mapped.db"
+    shutil.copy(db, mapped_db)
+    db = mapped_db
+    with pycolmap.Database.open(db) as d:
+        (c,) = d.read_all_cameras()
+        lens = pycolmap.Camera.create_from_model_name(
+            c.camera_id, "OPENCV", F_PX, c.width, c.height
+        )
+        lens.params = [F_PX, F_PX, CX, CY, 0, 0, 0, 0]
+        d.update_camera(lens)
     inc = pycolmap.IncrementalPipelineOptions()
     inc.num_threads = a.threads
-    inc.ba_refine_focal_length = False
+    inc.ba_refine_focal_length = True
     inc.ba_refine_principal_point = False
-    inc.ba_refine_extra_params = False
+    inc.ba_refine_extra_params = True
     inc.use_prior_position = True
     sparse = OUT / "sparse"
     sparse.mkdir(exist_ok=True)

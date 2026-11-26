@@ -167,6 +167,26 @@ Pooled over all seeds:
 - The median error is −0.40%, and 83% of errors are negative.
 - 90% of absolute errors are under 2.1 cm.
 
+### The failures in 42444858, traced (2026-11-26)
+
+Checked in scratch scripts against the committed outputs; nothing in the pipeline changed.
+- **No room-wide surface bias.** Each wall's TSDF plane against its Faro plane, at the wall's
+  centre and signed toward the cameras: median +0.06 cm (42444793), −0.14 cm (42444858), −0.32 cm
+  (42444515), with no trend against camera distance. A global depth scale would move every wall
+  and break the rooms that pass, so the LiDAR's 1.1–1.6% against the rendered laser depth is not
+  the cause.
+- **One wall decides it.** In seeds 0 and 2, every failing pair shares one wall of a passage about
+  1.05 m wide. That wall's TSDF plane sits 2.4–2.5 cm into the passage and is tilted 1.2° against
+  Faro; its partners sit within 0.3 cm.
+- **Partly the poses, partly the depth.** Along that wall, in 1 m pieces, the TSDF sits +3.1 and
+  +1.0 cm off Faro, the ARKit-posed laser +1.3 and −0.1 cm. The laser shares ARKit's poses, so
+  about 1 cm of the error comes with them; the rest is the LiDAR surface there.
+- **Fusion settings do not move it.** Re-fused in a mirror run directory and re-scored over five
+  seeds: depth under 0.5 m dropped, 8 of 84 pairs fail; pixels seen at under 17° dropped, 6 of
+  80; truncation 4 cm instead of 8 cm, 7 of 77 (the committed setting: 7 of 77).
+- **What would fix it:** refining the poses where the passage is seen (frame-to-model ICP or a
+  pose graph on the LiDAR frames). Not tried.
+
 ## The splat
 
 One splat per room, trained on the DGX on 2026-11-26 in a `free` window (`run_splat.sh`, gsplat
@@ -260,8 +280,9 @@ so the places above come from `components.py`.
      failures are, the reference agrees with Faro and the TSDF is short.
    - **The LiDAR depth** reads 1.09–1.61% shorter than Apple's rendered laser depth in all five
      videos. How that turns into a room-dependent wall error is not established.
-   - **Candidates for the room dependence:** the TSDF's surface at short range, ARKit's scale per
-     session, or the planes RANSAC picks. None is tested.
+   - **Traced (2026-11-26):** not a room-wide bias. One wall of a 1.05 m passage sits 2.4–2.5 cm
+     into it, about 1 cm with ARKit's poses and the rest from the LiDAR surface; three fusion
+     settings leave it in place.
 2. **Failures sit at short distances, where the 2 cm floor binds.**
    - **Against Faro:** all seven failures are 1.01–1.10 m pairs in 42444858, 2.2–3.8 cm short.
    - **Against the ARKit reference:** all three seeded failures are 1.01–1.09 m pairs in the same
@@ -293,7 +314,9 @@ so the places above come from `components.py`.
   laser reference, which shares the TSDF's poses: a pose error common to both is not seen there.
 - **The splat is not checked against Faro.** Its walls are scored only against the ARKit-posed
   reference.
-- **The cause of 42444858's short walls** is not found (finding 1).
+- **Pose refinement.** The failures in 42444858 trace to one wall of a 1 m passage, partly to
+  ARKit's poses there and partly to the LiDAR surface ("The failures in 42444858, traced"). No
+  pose refinement is tried, so whether it fixes them is not known.
 - **The Faro walls come from the reference's planes.** The reference picks and places each wall,
   and the Faro scan is refitted there. A wall the reference misses is not measured in the scan.
 - **The splat:** 7,000 steps only, default densification, no seed repeat. Floaters are not filtered or counted beyond the opacity cut, and the splat is not viewed in the browser.

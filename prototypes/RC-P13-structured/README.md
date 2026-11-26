@@ -309,8 +309,8 @@ throwaway container; outliers reach −225 m and +215 m around a site near 190 m
 **What the scripts do:**
 - **`buildings/reconstruct.py`:** SIFT features (3,200 px, 16,000 per photo) and exhaustive
   matching with pycolmap, then the points triangulated from the providers' poses (`--poses given`,
-  the default). `--poses mapped` runs the incremental mapper with the positions as pose priors;
-  on this flight it fails (iteration 1).
+  the default). `--poses mapped` runs the incremental mapper with the positions as pose priors
+  and an OPENCV lens left free (finding 5).
 - **`buildings/run_dense.sh`:** dense depth and fusion in RC-P2's HIP container on the X3, from the
   given-pose model at 1000 px: 2 h 42 min of patch-match, 3,280,739 fused points.
 - **`buildings/build_buildings.py`:** the city model at its simplest level (CityGML LOD1).
@@ -371,7 +371,7 @@ The ground reads +0.30 m against the LiDAR's (median). The model has 65 building
    the focal went to 4832 px. The dataset itself is consistent: its tie points sit +0.06 m from
    its LiDAR (IQR ±0.22 m), and its orientations reproject them within about 25 px, under the
    rotation R = Rx(ω) Ry(φ) Rz(κ) only. Fix: the given poses, held; our matches triangulated from
-   them land −0.01 m from the LiDAR (median).
+   them land −0.01 m from the LiDAR (median). The bend's cause, found later, is finding 5.
 2. **The ground read 1.17 m low.** Stray points under the surface became the minimum of the
    opening. Fix: a 3 × 3 median before it.
 3. **The LiDAR called trees buildings.** Two thirds of the LiDAR-only building cells were green in
@@ -408,9 +408,24 @@ The ground reads +0.30 m against the LiDAR's (median). The model has 65 building
    is a median 29% of the area, against a median error of 17% after the correction; 30 of 31 are
    within 2σ, one short of "each". The claim is now honest and wide; a tighter one needs walls
    the photos do not show.
-5. **Our own reconstruction fails on this flight.** The structure is built on the providers'
-   poses, as the cave segment is built on the authors' cloud. Why the mapper bends a nadir block
-   with 5 cm priors is open; it belongs to RC-P8 and RC-P1.
+5. **The bend was the lens.** The DxO-undistorted photos still carry radial distortion that the
+   published pinhole interior leaves out. Holding the given poses, an OPENCV lens takes our matches
+   from 6.9 px to 0.97 px mean reprojection error (k1 −0.063); a pinhole with the principal point
+   free only reaches 4.9 px. Each re-map below runs the same mapper on the same matches and 5 cm
+   priors:
+
+   | Lens in the mapper | Cameras from the given, median (max) | Height spread (given 4.11 m) | Surface − LiDAR, median | Cells within 0.5 m |
+   |---|---|---|---|---|
+   | Published pinhole, held | 7.53 m (52.8 m) | 13.8 m | −4.21 m | 3% |
+   | OPENCV refined against the given poses, held | 0.02 m (0.09 m) | 4.11 m | −0.05 m | 82% |
+   | OPENCV free from the published interior (`--poses mapped`) | 0.26 m (1.32 m) | 3.93 m | −1.11 m | 67% |
+
+   With the lens free, our own reconstruction finds the same distortion (k1 −0.063) but lengthens
+   the focal to 4790 px against 4730 px, and the surface reads 1.11 m low: 1.3% of an 82 m flying
+   height. That is the drone segment's pattern again, where the ground read 1.05 m low and DJI's
+   focal length was part of it: in a nadir block with position priors, focal length and height
+   trade against each other. The buildings stay on the given poses; the mapped model is the
+   reproducible comparison (`--poses mapped`).
 
 **Not covered:**
 - **Splitting houses of one height.** Terraced houses under one roof level stay one building;
@@ -421,6 +436,8 @@ The ground reads +0.30 m against the LiDAR's (median). The model has 65 building
   cadastre or tracing) is not checked, and buildings missing from the map count as extra.
 - **The roof σ.** It is the roof's spread, not calibrated against a reference.
 - **Roof shape.** LOD1 only: one height per building.
-- **Our poses.** See finding 5.
+- **Our poses for the buildings.** The structure uses the providers' poses. Our free-lens model
+  reads 1.11 m low (finding 5); breaking the focal-height trade needs ground control, oblique
+  photos or a calibrated focal, none tried here.
 - **The rules were tuned here.** The canopy threshold (1 m), the gap closing and the 1.5 m roof
   step were set on this site, against these references; no second site checks them.
