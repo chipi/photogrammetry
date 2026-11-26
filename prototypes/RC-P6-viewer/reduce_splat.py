@@ -1,11 +1,19 @@
 """RC-P6: reduce a trained 3DGS PLY to about one million gaussians and put it in the mesh's frame.
 
 Usage:
-  reduce_splat.py <full.ply> <sparse_dir> <out.ply> [--count 1000000]
+  reduce_splat.py <full.ply> <sparse_dir> <out.ply> [--count 1000000] [--rule contribution|volume]
+                  [--min-views 2]
 
-Rule: keep the `count` gaussians with the largest sigmoid(opacity) x exp(sum of log scales), the
-opacity-weighted volume. Large, opaque gaussians carry the visible surface; small or transparent
-ones are the first to go.
+Rules:
+- `contribution` (default): keep the `count` gaussians that cover the most of the training images,
+  summed over the views: sigmoid(opacity) x the projected area of the two largest axes
+  (pi s1 s2 f^2 / z^2) in each view whose image holds the centre. Occlusion is not modelled.
+- `volume` (the first rule, 2026-11-24): the largest sigmoid(opacity) x exp(sum of log scales). It
+  kept large blobs and needles: the kept set's median largest axis was 1.5 times the trained set's.
+
+Crop: before ranking, a gaussian must sit inside at least `min-views` training images (in front of
+the camera, inside the frame). From outside the capture area the trained splat is unconstrained,
+and its floaters and sky blobs were what the default orbit showed.
 
 Frame: gsplat trains in a normalised world (it recentres, rescales and rotates the scene from the
 camera poses and sparse points) while the textured mesh stays in the COLMAP model frame. The
@@ -20,7 +28,7 @@ from pathlib import Path
 
 import numpy as np
 
-from p6_io import gsplat_world_transform, read_ply, write_ply
+from p6_io import gsplat_world_transform, read_cameras_bin, read_images_bin, read_ply, write_ply
 
 
 def quat_mul(a: np.ndarray, b: np.ndarray) -> np.ndarray:
@@ -57,24 +65,43 @@ def rot_to_quat(r: np.ndarray) -> np.ndarray:
     return q / np.linalg.norm(q)
 
 
+def view_coverage(xyz: np.ndarray, scales: np.ndarray, opacity: np.ndarray, sparse: Path):
+    """Per gaussian (model frame): the number of training images holding its centre, and its
+    summed opacity x projected area over them, in pixels."""
+    cams = read_cameras_bin(sparse / "cameras.bin")
+    views = np.zeros(len(xyz), np.int32)
+    contrib = np.zeros(len(xyz))
+    s2 = np.sort(scales, axis=1)
+    area_m2 = np.pi * s2[:, 2] * s2[:, 1]
+    for im in read_images_bin(sparse / "images.bin"):
+        cam = cams[im["camera_id"]]
+        f, cx, cy = cam["params"][0], cam["params"][-2], cam["params"][-1]
+        if cam["model"] != 0:  # PINHOLE: fx, fy, cx, cy
+            f, cx, cy = cam["params"][0], cam["params"][2], cam["params"][3]
+        w2c = np.linalg.inv(im["c2w"])
+        pc = xyz @ w2c[:3, :3].T + w2c[:3, 3]
+        z = pc[:, 2]
+        with np.errstate(divide="ignore", invalid="ignore"):
+            u, v = f * pc[:, 0] / z + cx, f * pc[:, 1] / z + cy
+            inside = (z > 0.05) & (u >= 0) & (u < cam["width"]) & (v >= 0) & (v < cam["height"])
+            px = np.minimum(area_m2 * f * f / (z * z), cam["width"] * cam["height"])
+        views += inside
+        contrib += np.where(inside, opacity * px, 0.0)
+    return views, contrib
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("full", type=Path)
     ap.add_argument("sparse_dir", type=Path)
     ap.add_argument("out", type=Path)
     ap.add_argument("--count", type=int, default=1_000_000)
+    ap.add_argument("--rule", choices=["contribution", "volume"], default="contribution")
+    ap.add_argument("--min-views", type=int, default=2)
     args = ap.parse_args()
 
     src, _ = read_ply(args.full)
     n = len(src)
-    opacity = 1.0 / (1.0 + np.exp(-np.asarray(src["opacity"], np.float64)))
-    log_vol = sum(np.asarray(src[f"scale_{i}"], np.float64) for i in range(3))
-    score = opacity * np.exp(log_vol)
-    keep = np.sort(np.argpartition(score, n - args.count)[n - args.count :])
-    print(f"{n:,} gaussians, keeping {len(keep):,}; score cut {score[keep].min():.3e}")
-    kept_volume = score[keep].sum() / score.sum()
-    print(f"kept share of total opacity-weighted volume: {kept_volume:.3f}")
-
     m = gsplat_world_transform(args.sparse_dir)
     s = np.cbrt(np.linalg.det(m[:3, :3]))
     r = m[:3, :3] / s
@@ -82,9 +109,24 @@ def main() -> None:
     q_inv = rot_to_quat(inv_r)
     print(f"gsplat frame: scale {s:.6f}, model->gsplat; inverse applied to the splat")
 
+    opacity = 1.0 / (1.0 + np.exp(-np.asarray(src["opacity"], np.float64)))
+    log_s = np.stack([np.asarray(src[f"scale_{i}"], np.float64) for i in range(3)], axis=1)
+    all_xyz = np.stack([src["x"], src["y"], src["z"]], axis=1).astype(np.float64)
+    all_xyz = (all_xyz - m[:3, 3]) @ inv_r.T / s
+    views, contrib = view_coverage(all_xyz, np.exp(log_s) / s, opacity, args.sparse_dir)
+    seen = views >= args.min_views
+    print(f"{n:,} gaussians; {seen.sum():,} inside at least {args.min_views} training images")
+    if args.rule == "contribution":
+        score = np.where(seen, contrib, -1.0)
+    else:
+        score = np.where(seen, opacity * np.exp(log_s.sum(1)), -1.0)
+    count = min(args.count, int(seen.sum()))
+    keep = np.sort(np.argpartition(score, n - count)[n - count :])
+    print(f"rule {args.rule}: keeping {len(keep):,}; score cut {score[keep].min():.3e}")
+    print(f"kept share of the cropped set's score: {score[keep].sum() / score[seen].sum():.3f}")
+
     sel = np.asarray(src[keep])
-    xyz = np.stack([sel["x"], sel["y"], sel["z"]], axis=1).astype(np.float64)
-    xyz = (xyz - m[:3, 3]) @ inv_r.T / s
+    xyz = all_xyz[keep]
     rot = np.stack([sel[f"rot_{i}"] for i in range(4)], axis=1).astype(np.float64)
     rot /= np.linalg.norm(rot, axis=1, keepdims=True)
     rot = quat_mul(q_inv, rot)

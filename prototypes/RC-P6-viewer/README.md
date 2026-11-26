@@ -60,7 +60,8 @@ Copied from the DGX (`claude@dgx-llm-1:~/.cache/recce/runs/p4/`, read-only) into
 |---|---|---|---|
 | Textured mesh | `courtyard_3000_p1/mesh/textured.obj`, `.mtl`, 115 `textured_material*_map_Kd.png` | `data/mesh/` | 140 MB (OBJ 51.5 MB, atlases 91 MB: 6 at 4096², 2 at 2048², 12 at 1024², 26 at 512², 69 at 256²) |
 | Splat, original | `gsplat_courtyard30k/result/ply/point_cloud_29999.ply` (30,000 steps, 6,190,555 gaussians) | `data/splat/courtyard_30k_full.ply` | 1,460,972,458 B (1.46 GB, 248 B per gaussian) |
-| Splat, reduced | `reduce_splat.py` | `data/splat/courtyard_1m.ply` | 56,000,363 B (56 MB, 56 B per gaussian) |
+| Splat, reduced (default since 2026-11-26) | `reduce_splat.py` (contribution rule) | `data/splat/courtyard_1m_contrib.ply` | 56 MB, 56 B per gaussian |
+| Splat, reduced (first rule) | `reduce_splat.py --rule volume` | `data/splat/courtyard_1m.ply` | 56,000,363 B (56 MB, 56 B per gaussian) |
 | Sparse model (poses) | `courtyard_3000_p1/dense/sparse/*.bin` | `data/sparse/` | 11 MB |
 | Cropped mesh, crop box, Sim(3) | `mesh/mesh_crop.ply`, `bbox.json`, `align/sim3.json` | `data/` | 9.2 MB, small |
 | Rerun recording | `export_rerun.py` | `courtyard.rrd` | 33.1 MB |
@@ -92,10 +93,31 @@ The two files are not in the same coordinates, and one transform is needed.
 - The page rotates the model frame by −90° about x (z up to three.js y up); both objects sit in
   one group.
 
-## Reduction rule
+## Reduction rules
 
-`reduce_splat.py` keeps the 1,000,000 gaussians with the largest `sigmoid(opacity) × exp(s0 + s1 + s2)`,
-opacity times scale volume (`scale_i` are log scales). It also drops the spherical-harmonic bands
+**Contribution (the default, 2026-11-26).** The owner saw a messy splat on the M4 Pro and asked
+why. `reduce_splat.py` now keeps the 1,000,000 gaussians that cover the most of the 38 training
+images: for each, sigmoid(opacity) × its projected area (π s1 s2 f² / z², the two largest axes) is
+summed over the views whose frame holds its centre. Occlusion is not modelled. A gaussian must sit
+inside at least 2 training images; that crop removes only 54,291 of 6,190,555 (0.9%), because in a
+courtyard the cameras look outward in every direction and the sky and floaters are inside their
+frames too.
+
+| From | First rule (volume) | Contribution |
+|---|---|---|
+| The training camera `DSC_0296` | Streaked brick, the bicycle missing | Sharper brick, graffiti and the bicycle visible |
+| Outside the courtyard (`auto=1`) | Needles, floaters, sky blobs | The same |
+| Needles (largest axis over 10 times the smallest) | 58.8% | 77.1% |
+
+The pictures were compared by eye in headless Chromium on this machine's GPU; no pixel metric was
+computed. Of the trained 6,190,555 gaussians, 86.8% are needles: 38 photos with no penalty on
+stretched shapes. A long needle covers many pixels, so the contribution rule keeps more of them;
+from the capture positions they read as surface, from outside as streaks. No reduction rule
+cleans the outside view; that needs the training to constrain it (more views, a penalty on
+anisotropy) or a viewer that stays inside the capture area.
+
+**Volume (the first rule, `--rule volume`).** It keeps the gaussians with the largest
+`sigmoid(opacity) × exp(s0 + s1 + s2)`, opacity times scale volume (`scale_i` are log scales). It also drops the spherical-harmonic bands
 above degree 0 (`f_rest_*`): rotating them with the frame change is not implemented, and colour only
 makes the file 56 MB instead of 248 MB. The kept set holds 99.8% of the total opacity-weighted volume;
 the kept gaussians have a median largest axis of 6.4 cm and 99th percentile 56.5 cm (model units; the
@@ -117,7 +139,7 @@ is not declared in `pyproject.toml`. The data is copied as described in "Data" (
 ```bash
 cd prototypes/RC-P6-viewer
 D=~/.cache/recce/runs/p6/data
-uv run python reduce_splat.py $D/splat/courtyard_30k_full.ply $D/sparse $D/splat/courtyard_1m.ply
+uv run python reduce_splat.py $D/splat/courtyard_30k_full.ply $D/sparse $D/splat/courtyard_1m_contrib.ply
 uv run python export_rerun.py           # writes ~/.cache/recce/runs/p6/courtyard.rrd
 ./serve.sh                              # http://<this machine>:8806/
 ```
@@ -228,9 +250,11 @@ iPhone 15 Pro (30 fps or more): 50.0 fps, measured 2026-11-26.
 - **A real display on the workstation.** Its measurements are headless; presentation, vsync and thermal throttling
   are unmeasured, and so is frame time on a 4K or retina canvas beyond one early run.
 - **Visual quality.** The splat is RC-P4's courtyard splat (18.21 dB held-out PSNR, built on poses
-  that RC-P4 found weak); the default orbit view from outside shows streaks and floaters. The
-  reduction's effect on quality is not measured against the 6.19 M original (no render comparison,
-  no PSNR), and the degree-0 colour drops view-dependent shading.
+  that RC-P4 found weak); the default orbit view from outside shows streaks and floaters, with
+  either reduction rule. The reductions are compared by eye only (no PSNR against the photos or
+  against the 6.19 M original), and the degree-0 colour drops view-dependent shading. The frame
+  rates above were measured with the first rule's file; the contribution file holds the same
+  count and showed 59.9 fps headless here, not measured on the devices.
 - **Unlit mesh.** The mesh uses `MeshBasicMaterial`; the OBJ holds 463,017 faces of the
   502,902 in RC-P4's cropped mesh, and the gaps show as holes; the Delaunay mesh is untrimmed beyond
   RC-P4's crop.

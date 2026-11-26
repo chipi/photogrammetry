@@ -10,7 +10,7 @@ import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
 const q = new URLSearchParams(location.search);
 const MESH = q.get("mesh") ?? "data/mesh/textured.obj";
 const MTL = q.get("mtl") ?? "data/mesh/textured.mtl";
-const SPLAT = q.get("splat") ?? "data/splat/courtyard_1m.ply";
+const SPLAT = q.get("splat") ?? "data/splat/courtyard_1m_contrib.ply";
 const mobile = /iPhone|iPad|Android/.test(navigator.userAgent);
 // iOS kills a tab near 1 GB of textures. On the iPhone 15 Pro the scene failed to load at 2048 px
 // atlases and ran at 1024 (2026-11-26), so phones default to 1024.
