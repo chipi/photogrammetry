@@ -7,10 +7,29 @@ iPhone. See the [brief](../../docs/concept/RC-brief.md) §5.
 three.js scene from the result's files, render at 60 fps or more on the M4 Pro and 30 fps or more on
 the iPhone 15 Pro *(agreed 2026-11-24)*, and the same result also exports to Rerun as the engineering view.
 
-Status: **not proven yet.** The page loads the RC-P4 courtyard mesh and a 1,000,000-gaussian splat
-together from files and renders them at 59.9 fps (display-limited) on this machine's iGPU in
-Chromium, and the Rerun export is written and verified with Rerun's own CLI. The two device clauses
-(M4 Pro 60 fps, iPhone 15 Pro 30 fps) are the owner's to measure; see "To measure by the owner".
+Status: **not proven yet; the iPhone clause is met.**
+- **Workstation:** the page loads the RC-P4 courtyard mesh and a 1,000,000-gaussian splat together
+  from files and renders them at 59.9 fps (display-limited) on this machine's iGPU in Chromium.
+- **Rerun:** the export is written and verified with Rerun's own CLI.
+- **iPhone 15 Pro:** the owner measured 50.0 fps (median of 240 frames) on 2026-11-26, against the
+  30 fps target (see "On the devices").
+- **Left:** the M4 Pro clause (60 fps) is still the owner's to measure; see "To measure by the owner".
+
+## On the devices
+
+| Device | Browser | URL parameters | fps median (window of 240) | Loaded | Measured by |
+|---|---|---|---|---|---|
+| iPhone 15 Pro | Firefox for iOS (WebKit, as every iOS browser) | `auto=1&maxtex=1024`, `dpr` 2 | 50.0 | 1,000,000 gaussians, 463,017 faces, 115 atlases | Owner, 2026-11-26, screenshot |
+
+**First attempt on the iPhone.** The page first stopped at "EncodingError: Loading error."
+- **Cause:** the page decoded all 115 atlases at once, most of them 4096×4096, and WebKit refuses
+  image decodes under that much memory.
+- **Fix:** the page now decodes two atlases at a time on a phone (eight on a desktop, `texpar=`). It
+  drops each full-size image after shrinking it, and keeps going with a grey material if one atlas
+  fails (`p6Stats.texture_failures`).
+- **Atlas size:** with the fix, the default 2048 px atlases still did not load on the iPhone and
+  1024 px did, so phones now default to 1024. How the 2048 px load failed was not recorded.
+- **iOS version:** not recorded yet.
 
 ## What is here
 
@@ -102,7 +121,7 @@ uv run python export_rerun.py           # writes ~/.cache/recce/runs/p6/courtyar
 every path in the page is relative. Port 8765 is taken on this machine, hence 8806.
 
 Open `http://localhost:8806/`. Page parameters: `auto=1` (orbit by itself), `dpr=` (pixel ratio,
-capped at 2), `maxtex=` (largest atlas side; 2048 on iPhone and Android by default, no limit on a
+capped at 2), `maxtex=` (largest atlas side; 1024 on iPhone and Android by default, no limit on a
 desktop), `window=` (frames in the fps window, default 240), `sync=1` (a one-pixel readback after each
 frame, so frame time includes the GPU), `mesh=`, `mtl=`, `splat=` (other paths) and
 `view=<12 numbers>&fov=` (a COLMAP camera-to-world 3×4, row-major; for example the training camera
@@ -168,7 +187,7 @@ logging the texture.
 
 ### To measure by the owner
 
-M4 Pro (60 fps or more) and iPhone 15 Pro (30 fps or more): not measured.
+M4 Pro (60 fps or more): not measured. iPhone 15 Pro (30 fps or more): 50.0 fps, measured 2026-11-26.
 
 1. On this machine run `./serve.sh` (it stays in the foreground). This machine is `omarchy` on the
    tailnet, `100.92.54.65`.
@@ -192,10 +211,10 @@ M4 Pro (60 fps or more) and iPhone 15 Pro (30 fps or more): not measured.
 
 ## Not covered
 
-- **The M4 Pro and iPhone 15 Pro frame rates**, the two device clauses of "Proven when". Safari
-  (desktop or iOS) was not run at all; only Chromium 152 on Linux. Spark 2.4.0 and the page's
-  module imports in Safari are unverified.
-- **A real display.** All measurements are headless; presentation, vsync and thermal throttling
+- **The M4 Pro frame rate**, the one device clause left. The iPhone ran one session in one
+  browser (Firefox for iOS), at `maxtex=1024`, with the iOS version unrecorded; Safari on the Mac
+  and on the iPhone was not run. Thermal behaviour over a longer session was not watched.
+- **A real display on the workstation.** Its measurements are headless; presentation, vsync and thermal throttling
   are unmeasured, and so is frame time on a 4K or retina canvas beyond one early run.
 - **Visual quality.** The splat is RC-P4's courtyard splat (18.21 dB held-out PSNR, built on poses
   that RC-P4 found weak); the default orbit view from outside shows streaks and floaters. The

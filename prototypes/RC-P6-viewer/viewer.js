@@ -12,8 +12,10 @@ const MESH = q.get("mesh") ?? "data/mesh/textured.obj";
 const MTL = q.get("mtl") ?? "data/mesh/textured.mtl";
 const SPLAT = q.get("splat") ?? "data/splat/courtyard_1m.ply";
 const mobile = /iPhone|iPad|Android/.test(navigator.userAgent);
-// iOS Safari kills a tab near 1 GB of textures; the 4096 px atlases are halved there.
-const MAX_TEX = Number(q.get("maxtex") ?? (mobile ? 2048 : 0));
+// iOS kills a tab near 1 GB of textures. On the iPhone 15 Pro the scene failed to load at 2048 px
+// atlases and ran at 1024 (2026-11-26), so phones default to 1024.
+const MAX_TEX = Number(q.get("maxtex") ?? (mobile ? 1024 : 0));
+const TEX_CONCURRENCY = Number(q.get("texpar") ?? (mobile ? 2 : 8));
 const WINDOW = Number(q.get("window") ?? 240);
 const SYNC = q.get("sync") === "1";
 const dpr = Math.min(Number(q.get("dpr") ?? window.devicePixelRatio), 2);
@@ -65,6 +67,7 @@ async function loadTexture(url) {
     ctx.imageSmoothingQuality = "high";
     ctx.drawImage(img, 0, 0, MAX_TEX, MAX_TEX);
     source = c;
+    img.src = ""; // let the full-size decode go before the next atlas
   }
   const t = new THREE.Texture(source); // flipY stays true: OBJ uv origin is bottom-left
   t.colorSpace = THREE.SRGBColorSpace;
@@ -89,15 +92,26 @@ async function loadMesh() {
   }
   const group = new OBJLoader().parse(objText);
   const materials = {};
-  await Promise.all(
-    Object.entries(maps).map(async ([name, file]) => {
-      // Unlit: the atlas colour is the measurement, not a lighting design.
-      materials[name] = new THREE.MeshBasicMaterial({
-        map: await loadTexture(base + file),
-        side: THREE.DoubleSide,
-      });
-    }),
-  );
+  // A few decodes at a time: all 115 at once is several GB of decoded 4096 px atlases, and WebKit
+  // (Safari and every iOS browser) then fails with "EncodingError: Loading error" (2026-11-26).
+  const queue = Object.entries(maps);
+  stats.texture_failures = 0;
+  const worker = async () => {
+    while (queue.length) {
+      const [name, file] = queue.shift();
+      try {
+        // Unlit: the atlas colour is the measurement, not a lighting design.
+        materials[name] = new THREE.MeshBasicMaterial({
+          map: await loadTexture(base + file),
+          side: THREE.DoubleSide,
+        });
+      } catch (e) {
+        stats.texture_failures += 1;
+        console.warn("atlas failed", file, e);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: TEX_CONCURRENCY }, worker));
   let faces = 0;
   group.traverse((o) => {
     if (!o.isMesh) return;
@@ -178,7 +192,9 @@ try {
   stats.gpu = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : "unknown";
   $("info").textContent =
     `${stats.splats.toLocaleString()} gaussians, ${stats.mesh_faces.toLocaleString()} faces, ` +
-    `${stats.mesh_materials} atlases, dpr ${dpr}`;
+    `${stats.mesh_materials} atlases` +
+    (stats.texture_failures ? ` (${stats.texture_failures} failed)` : "") +
+    `, dpr ${dpr}`;
   stats.ready = true;
 } catch (e) {
   stats.error = String(e);

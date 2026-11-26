@@ -13,7 +13,7 @@ page is the summary. Updated 2026-11-25; see "Resume here" for the handover.
 | [RC-P3 Quality state an agent can read](https://github.com/chipi/recce/tree/main/prototypes/RC-P3-quality) | **Proven** | An agent with only three MCP read tools names the held-out region on both scenes |
 | [RC-P4 Dense, mesh, texture and splat, measured](https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products) | **Proven** | Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; all seven complaint measurements have a first number (underwater colour from RC-P12, on images). The courtyard splat at 30,000 steps reaches 18.2 dB, no better than at 7,000, so steps are not the cause. The texture-side parts of measurements 1 and 4 (2026-11-25): a texel covers a median 10.2 mm on seen faces; 89% of the textured area comes from exactly one photo, 11% is hole-filled; colour difference across seams (median ΔE 2.48) is close to that inside patches (2.14) |
 | [RC-P5 RAW to a consistent set](https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw) | **Proven** on one scene (pipes) | The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen |
-| [RC-P6 Mesh and splat in the browser](https://github.com/chipi/recce/tree/main/prototypes/RC-P6-viewer) | Not proven yet | The RC-P4 courtyard mesh and a 1,000,000-gaussian splat load together in three.js + Spark at 59.9 fps (display-limited) in Chromium on the X3's iGPU; the Rerun export is verified with Rerun's CLI. Open: the owner's frame-rate checks on the M4 Pro (60 fps) and the iPhone 15 Pro (30 fps); Safari not run |
+| [RC-P6 Mesh and splat in the browser](https://github.com/chipi/recce/tree/main/prototypes/RC-P6-viewer) | Not proven yet | The RC-P4 courtyard mesh and a 1,000,000-gaussian splat load together in three.js + Spark at 59.9 fps (display-limited) in Chromium on the X3's iGPU; the Rerun export is verified with Rerun's CLI. iPhone 15 Pro (owner, 2026-11-26): 50.0 fps against 30, at 1024 px atlases, after a fix to how the page decodes them. Open: the M4 Pro (60 fps); Safari not run |
 | RC-P7 Distribution on a large set | Deferred to the build phase | [GPU rental spec](gpu-rental-p7.md) ready. Owner (2026-11-26): important, but not piloted in Step 0 |
 | [RC-P8 Learned and classical, compared](https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned) | **Proven** | MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Owner's decision: an optional second route beside COLMAP, kept only after an agreement check, never the source of scale. The check (built 2026-11-25) gets 15 of 16 runs right with no wrong pass; once checked, the route keeps 1–13 frames COLMAP lacks, since on the low-texture videos the learned model is wrong and is rejected |
 | [RC-P9 A robot's capture set](https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture) | **Proven** on the 1.2 m fixture | Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%) |
@@ -120,10 +120,9 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 1. **RC-P10, the splat.** Inputs are built (`splat_prep.py`, on the workstation under
    `runs/p10/<video>/splat_input`) and synced to the DGX; `run_splat.sh <video>` runs in a daytime
    `free` window, then the splat is checked against the TSDF in metres.
-2. **RC-P6: the owner's frame-rate checks.** `./serve.sh` in `prototypes/RC-P6-viewer` on the
-   workstation, then on the M4 Pro (60 fps) and the iPhone 15 Pro (30 fps) open
-   `http://100.92.54.65:8806/?auto=1` (the short name `omarchy` does not resolve on the iPhone;
-   `omarchy.tail6d0ed4.ts.net` is the full tailnet name). Safari and iOS are untested.
+2. **RC-P6: the M4 Pro frame rate (60 fps).** `./serve.sh` in `prototypes/RC-P6-viewer` on the
+   workstation, then on the M4 Pro open `http://100.92.54.65:8806/?auto=1` in Safari and Chrome.
+   The iPhone 15 Pro passed on 2026-11-26 (50.0 fps against 30, Firefox for iOS, 1024 px atlases).
 3. **RC-P11** after RC-P8 or RC-P10 shows pose priors help. RC-P10's result (with poses and depth the
    rooms meet the wall limit; photos only, four of five split) is a finding; the owner puts it in
    context later (2026-11-25).
@@ -159,4 +158,4 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 ## Open, for the owner
 
 - The underwater benchmark capture, after the rest of Step 0 is finished (owner, 2026-11-26).
-- The M4 Pro and iPhone frame-rate checks for RC-P6 (ready to run).
+- The M4 Pro frame-rate check for RC-P6 (ready to run; the iPhone passed at 50.0 fps).
