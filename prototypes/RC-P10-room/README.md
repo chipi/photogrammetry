@@ -8,7 +8,7 @@ wall lengths match the reference within 2% or 2 cm, whichever is larger; photos-
 either registers as one model or the engine reports its separate components and where the links
 are missing.
 
-**Result (2026-11-25): partly met.**
+**Result (2026-11-26): not proven yet.** The mesh and the splat form one metric model. The wall-length limit holds on every distance against the Faro scan (one visit). Against the ARKit-posed laser reference, 3 of 332 TSDF distances and 8 of 331 splat distances fail, all pairs 1.0–1.5 m apart. The photos-only clause is met by this prototype's report, not yet by the engine.
 - **With poses and depth:**
   - **Against the Faro scan's own distances** (one visit, independent of ARKit): the TSDF mesh
     meets the wall-length limit on 85 of 85 wall-to-wall distances over five RANSAC seeds, with a
@@ -16,7 +16,7 @@ are missing.
   - **Against the ARKit-posed laser reference** (five videos): 329 of 332 distances are within the
     limit. The three failures are 1.01–1.09 m pairs in one video, off by 2.4–2.6 cm against the
     2 cm limit. On the visit with Faro scans, this reference itself reads a median 0.51% long.
-- **Splat:** not trained yet. Its input is ready and needs a daytime GPU window.
+- **Splat:** trained per room in ARKit's frame (2026-11-26). Its gaussian centres sit a median 1.9–3.9 cm from the TSDF surface, and walls refitted in them meet the limit on 323 of 331 distances (median −0.44%), so mesh and splat are one metric model.
 - **Photos only:** one scene registers as one component, 179 of 218 frames. The other four split
   into 2–4 components. This prototype reports each break with the frames on either side and where
   in the room it falls; the engine (`recon`) has no such report yet.
@@ -55,6 +55,7 @@ the floor check failed on 42444821 and the run was discarded.
 | components | `uv run --project ../RC-P1-registration python components.py` | Photos-only components from RC-P8's `none` runs (below) |
 | splat_prep | `uv run --project ../RC-P1-registration python splat_prep.py` | COLMAP model of RC-P8's posed frames (every 12th `vga_wide` frame) with 3-D points seeded from the TSDF vertices |
 | run_splat.sh | on the DGX, in a `free` window | gsplat's trainer with `--no-normalize-world-space`, so the splat stays in ARKit's frame in metres |
+| splat | `uv run python splat.py` | The splat against the TSDF and the walls (below) |
 | summarize | `uv run python summarize.py` | The tables below |
 
 Outputs go to `$RECCE_DATA_DIR/runs/p10/`. Wall time on the workstation (32 threads):
@@ -148,6 +149,42 @@ Pooled over all seeds:
 - The median error is −0.40%, and 83% of errors are negative.
 - 90% of absolute errors are under 2.1 cm.
 
+## The splat
+
+One splat per room, trained on the DGX on 2026-11-26 in a `free` window (`run_splat.sh`, gsplat
+1.5.3, `simple_trainer.py default`, 7,000 steps, every 8th frame held out). Each trains on RC-P8's
+posed frames (every 12th `vga_wide` frame, ARKit poses), seeded with 100–200k points from the TSDF
+mesh. `--no-normalize-world-space` keeps it in ARKit's frame, in metres. Each run took 162–182 s.
+
+`splat.py` checks it in three ways:
+- **Surface:** the distance from each confident gaussian's centre (opacity at least 0.5) to the
+  TSDF mesh.
+- **Walls:** room.py's walls are refitted in those centres, giving the same wall-to-wall distances
+  as before, scored against the laser reference.
+- **Quality:** the trainer's held-out PSNR and SSIM.
+
+| Video | Gaussians (confident) | Centre to TSDF, median | Within 2 / 5 / 10 cm | Walls within limit, five seeds | Wall error, median | Held-out PSNR / SSIM |
+|---|---|---|---|---|---|---|
+| 42444515 | 1,146,511 (547,272) | 3.7 cm | 32% / 62% / 87% | 24/27 | −1.17% | 24.70 dB / 0.880 |
+| 42444793 | 1,292,142 (644,248) | 1.9 cm | 52% / 80% / 97% | 82/85 | −0.81% | 26.27 dB / 0.869 |
+| 42444821 | 1,021,360 (461,517) | 2.4 cm | 45% / 71% / 87% | 141/141 | −0.35% | 21.70 dB / 0.854 |
+| 42444858 | 1,108,768 (494,919) | 2.7 cm | 41% / 67% / 80% | 75/77 | −0.43% | 21.76 dB / 0.800 |
+| 42444873 | 1,152,569 (531,905) | 3.9 cm | 34% / 56% / 72% | 1/1 | +0.15% | 20.85 dB / 0.713 |
+
+Pooled over the five rooms and seeds:
+- 323 of 331 wall distances are within the limit, with a median of −0.44%; 89% are short.
+- All eight failures are pairs 1.00–1.46 m apart, off by 2.1–3.1%.
+
+**Reading.** The splat sits in the TSDF's frame and scale: its centres lie a median 1.9–3.9 cm from
+the TSDF surface. Its walls read shorter than the TSDF's (median −0.44% against −0.40% for the TSDF
+on the same reference).
+
+Two things affect that comparison:
+- **The reference reads long.** It reads +0.51% long against the Faro scan on the one visit
+  checked, so against Faro the splat's walls are close to true there.
+- **Floaters may pull the walls in.** Gaussians in front of a wall would pull the refitted plane
+  toward the room. This is not checked separately.
+
 ## Photos only
 
 RC-P8's `colmap_incremental` runs without priors are used: every 12th `vga_wide` frame, SIFT,
@@ -214,10 +251,7 @@ Breaks, from `components.py`:
   reference, which shares the TSDF's poses: a pose error common to both is not seen there.
 - **The Faro walls come from the reference's planes.** The reference picks and places each wall,
   and the Faro scan is refitted there. A wall the reference misses is not measured in the scan.
-- **No splat yet.** The splat half of the first clause is not tested. Inputs are ready for all five
-  videos (90–218 images each, 100–200k seed points); `run_splat.sh` waits for a daytime GPU window.
-  - Not checked: whether the splat stays metric (its Gaussians against the TSDF) and its held-out
-    PSNR.
+- **The splat:** 7,000 steps only, default densification, no seed repeat. Floaters are not filtered or counted beyond the opacity cut, and the splat is not viewed in the browser.
 - **Lengths along a wall are not measured.** The distance between two opposite walls is the length
   of the walls that join them. The extent of a plane's points along itself was not used, since
   furniture and partial coverage cut it short.
