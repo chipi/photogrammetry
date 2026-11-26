@@ -136,7 +136,7 @@ Republish it (read it first, then publish to the same link) whenever a row here 
   proven. Data on the X3: SQUID Satil (MD5 matches Zenodo's) and its evaluation code, AquaMVS core
   and `data.zip` (MD5 matches). SQUID is non-commercial: develop only, never redistribute.
 - **The underwater benchmark capture** (S1–S4, licence, the friend's set): decided after
-  everything else in Step 0 is finished. The drone and Android dataset search runs now (2026-11-26).
+  everything else in Step 0 is finished. The drone and Android dataset search is done: [report](research-drone-phone-datasets-2026-11-26.md) (2026-11-26); fetching any of it is the owner's call.
 
 **Standing rules that carry over**
 
