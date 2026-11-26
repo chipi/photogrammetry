@@ -8,7 +8,7 @@ wall lengths match the reference within 2% or 2 cm, whichever is larger; photos-
 either registers as one model or the engine reports its separate components and where the links
 are missing.
 
-**Result (2026-11-26): not proven yet.** The mesh and the splat form one metric model. The wall-length limit holds on every distance against the Faro scan (one visit). Against the ARKit-posed laser reference, 3 of 332 TSDF distances and 8 of 331 splat distances fail, all pairs 1.0–1.5 m apart. The photos-only clause is met by this prototype's report, not yet by the engine.
+**Result (2026-11-26): not proven yet.** The mesh and the splat form one metric model. The wall-length limit holds on every distance against the Faro scan (one visit). Against the ARKit-posed laser reference, 3 of 332 TSDF distances and 8 of 331 splat distances fail, all pairs 1.0–1.5 m apart. The photos-only clause is met by the engine: `recon components` reports the components and every break. The remaining question is whether those 3 and 8 failures against a reference that itself reads 0.51% long count against the clause; that is the owner's call.
 - **With poses and depth:**
   - **Against the Faro scan's own distances** (one visit, independent of ARKit): the TSDF mesh
     meets the wall-length limit on 85 of 85 wall-to-wall distances over five RANSAC seeds, with a
@@ -18,8 +18,8 @@ are missing.
     2 cm limit. On the visit with Faro scans, this reference itself reads a median 0.51% long.
 - **Splat:** trained per room in ARKit's frame (2026-11-26). Its gaussian centres sit a median 1.9–3.9 cm from the TSDF surface, and walls refitted in them meet the limit on 323 of 331 distances (median −0.44%), so mesh and splat are one metric model.
 - **Photos only:** one scene registers as one component, 179 of 218 frames. The other four split
-  into 2–4 components. This prototype reports each break with the frames on either side and where
-  in the room it falls; the engine (`recon`) has no such report yet.
+  into 2–4 components. `recon components` reports each break with the frames on either side, and
+  where in the room it falls when the photos come with poses (2026-11-26).
 
 ## Data
 
@@ -192,23 +192,45 @@ exhaustive matching. Frames are taken in time order, and a frame counts as regis
 3-D points, as in RC-P1. A break is a change of component between two registered frames, with any
 unregistered frames in between. ARKit's poses are used only to say where a break falls.
 
+**The engine reports this itself (2026-11-26).** `recon components <sparse> [--capture-set <set>]`
+(`src/recon/components.py`, with tests) reads the mapper's models and writes the report. Run on the
+five RC-P8 models, it agrees with `components.py` on three videos. On two it finds fewer breaks,
+and the engine is right:
+- **The prototype's error:** `components.py` gave each frame one component label (the last that
+  held it), so a frame registered in two components showed as a change of component on either side.
+- **Why the engine is right:** a frame shared by two components is a link, not a break. The engine
+  keeps every component a frame belongs to.
+
+The table below uses the engine's counts.
+
 | Video | Frames | Registered | Components (frames) | Component changes | Shared frames | One model |
 |---|---|---|---|---|---|---|
 | 42444515 | 90 | 28 | 15, 13 | 2 | none | no |
-| 42444793 | 125 | 66 | 21, 19, 14, 13 | 4 | 0-2: 1 | no |
+| 42444793 | 125 | 66 | 21, 19, 14, 13 | 3 | 0-2: 1 | no |
 | 42444821 | 106 | 24 | 3, 11, 10 | 4 | none | no |
-| 42444858 | 133 | 95 | 7, 68, 29 | 4 | 0-2: 7, 1-2: 2 | no |
+| 42444858 | 133 | 95 | 7, 68, 29 | 2 | 0-2: 7, 1-2: 2 | no |
 | 42444873 | 218 | 179 | 179 | 0 | none | no (39 frames unregistered) |
 
-Breaks, from `components.py`:
+The breaks, with ARKit's positions from `components.py`:
 - **42444515:** both breaks are long unregistered runs: 28 frames over 11.6 s, while the camera
   moved 2.3 m and turned 95°, then 29 frames over 12.0 s.
-- **42444821:** 46 unregistered frames over 18.8 s and 3.5 m.
-- **42444793 and 42444858:** most breaks are between adjacent frames, 0.4 s apart and 0.1–0.2 m
-  apart, turning 13–22°.
+- **42444821:** 46 unregistered frames over 18.8 s and 3.5 m, and 18 over 7.6 s and 1.6 m. The
+  other two changes are between adjacent frames 0.4 s apart (0.2 m, 22–30°), where component 0
+  (3 frames) sits inside a run of component 2.
+- **42444793:**
+  - one unregistered frame over 0.8 s (0.32 m, 27.6°);
+  - 13 unregistered frames over 5.6 s (0.24 m, 46.4°);
+  - two adjacent frames 0.4 s apart (0.1 m, 13.2°).
+- **42444858:**
+  - 8 unregistered frames over 3.6 s (0.52 m, 6.7°);
+  - 6 unregistered frames over 2.8 s (1.94 m, 43.7°).
 - **Shared frames:** in 42444858, component 0 lies inside component 2 (all 7 of its frames are in
-  both). In 42444793, components 0 and 2 share one frame. A frame in two components is a link
-  COLMAP did not merge on.
+  both). In 42444793, components 0 and 2 share one frame. A frame in two components is a link the
+  mapper did not merge on.
+
+**Not yet in the engine:** where a break is, in the room, needs poses. The engine gives it when the
+photos come in a capture set with poses (ARKit, a robot). These five videos have no capture set yet,
+so the places above come from `components.py`.
 
 ## Findings
 
@@ -240,9 +262,9 @@ Breaks, from `components.py`:
    - COLMAP registers 23–71% of frames in four videos, and 82% in 42444873.
    - The breaks are either long unregistered runs (11–19 s) or turns between adjacent frames.
    - What the camera sees during the long runs is not checked.
-5. **The report is the prototype's, not the engine's.** The clause asks that the engine report its
-   components and where the links are missing. `components.py` produces that report from COLMAP's
-   output; `recon` has no registration step yet.
+5. **The engine reports components, but does not register.** `recon components` reads a mapper's
+   output and reports the components and the breaks between them. `recon` has no registration step
+   of its own yet, so the mapper (here COLMAP) runs outside it.
 
 ## Not covered
 

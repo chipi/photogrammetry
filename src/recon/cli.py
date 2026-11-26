@@ -1,12 +1,13 @@
 """`recon` command line. The reconstruction backend arrives with its prototype's graduation; today
-the CLI reads a capture set and writes the COLMAP model the backend starts from."""
+the CLI reads a capture set, writes the COLMAP model the backend starts from, and reports a mapper's
+components and the breaks between them."""
 
 import argparse
 import json
 import sys
 from pathlib import Path
 
-from recon import __version__, capture_set
+from recon import __version__, capture_set, components
 
 
 def _inspect(args: argparse.Namespace) -> int:
@@ -34,6 +35,16 @@ def _colmap_model(args: argparse.Namespace) -> int:
     return 0
 
 
+def _components(args: argparse.Namespace) -> int:
+    capture = capture_set.load(args.capture_set) if args.capture_set else None
+    rep = components.report(components.read_components(args.sparse), capture)
+    text = json.dumps(rep, indent=2)
+    if args.out:
+        args.out.write_text(text + "\n")
+    print(text)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="recon")
     parser.add_argument("--version", action="version", version=f"recon {__version__}")
@@ -45,10 +56,18 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("capture_set", type=Path)
     p.add_argument("out", type=Path)
     p.set_defaults(func=_colmap_model)
+    p = sub.add_parser(
+        "components",
+        help="report a mapper's components and where the links between them are missing",
+    )
+    p.add_argument("sparse", type=Path, help="a sparse model folder, or a folder of them")
+    p.add_argument("--capture-set", type=Path, help="gives capture order and pose-based places")
+    p.add_argument("--out", type=Path, help="also write the report here as JSON")
+    p.set_defaults(func=_components)
     args = parser.parse_args(argv)
     try:
         return args.func(args)
-    except capture_set.CaptureSetError as exc:
+    except (capture_set.CaptureSetError, components.ModelError) as exc:
         print(f"recon: {exc}", file=sys.stderr)
         return 2
 
