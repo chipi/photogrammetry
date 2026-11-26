@@ -318,7 +318,7 @@ README holds its numbers.
 P4 → P8 · P5 → P9 · P9 → P10 · P10 → P11 · P8 → P12.
 
 **Two tracks, one meeting point** *(owner, 2026-11-24)*. Step 0 runs two tracks side by side. Below,
-the **prototypes** (RC-P1..P12) prove how the technology works. Above, the **mock-ups** (RC-M<n>,
+the **prototypes** (RC-P1..P13) prove how the technology works. Above, the **mock-ups** (RC-M<n>,
 in `mockups/`) work out how the product looks and behaves: every concept in the
 [visual ideas](../wip/visual-ideas.md) catalogue is mocked, looked at and critiqued before anything
 is built. A mock-up is proven when the owner has judged it on screen and the concepts it carries
@@ -461,6 +461,26 @@ model and with a refractive model, and the error of each is recorded; on SQUID, 
 correction with ranges from the reconstruction is compared with uncorrected images on the scene's
 reference targets (identical DGK Color Tools charts placed at several distances); the open underwater benchmark is
 specified from what the public sets lack. *The "ranges from the reconstruction" part moved to the open benchmark's site scene S1 (owner, 2026-11-26): on SQUID it cannot be met, and Step 0 does not test it.*
+
+### F — Structured models *(added by the owner, 2026-11-26)*
+
+#### RC-P13 — A structured model from a reconstruction
+
+**Proves:** That an agent can turn a reconstruction and a little context (a few photos, one line
+of description) into a structured model (walls and rooms, passages, terrain and buildings) in which
+every element states whether it is measured, inferred or unknown, and how sure it is. The model is
+written once in a tool-neutral description; Blender, driven headless by the agent, is the first
+tool to build it, and others can follow against the same description.
+**Input:** three segments. Interior: RC-P10's room with the Faro scan (ARKitScenes). Cave from
+inside: a public cave set with a laser or survey reference, to be chosen. Drone over ground: EuroSDR
+RPAS Phase 2, Phantom 4 RTK (CC BY 4.0), with RTK positions and ground control.
+**Proven when:** In each segment the agent builds the structured model through the tool-neutral
+description, every element carries a source and an uncertainty, nothing tagged measured lacks
+support in the reconstruction, and the measured dimensions meet the segment's reference: room
+walls and floor area within 2% or 2 cm of the Faro scan; cave passage widths and heights against
+the set's reference, tolerance set when the set is chosen; drone terrain heights and building
+footprints against the control points. The number of agent iterations and where they went wrong
+is recorded.
 
 ### After Step 0 — the owner's data
 
