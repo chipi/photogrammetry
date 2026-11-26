@@ -246,6 +246,7 @@ def cmd_run(args):
     if (root / "results.json").exists():
         results["variants"] = json.loads((root / "results.json").read_text())["variants"]
     suffix = "" if args.camera == "SIMPLE_RADIAL" else "_" + args.camera.lower()
+    suffix += "_freefocal" if args.free_focal else ""
     for name, keep in variants.items():
         variant = name + suffix
         out = root / variant
@@ -261,7 +262,7 @@ def cmd_run(args):
         # Straight-down photos of near-flat ground leave focal length and height entangled: with
         # the focal free, the first full run's models grew to about 20 photos and collapsed five
         # times in 13 minutes. The factory focal and centre are held; distortion is refined.
-        inc.ba_refine_focal_length = False
+        inc.ba_refine_focal_length = args.free_focal
         inc.ba_refine_principal_point = False
         inc.use_prior_position = n_priors > 0
         sparse = out / "sparse"
@@ -299,6 +300,9 @@ def main():
     p.add_argument("--limit", type=int, default=0, help="first N photos only (a smoke test)")
     p.add_argument("--variants", default="", help="comma-separated subset, e.g. prior_half")
     p.add_argument("--camera", choices=["SIMPLE_RADIAL", "OPENCV"], default="SIMPLE_RADIAL")
+    p.add_argument(
+        "--free-focal", action="store_true", help="refine the focal length (priors hold the scale)"
+    )
     p.set_defaults(func=cmd_run)
     args = ap.parse_args()
     args.func(args)

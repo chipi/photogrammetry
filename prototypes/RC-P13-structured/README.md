@@ -195,31 +195,19 @@ GC6 falls in an inferred cell: −2.04 m as it stands. It is left out of the fit
 2. **The error is mostly one offset.** After one shift fitted on 7 control points, the check
    points are 0.27 m std, all within 2σ. The spread is larger at the block's edges, as the
    residual dome in RC-P8 predicts.
-3. **The offset comes with the RTK positions, not the lens.** As mapped, the cameras sit 0.30 m
-   below their RTK centres; after a similarity fit of the cameras to RTK, the ground is still
-   0.70 m below the survey (std 0.19 m). A fit of the height error to an offset, a depth term and
-   a dome term together (the quarry is both deeper and at the dome's centre) gives:
-
-   | Model | Offset at 65 m depth | Depth term | Dome term per (100 m)² |
-   |---|---|---|---|
-   | prior (k1) | −1.14 ± 0.06 m | +0.23 ± 0.42% | −0.13 ± 0.03 m |
-   | prior_half (k1) | −1.12 ± 0.16 m | −2.34 ± 1.16% | −0.42 ± 0.09 m |
-   | prior_half_opencv | −0.82 ± 0.06 m | −1.04 ± 0.40% | −0.13 ± 0.03 m |
-
-   A focal-length error would give the same depth term in every model, since all hold the same
-   focal; the terms disagree and the all-prior model's is zero. The offset is what all three
-   share. Horizontally, the 8 targets found consistently in 3 or 4 photos each sit 0.24 m
-   (median) from the survey, against about 1 m vertically. What remains is the RTK positions'
-   frame against ETRS89 (the base the drone used in flight is not documented) or how the logged
-   position relates to the camera: the photos' XMP repeats the MRK position exactly, so neither
-   says whether it is the antenna or the camera. A PPK solution against the benchmark's local
-   base station (RINEX, ETRS89 precise coordinates) would decide it.
+3. **The offset is split, and part of it is still open.** RC-P8's "The height offset against
+   the survey" takes it apart (2026-11-26): the RTK frame against a PPK solution on the local
+   base, 0.12 m; the mapper's hold on the priors, 0.26 m; DJI's calibrated focal length, 0.6% too
+   long, 0.28–0.36 m. About 0.25–0.38 m is not explained. A fit to an offset, a depth and a dome
+   term had first pointed away from the focal length; the adjustment with all RTK centres held
+   and the focal free is the cleaner test, and a full focal-free re-map gives the same answer.
+   The first version of this finding (a9c1c2c) said the offset comes with the RTK positions, not
+   the lens; that was wrong.
 
 **Not covered:**
 - **Buildings.** The site has none. The criterion's footprint clause needs another flight.
 - **A fixed tolerance.** The default scores the model's own claim (2σ); a fixed value for the
   drone is not set by the brief.
-- **PPK.** It needs RTKLIB, a new dependency.
 - **Horizontal position.** Only 8 of 57 targets are located consistently across photos; the
   others vary by more than 0.15 m from photo to photo, with each photo's pose error.
 - **Dense surface.** Heights come from the sparse model (about 2.3 points per m²).

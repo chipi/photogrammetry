@@ -371,10 +371,57 @@ All four register 430 of 430 photos in one component.
    tangential terms) 0.24 m and 0.09 m. The after-fit error halves, 0.44 to 0.22 m.
 4. **The remaining 0.2–0.3 m is far above RTK's centimetres.** OPENCV on every prior is not run.
 
+### The height offset against the survey (2026-11-26)
+
+```
+./drone_ppk.sh FLIGHT BASE_RINEX_GZ OUT/ppk2 "2021/08/25 12:00:00"   # RTKLIB in a throwaway container
+uv run --project ../RC-P1-registration python drone_refine.py ppk OUT OUT/ppk2
+uv run --project ../RC-P1-registration python drone_refine.py ba OUT [--free-focal] [--free-pp]
+```
+
+RC-P13's drone segment checks the ground of `prior_half_opencv` against the benchmark's 58 survey
+points (ETRS89, ellipsoidal heights): as mapped, it reads 1.00 m low (std 0.27 m). Three checks
+split that offset.
+
+- **The RTK frame: 0.12 m.** A PPK solution of the drone's raw GNSS log against the benchmark's
+  local base (RINEX, ETRS89 precise coordinates; 5,445 of 5,447 epochs fixed) agrees with the
+  in-flight RTK positions to 0.006 m E, 0.016 m N and +0.120 m U (std 2 cm). Moved into the PPK
+  frame, the ground still reads 0.88 m low.
+- **The mapper's hold on the priors: 0.26 m.** As mapped, the cameras sit 0.30 m below their RTK
+  centres. A bundle adjustment tied to all 430 RTK centres (pycolmap's pose-prior adjuster, 3 cm)
+  brings them to 0.00 m and the ground to −0.74 m (std 0.15 m).
+- **The focal length: 0.28–0.36 m.** In the same adjustment with the focal free, it settles at
+  3645.3 px, 0.58% below DJI's calibrated 3666.7 px, and the ground reads −0.46 m (std 0.11 m).
+  With the principal point free as well: 3640.4 px, the centre 11 px lower, ground −0.38 m.
+
+| Adjustment of `prior_half_opencv` | Focal px | Cameras dU | Ground mean | Ground std |
+|---|---|---|---|---|
+| As mapped | 3666.7 (DJI) | −0.30 m | −1.00 m | 0.27 m |
+| Tied to all RTK centres | 3666.7 | 0.00 m | −0.74 m | 0.15 m |
+| … and the focal free | 3645.3 | 0.00 m | −0.46 m | 0.11 m |
+| … and the principal point free | 3640.4 | 0.00 m | −0.38 m | 0.12 m |
+
+A full re-map with the focal free from the start (`drone_rtk.py run OUT --variants prior --camera
+OPENCV --free-focal`, all priors) breaks into 20 components in 2290 s, as the first focal-free run
+did. Its largest (334 photos) settles at 3641.9 px, cameras 0.04 m below RTK, ground −0.47 m (std
+0.12 m, 54 points): the same answer as the adjustment.
+
+1. **DJI's calibrated focal length is too long for this flight.** Held at 3666.7 px, nadir photos
+   over 60 m put the ground about 0.6% too far below the cameras. The fit to an offset, a depth
+   and a dome term (RC-P13) did not see it, because the free models' depth terms disagreed; the
+   adjustment with RTK centres held is the cleaner test.
+2. **About 0.25–0.38 m is still not explained** in the RTK frame (0.13–0.26 m in the PPK frame).
+   Not checked: the base antenna's phase-centre offset (RTKLIB ran without an ANTEX file), the
+   rover antenna's, the MRK lever arm's sign convention, and the height of the survey marks against
+   the ground the photos see.
+
+
 ## Not covered
 
 - **Drone, the ground.** The EuroSDR ground control points are not used: the reference is the
   flight's own RTK, which is also the prior, so only the held-out half is independent of it.
+- **Drone, the rest of the height offset.** 0.25–0.38 m against the survey is not explained;
+  see "The height offset against the survey".
 - **Drone, the cause of the residual dome.** It is not found. Richer models (FULL_OPENCV), the
   OPENCV lens with every prior, and a second flight are not run.
 - **Drone, mapping time.** The OPENCV run mapped in 690 s against 1941 s with k1 only; why is not
