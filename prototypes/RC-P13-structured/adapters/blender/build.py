@@ -7,6 +7,7 @@ the element's source, uncertainty and basis as custom properties, which the glTF
 `--mesh` adds the reconstruction, translucent, for comparison.
 """
 
+import itertools
 import json
 import math
 import sys
@@ -177,7 +178,11 @@ def render(cam, path, hide):
 
 
 def build_elements(s):
-    builders = {"wall_face": wall, "cells": lambda el: cells(el, el["source"])}
+    builders = {
+        "wall_face": wall,
+        "cells": lambda el: cells(el, el["source"]),
+        "polyline": polyline,
+    }
     objs = []
     for el in s["elements"]:
         build = builders.get(el["geometry"]["type"])
@@ -186,7 +191,66 @@ def build_elements(s):
         obj = build(el)
         tag(obj, el)
         objs.append(obj)
+    sections = [e for e in s["elements"] if e["geometry"]["type"] == "ray_section"]
+    if sections:
+        objs += passage(sections)
     return objs
+
+
+def ring(g):
+    """A section's rays as points: left is the passage tangent turned 90 degrees, up is +z."""
+    c, t = Vector(g["station"]), Vector(g["tangent"])
+    left = Vector((-t.y, t.x, 0)).normalized()
+    up = Vector((0, 0, 1))
+    return [
+        None
+        if r is None
+        else c + r * (math.cos(math.radians(a)) * left + math.sin(math.radians(a)) * up)
+        for a, r in zip(g["angles_deg"], g["radii_m"], strict=True)
+    ]
+
+
+def passage(sections):
+    """The tube between consecutive sections. A quad is measured where all four rays hit rock;
+    where any is unknown it is drawn red from the rays that exist, and skipped if fewer than 3."""
+    rings = [ring(e["geometry"]) for e in sections]
+    quads = {(s, half): ([], []) for s in ("measured", "unknown") for half in ("roof", "floor")}
+    n = len(rings[0])
+    for a, b in itertools.pairwise(rings):
+        for k in range(n):
+            pts = [a[k], a[(k + 1) % n], b[(k + 1) % n], b[k]]
+            have = [p for p in pts if p is not None]
+            src = "measured" if len(have) == 4 else "unknown"
+            if len(have) < 3:
+                continue
+            # Rays 0-180 degrees run left, up, right: the roof, hidden in the plan like a ceiling.
+            half = "roof" if 0 < sections[0]["geometry"]["angles_deg"][k] < 180 else "floor"
+            verts, faces = quads[(src, half)]
+            base = len(verts)
+            verts += [tuple(p) for p in have]
+            faces.append(tuple(range(base, base + len(have))))
+    objs = []
+    for (src, half), (verts, faces) in quads.items():
+        if faces:
+            obj = new_object(f"passage {half} {src}", verts, faces, material(src, "wall"), src)
+            obj["recce_id"] = f"passage-{half}-{src}"
+            obj["recce_kind"] = "ceiling" if half == "roof" else "passage_floor"
+            obj["recce_source"] = src
+            objs.append(obj)
+    return objs
+
+
+def polyline(el):
+    """A thin strip along the points, flat in plan, so it shows from above."""
+    pts = [Vector(p) for p in el["geometry"]["points"]]
+    verts, faces = [], []
+    for a, b in itertools.pairwise(pts):
+        d = (b - a).normalized()
+        side = Vector((-d.y, d.x, 0)) * 0.05
+        base = len(verts)
+        verts += [tuple(a - side), tuple(b - side), tuple(b + side), tuple(a + side)]
+        faces.append((base, base + 1, base + 2, base + 3))
+    return new_object(el["id"], verts, faces, material(el["source"]), el["source"])
 
 
 def dimension(m, a, b, slot=0):

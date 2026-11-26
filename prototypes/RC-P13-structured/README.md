@@ -17,7 +17,9 @@ is recorded.
 - **Room:** built and checked. All 13 measured dimensions are within 2% or 2 cm of the Faro scan.
   The floor-area part of the criterion is not yet compared as an area.
 - **Drone:** not built. Its reconstruction runs now; see RC-P8, drone.
-- **Cave:** no data yet.
+- **Cave:** built and checked on the authors' photogrammetric cloud. On covered sections, 11 of 17
+  widths and heights are within 2% or 5 cm (a proposed tolerance), median −0.9 cm, p95 12 cm. The
+  fork is marked unknown.
 
 ## Layout
 
@@ -25,6 +27,7 @@ is recorded.
 |---|---|
 | `scene.py` | The tool-neutral description: schema `recce-structured/0.1`, its rules, read and write. Pure standard library, so Blender's Python imports it |
 | `room/build_room.py` | Room segment: RC-P10's TSDF mesh to a scene, then the scene against the Faro scan. Runs in RC-P10's environment (Open3D) |
+| `cave/build_cave.py` | Cave segment: a lava tube's cloud to stations, cross-sections and LRUD, then against the LiDAR. Runs in RC-P10's environment |
 | `adapters/blender/build.py` | The Blender adapter: a scene to `.blend`, `.glb` (with the tags as glTF extras), a plan and perspective renders. Blender 4.5.17 LTS, headless |
 
 Outputs go to `$RECCE_DATA_DIR/runs/p13/<segment>/<id>/`.
@@ -134,9 +137,69 @@ EuroSDR RPAS Phase 2, Phantom 4 RTK, flight 100_0004 (430 photos, CC BY 4.0). Th
 runs as RC-P8's drone test (`prototypes/RC-P8-learned/drone_rtk.py`). The structured model
 (terrain cells, building footprints) is built after it.
 
-## Cave segment
+## Cave segment (Grotta di Monte Intraleo, LiDAR reference)
 
-No public cave set with both photos and a laser reference was found. The best candidate is the
-Grotta di Monte Intraleo lava tube on Etna (4TU.ResearchData, CC BY 4.0, 2.2 GB), which has a
-photogrammetric point cloud and five merged LiDAR scans, but not the robot's raw video. Its
-download waits for the owner's go.
+**Data.** A lava tube on Etna, from the paper "LiDAR and Photogrammetry Data Evaluation from a
+Lava Tube Mission in Sicily" (Romio et al.). It is on 4TU.ResearchData, doi
+10.4121/0cc49d43-8a5c-453e-9370-8e9088b00b48, under CC BY 4.0.
+- **The reconstruction:** the authors' merged photogrammetric cloud, 12.95 M points.
+- **The reference:** their five LiDAR scans, merged with CloudCompare ICP, 2.41 M points.
+- **What was skipped:** the authors' 1.5 GB cloud-to-cloud analysis. The robot's raw video is not
+  published.
+- **Getting it out:** the `.bin` files need CloudCompare 2.13 or later. Ubuntu 24.04's 2.11 refuses
+  the format. Debian 13's 2.13.2 runs headless in a throwaway Docker container and exports both
+  clouds to PLY, so nothing is installed on the host and the GPL tool stays outside our code.
+
+**What `cave/build_cave.py` does.** It follows a cave survey's structure:
+- **Stations:** every 1 m along the passage centreline.
+- **Sections:** a cross-section at each station, made of 72 rays (every 5°) in the vertical plane
+  square to the passage. A ray's length is the median distance of the cloud's points in its bin,
+  within a 0.2 m slab. It is unknown where the bin has fewer than 3 points.
+- **Measurements:** each section's width (left + right) and height (up + down). Each direction is
+  the median of the bins within ±10°.
+- **The check:** the same rays are cut in the LiDAR cloud.
+- **Tolerance:** 2% or 5 cm is proposed. The brief leaves the cave's tolerance open.
+
+**Against the LiDAR (22 stations over 22.7 m of passage):**
+
+| Sections | Compared | Within 2% or 5 cm | Median error | p95 abs error | Width / height median |
+|---|---|---|---|---|---|
+| Covered (at most 6 of 72 rays unknown) | 17 | 11 | −0.9 cm | 12.3 cm | −8.2 / +5.3 cm |
+| Partly covered | 19 | 8 | −3.6 cm | 61.1 cm | −5.1 / −3.0 cm |
+
+Of the widths and heights, the LiDAR has 7 that the photos lack, and the photos have 1 that the
+LiDAR lacks.
+
+**Agent iterations:**
+1. **The centreline was 58.9 m long for a 34 m cloud.** Slabs that caught a side chamber moved
+   their median off the passage, so two stations jumped 8–9 m. Also, one 5° bin decided each of
+   L, R, U and D. Fix: L, R, U and D come from the bins within ±10°.
+2. **Dropping the jumps greedily ate the passage.** Removing the worst station repeatedly
+   cascaded from one end, leaving 2 stations. A top view of both clouds showed why: the tube forks
+   near its north end, and slabs there mix both branches.
+3. **A walk from the end stopped at once.** The station at the tube's mouth wobbles 63°. Fix: seed
+   the walk at the station whose neighbours agree best, then walk both ways until the first break.
+   The result is a 22.7 m single passage.
+4. **The errors split by coverage,** so the check reports covered and partly covered sections
+   apart.
+5. **The plan joined the two ends into one red line** across the passage. Fix: the mouth and the
+   fork are separate unknown elements. The roof half of the tube is hidden in the plan, the way a
+   ceiling is.
+
+**Findings:**
+1. **Covered sections are close but biased.** Widths read about 8 cm narrow and heights about
+   5 cm tall against the LiDAR. A rigid registration cannot do that, so it is likely a surface
+   effect: rough lava, and cracks the photos miss. The cause is not checked.
+2. **Coverage decides the error.** The 61 cm p95 sits in sections where a quarter of the rays have
+   no rock. The model marks those rays unknown, but the width and height still use the rays that
+   exist.
+3. **The fork is not structured.** It is marked unknown. Structuring a branching passage needs a
+   graph of passages, not one centreline.
+
+**Not covered:**
+- **Uncertainty.** The section rays' uncertainty (5 cm, the voxel) is not calibrated.
+- **The tolerance.** It is a proposal for the owner.
+- **The branches** beyond the fork.
+- **The authors' own cloud-to-cloud analysis.** It is not compared with ours.
+- **The reconstruction itself.** It is the authors' photogrammetry, not ours, because the raw video
+  is not published.
