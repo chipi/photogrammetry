@@ -17,6 +17,7 @@ container).
 """
 
 import argparse
+import itertools
 import json
 import os
 import sys
@@ -49,6 +50,14 @@ VEG_SHARE = 0.3  # a LiDAR cell with more vegetation-class points than this is v
 ROUGH_M = 1.0
 FOOTPRINT_M = 40.0
 IOU_MATCH = 0.3
+# Neighbouring roof cells further apart in height than this belong to different buildings, so a
+# terrace of houses at different heights splits. Set on this site (1.5 m of 0.6, 1.0, 1.5 tried).
+ROOF_STEP_M = 1.5
+# The tolerance, fixed in the README before the OpenStreetMap check ran.
+TOL_MIN_AREA_M2 = 100.0
+TOL_IOU = 0.5
+TOL_DETECTED = 0.8
+OSM_IN_VIEW = 0.9  # an OSM building is compared when this share of it lies where the photos see
 
 
 def grid_stats(xy, z, lo, shape, extra=None, spread=False):
@@ -132,8 +141,9 @@ def tidy(mask, close=1):
     return np.nan_to_num(f) > 0.5
 
 
-def components(mask):
-    """4-connected components of a boolean grid, as lists of (i, j)."""
+def components(mask, h=None, step=None):
+    """4-connected components of a boolean grid, as lists of (i, j). With heights `h`, neighbours
+    more than `step` apart in height are not connected."""
     seen = np.zeros_like(mask)
     out = []
     for i0, j0 in zip(*np.nonzero(mask), strict=True):
@@ -151,6 +161,7 @@ def components(mask):
                     and 0 <= b < mask.shape[1]
                     and mask[a, b]
                     and not seen[a, b]
+                    and (h is None or not abs(h[a, b] - h[i, j]) > step)
                 ):
                     seen[a, b] = True
                     q.append((a, b))
@@ -164,19 +175,84 @@ def buildings(top, gnd, not_veg, inside=None):
     if inside is not None:
         mask &= inside
     found = []
-    for cells in components(mask):
+    for cells in components(mask, ndsm + gnd, ROOF_STEP_M):
         if len(cells) * CELL_M**2 < MIN_AREA_M2:
             continue
-        ii, jj = np.array(cells).T
-        found.append(
-            {
-                "cells": cells,
-                "area_m2": len(cells) * CELL_M**2,
-                "roof_m": float(np.nanmedian(top[ii, jj])),
-                "ground_m": float(np.nanmedian(gnd[ii, jj])),
-            }
-        )
+        found.append(prism(cells, top, gnd))
     return found, ndsm
+
+
+def prism(cells, top, gnd):
+    """One LOD1 building. Its roof is the median cell height; the roof's sigma is how far a single
+    height stands for the cells (1.4826 x their median absolute deviation)."""
+    ii, jj = np.array(cells).T
+    z = top[ii, jj]
+    roof = float(np.nanmedian(z))
+    return {
+        "cells": cells,
+        "area_m2": len(cells) * CELL_M**2,
+        "roof_m": roof,
+        "roof_sigma_m": float(1.4826 * np.nanmedian(np.abs(z - roof))),
+        "ground_m": float(np.nanmedian(gnd[ii, jj])),
+    }
+
+
+def polygon_cells(xy, lo, shape):
+    """Grid cells whose centre lies inside a closed outline (even-odd rule)."""
+    xy = np.asarray(xy, float)
+    i0, j0 = np.floor((xy.min(0) - lo) / CELL_M).astype(int)
+    i1, j1 = np.ceil((xy.max(0) - lo) / CELL_M).astype(int)
+    a0, a1, b0, b1 = max(i0, 0), min(i1, shape[0]), max(j0, 0), min(j1, shape[1])
+    if a1 <= a0 or b1 <= b0:
+        return []
+    ii, jj = np.mgrid[a0:a1, b0:b1]
+    px, py = lo[0] + (ii + 0.5) * CELL_M, lo[1] + (jj + 0.5) * CELL_M
+    inside = np.zeros(ii.shape, bool)
+    for (xa, ya), (xb, yb) in itertools.pairwise(xy):
+        if ya == yb:
+            continue
+        inside ^= ((ya > py) != (yb > py)) & (px < (xb - xa) * (py - ya) / (yb - ya) + xa)
+    return [(int(i), int(j)) for i, j in zip(ii[inside], jj[inside], strict=True)]
+
+
+def osm_reference(lo, shape, covered, ltop, lgnd):
+    """OpenStreetMap's footprints (fetch_osm.py) as reference buildings, heights from the LiDAR.
+    Only buildings almost wholly inside the photos' view are compared."""
+    path = RUN / "osm_buildings.json"
+    if not path.exists():
+        return None, 0
+    found, skipped = [], 0
+    for b in json.loads(path.read_text()):
+        cells = polygon_cells(b["xy"], lo, shape)
+        seen = [c for c in cells if covered[c]]
+        if not cells or len(seen) < OSM_IN_VIEW * len(cells):
+            skipped += 1
+            continue
+        found.append(prism(seen, ltop, lgnd) | {"osm_id": b["id"]})
+    return found, skipped
+
+
+def verdict(rows, model):
+    """The README's tolerance on reference buildings of 100 m2 or more."""
+    big = [r for r in rows if r["ref_area_m2"] >= TOL_MIN_AREA_M2]
+    passed = [r for r in big if r.get("iou", 0) >= TOL_IOU]
+    area_ok = height_ok = 0
+    for r in passed:
+        b = model[r["model"]]
+        sigma_area = boundary_cells(b["cells"]) * CELL_M * CELL_M / 2
+        area_ok += abs(r["model_area_m2"] - r["ref_area_m2"]) <= 2 * sigma_area
+        height_ok += abs(r["model_height_m"] - r["ref_height_m"]) <= 2 * b["roof_sigma_m"]
+    detected = len(passed) / len(big) if big else 0.0
+    return {
+        "reference_buildings": len(big),
+        "passed_iou": len(passed),
+        "detected_share": round(detected, 3),
+        "area_within_2sigma": area_ok,
+        "height_within_2sigma": height_ok,
+        "met": bool(
+            big and detected >= TOL_DETECTED and area_ok == len(passed) and height_ok == len(passed)
+        ),
+    }
 
 
 def label(found, shape):
@@ -194,7 +270,7 @@ def boundary_cells(cells):
 
 
 def match(model, ref):
-    """Each LiDAR building to the model building it overlaps most; IoU of the cell sets."""
+    """Each reference building to the model building it overlaps most; IoU of the cell sets."""
     owner = {}
     for k, b in enumerate(model):
         for c in b["cells"]:
@@ -206,7 +282,7 @@ def match(model, ref):
             if c in owner:
                 hits[owner[c]] = hits.get(owner[c], 0) + 1
         if not hits:
-            rows.append({"lidar": r_id, "model": None, "lidar_area_m2": r["area_m2"]})
+            rows.append({"ref": r_id, "model": None, "ref_area_m2": r["area_m2"]})
             continue
         k, inter = max(hits.items(), key=lambda kv: kv[1])
         union = len(r["cells"]) + len(model[k]["cells"]) - inter
@@ -214,21 +290,41 @@ def match(model, ref):
         used.add(k)
         rows.append(
             {
-                "lidar": r_id,
+                "ref": r_id,
                 "model": k,
                 "iou": round(iou, 3),
                 "matched": iou >= IOU_MATCH,
-                "lidar_area_m2": r["area_m2"],
+                "ref_area_m2": r["area_m2"],
                 "model_area_m2": model[k]["area_m2"],
                 "area_error_pct": round(
                     100 * (model[k]["area_m2"] - r["area_m2"]) / r["area_m2"], 1
                 ),
-                "lidar_height_m": round(r["roof_m"] - r["ground_m"], 2),
+                "ref_height_m": round(r["roof_m"] - r["ground_m"], 2),
                 "model_height_m": round(model[k]["roof_m"] - model[k]["ground_m"], 2),
             }
         )
     extra = [k for k in range(len(model)) if k not in used]
     return rows, extra
+
+
+def summary(model, ref):
+    rows, extra = match(model, ref)
+    matched = [r for r in rows if r.get("matched")]
+
+    def med(values, nd):
+        return round(float(np.median(values)), nd) if values else None
+
+    return {
+        "reference_buildings": len(ref),
+        "matched": len(matched),
+        "missed": sum(1 for r in rows if not r.get("matched")),
+        "extra": len(extra),
+        "iou_median": med([r["iou"] for r in matched], 3),
+        "area_error_pct_median": med([r["area_error_pct"] for r in matched], 1),
+        "height_error_m_median": med([r["model_height_m"] - r["ref_height_m"] for r in matched], 2),
+        "tolerance": verdict(rows, model),
+        "rows": rows,
+    }
 
 
 def main():
@@ -285,27 +381,13 @@ def main():
           f"compared {covered.sum()}")  # fmt: skip
     print(f"ground, model - LiDAR: median {np.nanmedian(gnd - lgnd):+.2f} m")
     print(f"buildings: model {len(model)}, LiDAR {len(ref)}")
-    rows, extra = match(model, ref)
-    matched = [r for r in rows if r.get("matched")]
-
-    def med(values, nd):
-        return round(float(np.median(values)), nd) if values else None
-
-    out = {
-        "cell_m": CELL_M,
-        "model_buildings": len(model),
-        "lidar_buildings": len(ref),
-        "matched": len(matched),
-        "missed": sum(1 for r in rows if not r.get("matched")),
-        "extra": len(extra),
-        "iou_median": med([r["iou"] for r in matched], 3),
-        "area_error_pct_median": med([r["area_error_pct"] for r in matched], 1),
-        "height_error_m_median": med(
-            [r["model_height_m"] - r["lidar_height_m"] for r in matched], 2
-        ),
-        "rows": rows,
-    }
-    print(json.dumps({k: v for k, v in out.items() if k != "rows"}, indent=1))
+    out = {"cell_m": CELL_M, "model_buildings": len(model), "lidar": summary(model, ref)}
+    osm, skipped = osm_reference(lo, shape, covered, ltop, lgnd)
+    if osm is not None:
+        out["osm"] = summary(model, osm) | {"partly_out_of_view": skipped}
+    for k in ("lidar", "osm"):
+        if k in out:
+            print(k, json.dumps({x: v for x, v in out[k].items() if x != "rows"}))
     (RUN / "check.json").write_text(json.dumps(out, indent=1))
     np.savez_compressed(
         RUN / "grids.npz", top=top, gnd=gnd, ltop=ltop, lgnd=lgnd, lo=lo, counts=counts,
@@ -357,8 +439,12 @@ def write_scene(model, top, gnd, seen, lo, model_dir, rec, n_points):
                     "z1": round(b["roof_m"], 2),
                 },
                 sigma_m=sigma_cell,
-                sigma_basis="half a cell on the footprint's edge; roof height not calibrated",
-                evidence={"cells": len(b["cells"]), "boundary_cells": nb},
+                sigma_basis="half a cell on the footprint edge; the roof spread is in evidence",
+                evidence={
+                    "cells": len(b["cells"]),
+                    "boundary_cells": nb,
+                    "roof_sigma_m": round(b["roof_sigma_m"], 2),
+                },
             )
         )
         measurements.append(

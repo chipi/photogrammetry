@@ -20,11 +20,11 @@ is recorded.
   ground reads 1.05 m low and 18 of 57 heights are within its stated 2σ; after one shift
   fitted on 7 control points, 50 of 50 check points are, std 0.27 m. The site has no
   buildings, so the footprint clause is not tested.
-- **Buildings:** built and checked on UseGeo against its LiDAR, from the providers' poses (our
-  own mapping bends on this flight). 92% of the model's building cells are LiDAR buildings; 26 of
-  35 buildings of 200 m² or more match (IoU ≥ 0.3, median 0.67). Footprints read a median 24%
-  small, and only 10 of 29 areas are within their stated 2σ. The LiDAR reference still counts
-  tree crowns as buildings.
+- **Buildings:** built and checked on UseGeo, from the providers' poses (our own mapping bends
+  on this flight), against a tolerance fixed beforehand. Not met: against OpenStreetMap, 31 of 49
+  buildings pass IoU 0.5 (80% needed) and 18 of 31 areas are within their stated 2σ; heights are
+  within 2σ for 29 of 31. Every mapped building is found; merged neighbours and roof-versus-wall
+  outlines fail it.
 - **Cave:** built and checked on the authors' photogrammetric cloud. On covered sections, 11 of 17
   widths and heights are within 2% or 5 cm (a proposed tolerance), median −0.9 cm, p95 12 cm. The
   fork is marked unknown.
@@ -39,7 +39,8 @@ is recorded.
 | `drone/build_drone.py` | Drone segment: RC-P8's drone model to a terrain grid, then the grid against the survey points. Runs in RC-P1's environment (pycolmap) |
 | `buildings/reconstruct.py` | Buildings segment: UseGeo features and matches, triangulated from the given poses. Runs in RC-P1's environment |
 | `buildings/run_dense.sh` | Dense depth and fusion in RC-P2's HIP container on the X3 |
-| `buildings/build_buildings.py` | The dense cloud to terrain and LOD1 buildings, then the same rule on the LiDAR. Runs in RC-P1's environment |
+| `buildings/fetch_osm.py` | OpenStreetMap's building outlines over the site, in a throwaway container with pyproj |
+| `buildings/build_buildings.py` | The dense cloud to terrain and LOD1 buildings, checked against OpenStreetMap and the LiDAR rule. Runs in RC-P1's environment |
 | `adapters/blender/build.py` | The Blender adapter: a scene to `.blend`, `.glb` (with the tags as glTF extras), a plan and perspective renders. Blender 4.5.17 LTS, headless |
 
 Outputs go to `$RECCE_DATA_DIR/runs/p13/<segment>/<id>/`.
@@ -289,37 +290,45 @@ LiDAR lacks.
 - **The reconstruction itself.** It is the authors' photogrammetry, not ours, because the raw video
   is not published.
 
-## Buildings segment (UseGeo Dataset-1, LiDAR reference)
+## Buildings segment (UseGeo Dataset-1, OpenStreetMap and LiDAR references)
 
 **Data.** UseGeo, Dataset-1 (FBK 3DOM and partners, CC BY-NC-SA 4.0, so internal prototypes
-only): 224 nadir photos, 7952 × 5304, DxO-undistorted, over the edge of a town (houses, roads,
-fields). The providers give the interior orientation (c 4636.912 px), an exterior orientation per
-photo in UTM from their own adjustment, their tie points, and a LiDAR flight (LAS 1.4, 105.9 M
-points; class 4 is vegetation, the rest is mostly unclassified). The LAS goes to numpy with laspy
-in a throwaway container; outliers reach −225 m and +215 m around a site near 190 m and are cut at
+only): 224 nadir photos, 7952 × 5304, DxO-undistorted, over the edge of a town in southern
+Sardinia (UTM zone 32N; the files carry no coordinate system, and zone 33 puts the site in the
+sea). The providers give the interior orientation (c 4636.912 px), an exterior orientation per
+photo from their own adjustment, their tie points, and a LiDAR flight (LAS 1.4, 105.9 M points;
+class 4 is vegetation, the rest mostly unclassified). The LAS goes to numpy with laspy in a
+throwaway container; outliers reach −225 m and +215 m around a site near 190 m and are cut at
 ±80 m from the median.
+- **Reference 1, OpenStreetMap:** the building outlines over the site (111 ways, ODbL), fetched
+  into the run directory by `buildings/fetch_osm.py` in a throwaway container with pyproj; never
+  committed. They line up with the LiDAR: a shift search finds the best fit within 1 m of none.
+- **Reference 2, the LiDAR:** through the model's own footprint rule (below). It has no building
+  class, so it is a second check, not the main one.
 
 **What the scripts do:**
 - **`buildings/reconstruct.py`:** SIFT features (3,200 px, 16,000 per photo) and exhaustive
   matching with pycolmap, then the points triangulated from the providers' poses (`--poses given`,
-  the default). `--poses mapped` runs the incremental mapper with the positions as pose priors
-  instead; on this flight it fails (iteration 1).
+  the default). `--poses mapped` runs the incremental mapper with the positions as pose priors;
+  on this flight it fails (iteration 1).
 - **`buildings/run_dense.sh`:** dense depth and fusion in RC-P2's HIP container on the X3, from the
   given-pose model at 1000 px: 2 h 42 min of patch-match, 3,280,739 fused points.
 - **`buildings/build_buildings.py`:** the city model at its simplest level (CityGML LOD1).
   - **Grid:** 1 m cells; the surface is the 90th-percentile height of a cell's points.
   - **Ground:** a 30 m morphological opening of the surface, after a 3 × 3 median.
-  - **Buildings:** connected cells more than 2.5 m above the ground and not green (excess green
-    of the photos' colour ≤ 0.06), at least 20 m². One-cell gaps are closed and one-cell specks
-    opened away.
-  - **The reference:** the LiDAR through the same rule. Its vegetation is the class-4 share
-    (> 0.3) or a canopy: a cell whose LiDAR heights spread more than 1 m (10th to 90th
-    percentile), together with all eight neighbours.
-  - **The check:** only where the photos give a surface; each LiDAR building is matched to the
-    model building it overlaps most, and matched when the IoU is 0.3 or more.
-  - **The scene:** terrain as an inferred height grid, each building a measured prism (footprint
-    cells, ground and roof height) with its area as a measurement. The Blender adapter's `prism`
-    builder extrudes them.
+  - **Buildings:** cells more than 2.5 m above the ground and not green (excess green ≤ 0.06),
+    one-cell gaps closed and specks opened away, connected where neighbouring roof heights differ
+    by 1.5 m or less, at least 20 m².
+  - **Each building:** a measured prism (footprint cells, ground, roof as the median cell height).
+    The area's σ is half a cell on each edge cell; the roof's σ is its cells' spread (1.4826 ×
+    median absolute deviation).
+  - **The LiDAR rule:** the same, with vegetation from the class-4 share (> 0.3) or a canopy (a
+    cell whose LiDAR heights spread more than 1 m, 10th to 90th percentile, with all eight
+    neighbours).
+  - **The check:** where the photos give a surface; each reference building against the model
+    building it overlaps most. OpenStreetMap buildings less than 90% in view are left out (50).
+  - **The scene:** terrain as an inferred height grid, buildings as measured prisms with their
+    areas as measurements. The Blender adapter's `prism` builder extrudes them.
 
 **Tolerance (fixed on 2026-11-26, before any check against a clean reference).** The brief names
 control points for footprints; this flight has none, so the owner agreed that a tolerance is set
@@ -334,20 +343,23 @@ within the area the photos cover:
 The segment's clause is met when all four hold. The reference is the OpenStreetMap building
 footprints for the site; the LiDAR rule stays as a second, independent check.
 
-**Against the LiDAR (133,990 compared cells):**
+**Result: not met.**
 
-| Quantity | Result |
-|---|---|
-| Ground, model − LiDAR | median +0.30 m |
-| Building cells: model's that are LiDAR buildings | 18,351 of 19,952 (92%) |
-| Building cells: LiDAR's that the model has | 18,351 of 29,749 (62%) |
-| Buildings, model / LiDAR | 55 / 90 |
-| Matched (IoU ≥ 0.3) | 29 of 90; of the 35 LiDAR buildings of 200 m² or more, 26 |
-| IoU of matched buildings | median 0.67, range 0.32–0.94 |
-| Area of matched buildings | median −24% |
-| Height of matched buildings | signed median +0.10 m, absolute median 0.34 m, p90 2.14 m |
-| Matched areas within the stated 2σ | 10 of 29 |
-| Model buildings with no LiDAR building cell | 3 (26, 27 and 195 m²) |
+| Against | Buildings of 100 m² or more | IoU ≥ 0.5 | Areas within 2σ | Heights within 2σ |
+|---|---|---|---|---|
+| OpenStreetMap | 49 | 31 (63%; 80% needed) | 18 of 31 | 29 of 31 |
+| LiDAR rule | 77 | 35 (45%) | 23 of 35 | 34 of 35 |
+
+| Quantity | Against OpenStreetMap | Against the LiDAR rule |
+|---|---|---|
+| Reference buildings compared | 61 | 156 |
+| Matched at IoU ≥ 0.3 | 45, IoU median 0.62 | 55, IoU median 0.64 |
+| Area of matched, median | +14% | −5% |
+| Height of matched, median | +0.09 m | +0.13 m |
+| Reference cells the model has | 79% | — |
+| Model cells inside the reference | 68% | — |
+
+The ground reads +0.30 m against the LiDAR's (median). The model has 65 buildings.
 
 **Agent iterations:**
 1. **The mapped model was bent.** The incremental mapper with the given positions as 5 cm priors
@@ -362,35 +374,44 @@ footprints for the site; the LiDAR rule stays as a second, independent check.
    opening. Fix: a 3 × 3 median before it.
 3. **The LiDAR called trees buildings.** Two thirds of the LiDAR-only building cells were green in
    the photos; the vegetation class misses many trees. A component rule (median spread over a
-   building) threw out houses joined to trees; the per-cell canopy rule above keeps them.
+   building) threw out houses joined to trees; the per-cell canopy rule keeps them.
 4. **Roofs had holes.** The sparse points (about 4 per m²) covered 38% of the LiDAR's building
-   cells; closing wider gaps (up to 8 m) reached 50% and merged houses. Fix: the dense cloud,
-   62%.
+   cells; closing wider gaps reached 50% and merged houses. Fix: the dense cloud, 62%.
+5. **The LiDAR reference was not clean enough to judge by.** Against it, footprints read 24%
+   small and only 10 of 29 areas sat within 2σ; 45 of its 55 buildings under 200 m² were green
+   tree crowns. Fix: the tolerance was fixed and recorded (f414c06), then OpenStreetMap became the
+   reference. Against it the model's footprints read larger, not smaller, and only 51% of the
+   LiDAR rule's building cells lie inside a mapped building, against 68% of the model's.
+6. **Neighbouring houses merged.** Against OpenStreetMap, 11 of the 21 failures were one model
+   building spanning several mapped houses. Fix: neighbours more than 1.5 m apart in roof height
+   are separate buildings (0.6, 1.0 and 1.5 m tried; 1.5 m passes most). Passing buildings rose
+   from 28 to 31 of 49, areas within 2σ from 13 to 18.
 
 **Findings:**
-1. **Buildings are found where they are.** 92% of the model's building cells are LiDAR building
-   cells, and 26 of 35 buildings of 200 m² or more match, median IoU 0.67, roof heights within
-   0.34 m (median).
-2. **The footprints are too small, and the stated uncertainty does not say so.** Matched areas
-   read a median 24% small; the model covers a median 73% of each large LiDAR footprint, and the
-   missing part is at the edges. Only 10 of 29 areas are within the stated 2σ (half a cell on
-   each edge). As in the drone segment, the model claims more than it knows. Without the 3 × 3
-   median the error grows to −31%, so the smoothing is not the cause; the cause is not found.
-3. **The reference is not clean.** Of the 55 LiDAR "buildings" under 200 m², 45 are green in the
-   photos (median excess green 0.15): tree crowns that pass both the vegetation class and the
-   canopy rule. The model rejects them, and each counts as missed. The 29 of 90 matched is
-   therefore a floor, not a measure of recall.
-4. **Our own reconstruction fails on this flight.** The structure is built on the providers'
+1. **Every mapped building is found, and heights are right.** Each of the 49 OpenStreetMap
+   buildings of 100 m² or more overlaps a model building; heights are within their stated 2σ for
+   29 of 31, median +0.09 m.
+2. **Outlines fail the tolerance.** 31 of 49 pass IoU 0.5 (63%, 80% needed). Of the 18 that fail,
+   7 are houses merged with a neighbour at nearly the same roof height, and 11 are one-to-one
+   with an IoU of 0.21–0.49 (9 of them 0.41 or more).
+3. **Nadir photos see roofs, maps draw walls.** Passing buildings read a median 19% larger than
+   their mapped outline. Eaves overhanging the walls would do that; it is not checked. A
+   footprint from nadir photos is a roof outline, and the model does not say so.
+4. **The stated area σ is too small.** 18 of 31 passing areas are within 2σ. Half a cell per edge
+   cell covers the grid, not the roof-to-wall difference or a wrong split.
+5. **Our own reconstruction fails on this flight.** The structure is built on the providers'
    poses, as the cave segment is built on the authors' cloud. Why the mapper bends a nadir block
    with 5 cm priors is open; it belongs to RC-P8 and RC-P1.
 
 **Not covered:**
-- **A clean building reference.** The LiDAR has no building class; a cadastral or mapped
-  footprint set would give recall without trees in it.
-- **The footprint undersize's cause.** Eaves, walls caught in edge cells, and the 1 m cell are
-  candidates; none is tested.
-- **The height uncertainty.** The roof height carries none; it is not calibrated.
+- **Splitting houses of one height.** Terraced houses under one roof level stay one building;
+  splitting them needs roof lines or the map itself.
+- **The roof-to-wall offset.** No eaves model and no oblique views; the cause of the +19% is not
+  tested.
+- **OpenStreetMap's own accuracy.** Its outlines are taken as truth; their source (survey,
+  cadastre or tracing) is not checked, and buildings missing from the map count as extra.
+- **The roof σ.** It is the roof's spread, not calibrated against a reference.
 - **Roof shape.** LOD1 only: one height per building.
-- **Our poses.** See finding 4.
-- **The rules were tuned here.** The canopy threshold (1 m) and the gap closing were set on this
-  set, against this reference; no second site checks them.
+- **Our poses.** See finding 5.
+- **The rules were tuned here.** The canopy threshold (1 m), the gap closing and the 1.5 m roof
+  step were set on this site, against these references; no second site checks them.
