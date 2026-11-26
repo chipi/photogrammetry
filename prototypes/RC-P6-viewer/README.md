@@ -7,18 +7,24 @@ iPhone. See the [brief](../../docs/concept/RC-brief.md) §5.
 three.js scene from the result's files, render at 60 fps or more on the M4 Pro and 30 fps or more on
 the iPhone 15 Pro *(agreed 2026-11-24)*, and the same result also exports to Rerun as the engineering view.
 
-Status: **not proven yet; the iPhone clause is met.**
+Status: **proven (2026-11-26).** The M4 Pro readings sit at the display's 60 Hz ceiling (58.8 to
+60.0 fps); the owner judged that this meets the 60 fps clause.
 - **Workstation:** the page loads the RC-P4 courtyard mesh and a 1,000,000-gaussian splat together
   from files and renders them at 59.9 fps (display-limited) on this machine's iGPU in Chromium.
 - **Rerun:** the export is written and verified with Rerun's own CLI.
 - **iPhone 15 Pro:** the owner measured 50.0 fps (median of 240 frames) on 2026-11-26, against the
   30 fps target (see "On the devices").
-- **Left:** the M4 Pro clause (60 fps) is still the owner's to measure; see "To measure by the owner".
+- **M4 Pro:** the owner measured 60.0, 59.9 (Chrome) and 58.8 fps (Safari), medians of 240
+  frames at `dpr` 1 on a 60 Hz display, on 2026-11-26. A display caps `requestAnimationFrame` at
+  its refresh rate, so these readings show the ceiling, not the headroom under it.
 
 ## On the devices
 
 | Device | Browser | URL parameters | fps median (window of 240) | Loaded | Measured by |
 |---|---|---|---|---|---|
+| M4 Pro | Not named by the owner (the first reading) | `auto=1`, `dpr` 1 | 60.0 | 1,000,000 gaussians, 463,017 faces, 115 atlases | Owner, 2026-11-26, screenshot |
+| M4 Pro | Chrome | `auto=1`, `dpr` 1 | 59.9 | same | Owner, 2026-11-26, screenshot |
+| M4 Pro | Safari | `auto=1`, `dpr` 1 | 58.8 | same | Owner, 2026-11-26, screenshot |
 | iPhone 15 Pro | Firefox for iOS (WebKit, as every iOS browser) | `auto=1&maxtex=1024`, `dpr` 2 | 50.0 at 09:06, 55.6 at 09:08 (one session; the server log shows no reload between) | 1,000,000 gaussians, 463,017 faces, 115 atlases | Owner, 2026-11-26, two screenshots |
 
 **First attempt on the iPhone.** The page first stopped at "EncodingError: Loading error."
@@ -187,7 +193,8 @@ logging the texture.
 
 ### To measure by the owner
 
-M4 Pro (60 fps or more): not measured. iPhone 15 Pro (30 fps or more): 50.0 fps, measured 2026-11-26.
+M4 Pro (60 fps or more): 58.8 to 60.0 fps, measured 2026-11-26, met by the owner's judgement.
+iPhone 15 Pro (30 fps or more): 50.0 fps, measured 2026-11-26.
 
 1. On this machine run `./serve.sh` (it stays in the foreground). This machine is `omarchy` on the
    tailnet, `100.92.54.65`.
@@ -211,9 +218,13 @@ M4 Pro (60 fps or more): not measured. iPhone 15 Pro (30 fps or more): 50.0 fps,
 
 ## Not covered
 
-- **The M4 Pro frame rate**, the one device clause left. The iPhone ran one session in one
-  browser (Firefox for iOS), at `maxtex=1024`, with the iOS version unrecorded; Safari on the Mac
-  and on the iPhone was not run. Thermal behaviour over a longer session was not watched.
+- **Headroom on the M4 Pro.** Its readings are capped by a 60 Hz display at `dpr` 1; frame time
+  under the cap, the minimum fps (`p6Stats.fps_min`) and a Retina canvas (`dpr` 2) are not
+  measured. Safari read 58.8, 2% under the ceiling; whether those frames were late from the GPU
+  or the display timing is not checked.
+- **The iPhone** ran one session in one browser (Firefox for iOS), at `maxtex=1024`, with the iOS
+  version unrecorded; Safari on the iPhone was not run. Thermal behaviour over a longer session
+  was not watched on either device.
 - **A real display on the workstation.** Its measurements are headless; presentation, vsync and thermal throttling
   are unmeasured, and so is frame time on a 4K or retina canvas beyond one early run.
 - **Visual quality.** The splat is RC-P4's courtyard splat (18.21 dB held-out PSNR, built on poses
