@@ -1,6 +1,6 @@
 # RC-01 — Vision
 
-**Version:** 0.6 · Draft
+**Version:** 0.7 · Draft
 **Date:** 2026-11-27
 **Inputs:** [brief](RC-brief.md) · [Step 0 close-out report](../wip/step0-closeout-2026-11-27.md) ·
 [architecture sketch](RC-architecture-sketch.md) · [use cases](RC-use-cases.md) ·
@@ -119,6 +119,18 @@ earned it, its scores on the scenes it was tested on. Recce proposes a recipe fr
 (the camera, the photographs, the priors, the kind of mission) and says why; the person can keep
 it, change it or bring their own. The recipes and corrections learned from a person's own
 cameras and captures are theirs.
+
+**A workflow is how the person works.** Not every mission needs every step. A GoPro's JPEGs can
+go straight in as they are; a D850's RAW files go through the darkroom first; a careful person
+stops to look at the develop panel before anything is matched, and someone in a hurry sends
+everything to the full pass the moment the gaps are closed. A workflow is the chain of steps a
+project runs, in the person's order: which steps are in, which are skipped, where Recce pauses
+for a look or an approval, where the full pass goes. The person builds it on a canvas, saves it,
+and keeps different workflows for different kinds of project; Recce proposes one for a new
+mission, with a recipe filling in each step's settings. A workflow can change in the middle of a
+mission: add the darkroom after the first leg shows the colour is off, and only the steps after
+the change run again. The workflow says what happens; the recipe says how well each step is
+tuned.
 
 **The full pass runs where the power is, and every case has some.** Dense geometry, the mesh,
 the texture and the splat need a CUDA or HIP GPU and hours of it. Recce finds that power wherever

@@ -322,6 +322,11 @@ plain to anyone who knows the field:
   saves presets. Recce's own presets are learned by evaluation across scenes; together with the
   rest of a capture type's choices they form the recipes.
 
+- **Workflows are the person's** *(owner, 2026-11-27)*: a project runs as a workflow, the chain
+  of steps in the person's order (input, develop or not, preview, full pass, hand-over, pauses
+  for review). People define their own, save several for different kinds of project, and change
+  one during a mission; Recce proposes one, and a recipe fills in each step's settings.
+
 - **Both: Recce Studio on the desktop, and the web** *(owner, 2026-11-27)*. The Studio is the web application packaged with the local engine in Electron, for macOS and Windows (Linux too); it does all RAW processing locally and sends only what the model needs. Recorded in [RC-01](RC-01-vision.md).
 
 ### Open from the start

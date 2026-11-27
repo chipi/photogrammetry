@@ -216,6 +216,14 @@ stages:
   colour:    { impl: colour/range-aware }
 ```
 
+*Workflows* *(owner, 2026-11-27)*. Above the recipe sits the person's workflow: which of these
+stages a project runs and in what order, which are skipped (a GoPro's JPEGs need no develop),
+where the run pauses for review or approval (the develop panel, a rented GPU), and where each pass
+runs. A workflow is saved, reused per kind of project and edited during a mission; since every
+stage's output is content-addressed, an edit re-runs only the stages downstream of it. The
+recipe fills each stage of a workflow with its implementation and parameters. RC-M4's recipe
+graph is the first picture of this canvas.
+
 *Three levels of control.* Automatic (the engine picks), recipe (the owner picks a named
 strategy), expert (any parameter). The UI leads with the first two and keeps the third one
 disclosure away; the API and MCP expose all three.
