@@ -67,7 +67,7 @@ underwater sets published with Sea-thru and SeaThru-NeRF).
 
 *Vision sentence under consideration* (from the 2026-11-23 review): "A reconstruction engine that
 always says what it knows and what it does not — scale, frame, coverage, uncertainty — so that a
-person, a robot or an agent can decide what to capture next, above water and below."
+person, a robot or an agent can decide what to capture next, above water and below." The vision as written after Step 0 is in [RC-01 Vision](RC-01-vision.md) (2026-11-27).
 
 ## 1. What it is
 

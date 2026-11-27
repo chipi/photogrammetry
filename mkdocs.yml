@@ -58,6 +58,7 @@ nav:
   - Home: index.md
   - Concept:
       - concept/index.md
+      - RC-01 Vision: concept/RC-01-vision.md
       - Brief: concept/RC-brief.md
       - Architecture sketch: concept/RC-architecture-sketch.md
       - Use cases: concept/RC-use-cases.md
