@@ -145,7 +145,7 @@ re-runs only what depends on it (Meshroom's node graph works this way). Each sta
 | Stage | Job | Default candidates (permissive) | Optional plug-ins | Runs best on |
 |---|---|---|---|---|
 | **Ingest** | Read files, metadata and priors; validate capture sets | rawpy/LibRaw (NEF, ARW, DNG), pillow-heif (HEIC), PyAV/ffmpeg (video), exiftool (EXIF/XMP), gpmf-parser (GoPro), robot manifest reader | — | Any, CPU |
-| **Develop** | Decode RAW to linear, set-wide white balance, exposure and tone matching | Own minimal pipeline on rawpy + numpy | darktable CLI (GPL; external tool) | Any; CPU or GPU array ops |
+| **Develop** | Decode RAW to linear, lens correction, set-wide white balance, exposure, tone and colour matching; presets *(its own module, owner, 2026-11-27)* | Own pipeline over third-party libraries: rawpy + numpy today (RC-P5); lens correction and colour libraries to evaluate | darktable CLI (GPL; external tool) | Any; CPU or GPU array ops |
 | **Frame select** | Pick sharp, well-spaced frames from video | Sharpness and overlap scoring, own code | — | Any |
 | **Mask** | Separate object from background | SAM 2 (Apache-2.0) | SAM 3 (custom licence, CUDA 12.6+), rembg | GPU: GB10, M4 (MPS), X3 |
 | **Features** | Keypoints and descriptors per image | COLMAP SIFT; ALIKED | SuperPoint (restrictive weights) | Fan-out across all machines |
@@ -428,7 +428,10 @@ Recommendations for the prototypes to confirm, not locked decisions.
 6. Which stages actually run on Metal and ROCm today, and which fall back to CPU (RC-P1, RC-P2).
 7. Texturing: which permissive implementation is good enough, or whether texturing is built.
 8. Refraction: adopt Refractive COLMAP (New BSD; a separate C++ build without Python bindings, not merged upstream) or implement a refractive camera model.
-9. The develop step: own pipeline or darktable (RC-P5).
+9. The develop step: own pipeline or darktable (RC-P5 chose the minimal rawpy route). Now its own
+    module *(owner, 2026-11-27)*, usable and testable alone: which libraries for lens correction
+    (lens profiles from a database, or the calibration the reconstruction already solves) and colour;
+    the preset format; how presets are evaluated across scenes and turned into recipes.
 10. The UI's 3D stack — leaning: one three.js scene (section 9). Open: which splat renderer, and
     the LOD format for large clouds.
 11. Capture advice — leaning: layered (section 9). Open: how a viewpoint is computed

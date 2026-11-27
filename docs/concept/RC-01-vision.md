@@ -1,6 +1,6 @@
 # RC-01 — Vision
 
-**Version:** 0.5 · Draft
+**Version:** 0.6 · Draft
 **Date:** 2026-11-27
 **Inputs:** [brief](RC-brief.md) · [Step 0 close-out report](../wip/step0-closeout-2026-11-27.md) ·
 [architecture sketch](RC-architecture-sketch.md) · [use cases](RC-use-cases.md) ·
@@ -101,6 +101,24 @@ camera. That is what the Studio is for, beyond showing the preview: by the time 
 the laptop, it is only what the model needs, the working images at the resolution the full pass
 uses and the camera solution. A transfer that would take a hotel uplink most of a day takes
 minutes to an hour. The originals never leave the person's disk.
+
+**A darkroom in the Studio.** Developing the photographs is its own craft, and Recce treats it as
+one: the RAW decoded, the lens corrected, white balance, exposure, tone and colour made to agree
+across the whole set, the way a photographer would in Lightroom, but for a reconstruction rather
+than a print. The person can open the develop panel, tune it and save what they like as a
+preset. Recce ships its own presets too, and those are not guesses: they come out of evaluation,
+the same develop settings tried on many scenes with known answers and kept where the models came
+out better (more photographs placed, colour that holds across seams, texture that stays sharp). A
+preset learned on a reef is different from one learned on a white-walled flat, and Recce says
+which it chose and why.
+
+**A recipe is how Recce remembers what works.** A recipe is a named, versioned set of choices
+for a kind of mission: the develop preset, the lens and camera model, how photographs are
+matched and placed, how the full pass builds the surface and the splat, and the evidence that
+earned it, its scores on the scenes it was tested on. Recce proposes a recipe from what it sees
+(the camera, the photographs, the priors, the kind of mission) and says why; the person can keep
+it, change it or bring their own. The recipes and corrections learned from a person's own
+cameras and captures are theirs.
 
 **The full pass runs where the power is, and every case has some.** Dense geometry, the mesh,
 the texture and the splat need a CUDA or HIP GPU and hours of it. Recce finds that power wherever
@@ -275,4 +293,6 @@ they capture with their own software, and Recce tells them what is missing. Not 
 - **What the full pass needs sent,** and when the originals have to travel (full-detail texture,
   colour corrected by range underwater).
 - **Renting.** Which providers first, and how data reaches them.
+- **The develop module.** Which libraries for lens correction and colour, and how presets are
+  evaluated across scenes; its own prototypes.
 - **A Mac running the full pass itself,** or always sending it out.
