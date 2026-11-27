@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recce Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 15px; --fs-xl: 18px; --fs-2xl: 24px;
+  --r-1: 4px; --r-2: 6px; --r-3: 8px; --r-pill: 999px;
+  --ui: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace; --read: "IBM Plex Serif", Georgia, serif;
+  --bg-app: #0b0d10; --bg-panel: #111419; --bg-raised: #161a21; --bg-field: #1b2029; --bg-hover: #212734;
+  --border: #212733; --border-strong: #2c3442;
+  --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
+  --accent: #7cc4ff; --accent-soft: rgba(124,196,255,.16); --new: #ffb36b; --truth: #5ee0a0; --warn: #ffcf5c; --error: #ff7a7a;
+  --water: #4fd1c5; --water-soft: rgba(79,209,197,.10); --ai: #c9a2ff;
+  --ok-ink: var(--truth); --fail-ink: var(--error); --cap-ink: var(--warn);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
+  --border: #dde1e7; --border-strong: #c9cfd8;
+  --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
+  --accent: #1f7ad6; --accent-soft: rgba(31,122,214,.14); --new: #d9711c; --truth: #18a865; --warn: #8a5a00; --error: #d23b3b;
+  --water: #0f8a80; --water-soft: rgba(15,138,128,.10); --ai: #7a3fc4;
+  --ok-ink: #0a7142; --fail-ink: #b42323; --cap-ink: #7a5000;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg-app); color: var(--text); font: var(--fs-md)/1.45 var(--ui); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+a { color: var(--accent); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; gap: var(--sp-3); height: 48px; padding: 0 var(--sp-4); background: var(--bg-panel); border-bottom: 1px solid var(--border); }
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; }
+.brand i { width: 14px; height: 14px; border-radius: 4px; background: linear-gradient(135deg, var(--accent), var(--truth)); }
+.crumb { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.grow { flex: 1; }
+.seg { display: inline-flex; background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-3); padding: 2px; flex: none; }
+.seg button { height: 26px; padding: 0 var(--sp-3); border: 0; border-radius: var(--r-2); background: transparent; color: var(--text-dim); cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text); box-shadow: 0 0 0 1px var(--border-strong); }
+.seg.ai button[aria-pressed="true"][data-v="1"] { color: var(--ai); }
+.iconbtn { height: 28px; padding: 0 var(--sp-3); border-radius: var(--r-2); border: 1px solid var(--border); background: var(--bg-field); cursor: pointer; color: var(--text-dim); flex: none; }
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--sp-8); max-width: 1320px; margin: 0 auto; padding: var(--sp-6) var(--sp-4) var(--sp-8); }
+nav.toc { position: sticky; top: 72px; align-self: start; display: grid; gap: 2px; }
+nav.toc .h { font-size: var(--fs-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint); margin: 0 0 var(--sp-2); }
+nav.toc a { display: grid; grid-template-columns: 22px 1fr; gap: var(--sp-2); padding: 6px var(--sp-2); border-radius: var(--r-2); color: var(--text-dim); text-decoration: none; }
+nav.toc a:hover { background: var(--bg-hover); color: var(--text); }
+nav.toc a b { font: 500 var(--fs-xs)/20px var(--mono); color: var(--text-faint); }
+nav.toc p { font-size: var(--fs-sm); color: var(--text-faint); margin: var(--sp-4) 0 0; }
+.intro { max-width: 68ch; margin-bottom: var(--sp-6); }
+.intro h1 { font: 500 var(--fs-2xl)/1.25 var(--ui); margin: 0 0 var(--sp-2); text-wrap: balance; }
+.intro p { font: var(--fs-lg)/1.6 var(--read); color: var(--text-dim); margin: 0; }
+.lab { border-top: 1px solid var(--border); padding: var(--sp-6) 0 var(--sp-8); scroll-margin-top: 64px; }
+.lab > header { display: flex; align-items: baseline; gap: var(--sp-3); flex-wrap: wrap; }
+.lab > header .n { font: 500 var(--fs-sm) var(--mono); color: var(--text-faint); }
+.lab h2 { font: 500 var(--fs-xl)/1.3 var(--ui); margin: 0; text-wrap: balance; }
+.lab > header a { font-size: var(--fs-sm); }
+.lab .read { font: var(--fs-lg)/1.6 var(--read); max-width: 68ch; margin: var(--sp-2) 0 var(--sp-4); }
+.lab .read .eq { font-family: var(--mono); font-size: var(--fs-md); white-space: nowrap; }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--sp-4); align-items: start; }
+figure { margin: 0; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--r-3); overflow: hidden; min-width: 0; }
+figure canvas { display: block; width: 100%; height: 300px; }
+.ctl { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3) var(--sp-5); padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--border); }
+.ctl label { display: grid; gap: 4px; font-size: var(--fs-sm); color: var(--text-dim); }
+.ctl label span { display: flex; justify-content: space-between; gap: var(--sp-2); }
+.ctl label b { font: 500 var(--fs-sm) var(--mono); color: var(--text); }
+.ctl input { width: 100%; accent-color: var(--accent); }
+.out { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--border); background: var(--bg-raised); }
+.out div { display: grid; gap: 2px; }
+.out small { font-size: var(--fs-xs); color: var(--text-faint); }
+.out b { font: 500 var(--fs-md) var(--mono); }
+.cap { font-size: var(--fs-xs); color: var(--text-faint); padding: 0 var(--sp-4) var(--sp-3); background: var(--bg-raised); }
+.tutor { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--r-3); padding: var(--sp-4); display: grid; gap: var(--sp-3); min-width: 0; }
+.tutor h3 { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); margin: 0; font: 500 var(--fs-xs) var(--ui); letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint); }
+.tutor .k { font-size: var(--fs-xs); letter-spacing: .04em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 2px; }
+.tutor p { margin: 0; line-height: 1.5; }
+.tutor .dim { color: var(--text-dim); font-size: var(--fs-sm); }
+.tutor ol { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--sp-3); counter-reset: s; }
+.tutor li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 2px var(--sp-2); counter-increment: s; }
+.tutor li::before { content: counter(s); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 500 var(--fs-xs) var(--mono); background: var(--bg-field); border: 1px solid var(--border-strong); }
+.tutor li > div { display: grid; gap: 4px; min-width: 0; }
+.row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.cchip { display: inline-flex; align-items: center; height: 22px; padding: 0 10px; border-radius: var(--r-pill); font-size: var(--fs-xs); border: 1px solid var(--border-strong); color: var(--text-dim); white-space: nowrap; letter-spacing: 0; text-transform: none; }
+.cchip.ai { border-color: var(--ai); color: var(--ai); }
+.cchip.ok { border-color: var(--ok-ink); color: var(--ok-ink); }
+.cchip.fail { border-color: var(--fail-ink); color: var(--fail-ink); }
+.cchip.cap { border-color: var(--cap-ink); color: var(--cap-ink); }
+.cchip.eng { border-color: var(--water); color: var(--water); }
+button.go { height: 22px; padding: 0 10px; border-radius: var(--r-pill); border: 1px solid var(--accent); background: transparent; color: var(--accent); font-size: var(--fs-xs); cursor: pointer; }
+button.go:hover { background: var(--accent-soft); }
+.tutor details { border-top: 1px solid var(--border); padding-top: var(--sp-2); }
+.tutor summary { cursor: pointer; color: var(--text-dim); font-size: var(--fs-sm); }
+.tutor details p { margin-top: var(--sp-2); font-size: var(--fs-sm); }
+.stale { font-size: var(--fs-sm); color: var(--cap-ink); display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.unbacked { text-decoration: underline wavy var(--fail-ink); text-underline-offset: 3px; }
+.foot { font-size: var(--fs-xs); color: var(--text-faint); }
+.status { display: flex; gap: var(--sp-5); flex-wrap: wrap; padding: 6px var(--sp-4); border-top: 1px solid var(--border); background: var(--bg-panel); font-size: var(--fs-xs); color: var(--text-faint); }
+@media (max-width: 1100px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } nav.toc { display: none; } .crumb { display: none; } }
+@media (max-width: 520px) { .ctl { grid-template-columns: 1fr; } figure canvas { height: 240px; } .top { gap: var(--sp-2); } .seg button { padding: 0 var(--sp-2); } }
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand"><i></i>Recce</span>
+  <span class="crumb">Learn · mini-labs beside the primer</span>
+  <span class="grow"></span>
+  <div class="seg ai" id="ai-seg" title="Recce is complete without AI; the person's own AI is opt-in"><button data-v="0" aria-pressed="true">No AI</button><button data-v="1" aria-pressed="false">AI connected</button></div>
+  <button class="iconbtn" id="theme" title="Light or dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="toc" id="toc"><div class="h">Labs</div></nav>
+  <main>
+    <div class="intro">
+      <h1>Five ideas from the primer, by touch</h1>
+      <p>Each lab sits beside a term of the photogrammetry primer and has one or two controls. Everything is synthetic by design: the numbers come from the formula or the small simulation named under each figure, so the lab shows the idea, not a measurement. A tutor says what you are looking at, why, and what to try next.</p>
+    </div>
+    <div id="labs"></div>
+  </main>
+</div>
+<div class="status"><span>Mock-up RC-M5, phase 1</span><span>Synthetic by design: computed in <code>labs.js</code> from the controls; nothing is measured</span><span id="status-ai"></span></div>
+
+<script type="module">
+import { LABS, IW, IH, WALL, FOOT, JOIN } from "./labs.js";
+
+const PRIMER = "https://github.com/chipi/recce/blob/main/docs/reference/photogrammetry-primer.md";
+const q = new URLSearchParams(location.search);
+const $ = (id) => document.getElementById(id);
+const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+if (q.get("theme") === "light") document.documentElement.dataset.theme = "light";
+
+const READ = {
+  baseline: `Two photos see the same point; their rays meet at it. With noise they meet in a region, and its depth extent is about <span class="eq">σZ ≈ Z²·σd / (f·B)</span>: it grows with the square of the distance and shrinks with the baseline. A wide baseline triangulates well and matches badly.`,
+  overlap: `Neighbouring views overlap by 60 to 80 percent: enough that each point appears in several images and that features match, with enough baseline between them for parallax. Less leaves weak links; much more adds photos without adding geometry.`,
+  features: `A keypoint is a place with local structure, such as a corner, that can be found again from another photo. A shot out of focus or shaken produces few keypoints. High ISO is better than blur, and noise is better than motion.`,
+  rolling: `A rolling shutter reads the rows one after another, roughly ten to thirty milliseconds from top to bottom. If the camera turns meanwhile, each row has a slightly different pose and verticals lean.`,
+  refraction: `A flat port bends each ray by Snell's law, <span class="eq">n₁ sin θ₁ = n₂ sin θ₂</span>. The field narrows by about the water's index, but the bend depends on the angle, so no single focal length fits the whole image and the rays no longer meet in one point.`,
+};
+const MODEL = {
+  baseline: "σZ formula with f = 3400 px and a 0.5 px matching error; the cameras and the point to scale, the uncertainty wedges widened 5 times so they can be seen; a short baseline is stretched across (labelled), which leaves the depth of the region true to scale.",
+  overlap: "A 20 m wall seen from 3 m, each photo covering 2 m; features placed at random, each found again in a photo with chance 0.7; a pair joins with 50 matches (the lab's rule).",
+  features: "A 192 by 128 synthetic image; Gaussian blur and noise; Harris corners at a fixed threshold, kept as found again if within 2 px of a corner of the sharp, clean image.",
+  rolling: "A 3000-row image at f = 3000 px; the bottom row is read the readout time after the top, while the camera pans. Ghost lines show a global shutter.",
+  refraction: "A flat port 30 mm in front of the entrance pupil, a thin window; rays traced by Snell's law and extended back to the axis.",
+};
+const OUT = {
+  baseline: [["Angle between rays", "parallax_deg", "°"], ["Depth uncertainty", "depth_sigma_mm", " mm"], ["Share of distance", "depth_sigma_share_of_distance", "", (v) => (v * 100).toFixed(2) + "%"]],
+  overlap: [["Photos", "frames", ""], ["Fewest matches in a pair", "matches_min", ""], ["Broken links", "broken_links", ""], ["Mean photos per feature", "mean_track_length", ""], ["Angle between neighbours", "neighbour_parallax_deg", "°"]],
+  features: [["Corners of the sharp image", "keypoints_sharp_clean", ""], ["Found again", "keypoints_repeatable", ""], ["Share found again", "repeatable_share_of_sharp", "", (v) => Math.round(v * 100) + "%"], ["Spurious", "spurious_keypoints", ""]],
+  rolling: [["Shift top to bottom", "top_to_bottom_shift_px", " px"], ["Verticals lean", "vertical_lean_deg", "°"]],
+  refraction: [["Focal factor, centre", "focal_factor_centre", "×"], ["Focal factor, edge", "focal_factor_edge", "×"], ["Edge mismatch", "edge_mismatch_pct", "%"], ["Half field in water", "half_field_water_deg", "°"], ["Viewpoint spread", "viewpoint_spread_mm", " mm"]],
+};
+
+const [tutorFacts, aiTutor] = await Promise.all([
+  fetch("data/tutor_facts.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+  fetch("data/ai_tutor.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+]);
+let aiOn = q.get("ai") === "1";
+const state = {}, canv = {};
+
+// ---------- build the sections ----------
+LABS.forEach((lab, i) => {
+  state[lab.id] = { ...lab.start };
+  const toc = document.createElement("a");
+  toc.href = `#lab-${lab.id}`; toc.innerHTML = `<b>${i + 1}</b><span>${esc(lab.term)}</span>`;
+  $("toc").append(toc);
+  const el = document.createElement("article");
+  el.className = "lab"; el.id = `lab-${lab.id}`;
+  el.innerHTML = `<header><span class="n">${i + 1}</span><h2>${esc(lab.term)}</h2><a href="${PRIMER}${lab.primer}" target="_blank" rel="noopener">in the primer ↗</a></header>
+    <p class="read">${READ[lab.id]}</p>
+    <div class="pair">
+      <figure><canvas id="cv-${lab.id}"></canvas>
+        <div class="ctl">${lab.controls.map((c) => `<label><span>${esc(c.label)}<b id="v-${lab.id}-${c.key}"></b></span><input type="range" data-lab="${lab.id}" data-key="${c.key}" min="${c.log ? 0 : c.min}" max="${c.log ? 1000 : c.max}" step="${c.log ? 1 : c.step}"></label>`).join("")}</div>
+        <div class="out" id="out-${lab.id}"></div>
+        <div class="cap">${esc(MODEL[lab.id])}</div>
+      </figure>
+      <aside class="tutor" id="tu-${lab.id}"></aside>
+    </div>`;
+  $("labs").append(el);
+  canv[lab.id] = el.querySelector("canvas");
+});
+const navEnd = document.createElement("p");
+navEnd.textContent = "Each lab has a tutor: a rule without AI, the person's own AI when connected.";
+$("toc").append(navEnd);
+
+const ctlOf = (lab, key) => lab.controls.find((c) => c.key === key);
+const toSlider = (c, v) => (c.log ? Math.round((1000 * Math.log(v / c.min)) / Math.log(c.max / c.min)) : v);
+const fromSlider = (c, v) => (c.log ? +(c.min * Math.exp((v / 1000) * Math.log(c.max / c.min))).toFixed(2) : +v);
+document.querySelectorAll("input[data-lab]").forEach((inp) => {
+  inp.oninput = () => { const lab = LABS.find((l) => l.id === inp.dataset.lab); state[lab.id][inp.dataset.key] = fromSlider(ctlOf(lab, inp.dataset.key), +inp.value); update(lab); };
+});
+
+function setState(lab, s) { state[lab.id] = { ...s }; update(lab); }
+
+// ---------- tutor ----------
+const STATUS = { supported: ["ok", "numbers checked"], judgement: ["", "judgement"], unsupported: ["fail", "a number without a fact"] };
+const stat = (c) => `<span class="cchip ${STATUS[c.status][0]}">${STATUS[c.status][1]}</span>`;
+function marked(c) {
+  let h = esc(c.text);
+  for (const n of [...new Set(c.unbacked ?? [])].sort((a, b) => b.length - a.length)) h = h.split(n).join(`<span class="unbacked" title="No fact behind this number">${n}</span>`);
+  return h;
+}
+function kindChip(a) {
+  if (!a) return `<span class="cchip fail">not in the menu</span>`;
+  return a.kind === "capture" ? `<span class="cchip cap">next capture</span>` : a.kind === "engine" ? `<span class="cchip eng">engine</span>` : `<span class="cchip">try in the lab</span>`;
+}
+const goBtn = (lab, id) => (lab.actions[id]?.set ? `<button class="go" data-lab="${lab.id}" data-act="${id}">Try it</button>` : "");
+function same(a, b) { return Object.keys(a).every((k) => Math.abs(a[k] - b[k]) < 1e-9); }
+
+function renderTutor(lab, f) {
+  const host = $(`tu-${lab.id}`), ai = aiTutor?.[lab.id];
+  if (!aiOn || !ai) {
+    const t = lab.tutor(f), a = lab.actions[t.act];
+    host.innerHTML = `<h3>Tutor <span class="cchip">${aiOn ? "AI connected, no answer" : "rule"}</span></h3>
+      <div><div class="k">What you see</div><p>${esc(t.see)}</p></div>
+      <div><div class="k">Why</div><p class="dim">${esc(t.why)}</p></div>
+      <div><div class="k">Try next</div><div class="row"><b>${esc(a.text)}</b></div><div class="row" style="margin-top:4px">${kindChip(a)}${goBtn(lab, t.act)}</div></div>
+      <div><div class="k">Watch</div><p class="dim">${esc(t.watch)}</p></div>
+      <div class="foot">Rules written for the mock-up; they follow the controls live.</div>`;
+    return;
+  }
+  const all = [ai.headline, ...ai.why, ...ai.plan, ai.check, ...ai.unknown], n = (s) => all.filter((c) => c.status === s).length;
+  const stale = same(state[lab.id], ai.state) ? "" : `<div class="stale">This answer is about the state the tutor saw. <button class="go" data-lab="${lab.id}" data-back="1">Back to it</button></div>`;
+  host.innerHTML = `<h3>Tutor <span class="cchip ai">${esc(ai.model)}</span></h3>${stale}
+    <p><b>${marked(ai.headline)}</b> ${stat(ai.headline)}</p>
+    <details><summary>Why it is like this (${ai.why.length})</summary>${ai.why.map((c) => `<p>${marked(c)} ${stat(c)}</p>`).join("")}</details>
+    <ol>${ai.plan.map((c) => { const a = lab.actions[c.action]; return `<li><div><b>${esc(a ? a.text : c.action)}</b><div class="row">${kindChip(a)}${goBtn(lab, c.action)}</div><span class="dim">${marked(c)} ${stat(c)}</span>${c.expect ? `<span class="dim">Expect: ${esc(c.expect)}</span>` : ""}</div></li>`; }).join("")}</ol>
+    <details open><summary>How you will know</summary><p>${marked(ai.check)} ${stat(ai.check)}</p></details>
+    <details><summary>What the lab cannot say (${ai.unknown.length})</summary>${ai.unknown.map((c) => `<p>${marked(c)} ${stat(c)}</p>`).join("")}</details>
+    <div class="foot">One recorded call: ${esc(ai.model)}, US$${ai.cost_usd.toFixed(3)}. ${n("supported")} supported, ${n("judgement")} judgement, ${n("unsupported")} unsupported. Steps can only name moves from the lab's menu.</div>`;
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("button.go");
+  if (!b) return;
+  const lab = LABS.find((l) => l.id === b.dataset.lab);
+  if (b.dataset.back) setState(lab, aiTutor[lab.id].state);
+  else setState(lab, lab.actions[b.dataset.act].set(state[lab.id]));
+});
+$("ai-seg").onclick = (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  aiOn = b.dataset.v === "1"; renderAll();
+};
+$("theme").onclick = () => { const d = document.documentElement; d.dataset.theme = d.dataset.theme === "light" ? "dark" : "light"; renderAll(); };
+
+// ---------- drawing ----------
+function prep(cv) {
+  const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const g = cv.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = `11px ${css("--mono")}`; g.textBaseline = "middle";
+  return [g, w, h];
+}
+function line(g, x1, y1, x2, y2, col, wdt = 1, dash) { g.strokeStyle = col; g.lineWidth = wdt; g.setLineDash(dash || []); g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); g.setLineDash([]); }
+function label(g, t, x, y, col, align = "left") { g.fillStyle = col; g.textAlign = align; g.fillText(t, x, y); }
+function camDot(g, x, y, col) { g.fillStyle = col; g.beginPath(); g.arc(x, y, 4, 0, 7); g.fill(); }
+
+const DRAW = {
+  baseline(g, w, h, s) {
+    const pad = 40, sc = Math.min((w - 2 * pad - 30) / s.Z, (h - 2 * pad) / Math.max(s.B, 1e-6) / 1.2);
+    // across the view is stretched when the baseline would be a few pixels, and the page says so
+    const stretch = Math.max(1, Math.round((h * 0.4) / (s.B * sc)));
+    const cx = pad, cy = h / 2, px = cx + s.Z * sc;
+    const cams = [[cx, cy - (s.B / 2) * sc * stretch], [cx, cy + (s.B / 2) * sc * stretch]];
+    const wedge = (0.5 / 3400) * 5 * stretch;
+    const lines = [];
+    for (const [x, y] of cams) {
+      const a = Math.atan2(cy - y, px - x);
+      for (const d of [-wedge, wedge]) lines.push([x, y, a + d]);
+      g.fillStyle = css("--accent-soft"); g.beginPath(); g.moveTo(x, y);
+      g.lineTo(x + Math.cos(a - wedge) * w * 2, y + Math.sin(a - wedge) * w * 2); g.lineTo(x + Math.cos(a + wedge) * w * 2, y + Math.sin(a + wedge) * w * 2); g.fill();
+      line(g, x, y, px, cy, css("--accent"), 1.2);
+    }
+    const hit = (l1, l2) => { const [x1, y1, a1] = l1, [x2, y2, a2] = l2, d = Math.cos(a1) * Math.sin(a2) - Math.sin(a1) * Math.cos(a2); if (Math.abs(d) < 1e-9) return null; const t = ((x2 - x1) * Math.sin(a2) - (y2 - y1) * Math.cos(a2)) / d; return t > 0 ? [x1 + Math.cos(a1) * t, y1 + Math.sin(a1) * t] : null; };
+    const far = hit(lines[1], lines[2]), near = hit(lines[0], lines[3]);
+    const xmax = w - 6, clamp = (p) => (p && p[0] < xmax ? p : null);
+    const pts = [hit(lines[0], lines[2]), clamp(far) || [xmax, cy], hit(lines[1], lines[3]), clamp(near) || [px - 2, cy]].filter(Boolean);
+    g.fillStyle = css("--new"); g.globalAlpha = 0.5; g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill(); g.globalAlpha = 1;
+    cams.forEach(([x, y]) => camDot(g, x, y, css("--accent")));
+    g.fillStyle = css("--text"); g.beginPath(); g.arc(px, cy, 3, 0, 7); g.fill();
+    label(g, "the point", px, cy - 14, css("--text-dim"), "center");
+    label(g, `B ${s.B} m`, cx + 8, cams[0][1] - 12, css("--accent"));
+    if (stretch > 1) label(g, `across stretched ×${stretch}`, 8, 16, css("--text-faint"));
+    label(g, `${s.Z} m`, (cx + px) / 2, h - 16, css("--text-faint"), "center");
+    line(g, cx, h - 26, px, h - 26, css("--border-strong"));
+    label(g, "where the point can be (wedges ×5)", w - 8, 16, css("--new"), "right");
+    if (!far || far[0] > xmax) label(g, "→ runs off the page", w - 8, cy + 22, css("--new"), "right");
+  },
+  overlap(g, w, h, s, lab) {
+    const { xs, step, frames, track, links } = lab.run(s);
+    const L = 16, R = w - 16, X = (m) => L + ((R - L) * m) / WALL;
+    label(g, "the wall, 20 m, and its features", L, 12, css("--text-faint"));
+    for (let i = 0; i < xs.length; i++) { g.fillStyle = track[i] ? css("--text-dim") : css("--border-strong"); g.fillRect(X(xs[i]), 22, 1, track[i] ? 10 : 5); }
+    const rows = 4;
+    for (let k = 0; k < frames; k++) {
+      const y = 46 + (k % rows) * 9;
+      g.fillStyle = css("--accent"); g.globalAlpha = 0.75; g.fillRect(X(k * step), y, X(k * step + FOOT) - X(k * step), 5); g.globalAlpha = 1;
+    }
+    label(g, `${frames} photos, each 2 m of wall`, L, 46 + rows * 9 + 8, css("--text-faint"));
+    const base = h - 24, top = 46 + rows * 9 + 40, maxM = Math.max(JOIN * 2, ...links), Y = (m) => base - ((base - top) * m) / maxM;
+    line(g, L, base, R, base, css("--border-strong"));
+    links.forEach((m, k) => {
+      const x = X(k * step + FOOT / 2 + step / 2), bw = Math.max(1.5, Math.min(14, ((R - L) * step) / WALL - 2));
+      g.fillStyle = m < JOIN ? css("--error") : css("--truth"); g.fillRect(x - bw / 2, Y(m), bw, base - Y(m));
+    });
+    line(g, L, Y(JOIN), R, Y(JOIN), css("--text-dim"), 1, [4, 4]);
+    label(g, `dashed line: ${JOIN} matches to join`, L, h - 10, css("--text-dim"));
+    label(g, "matches between neighbours", L, top - 8, css("--text-faint"));
+  },
+  features(g, w, h, s, lab) {
+    const { img, keys, ref } = lab.run(s);
+    const sc = Math.min((w - 24) / IW, (h - 24) / IH), ox = (w - IW * sc) / 2, oy = (h - IH * sc) / 2;
+    const id = new ImageData(IW, IH);
+    for (let i = 0; i < img.length; i++) { const v = Math.max(0, Math.min(255, img[i] * 255)); id.data[i * 4] = id.data[i * 4 + 1] = id.data[i * 4 + 2] = v; id.data[i * 4 + 3] = 255; }
+    const off = new OffscreenCanvas(IW, IH); off.getContext("2d").putImageData(id, 0, 0);
+    g.imageSmoothingEnabled = false; g.drawImage(off, ox, oy, IW * sc, IH * sc);
+    const P = ([x, y]) => [ox + (x + 0.5) * sc, oy + (y + 0.5) * sc];
+    const isRep = (k) => ref.some(([u, v]) => (u - k[0]) ** 2 + (v - k[1]) ** 2 <= 4);
+    const found = (rk) => keys.some(([u, v]) => (u - rk[0]) ** 2 + (v - rk[1]) ** 2 <= 4);
+    g.lineWidth = 1.5;
+    for (const rk of ref) if (!found(rk)) { const [x, y] = P(rk); g.strokeStyle = css("--warn"); g.setLineDash([2, 2]); g.beginPath(); g.arc(x, y, 6, 0, 7); g.stroke(); g.setLineDash([]); }
+    for (const k of keys) {
+      const [x, y] = P(k);
+      if (isRep(k)) { g.strokeStyle = css("--truth"); g.beginPath(); g.arc(x, y, 6, 0, 7); g.stroke(); }
+      else { line(g, x - 4, y - 4, x + 4, y + 4, css("--error"), 1.5); line(g, x - 4, y + 4, x + 4, y - 4, css("--error"), 1.5); }
+    }
+  },
+  rolling(g, w, h, s, lab) {
+    const f = lab.facts(s), H = 3000, W4 = 4000;
+    const iw = Math.min(w - 90, (h - 30) * (4 / 3)), ih = (iw * 3) / 4, ox = 66, oy = (h - ih) / 2, sc = iw / W4;
+    g.fillStyle = css("--bg-field"); g.fillRect(ox, oy, iw, ih);
+    g.fillStyle = css("--water-soft"); g.fillRect(ox, oy + ih * 0.62, iw, ih * 0.38);
+    const shift = f.top_to_bottom_shift_px * sc;
+    for (let i = 0; i < 6; i++) {
+      const x0 = ox + iw * (0.12 + i * 0.15);
+      line(g, x0, oy + 8, x0, oy + ih - 8, css("--border-strong"), 1, [3, 3]);
+      line(g, x0, oy + 8, x0 - shift * ((ih - 8) / ih), oy + ih - 8, css("--text"), 2.5);
+    }
+    g.strokeStyle = css("--border-strong"); g.strokeRect(ox, oy, iw, ih);
+    const grd = g.createLinearGradient(0, oy, 0, oy + ih); grd.addColorStop(0, css("--accent")); grd.addColorStop(1, css("--new"));
+    g.fillStyle = grd; g.fillRect(46, oy, 8, ih);
+    label(g, "0 ms", 42, oy + 6, css("--text-faint"), "right");
+    label(g, `${s.t} ms`, 42, oy + ih - 6, css("--text-faint"), "right");
+    label(g, "row read at", 8, oy - 9, css("--text-faint"), "left");
+    label(g, "dashed: a global shutter", ox + iw, oy - 9, css("--text-faint"), "right");
+  },
+  refraction(g, w, h, s, lab) {
+    const f = lab.facts(s), d = 30, mm = Math.min((w - 40) / 150, 4.5), port = 20 + 70 * mm, cy = h / 2, pup = port - d * mm;
+    g.fillStyle = s.n > 1.01 ? css("--water-soft") : "transparent"; g.fillRect(port, 0, w - port, h);
+    line(g, port, 10, port, h - 10, css("--water"), 3);
+    label(g, s.n > 1.01 ? `water, n ${s.n}` : "air", w - 10, 14, css("--water"), "right");
+    label(g, "flat port", port + 6, h - 14, css("--water"));
+    line(g, 10, cy, w - 10, cy, css("--border"), 1);
+    camDot(g, pup, cy, css("--accent")); label(g, "pupil", pup - 6, cy + 14, css("--accent"), "right");
+    const n = 7;
+    for (let i = -n; i <= n; i++) {
+      if (!i) continue;
+      const ta = (s.a * i * Math.PI) / 180 / n, tw = Math.asin(Math.sin(ta) / s.n);
+      const yp = cy - Math.tan(ta) * d * mm;
+      if (yp < 4 || yp > h - 4) continue;
+      line(g, pup, cy, port, yp, css("--accent"), 1.2);
+      const xe = w - 10, ye = yp - Math.tan(tw) * (xe - port);
+      line(g, port, yp, xe, ye, css("--accent"), 1.2);
+      const xv = port - (Math.tan(ta) * d) / Math.tan(tw) * mm;
+      line(g, port, yp, xv, cy, Math.abs(i) === n ? css("--new") : css("--text-faint"), 1, [3, 3]);
+      if (Math.abs(i) === n) { g.fillStyle = css("--new"); g.beginPath(); g.arc(xv, cy, 3, 0, 7); g.fill(); }
+    }
+    const xc = port - s.n * d * mm;
+    g.fillStyle = css("--truth"); g.beginPath(); g.arc(xc, cy, 3, 0, 7); g.fill();
+    label(g, "centre rays meet here", xc, cy - 46, css("--truth"), "center");
+    line(g, xc, cy - 38, xc, cy - 5, css("--truth"));
+    if (f.viewpoint_spread_mm > 0.5) { label(g, "edge rays here", port - f.focal_factor_edge * d * mm, cy + 48, css("--new"), "center"); line(g, port - f.focal_factor_edge * d * mm, cy + 40, port - f.focal_factor_edge * d * mm, cy + 6, css("--new")); }
+  },
+};
+
+function update(lab) {
+  const s = state[lab.id], f = lab.facts(s);
+  for (const c of lab.controls) {
+    document.querySelector(`input[data-lab="${lab.id}"][data-key="${c.key}"]`).value = toSlider(c, s[c.key]);
+    $(`v-${lab.id}-${c.key}`).textContent = `${c.key === "noise" ? s[c.key].toFixed(3) : c.key === "n" ? s[c.key].toFixed(2) : s[c.key]}${c.unit && c.unit.length <= 3 ? " " + c.unit : ""}`.replace(" °", "°").replace(" %", "%");
+  }
+  $(`out-${lab.id}`).innerHTML = OUT[lab.id].map(([l, k, u, fn]) => `<div><small>${l}</small><b>${fn ? fn(f[k]) : f[k] + u}</b></div>`).join("");
+  const [g, w, h] = prep(canv[lab.id]);
+  DRAW[lab.id](g, w, h, s, lab);
+  renderTutor(lab, f);
+}
+function renderAll() {
+  $("ai-seg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === (aiOn ? "1" : "0"))));
+  $("status-ai").textContent = aiOn ? (aiTutor ? "Tutor: the person's AI, recorded answers" : "Tutor: AI connected, no recorded answers") : "Tutor: rules, no AI";
+  LABS.forEach(update);
+}
+for (const lab of LABS) if (q.get(lab.id)) for (const kv of q.get(lab.id).split(",")) { const [k, v] = kv.split(":"); if (k in state[lab.id]) state[lab.id][k] = +v; }
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(renderAll, 120); });
+renderAll();
+if (q.get("lab")) $(`lab-${q.get("lab")}`)?.scrollIntoView();
+window.m5 = { state, LABS, update };
+window.m5Ready = true;
+</script>
+</body>
+</html>
