@@ -1,6 +1,6 @@
 # RC-01 — Vision
 
-**Version:** 0.7 · Draft
+**Version:** 0.8 · Draft
 **Date:** 2026-11-27
 **Inputs:** [brief](RC-brief.md) · [Step 0 close-out report](../wip/step0-closeout-2026-11-27.md) ·
 [architecture sketch](RC-architecture-sketch.md) · [use cases](RC-use-cases.md) ·
@@ -131,6 +131,36 @@ mission, with a recipe filling in each step's settings. A workflow can change in
 mission: add the darkroom after the first leg shows the colour is off, and only the steps after
 the change run again. The workflow says what happens; the recipe says how well each step is
 tuned.
+
+**A project holds one place.** A wreck, a building site, a flat, a car: each is a project, the
+boundary of one scene and everything done to it. A project holds two things. Its assets: the
+photographs of every leg, kept as ordinary files in the project's own folder on the person's
+disk, where any other tool can still open them. And its work: the workflow, the develop settings,
+the recipes, every run, every model and datasheet, and the history of the missions. Recce never
+changes an original; everything it does is stored as settings and results beside them, the way
+Lightroom keeps a catalog beside the photographs. Switching from one project to another is one
+click. Moving a project to another computer is copying its folder, or exporting it with or
+without the originals; on the other side Recce finds the photographs again by their content, so
+a renamed disk or a moved folder does not break anything.
+
+**Bringing photographs in.** The person points Recce at a folder, or plugs in the camera, the
+drone's card or the phone, and Recce imports: the photographs go into the project's folder, one
+subfolder per leg, named by date and device, duplicates from a card imported twice left out.
+Robots and the capture app deliver the same way, over the network. Inside the project, a small
+library shows every photograph by leg, camera and time; any photograph opens in a viewer with its
+metadata (camera, lens, exposure, position, depth, where it sits in the model) and with what the
+darkroom has done to it, before and after.
+
+**The darkroom works on groups with the same light.** A day's photographs do not share one light:
+the morning dive is blue and bright, the afternoon dive greener and darker; the drone's first
+battery flew in sun, the last in cloud. Recce groups the photographs of a project by leg, camera
+and measured light, and proposes those groups as the units of the darkroom. The person picks one
+photograph of a group, changes it, and sees the change live on that photograph and on the whole
+group as a contact sheet; applying it applies to the group, never touching the originals. Then
+Recce makes the groups agree with each other, because a reconstruction blends photographs from
+every leg into one surface, and two lights that disagree show up as seams on the model. The
+preview shows that too: a group out of line with the rest is visible on the model as a patch of
+the wrong colour, and fixing it in the darkroom fixes it there.
 
 **The full pass runs where the power is, and every case has some.** Dense geometry, the mesh,
 the texture and the splat need a CUDA or HIP GPU and hours of it. Recce finds that power wherever
@@ -306,5 +336,7 @@ they capture with their own software, and Recce tells them what is missing. Not 
   colour corrected by range underwater).
 - **Renting.** Which providers first, and how data reaches them.
 - **The develop module.** Which libraries for lens correction and colour, and how presets are
-  evaluated across scenes; its own prototypes.
+  evaluated across scenes; how light groups are found and matched across legs; its own prototypes.
+- **The project format.** What the project file holds, how an export carries the originals or
+  only the working set, and how a project on two computers stays in step.
 - **A Mac running the full pass itself,** or always sending it out.

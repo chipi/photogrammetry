@@ -327,6 +327,14 @@ plain to anyone who knows the field:
   for review). People define their own, save several for different kinds of project, and change
   one during a mission; Recce proposes one, and a recipe fills in each step's settings.
 
+- **Projects** *(owner, 2026-11-27)*: a project is the boundary of one scene and a container for
+  its assets and its processing (workflow, develop settings, recipes, runs, models). Originals
+  stay as files on disk in a folder per project, one subfolder per leg; Recce imports from a
+  folder or a connected device, never modifies an original, switches projects in one step and
+  exports or imports a project between computers. A small library and a photo viewer with the
+  metadata sit inside the project; the darkroom works on groups of photographs that share their
+  light, and matches the groups to each other.
+
 - **Both: Recce Studio on the desktop, and the web** *(owner, 2026-11-27)*. The Studio is the web application packaged with the local engine in Electron, for macOS and Windows (Linux too); it does all RAW processing locally and sends only what the model needs. Recorded in [RC-01](RC-01-vision.md).
 
 ### Open from the start

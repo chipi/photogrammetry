@@ -94,7 +94,9 @@ erDiagram
 
 | Entity | What it holds | Why it is first-class |
 |---|---|---|
-| **Capture** | A set of images from one session and device, with how they were taken | Underwater, drone, turntable and robot captures behave differently; the engine needs to know which it has |
+| **Project** | The boundary of one scene: a folder on disk holding the originals (one subfolder per capture), and a project file with the workflow, develop settings, recipes, reconstructions and history *(owner, 2026-11-27)* | Switching, moving and exporting work by project; originals are referenced by content hash, so a moved folder relinks |
+| **Capture** | A set of images from one session and device (a leg), with how they were taken | Underwater, drone, turntable and robot captures behave differently; the engine needs to know which it has |
+| **Develop group** | Images of one project that share their light (by capture, camera and measured light), the unit a darkroom edit applies to, plus the matching that makes groups agree | Light changes between legs; one set-wide setting cannot hold a morning and an afternoon dive |
 | **Image** | File hash, decoded form, EXIF/XMP, mask, develop settings | Content-addressed so a re-run never re-decodes; develop settings are part of provenance |
 | **Sensor + Calibration** | Camera model (pinhole, Brown, fisheye, later refractive), intrinsics, their uncertainty, source (EXIF guess, given, estimated) | One body and lens shared across images; robots and ARKit give calibrations, the engine estimates the rest |
 | **Pose prior** | Pose from GPS, ARKit, gimbal or a robot, with frame, source (`truth`/`belief`/`device`) and uncertainty | Priors are inputs the engine uses and reports on, never silently trusted or ignored |
