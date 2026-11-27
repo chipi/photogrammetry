@@ -104,7 +104,7 @@ Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept**; t
 | "Does the model know where it is wrong?" chart | 4, 14 | Kept |
 | Structure over the mesh | (RC-P13) | Kept |
 | Next shot as ghost camera, card and brief | 3, 21 | Kept |
-| The coach: rule plan, or the person's AI, checked (added after the verdict) | pattern (owner, 2026-11-27) | New, no verdict yet |
+| The coach: rule plan, or the person's AI, checked (added after the verdict) | pattern (owner, 2026-11-27) | Kept: good to go as a prototype (owner, 2026-11-27) |
 
 ## Not covered
 

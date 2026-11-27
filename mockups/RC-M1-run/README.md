@@ -110,7 +110,7 @@ judgement, 1 unsupported) and RC-M7 (15, 2, 0) are unchanged.
 
 **Kept, all concepts shown (owner, 2026-11-24):** the style ("I really like the style"), every concept in the three modes ("we really love everything"), and the gap list with site map and cards ("exactly what I wanted"). Phase 2 polishes the direction; the typeface (Inter, flagged as overused) is decided there.
 
-**The coach (2026-11-27):** new, no verdict yet.
+**The coach (2026-11-27):** kept, good to go as a prototype (owner, 2026-11-27).
 
 ## Phase 2 (2026-11-24)
 

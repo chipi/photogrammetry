@@ -85,7 +85,7 @@ Open <http://127.0.0.1:8799/>. A view is a link: `?lab=overlap` scrolls to a lab
 
 ## Verdict
 
-Phase 1, built 2026-11-27. Waiting for the owner's verdict.
+Phase 1, built 2026-11-27. **Kept: every concept is good to go as a prototype (owner, 2026-11-27).**
 
 | Concept | Idea |
 |---|---|

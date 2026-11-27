@@ -21,9 +21,9 @@ owner's own captures and the friend's dive set come after.
 |---|---|---|---|---|
 | Prototypes (13) | 9: RC-P1, P2, P3, P4, P5 (one scene), P6, P8, P9 (the fixture), P12 (one clause moved) | 1: RC-P13 | 1: RC-P10 | 2: RC-P7 (deferred to the build), RC-P11 (waits on pose priors) |
 
-| Mock-ups (8) | Kept by the owner | Waiting for a verdict | Not built |
-|---|---|---|---|
-| | 6: RC-M1, M2, M3, M4, M6, M7, every concept kept | RC-M5 (built 2026-11-27); the coach added to RC-M1 and RC-M2 | RC-M8 (after RC-P11) |
+| Mock-ups (8) | Kept by the owner | Not built |
+|---|---|---|
+| | 7: RC-M1 to RC-M7, every concept kept; RC-M5 and the coach added to RC-M1 and RC-M2 judged good to go as a prototype (2026-11-27) | RC-M8 (after RC-P11) |
 
 ## The prototypes
 
@@ -101,7 +101,7 @@ number (RC-P4, RC-P12):
 ## What the mock-ups settled
 
 Seven mock-ups were built on real prototype output, except RC-M5, which is synthetic by design.
-The owner kept every concept of RC-M1, M2, M3, M4, M6 and M7; what goes into the product is
+The owner kept every concept of RC-M1 to RC-M7, the coach on RC-M1 and RC-M2 included; what goes into the product is
 decided when the build starts. The patterns they share ([visual ideas](visual-ideas.md)):
 
 - **The reconstruction as a story with evidence** (RC-M1, RC-M3): the run replayed camera by
@@ -153,7 +153,6 @@ decided when the build starts. The patterns they share ([visual ideas](visual-id
 | Building outlines (RC-P13) | 31 of 49 at IoU 0.5; merged neighbours and roof-against-wall outlines fail |
 | The underwater ranges clause (RC-P12) and the benchmark capture | Moved to the benchmark's site scene S1; capture decided later |
 | Engine language and UI stack | Python stays; Rust was to close on RC-P1, RC-P2 and RC-P7, and RC-P7 is missing. The UI stack is decided on the mock-ups' evidence |
-| RC-M5's verdict and the coach on RC-M1 and RC-M2 | Waiting for the owner |
 
 ## What RC-01 Vision can take from this
 
