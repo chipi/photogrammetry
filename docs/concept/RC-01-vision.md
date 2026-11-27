@@ -1,6 +1,6 @@
 # RC-01 — Vision
 
-**Version:** 0.2 · Draft
+**Version:** 0.3 · Draft
 **Date:** 2026-11-27
 **Inputs:** [brief](RC-brief.md) · [Step 0 close-out report](../wip/step0-closeout-2026-11-27.md) ·
 [architecture sketch](RC-architecture-sketch.md) · [use cases](RC-use-cases.md) ·
@@ -8,144 +8,233 @@ the owner's direction after Step 0 (2026-11-27)
 
 ---
 
-## Leave the site knowing you have it
+## Every capture is a mission
 
-Every capture of the real world is a bet you only lose after you have left. The diver surfaces
-from the last dive of the trip, the drone is packed, the house has been rearranged, and only then,
-days later and on a machine big enough to process the photographs, does the model show the hole
-under the bow, the wall nobody photographed, the scale nobody can trust. The tools on the market
-sell the model. None of them sells what the person in the field needs while they can still act on
-it: certainty that they got it.
+Someone, or something, goes into a place for a limited time and has to come back with a model
+that other people will act on. The limit differs: the air in a diver's tank, the twenty minutes
+in a drone's battery, the hour a robot can survive in a burned building, the afternoon a seller
+has the keys to a flat, the weekend a car is clean. What does not differ is the shape of the
+problem. The capture can only be judged after it is over, and by then the place is out of reach.
+The gap under the hull, the field the drone missed, the room the robot never entered, the
+staircase nobody photographed: all of them show up when it is too late to go back.
 
-**Recce is a reality-capture studio you carry.** It tells you, on the evening of the capture and
-on the laptop you already travel with, what you have and what you are missing; it borrows the
-power to finish the job overnight; and it hands back a model that says exactly how far it can be
-trusted. You leave the site knowing you have it, or knowing precisely what to shoot tomorrow.
+**Recce makes the capture answer back while the mission is still running.** After every leg of a
+mission (a dive, a battery, a pass through a building, a floor of a house) it shows, within the
+time before the next leg, what is already covered and what is missing, and where to go to close
+it. When the gaps are closed, it finishes the model with whatever power is within reach that
+night, and hands it over with a datasheet that says exactly how far it can be trusted. The point
+is not a model at the end. It is leaving the place knowing the model will hold.
 
-## The shift: from the darkroom to the studio and the farm
+## Five missions
 
-Photogrammetry still works like a darkroom. One expensive machine, one long process, the result at
-the end, and a photogrammetrist who spends €20,000 on a workstation because 1,500 photographs of a
-wreck will not assemble on a laptop in a day.
+Recce is built for very different people doing the same thing.
 
-Film and visual effects solved this a generation ago. The artist works on a laptop, where they
-see, judge and decide; the heavy rendering goes to a farm, owned or rented by the night, and
-comes back finished. Nobody buys a render farm to make one film.
+**A diver documents a wreck for cultural heritage.** The site is protected, deep and visited
+rarely; archaeologists will measure from the model for years. The mission is two or three dives a
+day with surface intervals between them. What cannot be redone: the season, the weather window,
+the boat.
 
-Recce brings that split to reality capture, for one person. The laptop is the studio: it reads
-the RAW files, develops them into a consistent set, places every camera, and shows the model
-taking shape with its gaps named, all offline, the same evening. What a laptop cannot do (dense
-depth, the mesh, the splat, hours of CUDA) goes to whatever power is within reach tonight: a
-machine at home, or a GPU rented by the hour from the person's own provider account, priced before
-it starts and gone when it ends. A night on a rented GPU costs a few dollars. The ceiling on what
-one person can capture stops being the machine they own.
+**A drone surveys terrain before something is built.** Roads, houses, slopes and drainage are
+documented for a new project. The mission is a series of flights, one battery at a time. What
+cannot be redone cheaply: the crew on site, the permit, the light.
 
-## What it is like
+**A small robot enters a place people should not.** After a fire, or where a structure may come
+down, a robot or remote vehicle goes inside so that the people outside can see how it looks
+before anyone enters. The mission is one or a few passes on a weak radio link. What cannot be
+redone: the time, and possibly the robot.
 
-**On a dive boat.** Four dives, 1,500 RAW photographs. In the cabin that evening, with no
-connection, the laptop rebuilds the wreck camera by camera and says plainly that the port side of
-the bow below two metres was never photographed; tomorrow's dive plan comes out as cards (where
-to swim, at what angle, and why). On the marina's wifi it sends what the reconstruction needs, a
-reduced working set, not the 75 GB of RAW that would take seventeen hours on a hotel uplink. A GPU
-spins up for the night at a quoted price. In the morning the model is there, its colour corrected
-for the water, its remaining gaps named, and the second dive closes them.
+**An enthusiast wants a model of what they love.** A car, a mountain bike, a camera, something
+built by hand. The mission is an afternoon with a phone or a camera. What cannot be redone: the
+car being clean, the light being right, the patience.
 
-**At home with a phone.** A shoe on the table, twenty photographs with the iPhone, its position
-and depth recorded with each one. The heavy part goes to the box in the cupboard; within the hour
-later there is a model at its true size, ready for Blender or a game engine. Then the whole room,
-which is the same room the robots map.
+**An estate agent sells a home.** The flat inside and the building outside, measured, presented
+to buyers who will never visit in person. The mission is one visit with the keys. What cannot be
+redone: the empty flat, the agent's afternoon.
 
-**A robot overnight.** The robot re-maps the flat while everyone sleeps and hands Recce its
-photographs and poses. In the morning the model sits in the robot's own frame at its true scale,
-with what changed since last month and the corner the robot never saw.
+## What every mission shares
 
-**An agent at the controls.** Someone's own agent starts the reconstruction, reads where it is
-weak, compares two recipes and proposes the next capture, through the same interface a person
-uses.
+Underneath, every mission has the same five steps.
 
-## What Recce is made of
+1. **Plan.** What the model is for decides what it needs: an archaeologist needs scale and
+   texture, a responder needs the layout and what was not seen, a buyer needs rooms that look
+   right and measure right.
+2. **Capture, in legs.** Photographs, with whatever comes with them: the phone's position and
+   depth, the drone's GPS, the robot's own poses.
+3. **Quick pass, after every leg.** In the time before the next leg, Recce adds the new
+   photographs to the running model and shows coverage: what is seen well, seen weakly, not seen
+   at all, and where to stand to fix it.
+4. **Full pass, when the gaps are closed.** The heavy reconstruction (dense geometry, the mesh, the
+   texture, the gaussian splat) runs once, overnight or while the person does something else.
+5. **Hand-over.** The model goes to whoever acts on it, with its datasheet: its true size or
+   "size unknown", its frame, where it is solid, inferred or unseen, and how it was made.
 
-**A model with a datasheet.** Every model leaves Recce the way a measuring instrument leaves the
-factory: with its specification. Its true size, or "size unknown"; its frame; where it is solid,
-where it is inferred, where nothing was seen. Step 0 showed why that matters: on a scanned room,
-surfaces no photograph saw are 52.4 mm off the laser reference, surfaces seen by thirty-two or
-more are 14.7 mm off. A model that hides that difference cannot be measured from, handed to a
-robot or trusted on a dive. A model that shows it can.
+The quick pass is what turns a capture into a conversation. The full pass is what makes the
+result worth keeping. The datasheet is what makes it usable by someone who was not there. Step 0
+showed why the datasheet matters: on a scanned room, surfaces no photograph saw were 52.4 mm off
+the laser reference, surfaces seen by thirty-two or more were 14.7 mm off. A model that hides that
+difference cannot be measured from, handed to a robot or used to send people into a building.
 
-**Capture as a conversation.** The person shoots, Recce answers, the person shoots again. The
-answer is concrete: where to stand, what to point at, what it will fix. The finished model is
-where the conversation stops, not the point of it. A person, a robot and an agent hold the same
-conversation in their own language: cards, a JSON brief, MCP.
+## Two speeds
 
-**Power on tap, decided by the person.** Compute is something switched on for a night and off in
-the morning, never something bought in advance. Recce shows which machine did what, what moved
-over the network and what it cost, and never rents anything without the person's go.
+**The quick pass runs where the person is.** It works on reduced photographs, adds each leg to
+what came before instead of starting over, and aims for minutes, not hours: short enough to fit a
+surface interval, a battery swap or the walk to the next room. It runs on the laptop in the
+field, offline, and on the operator's station outside the burned building. What it produces is
+coverage and the next shots, plus a rough model to look at; it does not need to be beautiful, it
+needs to be right about the gaps.
 
-**Everything stays the person's.** The photographs stay on their machines unless they send them;
-the models carry their history; the corrections Recce learns from their own camera, their own
-housing and their own captures belong to them. Recce runs no cloud of its own; it is open source,
-and the person's data has nowhere else to go.
+**The full pass runs where the power is.** Dense geometry and the rest need a CUDA or HIP GPU and
+hours of it. A laptop with such a GPU runs the full pass itself. A Mac does not today, and many
+laptops have no GPU worth the name, so the full pass goes to a machine at home or to a GPU rented
+by the hour from the person's own provider account: priced before it starts, approved by the
+person, gone when it ends. A night on a rented GPU costs a few dollars; nobody needs to own the
+machine.
 
-**Places with a history.** A dive site visited each season, the rooms of a home, the flat a robot
-maps every week: each becomes a place Recce remembers, not a folder of exports. The next visit
-starts from the last visit's gaps.
+**What travels is the working set, not the camera's files.** The quick pass has already
+developed the RAW files into a consistent set and placed every camera; the full pass needs those
+working images at the resolution it uses and the camera solution, not the originals. That turns
+a transfer that would take a hotel uplink most of a day into one that takes minutes to an hour.
+The originals stay on the person's disk.
 
-**A teacher in the studio.** Recce explains as it goes: every stage is something to look at and
-understand, from the cameras finding each other to the light falling off with depth underwater.
-Small labs inside the product show the physics behind a bad capture (baseline, overlap, blur,
-rolling shutter, refraction). A person's own AI, when they connect one, coaches on top: why this
-capture came out the way it did and what to do about it, every number it uses checked against
-Recce's own. Without it, Recce is complete. After a few outings the person reshoots less, because
-they understand what the camera needs.
+## Surfaces
+
+The same product appears in a few places, built once.
+
+| Surface | Who uses it | Where | What runs there |
+|---|---|---|---|
+| **Recce Studio** (desktop, macOS and Windows, Linux too) | The person running the mission | Their laptop, in the field or at home | The interface, the local engine, the quick pass; the full pass when the laptop has the GPU for it; sends the rest out |
+| **Recce on the web** | The same person away from the laptop; anyone a model is shared with | A browser, reaching the person's own home machine, or a shared link | The same interface as the Studio; the viewer and the presentation for shared models |
+| **Capture app** (iPhone first) | The person capturing with a phone | On site | Photographs with position and depth; live coverage while shooting; sends to the Studio |
+| **Station** for robots and vehicles | A robot, a vehicle, its operator | Beside the operator, or on the vehicle | Receives capture sets, runs the quick pass, returns the brief for the next leg |
+| **Workers** | Nobody directly | Home machines, rented GPUs | The full pass |
+| **Agents** | A person's own agent | Anywhere | Everything above, through MCP |
+
+**The Studio is the website, packaged.** One web application (the interface, the 3D scenes,
+three.js and splats) is the Studio's interface and the browser's. On the desktop it is wrapped
+together with the local engine as a single installable application for macOS and Windows.
+Electron is the leading choice for the wrapper: it ships its own Chromium, so the 3D scenes
+render the same on every system, and its size is small next to the engine it carries. Tauri,
+which uses each system's own web view, is the alternative to measure against it. The decision
+belongs in an RFC.
+
+**How a robot's photographs reach Recce.** A robot does not have a card to pull. During a mission
+it sends what its link allows, a stream of selected frames with their poses, to the station,
+where the quick pass shows the operator what has been seen and returns the next brief as data
+the robot's own software can follow. When it comes back, or when the link is good, it delivers
+the full capture set, and the full pass runs. A vehicle with its own computer can carry the
+station on board and send only the coverage and the brief. Recce never steers the robot; it says
+what is missing.
+
+## Each mission, specialised
+
+| | Heritage diver | Survey drone | Robot in a hazard | Enthusiast | Estate agent |
+|---|---|---|---|---|---|
+| **A leg** | A dive | A battery | A pass inside | A walk round the subject | A room, a façade |
+| **Time for the quick pass** | The surface interval | The battery swap | Live, while the robot moves | Before packing up | Before handing back the keys |
+| **How photos reach Recce** | Card to laptop on the boat | Card to laptop at the site | Selected frames over radio; the full set on return | Phone or card to laptop | Capture app, drone card |
+| **What gives the scale** | Targets on the site, a refractive camera model | GPS with RTK, control points | The robot's own poses and depth | The phone's position and depth, or a scale bar | The phone's position and depth |
+| **The hard part** | Refraction, colour lost in water | Height, distortion, large areas | A weak link, smoke, darkness | Shine, thin parts | Plain walls, many rooms |
+| **Delivered** | A measured, colour-corrected model with its datasheet, for the archive | Georeferenced terrain and buildings, checked against control points | The layout inside and what was not seen, within the hour | A model for Blender, a game engine or a shared link | A walk-through for buyers, rooms with measured sizes |
+| **Who acts on it** | Archaeologists, conservators | Planners, engineers | Responders, structural engineers | The owner, their friends | Buyers |
+
+## What success looks like
+
+**For every mission:**
+
+- No one goes back to a site because of a gap Recce could have shown before they left.
+- The quick pass after each leg arrives before the next leg starts.
+- The full pass runs on power the person did not have to buy, at a cost they saw before they
+  approved it.
+- Every model that leaves Recce carries its datasheet, and what the datasheet says holds against
+  a reference.
+- The photographs and the models never leave the person's control unless they send them.
+
+**For each mission:**
+
+- **The diver** closes the morning's gaps in the afternoon dive and leaves the site with a model
+  the archaeologists measure from without asking how it was made.
+- **The drone crew** packs up after the last battery knowing the area is covered, and the next
+  morning's terrain meets the control points.
+- **The responders** see the inside of the building within the hour, with the unseen parts marked
+  as unseen, before anyone walks in.
+- **The enthusiast** gets a model they are proud to show, from a phone and an evening of rented
+  power, and reshoots less each time because Recce explained what went wrong.
+- **The agent** leaves the flat with every room covered and sends buyers a walk-through the same
+  day, with sizes that hold.
+
+## What makes Recce
+
+**Answers while the mission runs.** The quick pass, after every leg, is what no tool offers
+today; the others answer after the mission is over.
+
+**Power without owning it.** The heavy work goes where the hardware is, at home or rented for a
+night, decided and paid for by the person.
+
+**Models that state their limits.** The datasheet travels with every model: true size or not,
+solid or inferred or unseen.
+
+**One mission shape for people, robots and agents.** The same brief goes to a person as cards on
+a screen, to a robot as data, to an agent through MCP.
+
+**Places with a history.** A wreck visited each season, a site before and after construction, a
+building before and after the fire, a home sold twice: each becomes a place Recce remembers. The
+next mission starts from the last one's gaps.
+
+**It explains and it teaches.** Every stage is something to look at and understand. Small labs
+inside the product show the physics behind a weak capture. A person's own AI, when they connect
+one, coaches on top: why the capture came out the way it did and what to do about it, its numbers
+checked against Recce's. Without AI, Recce is complete.
+
+**It is the person's.** Open source, running on their machines, with no Recce cloud to send
+anything to.
 
 ## Why now
 
-Four things became true at once. Global camera solving made registration three to four times
-faster. Gaussian splats made reconstructions something people want to look at. Phones
-started recording their own position and depth with every photograph. And a CUDA GPU now rents
-for about a third of a dollar an hour. Agents can drive tools, and local models can run beside
-them. The established tools were built for one large machine and a finished photo set; none of
-them is built for a person in the field, a pool of borrowed power and a conversation with the
-capture.
+Global camera solving made registration three to four times faster, which is what makes a quick
+pass between legs thinkable. Gaussian splats made reconstructions something people want to look
+at. Phones record their own position and depth with every photograph, and robots and drones
+carry the same. A CUDA GPU rents for about a third of a dollar an hour. Agents can drive tools,
+and local models run beside them. The established tools were built for one large machine and a
+finished set of photographs; none of them is built for a mission that is still running.
 
 ## Where it starts
 
-Recce starts where it can be tested at every step, and grows outward.
+**At home, with the phone and the Studio.** The capture app and an object on a table, then a whole
+room. It is the enthusiast's and the estate agent's mission at its smallest, and the room is the
+robots' world.
 
-**At home, from simple to hard.** The iPhone capture app and an object on a table, then a whole
-room. The room is the robots' world, so the home loop is also the first step of the robot loop.
+**The quick pass and the full pass, split, from the start.** In parallel: the quick pass on the
+laptop and the full pass on a rented GPU and home machines, measured at every hand-off (what is
+sent, how long it takes, what it costs, how long each pass runs). Borrowed power and the quick pass
+are what every mission depends on, so they are built first.
 
-**The field night, from the start.** In parallel, the split that makes the rest possible: a large
-set developed and judged on the laptop, reduced, sent, reconstructed overnight on rented and home
-machines, and measured at every hand-off (bytes, upload time, wall-clock, cost). Borrowed power is
-the reason Recce exists, so it is built first, not added later.
-
-Underwater, drones and caves come next on the same studio and the same farm; Step 0 already
-measured what each of them needs.
+The drone, the dive and the robot in a hazard follow on the same shape; Step 0 already measured
+what each of them needs (RTK and control points, the refractive camera model and colour in water,
+a robot's capture set and frame).
 
 ## The bets
 
-The vision stands or falls on four things, each to be proven on the owner's own captures:
-
-1. **The night is enough.** A day's large set reconstructs overnight on borrowed machines, for a
-   price one person accepts without thinking twice.
-2. **What travels is small.** The laptop reduces a day's RAW to a working set a weak uplink
-   carries in under an hour, without costing the model its quality.
-3. **The laptop can judge alone.** Registration, the gaps and tomorrow's plan for a day's set run
-   offline on the laptop the same evening.
-4. **The datasheet is honest.** What every model says about itself holds against references.
+1. **The quick pass fits between legs.** Coverage and the next shots for a leg's photographs
+   arrive within a surface interval, a battery swap, or live for a robot.
+2. **The quick pass is right about the gaps.** What it calls covered is covered in the full pass.
+3. **What travels is small enough.** The working set crosses a field connection in minutes to an
+   hour without costing the model its quality.
+4. **A night of borrowed power is enough,** at a price one person accepts.
+5. **The datasheet is honest** against references, on real missions.
 
 ## What Recce refuses to be
 
 Not a cloud service: there is no Recce server to send photographs to. Not a survey instrument:
 models state their limits instead of claiming a grade. Not the controller of robots or drones:
-they capture with their own software, and Recce judges what they bring back. Not dependent on AI:
-the studio is complete without it.
+they capture with their own software, and Recce tells them what is missing. Not dependent on AI.
 
 ## Open
 
-How the studio is delivered on the laptop (the local engine with its web interface, or a desktop
-application around it); exactly what the laptop sends and at what resolution, and when the RAW
-itself has to travel (full-detail texture, colour corrected by range underwater); whether a day's
-registration fits in a laptop's memory; which providers to rent from first; and whether a Mac
-ever runs dense depth itself.
+- **The wrapper.** Electron or Tauri, decided in an RFC on measured rendering and size.
+- **The quick pass.** At which reduced resolution, how it adds a leg without starting over, and
+  how fast it runs on a laptop without a GPU.
+- **The robot link.** How frames are selected for a weak link, and the station's interface.
+- **What the full pass needs sent,** and when the originals have to travel (full-detail texture,
+  colour corrected by range underwater).
+- **Renting.** Which providers first, and how data reaches them.
+- **A Mac running the full pass itself,** or always sending it out.
