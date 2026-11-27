@@ -13,21 +13,25 @@ the set's reference, tolerance set when the set is chosen; drone terrain heights
 footprints against the control points. The number of agent iterations and where they went wrong
 is recorded.
 
-**Result (2026-11-26): not proven yet.**
+**Result (2026-11-27): partly proven, closed by the owner.** The agent builds an honest
+structured model in every segment: each element carries its source and uncertainty, and every
+segment marks what it does not know. The measured dimensions meet their reference in the room and
+not in the others, as below. The owner closed RC-P13 on that record (2026-11-27); the misses are
+findings for the build phase.
 - **Room:** built and checked. All 13 measured dimensions are within 2% or 2 cm of the Faro scan.
   The floor-area part of the criterion is not yet compared as an area.
 - **Drone:** built and checked against 58 survey points. As the model stands (RTK only), the
   ground reads 1.05 m low and 18 of 57 heights are within its stated 2σ; after one shift
   fitted on 7 control points, 50 of 50 check points are, std 0.27 m. The site has no
   buildings, so the footprint clause is not tested.
-- **Buildings:** built and checked on UseGeo, from the providers' poses (our own mapping bends
-  on this flight), against a tolerance fixed beforehand. Not met: against OpenStreetMap, 31 of 49
+- **Buildings:** built and checked on UseGeo, from the providers' poses (our own mapping, once the lens
+  is modelled, reads 1.11 m low), against a tolerance fixed beforehand. Not met: against OpenStreetMap, 31 of 49
   buildings pass IoU 0.5 (80% needed). With the eaves stated, 30 of 31 areas are within their
   2σ (σ a median 29% of the area); heights within 2σ for 29 of 31. Every mapped building is
   found; merged neighbours and outlines fail it.
-- **Cave:** built and checked on the authors' photogrammetric cloud. On covered sections, 11 of 17
-  widths and heights are within 2% or 5 cm (a proposed tolerance), median −0.9 cm, p95 12 cm. The
-  fork is marked unknown.
+- **Cave:** built and checked on the authors' photogrammetric cloud. Not met: on covered sections,
+  11 of 17 widths and heights are within 2% or 5 cm (the tolerance the owner set, 2026-11-27),
+  median −0.9 cm, p95 12 cm. The fork is marked unknown.
 
 ## Layout
 
@@ -244,7 +248,8 @@ Lava Tube Mission in Sicily" (Romio et al.). It is on 4TU.ResearchData, doi
 - **Measurements:** each section's width (left + right) and height (up + down). Each direction is
   the median of the bins within ±10°.
 - **The check:** the same rays are cut in the LiDAR cloud.
-- **Tolerance:** 2% or 5 cm is proposed. The brief leaves the cave's tolerance open.
+- **Tolerance:** 2% or 5 cm, set by the owner on 2026-11-27 (the brief left it open). On it the
+  segment is not met: 11 of 17 covered sections.
 
 **Against the LiDAR (22 stations over 22.7 m of passage):**
 
@@ -284,7 +289,6 @@ LiDAR lacks.
 
 **Not covered:**
 - **Uncertainty.** The section rays' uncertainty (5 cm, the voxel) is not calibrated.
-- **The tolerance.** It is a proposal for the owner.
 - **The branches** beyond the fork.
 - **The authors' own cloud-to-cloud analysis.** It is not compared with ours.
 - **The reconstruction itself.** It is the authors' photogrammetry, not ours, because the raw video
