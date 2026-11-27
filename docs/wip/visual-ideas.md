@@ -51,7 +51,9 @@ of the same day, also approved as directions. Source tags `[V]` and `[U]` there 
   taken as a crisp image plane with no outline; a dot marks the camera centre; four hairline rays
   run from the photo's corners and fade towards the centre, so the light reads as travelling and the
   photo as the surface. No edges close a pyramid. A shot not yet taken is a dotted outline with
-  faint rays. Every scene with cameras follows this.
+  faint rays. Every scene with cameras follows this. A setting replaces the photos with a solid
+  fill (owner, 2026-11-27), for large sets or slow devices where hundreds of textures cost frame
+  rate; the dot and the fading rays stay the same. Not built yet; its saving is not measured.
 - **AI is a layer, never a dependency** (owner, 2026-11-27): each view works with no AI connected;
   with the person's own AI connected, what it adds is marked as written by AI and checked against
   the engine's numbers.
