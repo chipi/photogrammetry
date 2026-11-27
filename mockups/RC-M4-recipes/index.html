@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recce · Recipes and comparison (RC-M4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Tokens follow RC-M1 to RC-M3. Recipe A is the accent, recipe B the "new" orange, everywhere:
+   graph, wipe, table and cost bars. */
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 14px; --fs-xl: 16px;
+  --r-1: 4px; --r-2: 6px; --r-3: 8px; --r-pill: 999px;
+  --dur-fast: 120ms; --ui: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --bg-app: #0b0d10; --bg-panel: #111419; --bg-raised: #161a21; --bg-field: #1b2029; --bg-hover: #212734;
+  --border: #212733; --border-strong: #2c3442;
+  --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
+  --a: #7cc4ff; --b: #ffb36b; --truth: #5ee0a0; --warn: #ffcf5c; --fail: #ff7a7a; --ai: #c9a2ff;
+  --view-bg: #0d1015; --bg-label: rgba(12,15,20,.88); color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
+  --border: #dde1e7; --border-strong: #c9cfd8;
+  --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
+  --a: #1f6fc4; --b: #c2600f; --truth: #137a49; --warn: #8a5a00; --fail: #c23030; --ai: #7a3fc4;
+  --view-bg: #f2f3f5; --bg-label: rgba(255,255,255,.94); color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg-app); color: var(--text); font: var(--fs-md)/1.45 var(--ui); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button, select { font: inherit; color: inherit; }
+button:focus-visible { outline: 2px solid var(--a); outline-offset: 1px; }
+.mono { font-family: var(--mono); font-size: var(--fs-sm); }
+.dim { color: var(--text-dim); }
+.app { display: grid; height: 100vh; grid-template-rows: 48px minmax(0,1fr); grid-template-columns: 330px minmax(0,1fr) 400px;
+  grid-template-areas: "top top top" "left view right"; }
+.top { grid-area: top; display: flex; align-items: center; gap: var(--sp-3); padding: 0 var(--sp-4); border-bottom: 1px solid var(--border); background: var(--bg-panel); min-width: 0; }
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; letter-spacing: .02em; }
+.brand i { width: 14px; height: 14px; border-radius: var(--r-1); background: conic-gradient(from 210deg, var(--a), var(--b), var(--truth), var(--a)); display: block; }
+.crumbs { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.crumbs b { color: var(--text); font-weight: 500; }
+.grow { flex: 1; }
+.seg { display: inline-flex; background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-3); padding: 2px; flex: none; }
+.seg button { height: 26px; border: 0; background: transparent; padding: 0 var(--sp-3); border-radius: var(--r-2); color: var(--text-dim); cursor: pointer; transition: background var(--dur-fast), color var(--dur-fast); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.iconbtn { height: 28px; padding: 0 var(--sp-3); border-radius: var(--r-2); border: 1px solid var(--border); background: var(--bg-field); cursor: pointer; color: var(--text-dim); }
+.iconbtn:hover { background: var(--bg-hover); color: var(--text); }
+.left, .right { background: var(--bg-panel); overflow: auto; scrollbar-width: thin; min-width: 0; }
+.left { grid-area: left; border-right: 1px solid var(--border); }
+.right { grid-area: right; border-left: 1px solid var(--border); }
+.sec { padding: var(--sp-4); border-bottom: 1px solid var(--border); }
+.sec h2 { margin: 0 0 var(--sp-3); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; display: flex; justify-content: space-between; gap: var(--sp-2); align-items: center; }
+.sec p { margin: 0 0 var(--sp-2); color: var(--text-dim); }
+.sec p b { color: var(--text); font-weight: 500; }
+/* The recipe graph */
+.graph { display: grid; gap: 0; }
+.node { position: relative; border: 1px solid var(--border-strong); border-radius: var(--r-3); background: var(--bg-raised); padding: var(--sp-2) var(--sp-3); }
+.node .k { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); }
+.node .v { font-weight: 500; }
+.node .m { font: var(--fs-xs) var(--mono); color: var(--text-dim); margin-top: 2px; }
+.wire { height: 18px; width: 2px; background: var(--border-strong); margin: 0 auto; }
+.fork { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); position: relative; }
+.fork .node { cursor: pointer; }
+.fork .node.a { border-color: var(--a); box-shadow: inset 3px 0 0 var(--a); }
+.fork .node.b { border-color: var(--b); box-shadow: inset 3px 0 0 var(--b); }
+.differs { display: inline-flex; align-items: center; height: 22px; padding: 0 10px; border-radius: var(--r-pill); border: 1px dashed var(--warn); color: var(--warn); font-size: var(--fs-xs); margin-bottom: var(--sp-2); }
+.node.later { opacity: .55; border-style: dashed; }
+.swap { margin-top: var(--sp-2); display: grid; gap: var(--sp-1); }
+.swap button { text-align: left; border: 1px solid var(--border); background: var(--bg-field); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); cursor: pointer; }
+.swap button:hover:not([disabled]) { background: var(--bg-hover); }
+.swap button[disabled] { opacity: .55; cursor: not-allowed; }
+.swap small { display: block; color: var(--text-dim); font-size: var(--fs-xs); }
+/* The view and its wipe */
+.view { grid-area: view; position: relative; background: var(--view-bg); min-width: 0; min-height: 0; overflow: hidden; }
+.view canvas { display: block; width: 100%; height: 100%; }
+.wipe { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px solid var(--text); cursor: ew-resize; }
+.wipe::before { content: ""; position: absolute; top: 0; bottom: 0; left: -12px; width: 22px; }
+.wipe .knob { position: absolute; top: 50%; left: -15px; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; background: var(--bg-raised); border: 2px solid var(--text); display: grid; place-items: center; font: 600 var(--fs-xs) var(--mono); color: var(--text); }
+.side { position: absolute; top: var(--sp-3); padding: var(--sp-2) var(--sp-3); border-radius: var(--r-2); background: var(--bg-label); border: 1px solid var(--border); font-size: var(--fs-sm); max-width: 42%; }
+.side b { font-weight: 600; }
+.side.a { left: var(--sp-3); border-left: 3px solid var(--a); }
+.side.b { right: var(--sp-3); border-right: 3px solid var(--b); text-align: right; }
+.hud { position: absolute; left: var(--sp-3); bottom: var(--sp-3); background: var(--bg-label); border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); color: var(--text-dim); font-size: var(--fs-sm); max-width: 70%; }
+.hud b { color: var(--text); font-weight: 500; }
+.lab { position: absolute; transform: translate(-50%, -120%); background: var(--bg-label); border: 1px solid var(--fail); color: var(--text); border-radius: var(--r-2); padding: 2px var(--sp-2); font: var(--fs-xs) var(--mono); white-space: nowrap; pointer-events: none; }
+.toggle { display: flex; align-items: center; gap: var(--sp-2); padding: 3px 0; color: var(--text-dim); cursor: pointer; }
+.legend-bar { height: 12px; border-radius: var(--r-1); border: 1px solid var(--border); }
+.legend-ticks { display: flex; justify-content: space-between; font: var(--fs-xs) var(--mono); color: var(--text-dim); margin-top: var(--sp-1); }
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+th, td { padding: 5px var(--sp-2); text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; white-space: normal; }
+thead th { font-size: var(--fs-xs); color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+td.num { font-family: var(--mono); }
+th.a, td.a { color: var(--a); } th.b, td.b { color: var(--b); }
+td.better { font-weight: 600; }
+td.better::after { content: " ◂"; font-weight: 400; color: var(--text-dim); }
+.verdict { border: 1px solid var(--border-strong); border-radius: var(--r-3); padding: var(--sp-3); background: var(--bg-raised); margin-top: var(--sp-3); }
+.verdict p { margin: 0 0 var(--sp-2); color: var(--text); }
+.verdict p:last-child { margin: 0; }
+.verdict .by { font-size: var(--fs-xs); color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--sp-2); display: flex; gap: var(--sp-2); align-items: center; }
+.aichip { display: inline-flex; align-items: center; height: 22px; padding: 0 10px; border-radius: var(--r-pill); border: 1px solid var(--ai); color: var(--ai); font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .06em; text-transform: none; }
+.verdict.ai { border-color: color-mix(in oklab, var(--ai) 55%, var(--border)); }
+.unbacked { text-decoration: underline wavy var(--fail); }
+/* Cost */
+.cost-row { display: grid; grid-template-columns: 108px minmax(0,1fr) 92px; gap: var(--sp-2); align-items: center; margin-bottom: var(--sp-2); font-size: var(--fs-sm); }
+.cost-row .bars { display: grid; gap: 3px; }
+.bar { height: 8px; border-radius: 2px; }
+.bar.est { background: transparent; border: 1px dashed var(--text-dim); height: 8px; }
+.bar.meas { background: var(--text-dim); }
+.cost-row .nums { font: var(--fs-xs) var(--mono); color: var(--text-dim); text-align: right; line-height: 1.35; }
+.cost-row .nums b { color: var(--text); font-weight: 500; }
+.cost-key { display: flex; gap: var(--sp-3); font-size: var(--fs-xs); color: var(--text-dim); margin-bottom: var(--sp-3); align-items: center; }
+.cost-key i { display: inline-block; width: 18px; height: 8px; border-radius: 2px; margin-right: var(--sp-1); vertical-align: middle; }
+.total { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); margin-top: var(--sp-3); }
+.total > div { border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); }
+.total .k { font-size: var(--fs-xs); color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; }
+.total .v { font: 500 var(--fs-xl) var(--mono); }
+.total .d { font: var(--fs-xs) var(--mono); color: var(--text-dim); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text-dim); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <span class="brand"><i></i>Recce</span>
+    <span class="crumbs">ETH3D <b id="crumb-scene"></b> › Recipes and comparison</span>
+    <span class="grow"></span>
+    <div class="seg" id="scene-seg" role="group" aria-label="Scene">
+      <button data-v="kicker">kicker</button>
+      <button data-v="courtyard">courtyard</button>
+    </div>
+    <div class="seg" id="ai-seg" role="group" aria-label="AI">
+      <button data-v="off" aria-pressed="true">No AI</button>
+      <button data-v="on">AI connected</button>
+    </div>
+    <button class="iconbtn" id="theme">Light</button>
+  </header>
+
+  <aside class="left" aria-label="Recipe">
+    <section class="sec">
+      <h2>Recipe <span class="dim" style="text-transform:none;letter-spacing:0;font-weight:400">two recipes, one graph</span></h2>
+      <div class="graph" id="graph"></div>
+    </section>
+    <section class="sec">
+      <h2>In the view</h2>
+      <div class="seg" id="color-seg" role="group" aria-label="Colour points by" style="margin-bottom:var(--sp-3)">
+        <button data-v="photo" aria-pressed="true">Photo colour</button>
+        <button data-v="error">Reprojection error</button>
+      </div>
+      <div id="legend" hidden>
+        <div class="legend-bar" id="legend-bar"></div>
+        <div class="legend-ticks"><span>0 px</span><span>1</span><span>2</span><span>3</span><span>4+ px</span></div>
+        <p style="margin-top:var(--sp-2);font-size:var(--fs-sm)">How far each point lands from where its photos saw it. Lightness rises with the error (OKLCH).</p>
+      </div>
+      <label class="toggle"><input type="checkbox" id="t-truth" checked> Where the cameras really were (ETH3D), with the miss drawn</label>
+      <label class="toggle"><input type="checkbox" id="t-cams" checked> Cameras as the recipe placed them</label>
+    </section>
+  </aside>
+
+  <main class="view" id="view">
+    <div class="loading" id="loading">Loading…</div>
+    <div class="side a" id="side-a"></div>
+    <div class="side b" id="side-b"></div>
+    <div class="wipe" id="wipe" role="slider" aria-label="Compare" tabindex="0"><div class="knob">⇔</div></div>
+    <div class="hud" id="hud"></div>
+  </main>
+
+  <aside class="right" aria-label="Comparison and cost">
+    <section class="sec">
+      <h2>What changed <span class="dim" id="diff-node"></span></h2>
+      <table id="diff"></table>
+      <div class="verdict" id="verdict"></div>
+    </section>
+    <section class="sec">
+      <h2>Cost <span class="dim" style="text-transform:none;letter-spacing:0;font-weight:400">estimated before, measured after</span></h2>
+      <div class="cost-key"><span><i style="border:1px dashed var(--text-dim)"></i>estimate</span><span><i style="background:var(--text-dim)"></i>measured</span><span id="cost-machine" class="mono"></span></div>
+      <div id="cost"></div>
+      <div class="total" id="total"></div>
+      <p style="margin-top:var(--sp-3);font-size:var(--fs-sm)" id="cost-note"></p>
+    </section>
+    <section class="sec">
+      <h2>On other machines <span class="dim" style="text-transform:none;letter-spacing:0;font-weight:400">RC-P1, mapping time</span></h2>
+      <table id="machines"></table>
+      <p style="margin-top:var(--sp-2);font-size:var(--fs-sm)">Time only: energy was not measured on the M4 Pro or the GB10.</p>
+    </section>
+  </aside>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const params = new URLSearchParams(location.search);
+if (params.get("theme") === "light") document.documentElement.dataset.theme = "light";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const meta = await fetch("data/meta.json").then(r => r.json());
+let ai = null;
+try { ai = await fetch("data/ai.json").then(r => r.ok ? r.json() : null); } catch { ai = null; }
+
+const RECIPES = {
+  colmap_incremental: { name: "COLMAP incremental", short: "COLMAP", how: "adds photos one at a time, refining as it goes" },
+  glomap_global: { name: "GLOMAP global", short: "GLOMAP", how: "places all photos at once from their pairwise rotations" },
+};
+const state = { scene: params.get("scene") || "kicker", A: "colmap_incremental", B: "glomap_global", color: params.get("color") || "photo",
+  ai: params.get("ai") === "1", split: +(params.get("split") || 0.5) };
+if (params.get("swap") === "1") [state.A, state.B] = [state.B, state.A];
+
+/* ---------- OKLCH ramp for the error colouring (as RC-M2) ---------- */
+function oklchToSrgb(L, C, hDeg) {
+  for (let c = C; c >= 0; c -= 0.005) {
+    const h = hDeg * Math.PI / 180, a = c * Math.cos(h), b = c * Math.sin(h);
+    const l_ = L + 0.3963377774 * a + 0.2158037573 * b, m_ = L - 0.1055613458 * a - 0.0638541728 * b, s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+    const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+    const lin = [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s];
+    if (lin.every(v => v >= -1e-4 && v <= 1 + 1e-4)) return lin.map(v => { v = Math.min(1, Math.max(0, v)); return v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055; });
+  }
+  return [L, L, L];
+}
+const ramp = t => oklchToSrgb(0.30 + 0.62 * t, 0.12, 255 - 160 * t);
+document.getElementById("legend-bar").style.background = `linear-gradient(90deg, ${Array.from({ length: 12 }, (_, i) => `rgb(${ramp(i / 11).map(v => Math.round(v * 255))})`).join(",")})`;
+
+/* ---------- Scene and the wipe ---------- */
+const view = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+view.prepend(renderer.domElement);
+const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 500);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+const scenes = { A: new THREE.Scene(), B: new THREE.Scene() };
+const labels = [];
+let data = null, upVec = new THREE.Vector3(0, 0, 1);
+
+function pointsObject(rec) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(rec.points.xyz, 3));
+  const n = rec.points.error_px.length, col = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const c = state.color === "error" ? ramp(Math.min(1, rec.points.error_px[i] / 4)) : rec.points.rgb.slice(i * 3, i * 3 + 3).map(v => v / 255);
+    col.set(c, i * 3);
+  }
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  return new THREE.Points(g, new THREE.PointsMaterial({ size: 2.2, sizeAttenuation: false, vertexColors: true }));
+}
+function frustum(c, size) {
+  const o = new THREE.Vector3(...c.centre), R = c.rotation;
+  const ax = k => new THREE.Vector3(R[0][k], R[1][k], R[2][k]);
+  const x = ax(0), y = ax(1), z = ax(2), hw = size * 0.75, hh = size * 0.5;
+  const k = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([sx, sy]) => o.clone().addScaledVector(z, size).addScaledVector(x, sx * hw).addScaledVector(y, sy * hh));
+  const v = []; for (const q of k) v.push(o, q); for (let i = 0; i < 4; i++) v.push(k[i], k[(i + 1) % 4]);
+  return v;
+}
+function build() {
+  for (const s of Object.values(scenes)) s.clear();
+  labels.forEach(l => l.el.remove()); labels.length = 0;
+  const truthOn = document.getElementById("t-truth").checked, camsOn = document.getElementById("t-cams").checked;
+  const ext = data.extent;
+  for (const side of ["A", "B"]) {
+    const rec = data.recipes[state[side]], s = scenes[side];
+    s.add(pointsObject(rec));
+    if (camsOn) {
+      const v = rec.cameras.flatMap(c => frustum(c, ext * 0.025));
+      s.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(v), new THREE.LineBasicMaterial({ color: cssVar(side === "A" ? "--a" : "--b") })));
+    }
+    if (truthOn) {
+      const tv = [], miss = [];
+      for (const c of rec.cameras) {
+        const t = data.truth[c.name]; if (!t) continue;
+        tv.push(...t);
+        miss.push(new THREE.Vector3(...c.centre), new THREE.Vector3(...t));
+      }
+      const tg = new THREE.BufferGeometry(); tg.setAttribute("position", new THREE.Float32BufferAttribute(tv, 3));
+      s.add(new THREE.Points(tg, new THREE.PointsMaterial({ size: 7, sizeAttenuation: false, color: cssVar("--truth") })));
+      s.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(miss), new THREE.LineBasicMaterial({ color: cssVar("--fail") })));
+      const worst = rec.cameras.filter(c => c.error_m != null).sort((p, q) => q.error_m - p.error_m)[0];
+      const el = document.createElement("div"); el.className = "lab";
+      el.textContent = `${side}: worst ${worst.name.split("/").pop()} ${worst.error_m.toFixed(2)} m off`;
+      view.appendChild(el); labels.push({ el, side, pos: new THREE.Vector3(...worst.centre) });
+    }
+  }
+  scenes.A.background = scenes.B.background = new THREE.Color(cssVar("--view-bg"));
+}
+
+async function loadScene() {
+  data = await fetch(`data/${state.scene}.json`).then(r => r.json());
+  const all = Object.values(data.truth);
+  // Framed on the 5th to 95th percentile of recipe A's points, so stray points do not shrink it.
+  const P = data.recipes[state.A].points.xyz;
+  const pct = (k, q) => { const v = []; for (let i = k; i < P.length; i += 3) v.push(P[i]); v.sort((a, b) => a - b); return v[Math.floor(q * (v.length - 1))]; };
+  const lo = [0, 1, 2].map(k => pct(k, 0.05)), hi = [0, 1, 2].map(k => pct(k, 0.95));
+  data.extent = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]);
+  // Up: the mean of the cameras' up directions (COLMAP cameras have +y down).
+  const ups = data.recipes[state.A].cameras.map(c => new THREE.Vector3(-c.rotation[0][1], -c.rotation[1][1], -c.rotation[2][1]));
+  upVec = ups.reduce((s, v) => s.add(v), new THREE.Vector3()).normalize();
+  camera.up.copy(upVec);
+  const mid = new THREE.Vector3((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2);
+  const camMid = all.reduce((s, p) => s.add(new THREE.Vector3(...p)), new THREE.Vector3()).divideScalar(all.length);
+  const look = mid.clone().sub(camMid); look.addScaledVector(upVec, -look.dot(upVec));
+  if (look.length() < 1e-3) look.set(1, 0, 0);
+  look.normalize();
+  controls.target.copy(mid);
+  // From behind the cameras, looking past them into the scene, a little above.
+  camera.position.copy(camMid).addScaledVector(look, -data.extent * 0.35).addScaledVector(upVec, data.extent * 0.45);
+  build(); renderPanels();
+}
+
+/* ---------- Panels ---------- */
+const fmt = (v, d = 2) => typeof v === "number" ? v.toFixed(d) : v;
+function metrics(r) {
+  const pe = r.pose_error;
+  return [
+    { k: "Photos registered", a: r.registered, unit: `/ ${meta.scenes[state.scene].images}`, better: "high", d: 0 },
+    { k: "Points", a: r.points3D, better: "high", d: 0 },
+    { k: "Reprojection, mean (px)", a: r.reprojection_error_mean_px, better: "low" },
+    { k: "Reprojection, 95th (px)", a: r.reprojection_error_p95_px, better: "low" },
+    { k: "Camera off truth, median (% of scene)", a: pe.position_frac_of_extent_median * 100, better: "low" },
+    { k: "Camera off truth, worst (% of scene)", a: pe.position_frac_of_extent_max * 100, better: "low" },
+    { k: "Rotation off truth, median (°)", a: pe.rotation_deg_median, better: "low", d: 3 },
+    { k: "Mapping time (s)", a: r.timings.mapping_s, better: "low", d: 1 },
+  ];
+}
+function renderPanels() {
+  const m = meta.scenes[state.scene], rA = m.results.strategies[state.A], rB = m.results.strategies[state.B];
+  document.getElementById("crumb-scene").textContent = state.scene;
+  document.querySelectorAll("#scene-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === state.scene)));
+  document.querySelectorAll("#color-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === state.color)));
+  document.querySelectorAll("#ai-seg button").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.v === "on") === state.ai)));
+  document.getElementById("legend").hidden = state.color !== "error";
+  const nA = RECIPES[state.A], nB = RECIPES[state.B];
+  document.getElementById("side-a").innerHTML = `<b style="color:var(--a)">A · ${nA.name}</b><br><span class="dim">${rA.registered} photos · ${rA.points3D.toLocaleString("en")} points</span>`;
+  document.getElementById("side-b").innerHTML = `<b style="color:var(--b)">B · ${nB.name}</b><br><span class="dim">${rB.registered} photos · ${rB.points3D.toLocaleString("en")} points</span>`;
+
+  // The graph: shared nodes once; the fork at the node that differs.
+  const shared = (k, v, mm) => `<div class="node"><div class="k">${k}</div><div class="v">${v}</div><div class="m">${mm}</div></div><div class="wire"></div>`;
+  const c = m.cost.stages;
+  document.getElementById("graph").innerHTML =
+    shared("Photos", `${m.images} JPEG, ETH3D ${state.scene}`, "DSLR, 6048 × 4032") +
+    shared("Features", "SIFT", `${c.features.seconds.toFixed(1)} s · ${(c.features.above_baseline_wh * 1000).toFixed(0)} mWh`) +
+    shared("Matching", "Exhaustive, verified", `${c.matching.seconds.toFixed(1)} s · ${(c.matching.above_baseline_wh * 1000).toFixed(0)} mWh`) +
+    `<div class="differs">The node that differs: mapping</div>
+     <div class="fork">
+       <div class="node a" data-side="A" tabindex="0" role="button"><div class="k">Mapping · A</div><div class="v">${nA.name}</div><div class="m">${c[state.A].seconds.toFixed(1)} s · ${(c[state.A].above_baseline_wh * 1000).toFixed(0)} mWh</div></div>
+       <div class="node b" data-side="B" tabindex="0" role="button"><div class="k">Mapping · B</div><div class="v">${nB.name}</div><div class="m">${c[state.B].seconds.toFixed(1)} s · ${(c[state.B].above_baseline_wh * 1000).toFixed(0)} mWh</div></div>
+     </div>
+     <div class="swap" id="swap" hidden></div>
+     <div class="wire"></div>
+     <div class="node later"><div class="k">Dense · mesh · splat</div><div class="v">Same for both</div><div class="m">not run for this comparison</div></div>`;
+  document.querySelectorAll(".fork .node").forEach(n => n.onclick = () => openSwap(n.dataset.side));
+
+  // What changed.
+  const mA = metrics(rA), mB = metrics(rB);
+  let t = `<thead><tr><th></th><th class="a">A · ${nA.short}</th><th class="b">B · ${nB.short}</th></tr></thead><tbody>`;
+  mA.forEach((x, i) => {
+    const y = mB[i], d = x.d ?? 2, same = x.a.toFixed(d) === y.a.toFixed(d);
+    const aBetter = !same && (x.better === "high" ? x.a > y.a : x.a < y.a);
+    t += `<tr><td>${x.k}</td><td class="num a${aBetter ? " better" : ""}">${x.a.toLocaleString("en", { minimumFractionDigits: d, maximumFractionDigits: d })}</td><td class="num b${!same && !aBetter ? " better" : ""}">${y.a.toLocaleString("en", { minimumFractionDigits: d, maximumFractionDigits: d })}</td></tr>`;
+  });
+  document.getElementById("diff").innerHTML = t + "</tbody>";
+  document.getElementById("diff-node").textContent = "mapping only";
+  renderVerdict(rA, rB, nA, nB);
+  renderCost(m);
+  renderMachines();
+  const u = new URL(location); u.searchParams.set("scene", state.scene); u.searchParams.set("color", state.color);
+  if (state.ai) u.searchParams.set("ai", "1"); else u.searchParams.delete("ai");
+  history.replaceState(null, "", u);
+}
+
+// Without AI: a rule over the measured numbers, stated as such.
+function renderVerdict(rA, rB, nA, nB) {
+  const el = document.getElementById("verdict");
+  if (state.ai && ai && ai.scenes[state.scene]) {
+    const a = ai.scenes[state.scene];
+    el.className = "verdict ai";
+    el.innerHTML = `<div class="by"><span class="aichip">AI</span> Which recipe for what · your connected AI</div>` +
+      a.claims.map(c => `<p>${c.html}</p>`).join("") +
+      `<p class="dim" style="font-size:var(--fs-xs)">${a.supported} of ${a.claims.length} sentences backed by the numbers on this page; a wavy line marks a number that is not. One recorded run of ${esc(ai.model)}.</p>`;
+    return;
+  }
+  el.className = "verdict";
+  const speed = rA.timings.mapping_s / rB.timings.mapping_s;
+  const worstA = rA.pose_error.position_frac_of_extent_max * 100, worstB = rB.pose_error.position_frac_of_extent_max * 100;
+  const fast = speed > 1 ? nB : nA, ratio = speed > 1 ? speed : 1 / speed;
+  const tight = worstA <= worstB ? nA : nB;
+  el.innerHTML = `<div class="by">By rule · no AI</div>
+    <p><b>${fast.short}</b> maps ${ratio.toFixed(1)} times faster here.</p>
+    <p><b>${tight.short}</b> keeps its worst camera closer to the truth: ${Math.min(worstA, worstB).toFixed(1)}% of the scene against ${Math.max(worstA, worstB).toFixed(1)}%.</p>
+    <p class="dim">Rule: for measurement, prefer the recipe whose worst camera is closer to the truth; for a quick look, the faster one. With ground truth absent, the reprojection 95th percentile (${rA.reprojection_error_p95_px.toFixed(1)} against ${rB.reprojection_error_p95_px.toFixed(1)} px) is the engine's own warning.</p>`;
+}
+
+function renderCost(m) {
+  const e = m.estimate, c = m.cost;
+  document.getElementById("cost-machine").textContent = `X3 · ${c.cores.replace("taskset -c ", "cores ")}`;
+  const rows = ["features", "matching", "colmap_incremental", "glomap_global"];
+  const maxS = Math.max(...rows.flatMap(k => [c.stages[k].seconds, e?.stages[k]?.seconds || 0]));
+  const label = { features: "Features", matching: "Matching", colmap_incremental: "COLMAP map", glomap_global: "GLOMAP map" };
+  document.getElementById("cost").innerHTML = rows.map(k => {
+    const ms = c.stages[k], es = e?.stages[k];
+    const tint = k === state.A ? "var(--a)" : k === state.B ? "var(--b)" : "var(--text-dim)";
+    return `<div class="cost-row"><span>${label[k]}</span><div class="bars">
+      ${es ? `<div class="bar est" style="width:${(es.seconds / maxS) * 100}%" title="${esc(es.model)}"></div>` : ""}
+      <div class="bar meas" style="width:${(ms.seconds / maxS) * 100}%;background:${tint}"></div></div>
+      <div class="nums">${es ? `${es.seconds.toFixed(1)} → ` : ""}<b>${ms.seconds.toFixed(1)} s</b><br>${es ? `${(es.above_baseline_wh * 1000).toFixed(0)} → ` : ""}<b>${(ms.above_baseline_wh * 1000).toFixed(0)} mWh</b></div></div>`;
+  }).join("");
+  const sum = (o, f) => rows.reduce((s, k) => s + o.stages[k][f], 0);
+  const tm = sum(c, "seconds"), em = sum(c, "above_baseline_wh");
+  const te = e ? sum(e, "seconds") : null, ee = e ? sum(e, "above_baseline_wh") : null;
+  const pct = (m_, e_) => `${m_ >= e_ ? "+" : ""}${(((m_ - e_) / e_) * 100).toFixed(0)}% against the estimate`;
+  document.getElementById("total").innerHTML =
+    `<div><div class="k">Time, both recipes</div><div class="v">${tm.toFixed(1)} s</div><div class="d">${te ? `estimated ${te.toFixed(1)} s · ${pct(tm, te)}` : ""}</div></div>
+     <div><div class="k">Energy above idle</div><div class="v">${(em * 1000).toFixed(0)} mWh</div><div class="d">${ee ? `estimated ${(ee * 1000).toFixed(0)} mWh · ${pct(em, ee)}` : ""}</div></div>`;
+  document.getElementById("cost-note").innerHTML =
+    `Measured on the X3's package power sensor (CPU and GPU), above an idle of ${c.baseline_w} W read before and after (${c.baseline_before_w} and ${c.baseline_after_w} W). ` +
+    (e ? `The estimate was fitted on ${e.fitted_on.join(" and ")} only: ${esc(e.caveat)}.` : "");
+}
+
+function renderMachines() {
+  const p = meta.rc_p1, name = { x3: "X3 (CPU)", m4pro: "M4 Pro (CPU)", gb10: "GB10 (GPU SIFT)" };
+  let t = `<thead><tr><th>Machine</th><th class="a">${RECIPES[state.A].short}</th><th class="b">${RECIPES[state.B].short}</th></tr></thead><tbody>`;
+  for (const m of ["x3", "m4pro", "gb10"]) {
+    const r = p[m]?.[state.scene]; if (!r) continue;
+    t += `<tr><td>${name[m]}</td><td class="num a">${r.strategies[state.A].timings.mapping_s.toFixed(1)} s</td><td class="num b">${r.strategies[state.B].timings.mapping_s.toFixed(1)} s</td></tr>`;
+  }
+  document.getElementById("machines").innerHTML = t + "</tbody>";
+}
+
+// Swap in place: the alternatives for the mapping node, keeping every other connection.
+function openSwap(side) {
+  const el = document.getElementById("swap");
+  if (!el.hidden && el.dataset.side === side) { el.hidden = true; return; }
+  el.dataset.side = side; el.hidden = false;
+  const current = state[side], other = state[side === "A" ? "B" : "A"];
+  const opts = [
+    ...Object.entries(RECIPES).map(([k, r]) => ({ k, name: r.name, note: r.how, ok: k !== current })),
+    { k: "mapanything", name: "MapAnything + bundle adjustment", note: "RC-P8: behind the agreement check; not run on this scene", ok: false },
+  ];
+  el.innerHTML = `<div class="dim" style="font-size:var(--fs-xs)">Swap mapping ${side}; features and matches stay connected</div>` +
+    opts.map(o => `<button data-k="${o.k}" ${o.ok ? "" : "disabled"}>${esc(o.name)}${o.k === current ? " · current" : ""}<small>${esc(o.note)}</small></button>`).join("");
+  el.querySelectorAll("button:not([disabled])").forEach(b => b.onclick = () => {
+    if (b.dataset.k === other) state[side === "A" ? "B" : "A"] = current;
+    state[side] = b.dataset.k; el.hidden = true; build(); renderPanels();
+  });
+}
+
+/* ---------- Controls ---------- */
+document.querySelectorAll("#scene-seg button").forEach(b => b.onclick = () => { state.scene = b.dataset.v; loadScene(); });
+document.querySelectorAll("#color-seg button").forEach(b => b.onclick = () => { state.color = b.dataset.v; build(); renderPanels(); });
+document.querySelectorAll("#ai-seg button").forEach(b => b.onclick = () => { state.ai = b.dataset.v === "on"; renderPanels(); });
+document.getElementById("t-truth").onchange = () => build();
+document.getElementById("t-cams").onchange = () => build();
+const syncTheme = () => document.getElementById("theme").textContent = document.documentElement.dataset.theme === "light" ? "Dark" : "Light";
+syncTheme();
+document.getElementById("theme").onclick = () => {
+  const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light"; syncTheme(); if (data) { build(); renderPanels(); }
+};
+const wipe = document.getElementById("wipe");
+const placeWipe = () => { wipe.style.left = `${state.split * view.clientWidth}px`; };
+wipe.addEventListener("pointerdown", e => {
+  wipe.setPointerCapture(e.pointerId); controls.enabled = false;
+  wipe.onpointermove = ev => { const r = view.getBoundingClientRect(); state.split = Math.min(0.95, Math.max(0.05, (ev.clientX - r.left) / r.width)); placeWipe(); };
+  wipe.onpointerup = () => { wipe.onpointermove = null; controls.enabled = true; };
+});
+wipe.onkeydown = e => { if (e.key === "ArrowLeft") state.split = Math.max(0.05, state.split - 0.02); if (e.key === "ArrowRight") state.split = Math.min(0.95, state.split + 0.02); placeWipe(); };
+
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); placeWipe();
+}
+new ResizeObserver(resize).observe(view);
+await loadScene(); resize();
+document.getElementById("loading").remove();
+document.getElementById("hud").innerHTML = `Drag the line to wipe between <b style="color:var(--a)">A</b> and <b style="color:var(--b)">B</b> on the same view. Green dots: where ETH3D says the cameras were; red lines: each camera's miss.`;
+const tmp = new THREE.Vector3();
+renderer.setAnimationLoop(() => {
+  controls.update();
+  const w = view.clientWidth, h = view.clientHeight, x = Math.round(state.split * w);
+  renderer.setScissorTest(true);
+  renderer.setViewport(0, 0, w, h);
+  renderer.setScissor(0, 0, x, h); renderer.render(scenes.A, camera);
+  renderer.setScissor(x, 0, w - x, h); renderer.render(scenes.B, camera);
+  renderer.setScissorTest(false);
+  for (const l of labels) {
+    tmp.copy(l.pos).project(camera);
+    const sx = (tmp.x + 1) / 2 * w, sy = (1 - tmp.y) / 2 * h;
+    const onSide = l.side === "A" ? sx < x : sx >= x;
+    l.el.hidden = !(tmp.z < 1 && onSide && sx > 0 && sx < w && sy > 0 && sy < h);
+    l.el.style.left = `${sx}px`; l.el.style.top = `${sy}px`;
+  }
+});
+</script>
+</body>
+</html>
