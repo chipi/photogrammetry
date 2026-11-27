@@ -105,18 +105,19 @@ atlases at 1024 px, as RC-P6.
 
 ## Verdict
 
-Phase 1, built 2026-11-27. Waiting for the owner's verdict.
+Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept**; the details are
+worked out when the product is built.
 
-| Concept | Idea |
-|---|---|
-| A path through the photos, stops as photos | 7 |
-| The stop dissolves into its photo, lens matched | 7 |
-| How close a view is to a photo, along the path | 7, pattern |
-| Lighting presets, and the splat's limit stated | 7 |
-| The mesh where the splat does not hold | 7 |
-| Framing: aspect, thirds and safe area | 7 |
-| The link: the audience view with "About this model" | 7 |
-| Words by rule, or drafted by the person's AI, checked | 7, pattern |
+| Concept | Idea | Verdict |
+|---|---|---|
+| A path through the photos, stops as photos | 7 | Kept |
+| The stop dissolves into its photo, lens matched | 7 | Kept |
+| How close a view is to a photo, along the path | 7, pattern | Kept |
+| Lighting presets, and the splat's limit stated | 7 | Kept |
+| The mesh where the splat does not hold | 7 | Kept |
+| Framing: aspect, thirds and safe area | 7 | Kept |
+| The link: the audience view with "About this model" | 7 | Kept |
+| Words by rule, or drafted by the person's AI, checked | 7, pattern | Kept |
 
 ## Not covered
 
