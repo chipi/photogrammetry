@@ -113,18 +113,18 @@ page), `&still=1` skips the flight, `&settings=1` opens "Bring your own AI", `&t
 
 ## Verdict
 
-Phase 1, built 2026-11-27. The owner's verdict per concept is open:
+Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept.**
 
 | Concept | Idea | Verdict |
 |---|---|---|
-| The engine's debrief without AI, complete on its own | (owner, 2026-11-27) | Open |
-| The engine's where-to-stand rule | 3, 21 | Open |
-| "Bring your own AI": an OpenAI-compatible endpoint, opt-in | (owner, 2026-11-27) | Open |
-| The AI layer: meaning, priorities per purpose, a walking plan, above the engine's debrief | 5 | Open |
-| Evidence handles: underlined numbers, replayed calls, photos on their cameras | 10 | Open |
-| Unsupported numbers flagged by replay, not by the agent | 10 | Open |
-| Readiness stamps with their requirements | 16 | Open |
-| Agent-placed labels and ghost cameras, moved or deleted by the person | 18 | Open |
+| The engine's debrief without AI, complete on its own | (owner, 2026-11-27) | Kept |
+| The engine's where-to-stand rule | 3, 21 | Kept |
+| "Bring your own AI": an OpenAI-compatible endpoint, opt-in | (owner, 2026-11-27) | Kept |
+| The AI layer: meaning, priorities per purpose, a walking plan, above the engine's debrief | 5 | Kept |
+| Evidence handles: underlined numbers, replayed calls, photos on their cameras | 10 | Kept |
+| Unsupported numbers flagged by replay, not by the agent | 10 | Kept |
+| Readiness stamps with their requirements | 16 | Kept |
+| Agent-placed labels and ghost cameras, moved or deleted by the person | 18 | Kept |
 
 ## Not covered
 
