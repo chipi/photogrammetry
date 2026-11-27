@@ -144,6 +144,17 @@ products of their own. The principle carries over from robotics-lab's Observator
 human friendly* — anything a page shows is something a command answers, and the reverse. The
 coordinate frame and the scale are never hidden.
 
+**AI is optional; the product is complete without it** *(owner, 2026-11-27)*. Every view, check,
+quality report, readiness verdict, gap list and suggested shot works from geometry and rules
+alone, and is good enough on its own: the version without AI is not a placeholder. AI comes in
+two ways, both opt-in. First, Recce is an MCP server, so a person's own agent can drive it from
+outside. Second, a person brings their own AI into Recce: an OpenAI-compatible endpoint (a hosted
+provider such as OpenAI or Anthropic with their key, or a local model) set once in the settings.
+With it connected, features inside Recce go further: the run is explained in words, assessments
+and plans are written over the rule-based ones, and an agent places labels and shots in the scene.
+What the AI adds is marked as written by AI and checked against the engine's own numbers; the
+engine, not the AI, supplies positions and verdicts.
+
 **Two registers in one interface** *(owner, 2026-11-24)*. The frame — panels, lists, inspectors,
 settings, the timeline of a run — is a professional tool in the family of Lightroom, Autodesk's
 products, Blender and Rerun, and follows robotics-lab's look (its Observatory and Mission Control:
@@ -154,8 +165,9 @@ end; explaining what the engine did and why, with imagery good enough to show to
 not know the field. Existing tools present photogrammetry as a technical process that ends in a
 mediocre model; this one shows each stage as something to look at and understand — the cameras
 finding each other, the matches that hold the model together, where coverage is thin, what a
-recipe changed. Agents and multimodal models make this reachable: an agent can look at the
-intermediate products, describe them and point at what matters. Beauty here is not decoration: the
+recipe changed. The geometry and the rules carry this on their own; with AI connected, agents
+and multimodal models take it further: an agent can look at the intermediate products, describe
+them and point at what matters. Beauty here is not decoration: the
 interface is the connection between a person and the machine, and software that looks right is
 simpler and more intuitive, which is what makes a complex concept understandable. That is why the
 3D scenes and the explanations carry so much weight. Inspiration reaches past Rerun, Blender and

@@ -13,7 +13,7 @@ cat >"$DATA/mcp.json" <<EOF
   "$REPO/prototypes/RC-P3-quality", "python", "$HERE/debrief_server.py"]}}}
 EOF
 ALLOWED=mcp__recce__get_summary,mcp__recce__list_regions,mcp__recce__get_region,\
-mcp__recce__get_products,mcp__recce__list_cameras,mcp__recce__place_label,mcp__recce__place_camera,\
+mcp__recce__get_products,mcp__recce__get_engine_debrief,mcp__recce__suggest_shots,mcp__recce__list_cameras,mcp__recce__place_label,mcp__recce__place_camera,\
 mcp__recce__list_annotations
 claude -p "$(cat "$HERE/prompt.md")" --model "$MODEL" --output-format json \
   --mcp-config "$DATA/mcp.json" --strict-mcp-config --tools '' --allowedTools "$ALLOWED" \

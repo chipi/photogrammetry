@@ -19,7 +19,7 @@
   --border: #212733; --border-strong: #2c3442;
   --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
   --accent: #7cc4ff; --accent-ink: #7cc4ff; --new: #ffb36b; --truth: #5ee0a0; --warn: #ffcf5c; --error: #ff7a7a;
-  --pass: #5ee0a0; --fail: #ff7a7a; --unknown: #ffcf5c;
+  --pass: #5ee0a0; --fail: #ff7a7a; --unknown: #ffcf5c; --ai: #c9a2ff;
   --view-bg: #0d1015; --bg-label: rgba(12,15,20,.88); --sel: rgba(124,196,255,.12); color-scheme: dark;
 }
 :root[data-theme="light"] {
@@ -27,7 +27,7 @@
   --border: #dde1e7; --border-strong: #c9cfd8;
   --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
   --accent: #1f7ad6; --accent-ink: #175fb0; --new: #d9711c; --truth: #18a865; --warn: #8a5a00; --error: #c23030;
-  --pass: #137a49; --fail: #c23030; --unknown: #8a5a00;
+  --pass: #137a49; --fail: #c23030; --unknown: #8a5a00; --ai: #7a3fc4;
   --view-bg: #f2f3f5; --bg-label: rgba(255,255,255,.94); --sel: rgba(31,122,214,.09); color-scheme: light;
 }
 * { box-sizing: border-box; }
@@ -102,6 +102,26 @@ button:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px
 .handle dt { color: var(--text-dim); } .handle dd { margin: 0; }
 pre.json { font: var(--fs-xs)/1.4 var(--mono); background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2); overflow: auto; max-height: 260px; margin: var(--sp-2) 0 0; }
 .edit-log { font-size: var(--fs-sm); color: var(--text-dim); margin: 0; padding-left: var(--sp-4); }
+.seg { display: inline-flex; background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-3); padding: 2px; flex: none; }
+.seg button { height: 26px; border: 0; background: transparent; padding: 0 var(--sp-3); border-radius: var(--r-2); color: var(--text-dim); cursor: pointer; transition: background var(--dur-fast), color var(--dur-fast); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.aichip { display: inline-flex; align-items: center; height: 20px; padding: 0 var(--sp-2); border-radius: var(--r-pill); border: 1px solid var(--ai); color: var(--ai); font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .06em; text-transform: none; }
+.claim.by-ai { background: color-mix(in oklab, var(--ai) 5%, transparent); }
+.layer-rule { display: flex; align-items: center; gap: var(--sp-2); margin: var(--sp-6) 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
+.layer-rule::before, .layer-rule::after { content: ""; flex: 1; border-top: 1px solid var(--border-strong); }
+.hint { border: 1px dashed var(--border-strong); border-radius: var(--r-3); padding: var(--sp-3); margin-top: var(--sp-6); color: var(--text-dim); font-size: var(--fs-sm); }
+.hint b { color: var(--text); font-weight: 500; }
+.hint ul, .settings ul { margin: var(--sp-1) 0 0; padding-left: var(--sp-4); }
+.settings { position: absolute; top: var(--sp-3); right: var(--sp-3); width: min(380px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto; background: var(--bg-panel); border: 1px solid var(--border-strong); border-radius: var(--r-3); padding: var(--sp-4); box-shadow: 0 8px 28px rgba(0,0,0,.35); z-index: 5; }
+.settings h3 { margin: 0 0 var(--sp-1); font-size: var(--fs-lg); }
+.settings p { margin: 0 0 var(--sp-3); color: var(--text-dim); font-size: var(--fs-sm); }
+.settings label { display: grid; gap: var(--sp-1); margin-bottom: var(--sp-3); font-size: var(--fs-sm); color: var(--text-dim); }
+.settings input, .settings select { height: 30px; padding: 0 var(--sp-2); border: 1px solid var(--border); border-radius: var(--r-2); background: var(--bg-field); color: var(--text); font: var(--fs-sm) var(--mono); min-width: 0; }
+.settings .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.settings .note { border-top: 1px solid var(--border); padding-top: var(--sp-3); margin-top: var(--sp-2); }
+.settings h4 { margin: var(--sp-3) 0 0; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); }
+.settings li { font-size: var(--fs-sm); color: var(--text-dim); }
 .loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text-dim); }
 </style>
 <script type="importmap">
@@ -116,6 +136,11 @@ pre.json { font: var(--fs-xs)/1.4 var(--mono); background: var(--bg-field); bord
     <span class="crumbs">ETH3D <b>courtyard</b> › run <b class="mono" id="crumb-run"></b> › Debrief</span>
     <span class="grow"></span>
     <span class="tally" id="tally"></span>
+    <div class="seg" id="ai-seg" role="group" aria-label="AI">
+      <button data-v="off" aria-pressed="true">No AI</button>
+      <button data-v="on">AI connected</button>
+    </div>
+    <button class="iconbtn" id="settings-btn" aria-expanded="false">Bring your own AI</button>
     <button class="iconbtn" id="theme">Light</button>
   </header>
 
@@ -126,6 +151,37 @@ pre.json { font: var(--fs-xs)/1.4 var(--mono); background: var(--bg-field); bord
   <main class="view" id="view">
     <div class="loading" id="loading">Loading the courtyard…</div>
     <div class="hud" id="hud"></div>
+    <form class="settings" id="settings" hidden>
+      <h3>Bring your own AI</h3>
+      <p>Optional. Recce works fully without it. Connect any OpenAI-compatible endpoint, hosted or local; the key stays on this machine.</p>
+      <label>Provider
+        <select id="s-provider">
+          <option value="openai">OpenAI</option>
+          <option value="anthropic" selected>Anthropic (OpenAI-compatible endpoint)</option>
+          <option value="local">Local model (Ollama, LM Studio, vLLM)</option>
+          <option value="custom">Other OpenAI-compatible endpoint</option>
+        </select>
+      </label>
+      <label>Base URL <input id="s-url" value="https://api.anthropic.com/v1/" spellcheck="false"></label>
+      <div class="row2">
+        <label>Model <input id="s-model" value="claude-sonnet" spellcheck="false"></label>
+        <label>API key <input id="s-key" type="password" placeholder="sk-…" autocomplete="off"></label>
+      </div>
+      <h4>What AI adds here</h4>
+      <ul>
+        <li>What the model is good for, in plain words</li>
+        <li>Priorities for a purpose (web viewing, measurement)</li>
+        <li>A walking order for the new photos, and what else to bring</li>
+        <li>Labels and ghost cameras placed in the scene</li>
+      </ul>
+      <h4>What never depends on it</h4>
+      <ul>
+        <li>The engine's debrief, every number with its tool call</li>
+        <li>Readiness verdicts, by rule</li>
+        <li>Where to stand: the engine computes each spot; the AI only uses it</li>
+      </ul>
+      <p class="note">In this mock-up the fields are not wired. The AI text is one recorded run of Claude Sonnet through the same MCP tools Recce exposes to outside agents.</p>
+    </form>
   </main>
 
   <aside class="evidence" aria-label="Evidence">
@@ -138,16 +194,16 @@ pre.json { font: var(--fs-xs)/1.4 var(--mono); background: var(--bg-field); bord
       </div>
     </section>
     <section class="sec">
-      <h2>In the scene <span class="dim">placed by the agent</span></h2>
-      <p>Labels and ghost cameras arrive through the agent's <span class="mono">place_label</span> and <span class="mono">place_camera</span>. Drag one to move it, × to delete it.</p>
+      <h2>In the scene <span class="dim" id="placed-by"></span></h2>
+      <p id="placed-how"></p>
       <ol class="edit-log" id="edit-log"></ol>
-      <button class="iconbtn" id="ann-btn" style="margin-top:var(--sp-2)">What the agent reads back</button>
+      <button class="iconbtn" id="ann-btn" style="margin-top:var(--sp-2)">What the engine reads back</button>
       <pre class="json" id="ann-json" hidden></pre>
     </section>
     <section class="sec">
       <h2>Data</h2>
       <p>Real: RC-P1's COLMAP model of ETH3D courtyard in RC-P3's frame, RC-P3's quality state (run <span class="mono">courtyard/full</span>), RC-P4's scan checks and RC-P6's frame rates.</p>
-      <p>The debrief is one real agent run through the tools only; the checks on its sentences are replays of the same tools. The readiness rules are written for the mock-up.</p>
+      <p>Without AI, the debrief and the shots come from templates and rules (<span class="mono">rules_debrief.py</span>, <span class="mono">plan_shots.py</span>). With AI, the added text is one real agent run through the tools only. Both are checked by replaying the same tools. The readiness rules are written for the mock-up.</p>
     </section>
   </aside>
 </div>
@@ -168,17 +224,14 @@ document.getElementById("theme").onclick = () => {
   const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light"; syncTheme();
 };
 
-const [scn, deb] = await Promise.all([
-  fetch("data/scene.json").then(r => r.json()), fetch("data/debrief.json").then(r => r.json())]);
+const [scn, eng, deb] = await Promise.all(["scene", "rules", "debrief"].map(n => fetch(`data/${n}.json`).then(r => r.json())));
+const state = { ai: params.get("ai") === "1" };
 document.getElementById("crumb-run").textContent = scn.run;
 const regionById = Object.fromEntries(scn.regions.map(r => [r.id, r]));
 const camByName = Object.fromEntries(scn.cameras.map(c => [c.name, c]));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
 /* ---------- The report ---------- */
-const c = deb.count, a = deb.agent;
-document.getElementById("tally").innerHTML =
-  `<span><b>${c.supported}</b> supported</span><span><b style="color:var(--fail)">${c.unsupported}</b> unsupported</span><span><b>${c.judgement}</b> judgement</span>`;
 
 // The same number pattern as verify.py; names (region ids, photo files) are not quantities.
 const NUM = /(?<![\w.])-?\d{1,3}(?:,\d{3})+(?:\.\d+)?|(?<![\w.])-?\d+(?:\.\d+)?/g;
@@ -187,13 +240,17 @@ function markNumbers(text, unbacked) {
   return parts.map((p, i) => i % 2 ? `<span class="mono">${esc(p)}</span>` :
     esc(p).replace(NUM, m => `<span class="num${unbacked.includes(m) ? " unbacked" : ""}">${m}</span>`)).join("");
 }
-const items = [];
-let html = `<div class="eyebrow">Debrief · written by the agent, checked by replay</div>
-  <h1>${esc(deb.title)}</h1>
-  <div class="byline">One run of Claude ${esc(params.get("model") || "Sonnet")} with only the run's quality tools · ${a.num_turns} turns · ${(a.duration_ms / 1000).toFixed(0)} s · US$${a.total_cost_usd.toFixed(2)}. A sentence's numbers are underlined where a tool call backs them; a wavy line marks a number nothing backs. This is the second run; the first had no tool for camera positions and put all three new shots where no one can stand.</div>`;
-for (const sec of deb.sections) {
-  html += `<h2>${esc(sec.heading)}</h2>`;
-  for (const cl of sec.claims) {
+let items = [];
+function claimsHtml(sections, byAi) {
+  let html = "";
+  for (const sec of sections) {
+    html += `<h2>${esc(sec.heading)}${byAi ? ` <span class="aichip">AI</span>` : ""}</h2>`;
+    for (const cl of sec.claims) html += claimHtml(cl, byAi);
+  }
+  return html;
+}
+function claimHtml(cl, byAi) {
+  {
     const k = items.push({ kind: "claim", ...cl }) - 1;
     const metaBits = [];
     if (cl.status === "unsupported") {
@@ -203,17 +260,48 @@ for (const sec of deb.sections) {
     metaBits.push(`${cl.handles.length} handle${cl.handles.length === 1 ? "" : "s"}`);
     if (cl.region) metaBits.push(`<span class="mono">${esc(cl.region)}</span>`);
     if (cl.photos?.length) metaBits.push(`${cl.photos.length} photo${cl.photos.length > 1 ? "s" : ""}`);
-    html += `<div class="claim ${cl.status}" data-k="${k}" tabindex="0" role="button">${markNumbers(cl.text, cl.unbacked_numbers)}<div class="meta">${metaBits.join("<span>·</span>")}</div></div>`;
+    return `<div class="claim ${cl.status}${byAi ? " by-ai" : ""}" data-k="${k}" tabindex="0" role="button">${markNumbers(cl.text, cl.unbacked_numbers)}<div class="meta">${metaBits.join("<span>·</span>")}</div></div>`;
   }
 }
-html += `<h2>Readiness <span class="dim" style="text-transform:none;letter-spacing:0;font-weight:400">· rules, not the agent's opinion</span></h2><div class="stamps">`;
-for (const st of deb.readiness) {
-  const k = items.push({ kind: "stamp", ...st }) - 1;
-  html += `<div class="stamp" data-k="${k}" tabindex="0" role="button"><div class="mark ${st.status}">${st.status.toUpperCase()}</div>
-    <div><b>${esc(st.use)}</b><p><i>Requires</i> ${esc(st.requires)}</p><p><i>Because</i> ${esc(st.because)}</p></div></div>`;
+function tally(doc) {
+  const c = doc.count;
+  return `<span><b>${c.supported}</b> supported</span><span><b style="color:var(--fail)">${c.unsupported}</b> unsupported</span>`;
 }
-html += `</div>`;
-document.getElementById("doc").innerHTML = html;
+function renderReport() {
+  items = [];
+  let html;
+  if (state.ai) {
+    const a = deb.agent;
+    html = `<div class="eyebrow">Debrief · AI layer over the engine's debrief</div>
+      <h1>${esc(deb.title)}</h1>
+      <div class="byline"><span class="aichip">AI</span> Written by your connected AI (here: one recorded run of Claude Sonnet, ${a.num_turns} turns, ${(a.duration_ms / 1000).toFixed(0)} s, US$${a.total_cost_usd.toFixed(2)}) through Recce's tools only. Positions come from the engine. Each number is checked by replaying its tool call; a wavy line marks a number the AI did not back.</div>`;
+    html += claimsHtml(deb.sections, true);
+    html += `<div class="layer-rule">The engine's debrief · no AI</div>`;
+    html += claimsHtml(eng.sections, false);
+    document.getElementById("tally").innerHTML = `<span class="aichip">AI</span>${tally(deb)}<span class="dim">· engine</span>${tally(eng)}`;
+  } else {
+    html = `<div class="eyebrow">Debrief · written by the engine</div>
+      <h1>${esc(eng.title)}</h1>
+      <div class="byline">From templates and rules over the run's quality state; no AI connected. Every number is underlined with the tool call that gives it. New shots are placed by the engine's where-to-stand rule.</div>`;
+    html += claimsHtml(eng.sections, false);
+    document.getElementById("tally").innerHTML = tally(eng);
+  }
+  html += `<h2>Readiness <span class="dim" style="text-transform:none;letter-spacing:0;font-weight:400">· rules, with or without AI</span></h2><div class="stamps">`;
+  for (const st of eng.readiness) {
+    const k = items.push({ kind: "stamp", ...st }) - 1;
+    html += `<div class="stamp" data-k="${k}" tabindex="0" role="button"><div class="mark ${st.status}">${st.status.toUpperCase()}</div>
+      <div><b>${esc(st.use)}</b><p><i>Requires</i> ${esc(st.requires)}</p><p><i>Because</i> ${esc(st.because)}</p></div></div>`;
+  }
+  html += `</div>`;
+  if (!state.ai) html += `<div class="hint"><b>With your own AI connected</b>, this report goes further: what the model is good for in plain words, which weak region to fix first for web viewing or for measurement, and a walking order for the new photos. The engine's report above stays as it is. <a href="#" id="hint-ai">Show it</a> · <a href="#" id="hint-settings">Connect an AI</a></div>`;
+  document.getElementById("doc").innerHTML = html;
+  document.querySelectorAll("[data-k]").forEach(e => {
+    e.onclick = () => select(+e.dataset.k);
+    e.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(+e.dataset.k); } };
+  });
+  const ha = document.getElementById("hint-ai"); if (ha) ha.onclick = ev => { ev.preventDefault(); setAi(true); };
+  const hs = document.getElementById("hint-settings"); if (hs) hs.onclick = ev => { ev.preventDefault(); toggleSettings(true); };
+}
 
 /* ---------- Scene ---------- */
 const view = document.getElementById("view");
@@ -294,7 +382,11 @@ const cellBox = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeom
 cellBox.scale.setScalar(scn.frame.cell_m); cellBox.visible = false; scene.add(cellBox);
 
 // Annotations: ghost cameras are dashed frustums; every annotation has an HTML handle that drags.
-const anns = deb.annotations.map(x => ({ ...x, moved: false, deleted: false, by: "agent" }));
+const anns = [
+  ...eng.annotations.map(x => ({ ...x, moved: false, deleted: false, by: "engine" })),
+  ...deb.annotations.map(x => ({ ...x, moved: false, deleted: false, by: "ai" })),
+];
+const active = an => !an.deleted && an.by === (state.ai ? "ai" : "engine");
 const annGroup = new THREE.Group(); scene.add(annGroup);
 const ghostMat = new THREE.LineDashedMaterial({ dashSize: 0.18, gapSize: 0.12 });
 function ghostGeometry(an) {
@@ -342,10 +434,18 @@ function startDrag(ev, an) {
   an.el.onpointerup = () => { an.el.onpointermove = null; drag = null; controls.enabled = true; logEdits(); };
 }
 function logEdits() {
-  const lines = anns.filter(x => x.moved || x.deleted).map(x => `<li><span class="mono">${x.id}</span> ${x.deleted ? "deleted" : `moved to (${x.position.join(", ")})`} by you</li>`);
-  document.getElementById("edit-log").innerHTML = lines.join("") || `<li class="empty" style="list-style:none;margin-left:calc(-1*var(--sp-4))">No edits yet: ${anns.length} placed by the agent.</li>`;
-  const back = anns.filter(x => !x.deleted).map(({ el, obj, moved, deleted, by, ...rest }) => ({ ...rest, ...(moved ? { moved_by: "person" } : {}) }));
+  const by = state.ai ? "ai" : "engine";
+  const mine = anns.filter(x => x.by === by);
+  const who = state.ai ? "your AI" : "the engine";
+  document.getElementById("placed-by").textContent = `placed by ${who}`;
+  document.getElementById("placed-how").innerHTML = state.ai
+    ? `Your AI places labels and ghost cameras through <span class="mono">place_label</span> and <span class="mono">place_camera</span>, at spots the engine computed. Drag one to move it, × to delete it.`
+    : `The engine labels the weakest regions and puts a ghost camera where its rule says to stand. Drag one to move it, × to delete it.`;
+  const lines = mine.filter(x => x.moved || x.deleted).map(x => `<li><span class="mono">${x.id}</span> ${x.deleted ? "deleted" : `moved to (${x.position.join(", ")})`} by you</li>`);
+  document.getElementById("edit-log").innerHTML = lines.join("") || `<li class="empty" style="list-style:none;margin-left:calc(-1*var(--sp-4))">No edits yet: ${mine.length} placed by ${who}.</li>`;
+  const back = mine.filter(x => !x.deleted).map(({ el, obj, moved, deleted, by, ...rest }) => ({ ...rest, ...(moved ? { moved_by: "person" } : {}) }));
   document.getElementById("ann-json").textContent = JSON.stringify(back, null, 1);
+  for (const an of anns) if (an.obj) an.obj.visible = active(an);
 }
 logEdits();
 document.getElementById("ann-btn").onclick = () => { const p = document.getElementById("ann-json"); p.hidden = !p.hidden; };
@@ -421,10 +521,33 @@ function select(k) {
   }
   const u = new URL(location); u.searchParams.set("pick", k); history.replaceState(null, "", u);
 }
-document.querySelectorAll("[data-k]").forEach(e => {
-  e.onclick = () => select(+e.dataset.k);
-  e.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(+e.dataset.k); } };
-});
+/* ---------- AI on or off, and its settings ---------- */
+function setAi(on) {
+  state.ai = on;
+  document.querySelectorAll("#ai-seg button").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.v === "on") === on)));
+  shownPhotos.forEach(n => showPhoto(n, false)); shownPhotos = [];
+  document.getElementById("ev-empty").hidden = false; document.getElementById("ev").hidden = true;
+  document.getElementById("ev-id").textContent = "";
+  pu.uSel.value = -1; cellBox.visible = false; hud.innerHTML = defaultHud;
+  renderReport(); logEdits();
+  const u = new URL(location); u.searchParams.delete("pick");
+  if (on) u.searchParams.set("ai", "1"); else u.searchParams.delete("ai");
+  history.replaceState(null, "", u);
+}
+function toggleSettings(open) {
+  const s = document.getElementById("settings");
+  s.hidden = open === undefined ? !s.hidden : !open;
+  document.getElementById("settings-btn").setAttribute("aria-expanded", String(!s.hidden));
+}
+document.querySelectorAll("#ai-seg button").forEach(b => b.onclick = () => setAi(b.dataset.v === "on"));
+document.getElementById("settings-btn").onclick = () => toggleSettings();
+document.getElementById("settings").onsubmit = ev => ev.preventDefault();
+const BASE_URLS = { openai: "https://api.openai.com/v1", anthropic: "https://api.anthropic.com/v1/", local: "http://localhost:11434/v1", custom: "" };
+document.getElementById("s-provider").onchange = e => { document.getElementById("s-url").value = BASE_URLS[e.target.value]; };
+renderReport();
+document.querySelectorAll("#ai-seg button").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.v === "on") === state.ai)));
+logEdits();
+if (params.get("settings") === "1") toggleSettings(true);
 
 /* ---------- Loop ---------- */
 function resize() {
@@ -436,7 +559,7 @@ const tmp = new THREE.Vector3();
 function placeLabels() {
   const w = view.clientWidth, h = view.clientHeight;
   for (const an of anns) {
-    if (an.deleted) continue;
+    if (!active(an)) { an.el.hidden = true; continue; }
     tmp.set(...an.position).project(camera);
     const on = tmp.z < 1 && Math.abs(tmp.x) < 1.1 && Math.abs(tmp.y) < 1.1;
     an.el.hidden = !on;

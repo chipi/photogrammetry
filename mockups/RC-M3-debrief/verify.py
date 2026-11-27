@@ -28,10 +28,10 @@ NUMBER = re.compile(r"(?<![\w.])-?\d{1,3}(?:,\d{3})+(?:\.\d+)?|(?<![\w.])-?\d+(?
 def call(tool: str, args: dict, data: Path):
     if tool == "get_products":
         return json.loads((data / "products.json").read_text())
-    if tool == "list_cameras":
+    if tool in ("list_cameras", "suggest_shots", "get_engine_debrief"):
         import debrief_server
 
-        return debrief_server.list_cameras(**args)
+        return getattr(debrief_server, tool)(**args)
     if tool == "list_annotations":
         return json.loads((data / "annotations.json").read_text())
     if tool in ("get_summary", "list_regions", "get_region"):

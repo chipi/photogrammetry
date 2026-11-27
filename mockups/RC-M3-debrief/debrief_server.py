@@ -14,6 +14,7 @@ from pathlib import Path
 from mcp.server.mcpserver import MCPServer
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "prototypes/RC-P3-quality"))
+import plan_shots
 import tools
 
 HERE = Path(__file__).resolve().parent
@@ -57,6 +58,31 @@ def list_cameras(region_id: str | None = None) -> dict:
     return {"cameras": cams, "total": len(cams)}
 
 
+def get_engine_debrief() -> dict:
+    """The debrief the engine wrote without AI: its sentences, by section, and its readiness
+    verdicts. Build on it; do not repeat it."""
+    doc = json.loads((DATA / "rules.json").read_text())
+    return {
+        "sections": [
+            {"heading": s["heading"], "sentences": [c["text"] for c in s["claims"]]}
+            for s in doc["sections"]
+        ],
+        "readiness": [
+            {k: r[k] for k in ("use", "status", "requires", "because")} for r in doc["readiness"]
+        ],
+    }
+
+
+def suggest_shots(region_id: str) -> dict:
+    """The engine's suggested spot for a new photo of a region, from geometry alone: at hand
+    height, inside the area already walked, on the side the surface faces, with a clear line of
+    sight and a new direction. Returns position and look_at [x, y, z] (metres), the new angle,
+    the distance, the nearest photo already taken, or found=false with the reason. Use this
+    position for a ghost camera; do not invent one."""
+    scene, xyz, point_region = plan_shots.load(DATA)
+    return plan_shots.suggest(tools.get_region(scene["run"], region_id), scene, xyz, point_region)
+
+
 def place_label(text: str, position: list[float], region_id: str | None = None) -> dict:
     """Place a short label in the scene at position [x, y, z] (scene frame, metres), optionally
     tied to a region id. The person sees it, can move it and can delete it."""
@@ -97,7 +123,8 @@ server = MCPServer(
     instructions=(
         "Quality state and products of one reconstruction, plus tools to place labels and ghost "
         "cameras in its scene. Read with get_summary, list_regions, get_region (run id "
-        "'courtyard/full'), get_products and list_cameras; place with place_label and place_camera."
+        "'courtyard/full'), get_products, list_cameras and suggest_shots; place with "
+        "place_label and place_camera."
     ),
 )
 for fn in (
@@ -105,7 +132,9 @@ for fn in (
     tools.list_regions,
     tools.get_region,
     get_products,
+    get_engine_debrief,
     list_cameras,
+    suggest_shots,
     place_label,
     place_camera,
     list_annotations,
