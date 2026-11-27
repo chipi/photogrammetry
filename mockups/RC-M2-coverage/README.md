@@ -66,18 +66,18 @@ Open `http://<host>:8794/`. three.js loads from jsDelivr. A view is a link:
 
 ## Verdict
 
-Phase 1, built 2026-11-27. The owner's verdict per concept is open:
+Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept**; the finishing is done in the build phase, not in a phase 2 here.
 
 | Concept | Idea | Verdict |
 |---|---|---|
-| Light and shadow on the photo colour | 3 | Open |
-| Confidence as solid and hatched | 4 | Open |
-| The truth overlay beside the claim | 4 | Open |
-| OKLCH ramps, colour-blind-safe and lightness-only variants, legend | 14 | Open |
-| The coverage glyph | 13 | Open |
-| "Does the model know where it is wrong?" chart | 4, 14 | Open |
-| Structure over the mesh | (RC-P13) | Open |
-| Next shot as ghost camera, card and brief | 3, 21 | Open |
+| Light and shadow on the photo colour | 3 | Kept |
+| Confidence as solid and hatched | 4 | Kept |
+| The truth overlay beside the claim | 4 | Kept |
+| OKLCH ramps, colour-blind-safe and lightness-only variants, legend | 14 | Kept |
+| The coverage glyph | 13 | Kept |
+| "Does the model know where it is wrong?" chart | 4, 14 | Kept |
+| Structure over the mesh | (RC-P13) | Kept |
+| Next shot as ghost camera, card and brief | 3, 21 | Kept |
 
 ## Not covered
 
