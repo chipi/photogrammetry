@@ -21,9 +21,13 @@ off. Both halves run on RC-P12's measurements.
   (×3 by default) and coloured at true size. Click a corner to follow its rays; per-frame
   scale-error bars compare both models.
 - **A verdict by rule** on each half, over the measured numbers, stated beside it.
-
-No AI layer: the verdicts come from the numbers alone, and nothing on this page needs an agent to
-read it (pattern "AI is a layer, never a dependency").
+- **The coach** (owner, 2026-11-27: AI as a coach to the operator). The engine supplies the facts
+  and a menu of actions it or the diver can take, each marked "engine" or "next capture"; engine
+  actions have an Apply button that sets the view. Without AI, a rule picks the steps from the
+  facts and says which fact each rests on. With the person's own AI connected, it says why the
+  result is as it is, orders the plan, says how the operator will know it worked and what the
+  facts cannot say. Every number it writes is checked against the fact it cites, and every step
+  must name an action from the menu (`../coach_lib.py`, shared by the mock-ups).
 
 The frame follows RC-M1 to RC-M6. One new colour, water (a teal), marks the surface, the
 refractive model and the water's veil; the pinhole model is the orange used for "the other
@@ -46,6 +50,24 @@ of shape (frame 4), and how much depends on where the board is: frame 9 is 0.03%
 the pinhole corners are squeezed along one board axis; drawn ×10 the rows collapse into a line,
 so the page defaults to ×3.
 
+**The coach, without and with AI.** The rule lists 8 steps in a fixed order: RAW, one white
+balance, shoot closer, dark targets, overlapping views, the refractive model, calibrating in the
+water, and checking the board at several positions. The AI coach (Claude Sonnet, one call with
+the facts, the menu and three photos of RGT_4318, US$0.082) chose 7 of the same actions and
+added what the rule does not: an order (the refractive model first, since it is software and
+needs no new capture; haze removal re-run only after RAW, ranges and dark targets exist), why
+the near charts tint, how the operator will know it worked, and what the facts cannot say (how
+much red a RAW restores, how accurate SQUID's stereo ranges are, whether the refractive gain
+holds for a field housing and port). Of its 17 statements, 15 have every number checked and 2 are judgement. It left
+out "shoot closer" and "calibrate in the water". Sentences that mix numbers with what it sees in
+the photos ("looks over-cleaned") count as checked: only their numbers are.
+
+The first call wrote numbers again without citing them: 10 of its statements were unsupported,
+though the cites it did give were right (kept as `data/ai_coach_run1.json`). The prompt now says
+each statement is checked on its own, and two facts that were only in a text note (16 photos, 8
+pairs) became numbers; the second call is the one shown. The checker treats frame labels
+("frames 1 and 4") as names, not quantities.
+
 **The frame mapping was checked.** Corner frame k is the k-th frame PNG per camera in AquaMVS's
 `data.zip`; frame 4's pinhole corners projected into camera e3v829d's raw frame 4 land on the
 board's corners (overlay written to `data/aquamvs/check_frame4_e3v829d.jpg`, read by eye).
@@ -63,6 +85,8 @@ board's corners (overlay written to `data/aquamvs/check_frame4_e3v829d.jpg`, rea
 | Board drawn per model | Rigid fit of the board to that model's corners (RC-P12's Umeyama) |
 | Verdicts | **Rules written for the mock-up**, over those numbers |
 | Exaggeration of misses | **Display only**, labelled on the view |
+| The coach without AI | **Rules written for the mock-up** (`coach.py`), over the facts above |
+| The coach with AI | **One recorded run**, checked by `coach_lib.py` |
 
 SQUID is CC BY-NC-SA 4.0 and stays on this machine; AquaMVS is CC BY 4.0. Both live in the
 gitignored `data/`.
@@ -74,17 +98,20 @@ cd prototypes/RC-P12-underwater
 uv run python ../../mockups/RC-M7-underwater/export_underwater.py \
   ../../mockups/RC-M7-underwater/data
 cd ../../mockups/RC-M7-underwater
+python3 coach.py data              # facts, the action menu and the rule's plan
+python3 coach.py data ai sonnet    # optional: the AI coach (one call)
 python3 -m http.server 8798 --bind 0.0.0.0
 ```
 
 Open <http://127.0.0.1:8798/>. A view is a link: `?img=RGT_4318`, `&l=` and `&r=` (`camera_wb`,
 `grey_world`, `backscatter`, `range`), `&split=0.4`; `?tab=lens&lens=0&frame=4&ex=3`;
-`&theme=light`.
+`&ai=1`; `&theme=light`.
 
 | File | Does |
 |---|---|
 | `export_underwater.py` | SQUID method images, ranges, charts and fits; the AquaMVS rig, corners and rays per model and frame; camera photos |
-| `index.html` | The page: colour in water, and the water lens |
+| `coach.py` | The coach's facts, action menu and rule plan; the optional AI call |
+| `index.html` | The page: colour in water, the water lens and the coach |
 
 ## Verdict
 
@@ -99,6 +126,7 @@ Phase 1, built 2026-11-27. Waiting for the owner's verdict.
 | The water lens switch: rays bent or straight, the board where each model puts it | 8 |
 | Each corner's miss, exaggerated and coloured at true size | 8 |
 | Verdicts by rule | 8, pattern |
+| The coach: why, a plan from the engine's actions, how to know it worked | pattern (owner, 2026-11-27) |
 
 ## Not covered
 

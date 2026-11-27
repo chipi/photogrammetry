@@ -57,6 +57,10 @@ of the same day, also approved as directions. Source tags `[V]` and `[U]` there 
 - **AI is a layer, never a dependency** (owner, 2026-11-27): each view works with no AI connected;
   with the person's own AI connected, what it adds is marked as written by AI and checked against
   the engine's numbers.
+- **The AI is a coach** (owner, 2026-11-27): why the result is as it is, a plan made only of
+  actions from the engine's menu (each "engine" or "next capture"), how the operator will know it
+  worked, and what the facts cannot say. The rule writes a plan from the same facts without AI.
+  Shared checker: `mockups/coach_lib.py`; first in RC-M7.
 - **The frame follows robotics-lab** (Observatory, Mission Control): dark by default, outliner,
   read-only inspector, label left and value right in mono; tokens derived from base, accent and
   contrast (Linear's approach).

@@ -153,7 +153,11 @@ provider such as OpenAI or Anthropic with their key, or a local model) set once 
 With it connected, features inside Recce go further: the run is explained in words, assessments
 and plans are written over the rule-based ones, and an agent places labels and shots in the scene.
 What the AI adds is marked as written by AI and checked against the engine's own numbers; the
-engine, not the AI, supplies positions and verdicts.
+engine, not the AI, supplies positions and verdicts. The AI's role is a coach to the operator *(owner,
+2026-11-27)*: it says why a result is the way it is and how to get to a better one, as a plan
+built only from actions the engine can carry out (re-run with another option, re-shoot here,
+add a target), with how the operator will know it worked. Without AI, a rule writes the same
+kind of plan from the same facts.
 
 **Two registers in one interface** *(owner, 2026-11-24)*. The frame — panels, lists, inspectors,
 settings, the timeline of a run — is a professional tool in the family of Lightroom, Autodesk's
