@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recce · Underwater (RC-M7)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Tokens follow RC-M1 to RC-M6. Water is the one new colour: --water, for the surface, the
+   water's veil in the plot and the refractive model; the pinhole model is the "new" orange. */
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 14px; --fs-xl: 16px;
+  --r-1: 4px; --r-2: 6px; --r-3: 8px; --r-pill: 999px;
+  --dur-fast: 120ms; --ui: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --bg-app: #0b0d10; --bg-panel: #111419; --bg-raised: #161a21; --bg-field: #1b2029; --bg-hover: #212734;
+  --border: #212733; --border-strong: #2c3442;
+  --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
+  --accent: #7cc4ff; --water: #4fd1d9; --pin: #ffb36b; --ok: #5ee0a0; --warn: #ffcf5c; --fail: #ff7a7a;
+  --r: #ff7a7a; --g: #5ee0a0; --b: #7cc4ff;
+  --view-bg: #0d1015; --bg-label: rgba(12,15,20,.88); color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
+  --border: #dde1e7; --border-strong: #c9cfd8;
+  --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
+  --accent: #1f6fc4; --water: #0e7f88; --pin: #c2600f; --ok: #137a49; --warn: #8a5a00; --fail: #c23030;
+  --r: #c23030; --g: #137a49; --b: #1f6fc4;
+  --view-bg: #e9ecf0; --bg-label: rgba(255,255,255,.94); color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg-app); color: var(--text); font: var(--fs-md)/1.45 var(--ui); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button, select, input { font: inherit; color: inherit; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.mono { font-family: var(--mono); font-size: var(--fs-sm); }
+.dim { color: var(--text-dim); }
+.app { display: grid; height: 100%; grid-template-rows: 48px minmax(0,1fr); grid-template-columns: minmax(0,1fr) 380px; grid-template-areas: "top top" "view side"; }
+.top { grid-area: top; display: flex; align-items: center; gap: var(--sp-3); padding: 0 var(--sp-4); border-bottom: 1px solid var(--border); background: var(--bg-panel); min-width: 0; }
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; letter-spacing: .02em; }
+.brand i { width: 14px; height: 14px; border-radius: var(--r-1); background: conic-gradient(from 210deg, var(--accent), var(--water), var(--pin), var(--accent)); display: block; }
+.crumbs { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.crumbs b { color: var(--text); font-weight: 500; }
+.grow { flex: 1; }
+.seg { display: inline-flex; background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-3); padding: 2px; flex: none; flex-wrap: wrap; }
+.seg button { height: 26px; border: 0; background: transparent; padding: 0 var(--sp-3); border-radius: var(--r-2); color: var(--text-dim); cursor: pointer; white-space: nowrap; transition: background var(--dur-fast), color var(--dur-fast); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.iconbtn { height: 28px; padding: 0 var(--sp-3); border-radius: var(--r-2); border: 1px solid var(--border); background: var(--bg-field); cursor: pointer; color: var(--text-dim); }
+.iconbtn:hover { background: var(--bg-hover); color: var(--text); }
+.side { grid-area: side; background: var(--bg-panel); border-left: 1px solid var(--border); overflow: auto; scrollbar-width: thin; min-width: 0; }
+.sec { padding: var(--sp-4); border-bottom: 1px solid var(--border); display: grid; gap: var(--sp-2); }
+.sec h2 { margin: 0 0 var(--sp-1); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; display: flex; justify-content: space-between; gap: var(--sp-2); align-items: center; }
+.sec p { margin: 0; color: var(--text-dim); }
+.sec p b { color: var(--text); font-weight: 500; }
+.field { display: grid; gap: var(--sp-1); }
+.field > span { font-size: var(--fs-xs); color: var(--text-dim); }
+label.check { display: grid; grid-template-columns: auto minmax(0,1fr); gap: var(--sp-2); align-items: start; }
+label.check input { margin: 3px 0 0; }
+input[type=range] { width: 100%; accent-color: var(--water); }
+.verdict { border-left: 2px solid var(--water); padding: 2px 0 2px var(--sp-3); display: grid; gap: var(--sp-1); }
+.verdict b { font-weight: 500; }
+.verdict small { color: var(--text-faint); font-size: var(--fs-xs); }
+.note { font-size: var(--fs-sm); color: var(--text-dim); border-left: 2px solid var(--warn); padding-left: var(--sp-2); }
+table { border-collapse: collapse; width: 100%; font-size: var(--fs-sm); }
+td, th { padding: 4px 0; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-weight: 500; color: var(--text-dim); font-size: var(--fs-xs); }
+td.n, th.n { text-align: right; font-family: var(--mono); padding-left: var(--sp-2); }
+td.good { color: var(--ok); } td.bad { color: var(--fail); }
+td:first-child, th:first-child { padding-left: 8px; } td:last-child, th:last-child { padding-right: 8px; }
+tr.sel td { background: var(--bg-hover); }
+.thumbs { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 4px; }
+.thumbs button { padding: 0; border: 2px solid transparent; border-radius: var(--r-1); background: none; cursor: pointer; display: grid; gap: 2px; }
+.thumbs button img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; border-radius: 2px; }
+.thumbs button span { font: 11px var(--mono); color: var(--text-faint); }
+.thumbs button[aria-pressed="true"] { border-color: var(--water); }
+/* The colour view */
+.view { grid-area: view; position: relative; background: var(--view-bg); min-width: 0; min-height: 0; overflow: hidden; }
+.photo { position: absolute; inset: 0; display: grid; place-items: center; padding: var(--sp-6); }
+.pic { position: relative; max-width: 100%; max-height: 100%; aspect-ratio: var(--ar); width: min(100%, calc((100vh - 48px - 48px) * var(--arn))); user-select: none; }
+.pic img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pic .right { clip-path: inset(0 0 0 var(--split)); }
+.pic .rng { opacity: 0; transition: opacity 200ms; }
+.pic.showrange .rng { opacity: .8; }
+.pic .norange { mix-blend-mode: normal; }
+.wipe { position: absolute; top: 0; bottom: 0; left: var(--split); width: 0; border-left: 2px solid #fff; cursor: ew-resize; box-shadow: 0 0 0 1px rgba(0,0,0,.35); }
+.wipe::after { content: ""; position: absolute; top: 50%; left: -13px; width: 24px; height: 24px; margin-top: -12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.side-lab { position: absolute; top: var(--sp-3); padding: 2px 8px; border-radius: var(--r-1); background: var(--bg-label); font-size: var(--fs-xs); color: var(--text); pointer-events: none; }
+.chart { position: absolute; border: 1.5px solid #fff; border-radius: 2px; pointer-events: none; }
+.chart.sel { border-color: var(--warn); }
+.chart span { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); white-space: nowrap; padding: 2px 8px; border-radius: var(--r-1); background: var(--bg-label); font: var(--fs-xs)/1.35 var(--mono); color: var(--text); }
+.readout { position: absolute; left: var(--sp-4); bottom: var(--sp-4); padding: 4px 10px; border-radius: var(--r-2); background: var(--bg-label); font: var(--fs-sm) var(--mono); color: var(--text); pointer-events: none; }
+.legend-r { position: absolute; right: var(--sp-4); bottom: var(--sp-4); padding: 6px 10px; border-radius: var(--r-2); background: var(--bg-label); font: var(--fs-xs) var(--mono); color: var(--text-dim); display: grid; gap: 4px; }
+.legend-r i { display: block; width: 160px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, rgb(253,231,37), rgb(94,201,98), rgb(33,145,140), rgb(59,82,139), rgb(68,1,84)); }
+.legend-r div { display: flex; justify-content: space-between; }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--text-faint); }
+/* The refraction view */
+#gl { position: absolute; inset: 0; }
+#gl canvas { display: block; width: 100%; height: 100%; }
+.hud { position: absolute; top: var(--sp-3); left: var(--sp-3); display: flex; gap: var(--sp-2); flex-wrap: wrap; pointer-events: none; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 10px; border-radius: var(--r-pill); font-size: var(--fs-xs); border: 1px solid var(--border-strong); color: var(--text-dim); background: var(--bg-label); white-space: nowrap; }
+.chip.water { border-color: var(--water); color: var(--water); }
+.chip.pin { border-color: var(--pin); color: var(--pin); }
+.chip i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: block; }
+.lens { position: absolute; bottom: var(--sp-4); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-pill); background: var(--bg-label); border: 1px solid var(--border-strong); }
+.switch { position: relative; width: 44px; height: 24px; border-radius: 12px; border: 0; background: var(--border-strong); cursor: pointer; flex: none; padding: 0; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform var(--dur-fast); }
+.switch[aria-checked="true"] { background: var(--water); }
+.switch[aria-checked="true"]::after { transform: translateX(20px); }
+.lens b { font-weight: 500; }
+.bars { display: grid; gap: 3px; }
+.bar { display: grid; grid-template-columns: 52px minmax(0,1fr); gap: var(--sp-2); align-items: center; cursor: pointer; padding: 2px 4px; border-radius: var(--r-1); }
+.bar:hover, .bar.sel { background: var(--bg-hover); }
+.bar .k { font: var(--fs-xs) var(--mono); color: var(--text-dim); }
+.bar .t { position: relative; height: 18px; }
+.bar .t::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px solid var(--border-strong); }
+.bar .t i { position: absolute; height: 7px; border-radius: 2px; }
+.bar .t i.p { top: 1px; background: var(--pin); }
+.bar .t i.w { top: 10px; background: var(--water); }
+.axis { display: flex; justify-content: space-between; font: 11px var(--mono); color: var(--text-faint); margin-left: 64px; }
+@media (max-width: 900px) {
+  .app { grid-template-columns: minmax(0,1fr); grid-template-rows: 48px 62vh auto; grid-template-areas: "top" "view" "side"; height: auto; }
+  body { overflow: auto; }
+  .side { border-left: 0; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <span class="brand"><i></i>Recce</span>
+    <span class="crumbs" id="crumbs">underwater › <b>Colour</b></span>
+    <span class="grow"></span>
+    <div class="seg" id="tab-seg"><button data-v="colour" aria-pressed="true">Colour in water</button><button data-v="lens" aria-pressed="false">The water lens</button></div>
+    <button class="iconbtn" id="theme">Light</button>
+  </header>
+
+  <main class="view">
+    <div id="v-colour">
+      <div class="photo"><div class="pic" id="pic">
+        <img class="left" id="img-l" src="data/squid/RGT_4318_camera_wb.jpg" alt="Left side of the wipe">
+        <img class="right" id="img-r" src="data/squid/RGT_4318_grey_world.jpg" alt="Right side of the wipe">
+        <img class="rng" id="img-rng" src="data/squid/RGT_4318_range.png" alt="Range of every pixel">
+        <div id="boxes"></div>
+        <span class="side-lab" id="lab-l" style="left:var(--sp-3)"></span>
+        <span class="side-lab" id="lab-r" style="right:var(--sp-3)"></span>
+        <div class="wipe" id="wipe" role="slider" aria-label="Wipe between the two images" tabindex="0"></div>
+      </div></div>
+      <div class="readout" id="readout">Hover the image for the range</div>
+      <div class="legend-r" id="legend-r" hidden><span>Range from SQUID's stereo</span><i></i><div><span>2 m</span><span>11 m</span><span>20 m</span></div></div>
+    </div>
+    <div id="v-lens" hidden>
+      <div id="gl"></div>
+      <div class="hud"><span class="chip" id="hud-model"></span><span class="chip" id="hud-ex"></span><span class="chip" id="hud-corner"></span></div>
+      <div class="lens"><span class="dim">Water lens</span><button class="switch" id="lens" role="switch" aria-checked="true" aria-label="Model refraction at the water surface"></button><b id="lens-lab">On: rays bend at the surface</b></div>
+    </div>
+  </main>
+
+  <aside class="side">
+    <div id="s-colour">
+      <section class="sec">
+        <h2>Image <span class="dim">SQUID, Satil, 5.8–18.9 m</span></h2>
+        <div class="thumbs" id="thumbs"></div>
+      </section>
+      <section class="sec">
+        <h2>Compare</h2>
+        <div class="field"><span>Left of the line</span><div class="seg" id="seg-l"></div></div>
+        <div class="field"><span>Right of the line</span><div class="seg" id="seg-r"></div></div>
+        <label class="check"><input type="checkbox" id="show-range"> Show the range of every pixel (SQUID's stereo)</label>
+        <label class="check"><input type="checkbox" id="show-charts" checked> Show the charts and their scores</label>
+        <p class="dim" id="method-d"></p>
+      </section>
+      <section class="sec">
+        <h2>Verdict <span class="chip">rule</span></h2>
+        <div class="verdict" id="verdict"></div>
+      </section>
+      <section class="sec">
+        <h2>The charts</h2>
+        <p>Identical colour charts at several ranges. <b>Angle to grey</b>: how far the grey patches are from grey (0° is neutral). <b>Contrast</b>: white against black on the chart; haze lowers it.</p>
+        <table id="charts"></table>
+      </section>
+      <section class="sec">
+        <h2>What the water adds, by range</h2>
+        <p>The light scattered back by the water between the camera and a surface (backscatter), fitted to the darkest pixels at each range. A chart's black patch reflects almost nothing, so the fit should stay under it.</p>
+        <svg id="plot" viewBox="0 0 340 200" role="img" aria-label="Backscatter by range, per channel"></svg>
+        <div class="row" style="display:flex;gap:12px;font-size:var(--fs-xs);color:var(--text-dim);flex-wrap:wrap"><span>— fit</span><span>· darkest pixels</span><span>◆ chart black patch</span></div>
+      </section>
+      <section class="sec">
+        <p class="note">SQUID is CC BY-NC-SA 4.0: these images stay on this machine. Ranges come from SQUID's calibrated stereo; our own reconstruction gave no depth on this data (RC-P12).</p>
+      </section>
+    </div>
+
+    <div id="s-lens" hidden>
+      <section class="sec">
+        <h2>The rig <span class="dim">AquaMVS, CC BY 4.0</span></h2>
+        <p>13 cameras look down through a flat water surface at a submerged board of 60 mm squares. Each camera hangs as its photo of the chosen frame.</p>
+      </section>
+      <section class="sec">
+        <h2>Verdict <span class="chip">rule</span></h2>
+        <div class="verdict" id="l-verdict"></div>
+      </section>
+      <section class="sec">
+        <h2>Both models, all 8 frames</h2>
+        <table id="l-sum"></table>
+      </section>
+      <section class="sec">
+        <h2>Scale error per frame <span class="dim">click a frame</span></h2>
+        <div class="bars" id="bars"></div>
+        <div class="axis"><span>−5%</span><span>0</span><span>+5%</span></div>
+        <div style="display:flex;gap:12px;font-size:var(--fs-xs);color:var(--text-dim)"><span style="color:var(--pin)">■ pinhole</span><span style="color:var(--water)">■ refractive</span></div>
+      </section>
+      <section class="sec">
+        <h2>Show</h2>
+        <div class="field"><span>Exaggerate each corner's miss <b class="mono" id="ex-v"></b></span><input type="range" id="ex" min="1" max="15" step="1" value="3"></div>
+        <label class="check"><input type="checkbox" id="all-rays"> Every ray of the frame (otherwise the chosen corner's)</label>
+        <label class="check"><input type="checkbox" id="other" checked> The other model's corners, faint</label>
+        <p class="dim">Click a corner to follow its rays. Corners are coloured by how far they miss the board, at true size.</p>
+      </section>
+    </div>
+  </aside>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const $ = (id) => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+if (q.get("theme") === "light") document.documentElement.dataset.theme = "light";
+const [squid, aqua] = await Promise.all([fetch("data/squid.json").then((r) => r.json()), fetch("data/aquamvs.json").then((r) => r.json())]);
+
+// ================= Colour in water =================
+const METHODS = {
+  camera_wb: { name: "As the camera saw it", short: "As seen", d: "The RAW with the camera's own white balance: the water's colour and its haze." },
+  grey_world: { name: "Water colour removed", short: "Colour", d: "One white balance for the whole image (grey world on the RAW). Removes the water's tint; leaves the haze." },
+  backscatter: { name: "Haze removed", short: "Haze", d: "The water's backscatter, fitted by range, subtracted; then the white balance. Only where SQUID's stereo gives a range." },
+  range: { name: "Haze and loss with range", short: "Haze + loss", d: "As haze removed, then each channel's loss with range divided out. On this water the fitted loss is close to zero." },
+};
+const C = { img: q.get("img") ?? "RGT_4318", l: q.get("l") ?? "camera_wb", r: q.get("r") ?? "grey_world", split: Number(q.get("split") ?? 0.5), chart: 0 };
+const imgOf = () => squid.images.find((i) => i.name === C.img);
+function segC(id, key) {
+  const el = $(id);
+  el.innerHTML = Object.entries(METHODS).map(([k, m]) => `<button data-v="${k}" title="${m.name}">${m.short}</button>`).join("");
+  const sync = () => el.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === C[key])));
+  el.onclick = (e) => { const b = e.target.closest("button"); if (!b) return; C[key] = b.dataset.v; sync(); renderColour(); };
+  sync();
+}
+$("thumbs").innerHTML = squid.images.map((i) => `<button data-v="${i.name}" aria-pressed="${i.name === C.img}"><img src="data/squid/${i.name}_thumb.jpg" alt="${i.name}"><span title="${i.charts.length} charts">${i.name.slice(4)} · ${i.charts.length}</span></button>`).join("");
+$("thumbs").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; C.img = b.dataset.v; C.chart = 0; $("thumbs").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); renderColour(); };
+const pic = $("pic");
+function renderColour() {
+  const im = imgOf();
+  pic.style.setProperty("--ar", `${im.size[0]} / ${im.size[1]}`);
+  pic.style.setProperty("--arn", String(im.size[0] / im.size[1]));
+  pic.style.setProperty("--split", `${C.split * 100}%`);
+  $("img-l").src = `data/squid/${im.name}_${C.l}.jpg`;
+  $("img-r").src = `data/squid/${im.name}_${C.r}.jpg`;
+  $("img-rng").src = `data/squid/${im.name}_range.png`;
+  $("lab-l").textContent = `← ${METHODS[C.l].name}`;
+  $("lab-r").textContent = `${METHODS[C.r].name} →`;
+  $("method-d").innerHTML = `<b>Left:</b> ${METHODS[C.l].d}<br><b>Right:</b> ${METHODS[C.r].d}`;
+  const [W, H] = im.size;
+  $("boxes").innerHTML = $("show-charts").checked ? im.charts.map((c, i) => {
+    const [x0, y0, x1, y1] = c.box;
+    const side = (x0 + x1) / 2 / W < C.split ? C.l : C.r;
+    return `<div class="chart${i === C.chart ? " sel" : ""}" style="left:${(x0 / W) * 100}%;top:${(y0 / H) * 100}%;width:${((x1 - x0) / W) * 100}%;height:${((y1 - y0) / H) * 100}%"><span>${c.range_m.toFixed(1)} m · ${c.angle[side]?.toFixed(1) ?? "—"}° · ${c.contrast[side]?.toFixed(2) ?? "—"}</span></div>`;
+  }).join("") : "";
+  const better = (a, b, low) => (a == null || b == null ? "" : (low ? a < b : a > b) ? "good" : "");
+  $("charts").innerHTML = `<tr><th>Chart</th><th class="n">Range</th><th class="n">Angle L</th><th class="n">Angle R</th><th class="n">Contrast L</th><th class="n">Contrast R</th></tr>` +
+    im.charts.map((c, i) => `<tr class="${i === C.chart ? "sel" : ""}" data-i="${i}" style="cursor:pointer"><td>${i + 1}</td><td class="n">${c.range_m.toFixed(1)} m</td>
+      <td class="n ${better(c.angle[C.l], c.angle[C.r], true)}">${c.angle[C.l]?.toFixed(1) ?? "—"}°</td><td class="n ${better(c.angle[C.r], c.angle[C.l], true)}">${c.angle[C.r]?.toFixed(1) ?? "—"}°</td>
+      <td class="n ${better(c.contrast[C.l], c.contrast[C.r], false)}">${c.contrast[C.l]?.toFixed(2) ?? "—"}</td><td class="n ${better(c.contrast[C.r], c.contrast[C.l], false)}">${c.contrast[C.r]?.toFixed(2) ?? "—"}</td></tr>`).join("");
+  renderVerdict(im);
+  renderPlot(im);
+}
+$("charts").onclick = (e) => { const tr = e.target.closest("tr[data-i]"); if (tr) { C.chart = Number(tr.dataset.i); renderColour(); } };
+// The rule: what each step does to the charts of this image, read from their scores.
+function renderVerdict(im) {
+  const med = (k) => { const v = im.charts.map((c) => c.angle[k]).filter((x) => x != null).sort((a, b) => a - b); return v[v.length >> 1]; };
+  const mean = (k) => { const v = im.charts.map((c) => c.contrast[k]).filter((x) => x != null); return v.reduce((a, b) => a + b, 0) / v.length; };
+  const tinted = im.charts.filter((c) => c.angle.backscatter != null && c.angle.backscatter - c.angle.grey_world > 5);
+  const over = im.charts.filter((c) => c.b_over_black != null && c.b_over_black > 1);
+  const lines = [
+    `<b>Colour:</b> one white balance takes the grey patches from ${med("camera_wb").toFixed(1)}° to ${med("grey_world").toFixed(1)}° (median), at every range. The water's tint is one global cast here.`,
+    `<b>Haze:</b> removing backscatter raises chart contrast from ${mean("grey_world").toFixed(2)} to ${mean("backscatter").toFixed(2)} (mean). No white balance can do that.`,
+    tinted.length
+      ? `<b>But:</b> it tints ${tinted.length === 1 ? "chart" : "charts"} ${tinted.map((c) => im.charts.indexOf(c) + 1).join(", ")} (${tinted.map((c) => `${c.angle.backscatter.toFixed(0)}°`).join(", ")} from grey)${over.length ? `, where the fit removes more light than the black patch reflects (${over.map((c) => `${c.b_over_black.toFixed(2)}×`).join(", ")})` : ""}. Near the camera this scene has no truly dark pixels to fit.`
+      : `<b>And:</b> on this image the haze fit leaves every chart within 5° of the white-balanced grey.`,
+  ];
+  $("verdict").innerHTML = lines.map((l) => `<span>${l}</span>`).join("") + `<small>Rule written for the mock-up, over the chart scores. A tint over 5° counts.</small>`;
+}
+function renderPlot(im) {
+  const W = 340, H = 200, L = 34, R = 10, T = 10, B = 26;
+  const xmax = 20, ymax = Math.max(...im.dark.rgb.flat(), ...im.charts.flatMap((c) => c.black)) * 1.1;
+  const x = (d) => L + (d / xmax) * (W - L - R), y = (v) => H - B - (v / ymax) * (H - T - B);
+  const cols = ["--r", "--g", "--b"].map(cssVar);
+  let s = `<line x1="${L}" y1="${H - B}" x2="${W - R}" y2="${H - B}" stroke="${cssVar("--border-strong")}"/><line x1="${L}" y1="${T}" x2="${L}" y2="${H - B}" stroke="${cssVar("--border-strong")}"/>`;
+  for (const d of [0, 5, 10, 15, 20]) s += `<text x="${x(d)}" y="${H - 8}" text-anchor="middle">${d} m</text>`;
+  for (const f of [0, 0.5, 1]) s += `<text x="${L - 4}" y="${y(f * ymax) + 3}" text-anchor="end">${(f * ymax).toFixed(2)}</text>`;
+  for (let c = 0; c < 3; c++) {
+    const pts = [];
+    for (let d = 0; d <= xmax; d += 0.25) pts.push(`${x(d).toFixed(1)},${y(im.fit.b_inf[c] * (1 - Math.exp(-im.fit.b[c] * d))).toFixed(1)}`);
+    s += `<polyline points="${pts.join(" ")}" fill="none" stroke="${cols[c]}" stroke-width="1.6"/>`;
+    im.dark.range_m.forEach((d, i) => (s += `<circle cx="${x(d)}" cy="${y(im.dark.rgb[i][c])}" r="2" fill="${cols[c]}" opacity=".6"/>`));
+    im.charts.forEach((ch) => { const cx = x(ch.range_m), cy = y(ch.black[c]); s += `<path d="M${cx} ${cy - 4}L${cx + 4} ${cy}L${cx} ${cy + 4}L${cx - 4} ${cy}Z" fill="none" stroke="${cols[c]}" stroke-width="1.4"/>`; });
+  }
+  $("plot").innerHTML = s;
+}
+// The wipe and the range readout
+function dragWipe(e) {
+  const r = pic.getBoundingClientRect();
+  C.split = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+  pic.style.setProperty("--split", `${C.split * 100}%`);
+}
+$("wipe").addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  const mv = (ev) => dragWipe(ev);
+  addEventListener("pointermove", mv);
+  addEventListener("pointerup", () => { removeEventListener("pointermove", mv); renderColour(); }, { once: true });
+});
+$("wipe").addEventListener("keydown", (e) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { C.split = Math.min(1, Math.max(0, C.split + (e.key === "ArrowLeft" ? -0.05 : 0.05))); renderColour(); } });
+pic.addEventListener("pointermove", (e) => {
+  const im = imgOf(), r = pic.getBoundingClientRect();
+  const gx = Math.floor(((e.clientX - r.left) / r.width) * im.range_grid.w), gy = Math.floor(((e.clientY - r.top) / r.height) * im.range_grid.h);
+  if (gx < 0 || gy < 0 || gx >= im.range_grid.w || gy >= im.range_grid.h) return;
+  const cm = im.range_grid.cm[gy * im.range_grid.w + gx];
+  $("readout").textContent = cm > 0 ? `Range ${(cm / 100).toFixed(1)} m (SQUID's stereo)` : "No range here: the stereo found no depth";
+});
+$("show-range").onchange = (e) => { pic.classList.toggle("showrange", e.target.checked); $("legend-r").hidden = !e.target.checked; };
+$("show-charts").onchange = renderColour;
+segC("seg-l", "l");
+segC("seg-r", "r");
+renderColour();
+
+// ================= The water lens (AquaMVS) =================
+let gl = null;
+const L = { lens: q.get("lens") !== "0", frame: Number(q.get("frame") ?? 4), ex: Number(q.get("ex") ?? 3), corner: null };
+// World: AquaMVS's frame, z down into the water. three.js: y up. (x, y, z) -> (x, -z, y).
+const W3 = (p) => new THREE.Vector3(p[0], -p[2], p[1]);
+function initLens() {
+  const host = $("gl");
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  host.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 50);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  const root = new THREE.Group();
+  scene.add(root);
+  const size = () => { const r = host.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); };
+  new ResizeObserver(size).observe(host);
+  size();
+  // Frame the rig and the board from the side, a little above the water.
+  const ref = aqua.refractive;
+  const cams = ref.cameras.map((c) => W3(c.centre));
+  const box = new THREE.Box3().setFromPoints(cams);
+  const fr = ref.frames[String(L.frame)];
+  fr.corners.forEach((c) => box.expandByPoint(W3(c.xyz)));
+  const ctr = box.getCenter(new THREE.Vector3()), sz = box.getSize(new THREE.Vector3()).length();
+  controls.target.copy(ctr);
+  camera.position.copy(ctr).add(new THREE.Vector3(0.55, 0.95, 0.75).multiplyScalar(sz));
+  controls.update();
+  const pick = new THREE.Raycaster();
+  pick.params.Points.threshold = 0.01;
+  renderer.domElement.addEventListener("click", (e) => {
+    const r = renderer.domElement.getBoundingClientRect();
+    pick.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+    const hit = pick.intersectObject(gl.cornerPts)[0];
+    if (hit) { L.corner = gl.cornerIds[hit.index]; buildLens(); }
+  });
+  gl = { renderer, scene, camera, controls, root };
+  window.m7gl = gl;
+  (function tick() { requestAnimationFrame(tick); controls.update(); renderer.render(scene, camera); })();
+}
+const rayVS = "attribute float aF; varying float vF; void main(){ vF = aF; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }";
+const rayFS = "uniform vec3 uColor; uniform float uOpacity; varying float vF; void main(){ gl_FragColor = vec4(uColor, uOpacity * smoothstep(0.0, 1.0, vF * 0.9 + 0.1)); }";
+const tex = new Map();
+const loader = new THREE.TextureLoader();
+function thumb(name, f) {
+  const k = `${name}_${f}`;
+  if (!tex.has(k)) { const t = loader.load(`data/aquamvs/thumbs/${k}.jpg`); t.colorSpace = THREE.SRGBColorSpace; tex.set(k, t); }
+  return tex.get(k);
+}
+// A camera is its photo (RC-M1): the frame's photo hangs in front of the camera, rays fade to the centre.
+function photoCam(c, d, tint) {
+  const R = c.R, C = c.centre, [w, h] = c.size;
+  const hw = (w / 2 / c.f) * d, hh = (h / 2 / c.f) * d;
+  // camera axes (OpenCV: x right, y down, z forward) to world: X = C + R^T p
+  const toW = (p) => W3([C[0] + R[0][0] * p[0] + R[1][0] * p[1] + R[2][0] * p[2], C[1] + R[0][1] * p[0] + R[1][1] * p[1] + R[2][1] * p[2], C[2] + R[0][2] * p[0] + R[1][2] * p[1] + R[2][2] * p[2]]);
+  const o = W3(C), tl = toW([-hw, -hh, d]), tr = toW([hw, -hh, d]), bl = toW([-hw, hh, d]), br = toW([hw, hh, d]);
+  const g = new THREE.Group();
+  const lp = [], fa = [];
+  for (const q2 of [tl, tr, bl, br]) { lp.push(o.x, o.y, o.z, q2.x, q2.y, q2.z); fa.push(0, 1); }
+  const rg = new THREE.BufferGeometry();
+  rg.setAttribute("position", new THREE.Float32BufferAttribute(lp, 3));
+  rg.setAttribute("aF", new THREE.Float32BufferAttribute(fa, 1));
+  g.add(new THREE.LineSegments(rg, new THREE.ShaderMaterial({ uniforms: { uColor: { value: new THREE.Color(tint) }, uOpacity: { value: 0.55 } }, vertexShader: rayVS, fragmentShader: rayFS, transparent: true, depthWrite: false })));
+  g.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints([o]), new THREE.PointsMaterial({ color: tint, size: 5, sizeAttenuation: false })));
+  const pg = new THREE.BufferGeometry().setFromPoints([tl, tr, bl, br]);
+  pg.setAttribute("uv", new THREE.Float32BufferAttribute([0, 1, 1, 1, 0, 0, 1, 0], 2));
+  pg.setIndex([0, 2, 1, 1, 2, 3]);
+  g.add(new THREE.Mesh(pg, new THREE.MeshBasicMaterial({ map: thumb(c.name, L.frame), side: THREE.DoubleSide })));
+  return g;
+}
+function boardTexture() {
+  const c = document.createElement("canvas"), sq = 32, b = aqua.board;
+  c.width = b.squares_x * sq; c.height = b.squares_y * sq;
+  const x = c.getContext("2d");
+  for (let i = 0; i < b.squares_x; i++) for (let j = 0; j < b.squares_y; j++) { x.fillStyle = (i + j) % 2 ? "#f2f2f2" : "#1d1d1d"; x.fillRect(i * sq, j * sq, sq, sq); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const boardTex = boardTexture();
+function missColor(mm) { // ok under 1 mm, warn to 5 mm, fail beyond
+  return new THREE.Color(cssVar(mm < 1 ? "--ok" : mm < 5 ? "--warn" : "--fail"));
+}
+function buildLens() {
+  const { root } = gl;
+  root.clear();
+  const name = L.lens ? "refractive" : "pinhole", other = L.lens ? "pinhole" : "refractive";
+  const M = aqua[name], fr = M.frames[String(L.frame)];
+  const tint = cssVar(L.lens ? "--water" : "--pin");
+  // The water surface: a lens of water, drawn only when it is modelled.
+  const cams = M.cameras.map((c) => W3(c.centre));
+  const bx = new THREE.Box3().setFromPoints(cams);
+  fr.corners.forEach((c) => bx.expandByPoint(W3(c.xyz)));
+  const span = bx.getSize(new THREE.Vector3()), mid = bx.getCenter(new THREE.Vector3());
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(span.x * 1.3, span.z * 1.3), new THREE.MeshBasicMaterial({ color: cssVar("--water"), transparent: true, opacity: L.lens ? 0.16 : 0.05, side: THREE.DoubleSide, depthWrite: false }));
+  water.rotation.x = -Math.PI / 2;
+  water.position.set(mid.x, -M.water_z, mid.z);
+  root.add(water);
+  const edge = new THREE.LineSegments(new THREE.EdgesGeometry(water.geometry), new THREE.LineDashedMaterial({ color: cssVar("--water"), dashSize: 0.03, gapSize: 0.02, transparent: true, opacity: L.lens ? 0.8 : 0.35 }));
+  edge.rotation.copy(water.rotation); edge.position.copy(water.position); edge.computeLineDistances();
+  root.add(edge);
+  // Cameras as their photos
+  M.cameras.forEach((c) => root.add(photoCam(c, 0.2, cssVar("--text-dim"))));
+  // The board where this model's corners put it (rigid fit), and each corner's miss, exaggerated
+  const b = aqua.board, Rb = fr.board_R, tb = fr.board_t;
+  const onBoard = (u, v) => [Rb[0][0] * u + Rb[0][1] * v + tb[0], Rb[1][0] * u + Rb[1][1] * v + tb[1], Rb[2][0] * u + Rb[2][1] * v + tb[2]];
+  // Inner corner (0,0) sits one square in from the board's edge.
+  const sqm = b.square_size, u0 = -sqm, v0 = -sqm, u1 = (b.squares_x - 1) * sqm, v1 = (b.squares_y - 1) * sqm;
+  const bg = new THREE.BufferGeometry().setFromPoints([W3(onBoard(u0, v0)), W3(onBoard(u1, v0)), W3(onBoard(u0, v1)), W3(onBoard(u1, v1))]);
+  bg.setAttribute("uv", new THREE.Float32BufferAttribute([0, 1, 1, 1, 0, 0, 1, 0], 2));
+  bg.setIndex([0, 2, 1, 1, 2, 3]);
+  root.add(new THREE.Mesh(bg, new THREE.MeshBasicMaterial({ map: boardTex, side: THREE.DoubleSide, transparent: true, opacity: 0.8, depthWrite: false })));
+  const pos = [], col = [], miss = [];
+  gl.cornerIds = [];
+  const misses = [];
+  fr.corners.forEach((c) => {
+    const truth = onBoard(c.board[0], c.board[1]);
+    const dv = c.xyz.map((v, i) => v - truth[i]);
+    const mm = Math.hypot(...dv) * 1000;
+    misses.push(mm);
+    const shown = W3(truth.map((v, i) => v + dv[i] * L.ex));
+    pos.push(shown.x, shown.y, shown.z);
+    const k = missColor(mm); col.push(k.r, k.g, k.b);
+    miss.push(W3(truth), shown);
+    gl.cornerIds.push(c.id);
+  });
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  pg.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  gl.cornerPts = new THREE.Points(pg, new THREE.PointsMaterial({ size: 7, sizeAttenuation: false, vertexColors: true, depthTest: false, transparent: true }));
+  gl.cornerPts.renderOrder = 2;
+  root.add(gl.cornerPts);
+  root.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(miss), new THREE.LineBasicMaterial({ color: cssVar("--text-dim"), transparent: true, opacity: 0.7, depthTest: false })));
+  if ($("other").checked) {
+    const O = aqua[other].frames[String(L.frame)];
+    root.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(O.corners.map((c) => W3(c.xyz))), new THREE.PointsMaterial({ color: cssVar(L.lens ? "--pin" : "--water"), size: 3, sizeAttenuation: false, transparent: true, opacity: 0.5 })));
+  }
+  // Rays: camera to the surface, then bent to the corner (lens on); straight to the corner (lens off)
+  if (L.corner == null || !fr.corners.some((c) => c.id === L.corner)) L.corner = fr.corners[fr.corners.length >> 1].id;
+  const chosen = $("all-rays").checked ? fr.corners : fr.corners.filter((c) => c.id === L.corner);
+  const seg = [];
+  chosen.forEach((c) => c.cams.forEach((ci, k) => {
+    const o = W3(M.cameras[ci].centre), x = W3(c.xyz);
+    if (L.lens) { const h = W3(c.hits[k]); seg.push(o, h, h, x); } else seg.push(o, x);
+  }));
+  root.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(seg), new THREE.LineBasicMaterial({ color: tint, transparent: true, opacity: $("all-rays").checked ? 0.12 : 0.9 })));
+  const cc = fr.corners.find((c) => c.id === L.corner);
+  const cm = misses[fr.corners.indexOf(cc)];
+  $("hud-model").className = `chip ${L.lens ? "water" : "pin"}`;
+  $("hud-model").innerHTML = `<i></i>${L.lens ? "Refractive model, n = 1.333" : "Pinhole model: no water lens"} · frame ${L.frame}`;
+  $("hud-ex").textContent = `Misses drawn ×${L.ex}`;
+  $("hud-corner").textContent = `Corner ${cc.id}: seen by ${cc.cams.length} cameras, misses the board by ${cm.toFixed(1)} mm, rays ${cc.spread_mm.toFixed(2)} mm apart`;
+  $("lens").setAttribute("aria-checked", String(L.lens));
+  $("lens-lab").textContent = L.lens ? "On: rays bend at the surface" : "Off: rays go straight, as in air";
+  renderLensSide();
+}
+function renderLensSide() {
+  const P = aqua.pinhole.summary, Rf = aqua.refractive.summary;
+  const row = (k, lab, unit, d = 2) => `<tr><td>${lab}</td><td class="n ${Math.abs(P[k]) > Math.abs(Rf[k]) ? "bad" : ""}">${P[k] > 0 && unit === "%" ? "+" : ""}${P[k].toFixed(d)} ${unit}</td><td class="n ${Math.abs(Rf[k]) < Math.abs(P[k]) ? "good" : ""}">${Rf[k] > 0 && unit === "%" ? "+" : ""}${Rf[k].toFixed(d)} ${unit}</td></tr>`;
+  $("l-sum").innerHTML = `<tr><th></th><th class="n" style="color:var(--pin)">Pinhole</th><th class="n" style="color:var(--water)">Refractive</th></tr>` +
+    row("scale_error_pct", "Scale error, mean", "%", 2) + row("rigid_rmse_mm", "Shape error (rigid RMSE)", "mm", 2) + row("adjacent_rms_mm", "60 mm squares, RMS miss", "mm", 2) + row("ray_spread_mm" in P ? "ray_spread_mm" : "ray_rms_mm", "Rays' spread at a corner", "mm", 2);
+  const fs = aqua.frames;
+  const pm = (m) => aqua[m].frames;
+  $("bars").innerHTML = fs.map((f) => {
+    const p = pm("pinhole")[f].metrics.scale_error_pct, r = pm("refractive")[f].metrics.scale_error_pct;
+    const bar = (v, cls) => { const x = Math.max(-5, Math.min(5, v)); const l = 50 + Math.min(0, x) * 10, w = Math.abs(x) * 10; return `<i class="${cls}" style="left:${l}%;width:${Math.max(w, 0.6)}%" title="${v.toFixed(2)}%"></i>`; };
+    return `<div class="bar${f === L.frame ? " sel" : ""}" data-f="${f}"><span class="k">frame ${f}</span><span class="t">${bar(p, "p")}${bar(r, "w")}</span></div>`;
+  }).join("");
+  const worstP = Math.max(...fs.map((f) => Math.abs(pm("pinhole")[f].metrics.scale_error_pct)));
+  const worstR = Math.max(...fs.map((f) => Math.abs(pm("refractive")[f].metrics.scale_error_pct)));
+  const rigR = Math.max(...fs.map((f) => pm("refractive")[f].metrics.rigid_rmse_mm)), rigP = Math.max(...fs.map((f) => pm("pinhole")[f].metrics.rigid_rmse_mm));
+  const cur = pm(L.lens ? "refractive" : "pinhole")[L.frame].metrics;
+  $("l-verdict").innerHTML = `<span><b>With the water lens on</b>, every frame's scale is within ±${worstR.toFixed(2)}% and its shape within ${rigR.toFixed(1)} mm. <b>Off</b>, the board measures up to ${worstP.toFixed(1)}% small and ${rigP.toFixed(1)} mm out of shape, and how much depends on where the board is.</span>
+    <span>This frame, ${L.lens ? "refractive" : "pinhole"}: scale ${cur.scale_error_pct > 0 ? "+" : ""}${cur.scale_error_pct.toFixed(2)}%, shape ${cur.rigid_rmse_mm.toFixed(1)} mm.</span>
+    <small>Rule written for the mock-up, over RC-P12's measurements. Flat water surface, fresh water, one rig.</small>`;
+}
+$("bars").onclick = (e) => { const b = e.target.closest(".bar"); if (b) { L.frame = Number(b.dataset.f); buildLens(); } };
+$("lens").onclick = () => { L.lens = !L.lens; buildLens(); };
+$("ex").value = L.ex; $("ex-v").textContent = `×${L.ex}`;
+$("ex").oninput = (e) => { L.ex = Number(e.target.value); $("ex-v").textContent = `×${L.ex}`; buildLens(); };
+$("all-rays").onchange = buildLens;
+$("other").onchange = buildLens;
+
+// ================= Tabs and theme =================
+function setTab(t) {
+  $("tab-seg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === t)));
+  $("v-colour").hidden = $("s-colour").hidden = t !== "colour";
+  $("v-lens").hidden = $("s-lens").hidden = t !== "lens";
+  $("crumbs").innerHTML = `underwater › <b>${t === "colour" ? "Colour in water" : "The water lens"}</b>`;
+  if (t === "lens") { if (!gl) initLens(); buildLens(); }
+}
+$("tab-seg").onclick = (e) => { const b = e.target.closest("button"); if (b) setTab(b.dataset.v); };
+$("theme").onclick = () => {
+  const light = document.documentElement.dataset.theme !== "light";
+  document.documentElement.dataset.theme = light ? "light" : "dark";
+  $("theme").textContent = light ? "Dark" : "Light";
+  renderColour();
+  if (gl && !$("v-lens").hidden) buildLens();
+};
+setTab(q.get("tab") === "lens" ? "lens" : "colour");
+window.m7Ready = true;
+</script>
+</body>
+</html>
