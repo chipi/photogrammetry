@@ -170,17 +170,22 @@ Pooled over all seeds:
 ### The failures in 42444858, traced (2026-11-26)
 
 Checked in scratch scripts against the committed outputs; nothing in the pipeline changed.
-- **No room-wide surface bias.** Each wall's TSDF plane against its Faro plane, at the wall's
-  centre and signed toward the cameras: median +0.06 cm (42444793), −0.14 cm (42444858), −0.32 cm
-  (42444515), with no trend against camera distance. A global depth scale would move every wall
-  and break the rooms that pass, so the LiDAR's 1.1–1.6% against the rendered laser depth is not
-  the cause.
+- **No room-wide surface bias that explains it.** Each wall's TSDF plane against its Faro plane,
+  at the wall's centre and signed toward the cameras: median +1.00 cm (42444793, the room that
+  passes), +0.38 cm (42444858), −0.09 cm (42444515), with no trend against camera distance (fitted
+  slopes −0.15 to +0.54 cm per metre). A global depth scale would move every wall, so the LiDAR's
+  1.1–1.6% against the rendered laser depth is not the cause of the failures.
 - **One wall decides it.** In seeds 0 and 2, every failing pair shares one wall of a passage about
-  1.05 m wide. That wall's TSDF plane sits 2.4–2.5 cm into the passage and is tilted 1.2° against
-  Faro; its partners sit within 0.3 cm.
+  1.05 m wide. That wall's TSDF plane sits 2.4–2.5 cm into the passage and is tilted 1.2–1.3°
+  against Faro; its partners sit within 0.75 cm. The cameras that see it are 1.0 m or more away
+  (median 1.7 m), so it is not near-range depth.
 - **Partly the poses, partly the depth.** Along that wall, in 1 m pieces, the TSDF sits +3.1 and
   +1.0 cm off Faro, the ARKit-posed laser +1.3 and −0.1 cm. The laser shares ARKit's poses, so
   about 1 cm of the error comes with them; the rest is the LiDAR surface there.
+- **A correction (2026-11-27):** the first version of this trace (f9e8893) took the trajectory's
+  translation column as the camera centre; ARKit stores cam_from_world, so the centre is −Rᵀt.
+  The per-room medians and the partners' offsets above are recomputed with the right centres;
+  the failing wall's offset and the fusion results did not depend on it.
 - **Fusion settings do not move it.** Re-fused in a mirror run directory and re-scored over five
   seeds: depth under 0.5 m dropped, 8 of 84 pairs fail; pixels seen at under 17° dropped, 6 of
   80; truncation 4 cm instead of 8 cm, 7 of 77 (the committed setting: 7 of 77).
@@ -282,7 +287,7 @@ so the places above come from `components.py`.
      videos. How that turns into a room-dependent wall error is not established.
    - **Traced (2026-11-26):** not a room-wide bias. One wall of a 1.05 m passage sits 2.4–2.5 cm
      into it, about 1 cm with ARKit's poses and the rest from the LiDAR surface; three fusion
-     settings leave it in place.
+     settings leave it in place. Wall medians per room are +1.00, +0.38 and −0.09 cm.
 2. **Failures sit at short distances, where the 2 cm floor binds.**
    - **Against Faro:** all seven failures are 1.01–1.10 m pairs in 42444858, 2.2–3.8 cm short.
    - **Against the ARKit reference:** all three seeded failures are 1.01–1.09 m pairs in the same
