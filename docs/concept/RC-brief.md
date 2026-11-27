@@ -315,7 +315,7 @@ plain to anyone who knows the field:
 
 - **Distribution is at the front, for work in the field** *(owner, 2026-11-27)*. The owner travels with a laptop and shoots with a camera, a drone or an underwater camera, and processes the day's work after. The answer is not a stronger laptop but offloading: the laptop sends work to the owner's other machines and to rented GPUs. Running workloads on other machines, rented GPUs included, is built from the beginning and is a key part of the vision, not a later scaling step. Open problems this raises: the upload (1,500 photos at 50 MB are 75 GB), whether the RAW files need to leave the laptop at all, and how work splits between the laptop and the remote workers before anything is sent.
 
-- **A web application, a local client, or both** *(open, owner, 2026-11-27)*: in the field something has to run on the laptop; how it is packaged is decided later.
+- **Both: Recce Studio on the desktop, and the web** *(owner, 2026-11-27)*. The Studio is the web application packaged with the local engine in Electron, for macOS and Windows (Linux too); it does all RAW processing locally and sends only what the model needs. Recorded in [RC-01](RC-01-vision.md).
 
 ### Open from the start
 

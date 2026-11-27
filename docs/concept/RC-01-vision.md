@@ -1,6 +1,6 @@
 # RC-01 — Vision
 
-**Version:** 0.3 · Draft
+**Version:** 0.4 · Draft
 **Date:** 2026-11-27
 **Inputs:** [brief](RC-brief.md) · [Step 0 close-out report](../wip/step0-closeout-2026-11-27.md) ·
 [architecture sketch](RC-architecture-sketch.md) · [use cases](RC-use-cases.md) ·
@@ -60,9 +60,9 @@ Underneath, every mission has the same five steps.
    right and measure right.
 2. **Capture, in legs.** Photographs, with whatever comes with them: the phone's position and
    depth, the drone's GPS, the robot's own poses.
-3. **Quick pass, after every leg.** In the time before the next leg, Recce adds the new
-   photographs to the running model and shows coverage: what is seen well, seen weakly, not seen
-   at all, and where to stand to fix it.
+3. **Preview, after every leg.** In the time before the next leg, Recce adds the new
+   photographs to the running model and shows a preview with its coverage: what is seen well,
+   seen weakly, not seen at all, and where to stand to fix it.
 4. **Full pass, when the gaps are closed.** The heavy reconstruction (dense geometry, the mesh, the
    texture, the gaussian splat) runs once, overnight or while the person does something else.
 5. **Hand-over.** The model goes to whoever acts on it, with its datasheet: its true size or
@@ -76,25 +76,37 @@ difference cannot be measured from, handed to a robot or used to send people int
 
 ## Two speeds
 
-**The quick pass runs where the person is.** It works on reduced photographs, adds each leg to
-what came before instead of starting over, and aims for minutes, not hours: short enough to fit a
-surface interval, a battery swap or the walk to the next room. It runs on the laptop in the
-field, offline, and on the operator's station outside the burned building. What it produces is
-coverage and the next shots, plus a rough model to look at; it does not need to be beautiful, it
-needs to be right about the gaps.
+**The preview: plan the next leg without waiting.** As soon as a leg's photographs are on the
+laptop, Recce builds a preview from them: every camera in its place, the rough shape of the
+place, coverage laid over it, and the gaps with where to stand to close them. It is the quick
+pass: reduced photographs, each leg added to what came before instead of starting over, minutes
+rather than hours, on the laptop in the field and offline, or on the operator's station outside
+the burned building. The person walks around it, sees what the first dive or the first battery
+missed, and plans the second leg on it. Nobody waits for the full render to know what to do
+next. The preview does not need to be beautiful; it needs to be right about the gaps.
 
-**The full pass runs where the power is.** Dense geometry and the rest need a CUDA or HIP GPU and
-hours of it. A laptop with such a GPU runs the full pass itself. A Mac does not today, and many
-laptops have no GPU worth the name, so the full pass goes to a machine at home or to a GPU rented
-by the hour from the person's own provider account: priced before it starts, approved by the
-person, gone when it ends. A night on a rented GPU costs a few dollars; nobody needs to own the
-machine.
+**The local client does the heavy lifting on the data.** Everything that touches the camera's
+originals happens on the laptop: reading the RAW files, developing them into one consistent set
+(white balance, exposure, colour), dropping the blurred and the duplicates, placing every
+camera. That is what the Studio is for, beyond showing the preview: by the time anything leaves
+the laptop, it is only what the model needs, the working images at the resolution the full pass
+uses and the camera solution. A transfer that would take a hotel uplink most of a day takes
+minutes to an hour. The originals never leave the person's disk.
 
-**What travels is the working set, not the camera's files.** The quick pass has already
-developed the RAW files into a consistent set and placed every camera; the full pass needs those
-working images at the resolution it uses and the camera solution, not the originals. That turns
-a transfer that would take a hotel uplink most of a day into one that takes minutes to an hour.
-The originals stay on the person's disk.
+**The full pass runs where the power is, and every case has some.** Dense geometry, the mesh,
+the texture and the splat need a CUDA or HIP GPU and hours of it. Recce finds that power wherever
+the person has it:
+
+- **in the laptop**, when it has the GPU: the full pass runs there, nothing is sent;
+- **next to the laptop**: an external GPU or a GPU machine carried along, on the desk or in the
+  van;
+- **at home**: the person's own machine with a GPU, reached over their private network;
+- **rented by the hour**, when they have none of these: a GPU from the person's own provider
+  account, priced before it starts, approved by the person, gone when it ends. A night costs a
+  few dollars.
+
+Recce shows the time and the cost on each option before the person chooses. Nobody needs to own
+the big machine, and nobody who owns one is made to rent.
 
 ## Surfaces
 
@@ -112,18 +124,35 @@ The same product appears in a few places, built once.
 **The Studio is the website, packaged.** One web application (the interface, the 3D scenes,
 three.js and splats) is the Studio's interface and the browser's. On the desktop it is wrapped
 together with the local engine as a single installable application for macOS and Windows.
-Electron is the leading choice for the wrapper: it ships its own Chromium, so the 3D scenes
-render the same on every system, and its size is small next to the engine it carries. Tauri,
-which uses each system's own web view, is the alternative to measure against it. The decision
-belongs in an RFC.
+The wrapper is Electron *(owner, 2026-11-27)*: it ships its own Chromium, so the 3D scenes
+render the same on every system, and its size is small next to the engine it carries. What
+the browser shows and what the Studio shows is the same thing.
 
-**How a robot's photographs reach Recce.** A robot does not have a card to pull. During a mission
-it sends what its link allows, a stream of selected frames with their poses, to the station,
-where the quick pass shows the operator what has been seen and returns the next brief as data
-the robot's own software can follow. When it comes back, or when the link is good, it delivers
-the full capture set, and the full pass runs. A vehicle with its own computer can carry the
-station on board and send only the coverage and the brief. Recce never steers the robot; it says
-what is missing.
+**How a robot's mission runs with Recce.** The robot's own software plans and drives;
+Recce sees and advises. With robotics-lab, whose Mission Control plans and executes the owner's
+robots, the shape proposed on both sides (2026-11-27, not yet decided by the operator) is:
+
+- **A leg is a group of capture steps** in the robot's mission plan: a sequence of
+  `capture_view` goals, each a place to stand and a burst to shoot.
+- **During the leg, a reduced stream goes out.** The robot's recording keeps every frame and
+  sends a reduced copy with poses over its link to a Recce station. The robot does the cheap
+  selection (a rate, or a new frame when the pose has changed enough), within the link's budget;
+  Recce does the selection that needs the model (what adds coverage). The full set follows when
+  the robot is back or the link is good.
+- **The station sits beside Mission Control** on the operator's machine; later, as an option,
+  on the robot's own computer for when the link drops.
+- **After the leg, the gaps come back as data** (`gaps.json`). The planner treats "a capture
+  with open gaps" as a reason to replan, at the leg boundary; it turns the gaps into the next
+  leg's capture steps, the operator reviews, and Mission Control executes. In manual mode the
+  operator sees the gaps and adds the leg by hand. Recce never steers the robot.
+- **In a hazard, unseen is not the same as unsafe.** For the robot in a burned building, the gaps
+  have to say whether a part is merely unseen or lies behind something the model marks as
+  dangerous, so the planner does not send the robot there, and each leg has a time budget the
+  preview must meet. This is a safety design the operator decides with robotics-lab, not only an
+  interface.
+
+A vehicle with its own computer can carry the station on board and send only the coverage and
+the gaps.
 
 ## Each mission, specialised
 
@@ -230,10 +259,10 @@ they capture with their own software, and Recce tells them what is missing. Not 
 
 ## Open
 
-- **The wrapper.** Electron or Tauri, decided in an RFC on measured rendering and size.
-- **The quick pass.** At which reduced resolution, how it adds a leg without starting over, and
-  how fast it runs on a laptop without a GPU.
-- **The robot link.** How frames are selected for a weak link, and the station's interface.
+- **The preview.** At which reduced resolution, how it adds a leg without starting over, how
+  fast it runs on a laptop without a GPU, and how close it looks to the final model.
+- **The robot link.** The transport for the reduced stream over a weak link and its back-pressure;
+  the hazard rules for unseen against unsafe (with robotics-lab and the operator).
 - **What the full pass needs sent,** and when the originals have to travel (full-detail texture,
   colour corrected by range underwater).
 - **Renting.** Which providers first, and how data reaches them.
