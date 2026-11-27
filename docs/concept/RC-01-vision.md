@@ -1,6 +1,6 @@
 # RC-01 — Vision
 
-**Version:** 0.4 · Draft
+**Version:** 0.5 · Draft
 **Date:** 2026-11-27
 **Inputs:** [brief](RC-brief.md) · [Step 0 close-out report](../wip/step0-closeout-2026-11-27.md) ·
 [architecture sketch](RC-architecture-sketch.md) · [use cases](RC-use-cases.md) ·
@@ -83,7 +83,16 @@ pass: reduced photographs, each leg added to what came before instead of startin
 rather than hours, on the laptop in the field and offline, or on the operator's station outside
 the burned building. The person walks around it, sees what the first dive or the first battery
 missed, and plans the second leg on it. Nobody waits for the full render to know what to do
-next. The preview does not need to be beautiful; it needs to be right about the gaps.
+next. The preview does not need to be finished; it needs to be right about the gaps.
+
+**The preview builds in front of the person's eyes.** There is no progress bar followed by a
+finished model. As the photographs come in (copied off the card, sent from the phone, streamed by
+the robot), each one is picked up and finds its place: the photo flies to where it was taken,
+the points it shares with the others light up, and the shape of the place grows out of them. The
+coverage fills in as it goes, and the gaps show up as the parts that stay dark. Everything stays
+live and interactive while it builds: the person turns the model, opens a photo, follows the
+threads to what it sees, and starts planning the next leg before the last photograph has landed.
+Watching a reconstruction happen is also how a person learns what makes one work.
 
 **The local client does the heavy lifting on the data.** Everything that touches the camera's
 originals happens on the laptop: reading the RAW files, developing them into one consistent set
@@ -193,8 +202,8 @@ the gaps.
 
 ## What makes Recce
 
-**Answers while the mission runs.** The quick pass, after every leg, is what no tool offers
-today; the others answer after the mission is over.
+**Answers while the mission runs.** The preview grows live from the first photograph of every
+leg; no tool offers that today, the others answer after the mission is over.
 
 **Power without owning it.** The heavy work goes where the hardware is, at home or rented for a
 night, decided and paid for by the person.
