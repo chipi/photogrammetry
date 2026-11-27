@@ -164,7 +164,9 @@ These are proposals for the owner, drawn from the evidence above:
   arbitrary. A learned model may propose poses; it never sets scale.
 - The engine supplies positions, numbers and verdicts; an AI explains, orders and coaches, and is
   checked against the engine.
-- Distribution remains the claim to prove first in the build, since Step 0 did not test it.
+- Distribution remains untested; where it sits in the build's order is open.
+
+Decided by the owner after this report (2026-11-27): the first case is the owner's home with the iPhone app, objects first and then a whole room, leading into the robot cases; learn mode is a feature inside the product. Both are recorded in the [brief](../concept/RC-brief.md) §4.
 
 ## Not covered
 

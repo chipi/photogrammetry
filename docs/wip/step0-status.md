@@ -147,6 +147,8 @@ Republish it (read it first, then publish to the same link) whenever a row here 
   alone and is good enough on its own. AI is opt-in: Recce is an MCP server for a person's own
   agent, and a person can bring their own AI (an OpenAI-compatible endpoint, hosted or local) to
   take features further. Recorded in the brief; the mock-ups show both states.
+- **The first case: the owner's home, captured with the iPhone app** *(owner, 2026-11-27)*. The build starts with the iPhone capture app (RC-P11) and the owner photographing at home, from simpler to more complex: objects first, then a whole room. The room is the setting the robots map, so it leads into the robot use cases. Recorded in the brief.
+- **Learn mode is a feature inside the product** *(owner, 2026-11-27)*: the mini-labs and their tutor (RC-M5) live in Recce beside what they explain, not as a separate face.
 
 **Deferred by the owner (2026-11-26)**
 

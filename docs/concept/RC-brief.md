@@ -309,6 +309,10 @@ plain to anyone who knows the field:
 - **One monorepo.** Engine, workers, web UI, the iPhone app (`apps/ios/`) and infrastructure as
   code live in this repository. Robotics-lab stays separate, joined by the capture-set format.
 
+- **The first case: the owner's home, captured with the iPhone app** *(owner, 2026-11-27)*. The build starts with the iPhone capture app (RC-P11) and the owner photographing at home, from simpler to more complex: objects first, then a whole room. The room is the setting the robots map, so it leads into the robot use cases.
+
+- **Learn mode is a feature inside the product** *(owner, 2026-11-27)*: the mini-labs and their tutor (RC-M5) live in Recce beside what they explain, not as a separate face.
+
 ### Open from the start
 
 Final name; implementation language and stack; how workers are deployed and secured on
