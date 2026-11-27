@@ -115,7 +115,7 @@ Open <http://127.0.0.1:8798/>. A view is a link: `?img=RGT_4318`, `&l=` and `&r=
 
 ## Verdict
 
-Phase 1, built 2026-11-27. Waiting for the owner's verdict.
+Phase 1, built 2026-11-27. **Kept (owner, 2026-11-27): every concept**, all kept as they are; what goes into the product is decided when the build starts.
 
 | Concept | Idea |
 |---|---|
