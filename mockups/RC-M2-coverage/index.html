@@ -323,17 +323,28 @@ const camLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(camPts),
 scene.add(camLine);
 document.getElementById("n-cams").textContent = `${meta.frames_used} frames`;
 
-// Ghost camera: a frustum at the suggested position, aimed at the weak patch.
+// Ghost camera: a photo not yet taken (the RC-M1 rule): a dotted outline where the photo would
+// hang, faint rays from its corners fading to where to stand, a dot there, and a dashed line of
+// sight to the weak patch. No edges close a pyramid.
 const ghost = new THREE.Group();
 {
   const g = meta.ghost, p = new THREE.Vector3(...g.position), t = new THREE.Vector3(...g.target);
   const fw = t.clone().sub(p).normalize(), up = new THREE.Vector3(0, 0, 1), right = fw.clone().cross(up).normalize(), u2 = right.clone().cross(fw);
   const d = 0.35, w = 0.26, h = 0.2;
   const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => p.clone().add(fw.clone().multiplyScalar(d)).add(right.clone().multiplyScalar(a * w)).add(u2.clone().multiplyScalar(b * h)));
-  const segs = [];
-  corners.forEach((c, i) => { segs.push(p, c, c, corners[(i + 1) % 4]); });
-  const ghostMat = new THREE.LineDashedMaterial({ color: 0xffb36b, dashSize: 0.04, gapSize: 0.03 });
-  const fr = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), ghostMat); fr.computeLineDistances(); ghost.add(fr);
+  const outline = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(corners), new THREE.LineDashedMaterial({ color: 0xffb36b, dashSize: 0.03, gapSize: 0.025 }));
+  outline.computeLineDistances(); ghost.add(outline);
+  const lp = [], fade = [];
+  corners.forEach(c => { lp.push(p.x, p.y, p.z, c.x, c.y, c.z); fade.push(0, 1); });
+  const rg = new THREE.BufferGeometry();
+  rg.setAttribute("position", new THREE.Float32BufferAttribute(lp, 3));
+  rg.setAttribute("aF", new THREE.Float32BufferAttribute(fade, 1));
+  ghost.add(new THREE.LineSegments(rg, new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color(0xffb36b) }, uOpacity: { value: 0.55 } },
+    vertexShader: "attribute float aF; varying float vF; void main(){ vF = aF; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+    fragmentShader: "uniform vec3 uColor; uniform float uOpacity; varying float vF; void main(){ gl_FragColor = vec4(uColor, uOpacity * smoothstep(0.0, 1.0, vF * 0.9 + 0.1)); }",
+    transparent: true, depthWrite: false })));
+  ghost.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints([p]), new THREE.PointsMaterial({ color: 0xffb36b, size: 4, sizeAttenuation: false })));
   const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints([p, t]), new THREE.LineDashedMaterial({ color: 0xffb36b, dashSize: 0.06, gapSize: 0.05, transparent: true, opacity: 0.7 }));
   ray.computeLineDistances(); ghost.add(ray);
   const ring = new THREE.Mesh(new THREE.RingGeometry(0.16, 0.2, 40), new THREE.MeshBasicMaterial({ color: 0xffb36b, side: THREE.DoubleSide, transparent: true, opacity: 0.8 }));
@@ -521,7 +532,7 @@ function drawGlyph(mask, S, n) {
   const solidE = Math.round(meta.error_by_views[meta.error_by_views.length - 1].error_mm_median);
   const facing = Math.round((Math.atan2(t[1] - p[1], t[0] - p[0]) * 180 / Math.PI + 360) % 360);
   document.getElementById("shot").innerHTML = `<h3>Shoot the wall ${(t[2] - floorZ).toFixed(1)} m above the floor</h3>
-    <p><b>Where to stand:</b> the orange frustum, ${g.standoff_m.toFixed(1)} m back from the wall, at the height the phone was carried.</p>
+    <p><b>Where to stand:</b> the orange outline and its dot, ${g.standoff_m.toFixed(1)} m back from the wall, at the height the phone was carried.</p>
     <p><b>What:</b> a slow sweep across the patch at the ring, holding the phone level.</p>
     <p><b>Why:</b> ${g.weak_vertices} wall vertices there were seen by fewer than 4 frames; at fewer than 4 frames the mesh is a median ${weakLo}–${weakHi} mm off Faro, against ${solidE} mm where 32 or more frames saw it.</p>
     <p class="mono dim" style="font-size:var(--fs-xs)">Rule: ${g.rule}.</p>`;

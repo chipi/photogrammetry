@@ -114,15 +114,15 @@ Open <http://127.0.0.1:8796/>. A view is a link: `?scene=kicker|courtyard`, `&co
 
 ## Verdict
 
-Phase 1, built 2026-11-27. The owner's verdict per concept is open:
+Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept.** Cameras are drawn by the RC-M1 rule (the photo hangs where it was taken, rays fade from its corners to the centre), after the owner's note that the first version drew plain pyramids.
 
 | Concept | Idea | Verdict |
 |---|---|---|
-| The recipe graph, the node that differs, swap in place | pattern | Open |
-| The wipe across one 3D view | 6 | Open |
-| What changed, A against B, and the verdict by rule | 6 | Open |
-| The AI layer's verdict per purpose, checked | 6 (owner, 2026-11-27) | Open |
-| Cost estimated before and measured after, time and energy | 20 | Open |
+| The recipe graph, the node that differs, swap in place | pattern | Kept |
+| The wipe across one 3D view | 6 | Kept |
+| What changed, A against B, and the verdict by rule | 6 | Kept |
+| The AI layer's verdict per purpose, checked | 6 (owner, 2026-11-27) | Kept |
+| Cost estimated before and measured after, time and energy | 20 | Kept |
 
 ## Not covered
 

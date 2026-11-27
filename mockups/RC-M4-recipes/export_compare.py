@@ -83,6 +83,12 @@ def main():
             "cost": json.loads((run / "cost.json").read_text()),
             "estimate": json.loads(est.read_text()) if est.is_file() else None,
         }
+        thumbs = out / "thumbs" / scene
+        thumbs.mkdir(parents=True, exist_ok=True)
+        for img in sorted((datasets / scene / "images").rglob("*.JPG")):
+            bitmap = pycolmap.Bitmap.read(str(img), as_rgb=True)
+            bitmap.rescale(480, round(480 * bitmap.height / bitmap.width))
+            bitmap.write(str(thumbs / f"{img.stem}.jpg"))
         print(scene, {r: len(d["cameras"]) for r, d in data["recipes"].items()})
     for machine in ("x3", "m4pro", "gb10"):
         p1 = runs.parents[1] / "p1" / machine

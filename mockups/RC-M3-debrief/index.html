@@ -334,78 +334,102 @@ const pmat = new THREE.ShaderMaterial({
 });
 scene.add(new THREE.Points(pgeo, pmat));
 
-// Cameras: a camera is its frustum; evidence photos get their picture on the image plane.
-const FRUST = 0.7;
+// A camera is its photo, hanging where it was taken (the RC-M1 rule, owner 2026-11-24): a crisp
+// image plane with no outline, a dot at the camera centre, and four hairline rays from the photo's
+// corners that fade towards the centre, so the light reads as travelling and the photo as the
+// surface. No edges close a pyramid. An evidence photo gets a thin accent edge and stronger rays.
+const FRUST = 0.9;
 const camGroup = new THREE.Group(); scene.add(camGroup);
 const texLoader = new THREE.TextureLoader();
 const camLines = new Map();
-function frustumPoints(centre, R, w, h, f, d) {
-  const o = new THREE.Vector3(...centre);
-  const ax = k => new THREE.Vector3(R[0][k], R[1][k], R[2][k]);
-  const x = ax(0), y = ax(1), z = ax(2);
+const rayVS = "attribute float aF; varying float vF; void main(){ vF = aF; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }";
+const rayFS = "uniform vec3 uColor; uniform float uOpacity; varying float vF; void main(){ gl_FragColor = vec4(uColor, uOpacity * smoothstep(0.0, 1.0, vF * 0.9 + 0.1)); }";
+function rayMaterial(opacity) {
+  return new THREE.ShaderMaterial({ uniforms: { uColor: { value: new THREE.Color() }, uOpacity: { value: opacity } },
+    vertexShader: rayVS, fragmentShader: rayFS, transparent: true, depthWrite: false });
+}
+// Corners of the image plane at depth d, in the camera's frame (x right, y down, z forward).
+function cornersAt(w, h, f, d) {
   const hw = d * w / (2 * f), hh = d * h / (2 * f);
-  const corner = (sx, sy) => o.clone().addScaledVector(z, d).addScaledVector(x, sx * hw).addScaledVector(y, sy * hh);
-  return { o, c: [corner(-1, -1), corner(1, -1), corner(1, 1), corner(-1, 1)], x, y, z, hw, hh };
+  return [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]];
 }
-function frustumGeometry(fp) {
-  const v = [];
-  for (const k of fp.c) v.push(fp.o, k);
-  for (let i = 0; i < 4; i++) v.push(fp.c[i], fp.c[(i + 1) % 4]);
-  return new THREE.BufferGeometry().setFromPoints(v);
+function raysGeometry(corners) {
+  const lp = [], fade = [];
+  corners.forEach(q => { lp.push(0, 0, 0, ...q); fade.push(0, 1); });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(lp, 3));
+  g.setAttribute("aF", new THREE.Float32BufferAttribute(fade, 1));
+  return g;
 }
-const camMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.35 });
-const camSelMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 1 });
+function placed(R, centre) {
+  const g = new THREE.Group(); g.matrixAutoUpdate = false;
+  g.matrix.set(R[0][0], R[0][1], R[0][2], centre[0], R[1][0], R[1][1], R[1][2], centre[1], R[2][0], R[2][1], R[2][2], centre[2], 0, 0, 0, 1);
+  return g;
+}
 for (const cm of scn.cameras) {
-  const fp = frustumPoints(cm.centre, cm.rotation, cm.width, cm.height, cm.focal, FRUST);
-  const line = new THREE.LineSegments(frustumGeometry(fp), camMat);
-  camGroup.add(line);
-  camLines.set(cm.name, { line, fp, plane: null });
+  const g = placed(cm.rotation, cm.centre), corners = cornersAt(cm.width, cm.height, cm.focal, FRUST);
+  const rayMat = rayMaterial(0.35);
+  g.add(new THREE.LineSegments(raysGeometry(corners), rayMat));
+  const dotMat = new THREE.PointsMaterial({ size: 3, sizeAttenuation: false, transparent: true, opacity: 0.6 });
+  g.add(new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0], 3)), dotMat));
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute("position", new THREE.Float32BufferAttribute([...corners[0], ...corners[1], ...corners[3], ...corners[2]], 3));
+  pg.setAttribute("uv", new THREE.Float32BufferAttribute([0, 1, 1, 1, 0, 0, 1, 0], 2));
+  pg.setIndex([0, 2, 1, 1, 2, 3]);
+  const map = texLoader.load("data/" + cm.thumb); map.colorSpace = THREE.SRGBColorSpace;
+  const photoMat = new THREE.MeshBasicMaterial({ map, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+  g.add(new THREE.Mesh(pg, photoMat));
+  const edgeMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0 });
+  g.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(corners.map(q => new THREE.Vector3(...q))), edgeMat));
+  camGroup.add(g);
+  camLines.set(cm.name, { rayMat, dotMat, photoMat, edgeMat, on: false });
+}
+function paintCamera(e) {
+  e.rayMat.uniforms.uColor.value.set(cssVar(e.on ? "--accent" : "--text-dim"));
+  e.rayMat.uniforms.uOpacity.value = e.on ? 0.9 : 0.35;
+  e.dotMat.color.set(cssVar(e.on ? "--accent" : "--text-dim")); e.dotMat.opacity = e.on ? 1 : 0.6;
+  e.photoMat.opacity = e.on ? 1 : 0.8;
+  e.edgeMat.color.set(cssVar("--accent")); e.edgeMat.opacity = e.on ? 0.9 : 0;
 }
 function showPhoto(name, on) {
   const e = camLines.get(name); if (!e) return;
-  e.line.material = on ? camSelMat : camMat;
-  if (on && !e.plane) {
-    const g = new THREE.PlaneGeometry(2 * e.fp.hw, 2 * e.fp.hh);
-    const m = new THREE.MeshBasicMaterial({ map: texLoader.load("data/" + camByName[name].thumb), side: THREE.DoubleSide });
-    m.map.colorSpace = THREE.SRGBColorSpace;
-    e.plane = new THREE.Mesh(g, m);
-    const basis = new THREE.Matrix4().makeBasis(e.fp.x, e.fp.y.clone().negate(), e.fp.z.clone().negate());
-    e.plane.quaternion.setFromRotationMatrix(basis);
-    e.plane.position.copy(e.fp.o).addScaledVector(e.fp.z, FRUST);
-    scene.add(e.plane);
-  }
-  if (e.plane) e.plane.visible = on;
+  e.on = on; paintCamera(e);
 }
 
 // The selected region's cell.
 const cellBox = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)), new THREE.LineBasicMaterial());
 cellBox.scale.setScalar(scn.frame.cell_m); cellBox.visible = false; scene.add(cellBox);
 
-// Annotations: ghost cameras are dashed frustums; every annotation has an HTML handle that drags.
+// Annotations: ghost cameras are photos not yet taken; every annotation has an HTML handle that drags.
 const anns = [
   ...eng.annotations.map(x => ({ ...x, moved: false, deleted: false, by: "engine" })),
   ...deb.annotations.map(x => ({ ...x, moved: false, deleted: false, by: "ai" })),
 ];
 const active = an => !an.deleted && an.by === (state.ai ? "ai" : "engine");
 const annGroup = new THREE.Group(); scene.add(annGroup);
-const ghostMat = new THREE.LineDashedMaterial({ dashSize: 0.18, gapSize: 0.12 });
-function ghostGeometry(an) {
+// A ghost camera is a photo not yet taken: a dotted outline where the photo would hang, faint rays
+// fading to where to stand, and a dashed line of sight to what it should look at.
+const ghostMat = new THREE.LineDashedMaterial({ dashSize: 0.12, gapSize: 0.1, transparent: true, opacity: 0.9 });
+const ghostSightMat = new THREE.LineDashedMaterial({ dashSize: 0.18, gapSize: 0.14, transparent: true, opacity: 0.35 });
+const ghostRayMat = rayMaterial(0.5);
+function ghostObject(an) {
   const o = new THREE.Vector3(...an.position), t = new THREE.Vector3(...an.look_at);
   const z = t.clone().sub(o).normalize(), x = new THREE.Vector3().crossVectors(z, new THREE.Vector3(0, 0, 1)).normalize();
   const y = new THREE.Vector3().crossVectors(z, x);
   const R = [[x.x, y.x, z.x], [x.y, y.y, z.y], [x.z, y.z, z.z]];
-  // The courtyard camera's proportions; the dashed line runs to what the photo should look at.
-  const c0 = scn.cameras[0];
-  const fp = frustumPoints(an.position, R, c0.width, c0.height, c0.focal, 1.2);
-  const v = [];
-  for (const k of fp.c) v.push(fp.o, k);
-  for (let i = 0; i < 4; i++) v.push(fp.c[i], fp.c[(i + 1) % 4]);
-  v.push(o, t);
-  return new THREE.BufferGeometry().setFromPoints(v);
+  // The courtyard camera's proportions, drawn a little larger than the photos taken.
+  const c0 = scn.cameras[0], corners = cornersAt(c0.width, c0.height, c0.focal, 1.2);
+  const g = placed(R, an.position);
+  const outline = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(corners.map(q => new THREE.Vector3(...q))), ghostMat);
+  outline.computeLineDistances(); g.add(outline);
+  g.add(new THREE.LineSegments(raysGeometry(corners), ghostRayMat));
+  const sight = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 1.2), new THREE.Vector3(0, 0, o.distanceTo(t))]), ghostSightMat);
+  sight.computeLineDistances(); g.add(sight);
+  return g;
 }
 for (const an of anns) {
   if (an.kind === "camera") {
-    an.obj = new THREE.LineSegments(ghostGeometry(an), ghostMat); an.obj.computeLineDistances(); annGroup.add(an.obj);
+    an.obj = ghostObject(an); annGroup.add(an.obj);
   }
   const el = document.createElement("div");
   el.className = `ann ${an.kind}`;
@@ -428,7 +452,7 @@ function startDrag(ev, an) {
     const hit = new THREE.Vector3();
     if (ray.ray.intersectPlane(drag.plane, hit)) {
       an.position = [+hit.x.toFixed(2), +hit.y.toFixed(2), an.position[2]]; an.moved = true; an.el.classList.add("moved");
-      if (an.obj) { an.obj.geometry.dispose(); an.obj.geometry = ghostGeometry(an); an.obj.computeLineDistances(); }
+      if (an.obj) { const vis = an.obj.visible; annGroup.remove(an.obj); an.obj = ghostObject(an); an.obj.visible = vis; annGroup.add(an.obj); }
     }
   };
   an.el.onpointerup = () => { an.el.onpointermove = null; drag = null; controls.enabled = true; logEdits(); };
@@ -452,8 +476,8 @@ document.getElementById("ann-btn").onclick = () => { const p = document.getEleme
 
 window.repaint = () => {
   scene.background = new THREE.Color(cssVar("--view-bg"));
-  camMat.color.set(cssVar("--text-dim")); camSelMat.color.set(cssVar("--accent"));
-  cellBox.material.color.set(cssVar("--accent")); ghostMat.color.set(cssVar("--new"));
+  for (const e of camLines.values()) paintCamera(e);
+  cellBox.material.color.set(cssVar("--accent")); ghostMat.color.set(cssVar("--new")); ghostSightMat.color.set(cssVar("--new")); ghostRayMat.uniforms.uColor.value.set(cssVar("--new"));
 };
 window.repaint();
 

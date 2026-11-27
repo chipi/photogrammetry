@@ -162,7 +162,7 @@ td.better::after { content: " ◂"; font-weight: 400; color: var(--text-dim); }
         <p style="margin-top:var(--sp-2);font-size:var(--fs-sm)">How far each point lands from where its photos saw it. Lightness rises with the error (OKLCH).</p>
       </div>
       <label class="toggle"><input type="checkbox" id="t-truth" checked> Where the cameras really were (ETH3D), with the miss drawn</label>
-      <label class="toggle"><input type="checkbox" id="t-cams" checked> Cameras as the recipe placed them</label>
+      <label class="toggle"><input type="checkbox" id="t-cams" checked> Photos where the recipe placed them</label>
     </section>
   </aside>
 
@@ -252,13 +252,42 @@ function pointsObject(rec) {
   g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
   return new THREE.Points(g, new THREE.PointsMaterial({ size: 2.2, sizeAttenuation: false, vertexColors: true }));
 }
-function frustum(c, size) {
-  const o = new THREE.Vector3(...c.centre), R = c.rotation;
-  const ax = k => new THREE.Vector3(R[0][k], R[1][k], R[2][k]);
-  const x = ax(0), y = ax(1), z = ax(2), hw = size * 0.75, hh = size * 0.5;
-  const k = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([sx, sy]) => o.clone().addScaledVector(z, size).addScaledVector(x, sx * hw).addScaledVector(y, sy * hh));
-  const v = []; for (const q of k) v.push(o, q); for (let i = 0; i < 4; i++) v.push(k[i], k[(i + 1) % 4]);
-  return v;
+// A camera is its photo, hanging where it was taken (the RC-M1 rule, owner 2026-11-24): a crisp
+// image plane with no outline, a dot at the camera centre, and four hairline rays from the photo's
+// corners that fade towards the centre, so the light reads as travelling and the photo as the
+// surface. No edges close a pyramid.
+const loader = new THREE.TextureLoader(), texCache = new Map();
+function tex(name) {
+  const key = `${state.scene}/${name}`;
+  if (!texCache.has(key)) {
+    const t = loader.load(`data/thumbs/${state.scene}/${name.split("/").pop().replace(/\.JPG$/i, ".jpg")}`);
+    t.colorSpace = THREE.SRGBColorSpace; texCache.set(key, t);
+  }
+  return texCache.get(key);
+}
+const rayVS = "attribute float aF; varying float vF; void main(){ vF = aF; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }";
+const rayFS = "uniform vec3 uColor; uniform float uOpacity; varying float vF; void main(){ gl_FragColor = vec4(uColor, uOpacity * smoothstep(0.0, 1.0, vF * 0.9 + 0.1)); }";
+function photoCamera(c, d, tint) {
+  const g = new THREE.Group(), R = c.rotation;
+  g.matrixAutoUpdate = false;
+  g.matrix.set(R[0][0], R[0][1], R[0][2], c.centre[0], R[1][0], R[1][1], R[1][2], c.centre[1], R[2][0], R[2][1], R[2][2], c.centre[2], 0, 0, 0, 1);
+  const hw = d * 0.75, hh = d * 0.5;
+  const corners = [[-hw, -hh, d], [hw, -hh, d], [hw, hh, d], [-hw, hh, d]];
+  const lp = [], fade = [];
+  corners.forEach(q => { lp.push(0, 0, 0, ...q); fade.push(0, 1); });
+  const rg = new THREE.BufferGeometry();
+  rg.setAttribute("position", new THREE.Float32BufferAttribute(lp, 3));
+  rg.setAttribute("aF", new THREE.Float32BufferAttribute(fade, 1));
+  g.add(new THREE.LineSegments(rg, new THREE.ShaderMaterial({ uniforms: { uColor: { value: new THREE.Color(tint) }, uOpacity: { value: 0.55 } },
+    vertexShader: rayVS, fragmentShader: rayFS, transparent: true, depthWrite: false })));
+  g.add(new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0], 3)),
+    new THREE.PointsMaterial({ color: tint, size: 4, sizeAttenuation: false })));
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute("position", new THREE.Float32BufferAttribute([...corners[0], ...corners[1], ...corners[3], ...corners[2]], 3));
+  pg.setAttribute("uv", new THREE.Float32BufferAttribute([0, 1, 1, 1, 0, 0, 1, 0], 2));
+  pg.setIndex([0, 2, 1, 1, 2, 3]);
+  g.add(new THREE.Mesh(pg, new THREE.MeshBasicMaterial({ map: tex(c.name), side: THREE.DoubleSide })));
+  return g;
 }
 function build() {
   for (const s of Object.values(scenes)) s.clear();
@@ -269,8 +298,8 @@ function build() {
     const rec = data.recipes[state[side]], s = scenes[side];
     s.add(pointsObject(rec));
     if (camsOn) {
-      const v = rec.cameras.flatMap(c => frustum(c, ext * 0.025));
-      s.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(v), new THREE.LineBasicMaterial({ color: cssVar(side === "A" ? "--a" : "--b") })));
+      const tint = cssVar(side === "A" ? "--a" : "--b");
+      for (const c of rec.cameras) s.add(photoCamera(c, ext * 0.03, tint));
     }
     if (truthOn) {
       const tv = [], miss = [];

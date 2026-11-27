@@ -47,6 +47,11 @@ of the same day, also approved as directions. Source tags `[V]` and `[U]` there 
 - **Recipes are node graphs with swap-in-place** (Houdini, Blender's Swap Node): a strategy is
   swapped and keeps its connections; two recipes compare by the node that differs.
 - **Motion is optional** (Blender's Reduce Motion): every animation has a still equivalent.
+- **A camera is its photo** (owner, 2026-11-24, restated 2026-11-27): a photo hangs where it was
+  taken as a crisp image plane with no outline; a dot marks the camera centre; four hairline rays
+  run from the photo's corners and fade towards the centre, so the light reads as travelling and the
+  photo as the surface. No edges close a pyramid. A shot not yet taken is a dotted outline with
+  faint rays. Every scene with cameras follows this.
 - **AI is a layer, never a dependency** (owner, 2026-11-27): each view works with no AI connected;
   with the person's own AI connected, what it adds is marked as written by AI and checked against
   the engine's numbers.
@@ -91,4 +96,4 @@ M5–M8 follow the prototypes they depend on.
 | M0 + M1, first passes at M2 and M3 | Phase 1 built 2026-11-24, **owner verdict: kept, all concepts shown** ("we really love everything"; the gap list "exactly what I wanted"). Phase 2 done the same day: IBM Plex, tokens, AA contrast, field shot cards; photos hang in the air with faint rays (owner feedback) | [mockups/RC-M1-run](https://github.com/chipi/recce/tree/main/mockups/RC-M1-run) |
 | M2 | Phase 1 built 2026-11-27 on RC-P10's room 42444793 and RC-P13's structure. **Owner verdict (2026-11-27): all concepts kept**; finished in the build phase | [mockups/RC-M2-coverage](https://github.com/chipi/recce/tree/main/mockups/RC-M2-coverage) |
 | M3 | Phase 1 built 2026-11-27 on ETH3D courtyard: the engine's debrief without AI, an opt-in AI layer over it ("Bring your own AI"), handles replayed by `verify.py`, readiness stamps, the engine's where-to-stand rule. **Owner verdict (2026-11-27): all concepts kept** | [mockups/RC-M3-debrief](https://github.com/chipi/recce/tree/main/mockups/RC-M3-debrief) |
-| M4 | Phase 1 built 2026-11-27 on ETH3D kicker and courtyard: recipe graph with swap in place, the wipe, what changed (rule, or opt-in AI), cost estimated before and measured after (time and energy); owner verdict open | [mockups/RC-M4-recipes](https://github.com/chipi/recce/tree/main/mockups/RC-M4-recipes) |
+| M4 | Phase 1 built 2026-11-27 on ETH3D kicker and courtyard: recipe graph with swap in place, the wipe, what changed (rule, or opt-in AI), cost estimated before and measured after (time and energy). **Owner verdict (2026-11-27): all concepts kept** | [mockups/RC-M4-recipes](https://github.com/chipi/recce/tree/main/mockups/RC-M4-recipes) |
