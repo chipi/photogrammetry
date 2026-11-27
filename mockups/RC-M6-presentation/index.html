@@ -66,7 +66,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .row { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
 label.check { display: grid; grid-template-columns: auto minmax(0,1fr); gap: var(--sp-2); align-items: start; }
 label.check input { margin: 3px 0 0; }
-.chip { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: var(--r-pill); font-size: var(--fs-xs); border: 1px solid var(--border-strong); color: var(--text-dim); white-space: nowrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 10px; border-radius: var(--r-pill); font-size: var(--fs-xs); border: 1px solid var(--border-strong); color: var(--text-dim); white-space: nowrap; }
 .chip.ai { border-color: var(--ai); color: var(--ai); }
 .chip.ok { border-color: var(--ok); color: var(--ok); }
 .chip.warn { border-color: var(--warn); color: var(--warn); }
@@ -710,7 +710,7 @@ function renderStops() {
     return `<div class="stop${k === sel ? " sel" : ""}" data-k="${k}">${img}<div><div class="hd"><b class="mono">${st.ci == null ? "A free view" : cams[st.ci].name}</b>
       <span class="acts"><button data-act="up" title="Earlier">↑</button><button data-act="down" title="Later">↓</button><button data-act="del" title="Remove">×</button></span></div>
       ${st.ci == null ? `<span class="chip warn"><i></i>not a photo: rendered only</span>` : `<div class="sub">Photo ${tourPos.get(st.ci) + 1} of ${cams.length} in walking order</div>`}</div>
-      <div class="cap"><textarea data-cap="${k}" rows="2" aria-label="Caption for stop ${k + 1}">${esc(c.text)}</textarea><div class="src">${capSrc(c)}${c.src === "yours" ? `<button class="iconbtn" style="height:20px;padding:0 6px" data-act="revert">Use the ${S.ai && ai ? "AI draft" : "rule"}</button>` : ""}</div></div></div>`;
+      <div class="cap"><textarea data-cap="${k}" rows="2" aria-label="Caption for stop ${k + 1}">${esc(c.text)}</textarea><div class="src">${capSrc(c)}${c.src === "yours" ? `<button class="iconbtn" style="height:22px;padding:0 10px" data-act="revert">Use the ${S.ai && ai ? "AI draft" : "rule"}</button>` : ""}</div></div></div>`;
   }).join("");
   const on = new Map(S.stops.map((st, k) => [st.ci, k]));
   $("all").innerHTML = meta.tour.map((ci) => `<button data-ci="${ci}" class="${on.has(ci) ? "on" : ""}" data-n="${on.has(ci) ? on.get(ci) + 1 : ""}" title="${cams[ci].name}"><img src="data/thumbs/${cams[ci].name}.jpg" alt="${cams[ci].name}"></button>`).join("");
@@ -825,7 +825,7 @@ function renderStory() {
   if (document.activeElement !== $("intro")) $("intro").value = introText();
   const src = (own, aiPart) => own != null ? `<span class="chip">Yours</span>` : S.ai && ai ? `<span class="chip ai">AI draft</span><span class="chip ${aiPart.status === "supported" ? "ok" : aiPart.status === "unsupported" ? "fail" : ""}"><i></i>${aiPart.status === "supported" ? "numbers checked" : aiPart.status}</span>` : `<span class="chip">Rule</span>`;
   $("story-src").innerHTML = `<span class="dim">Title</span> ${src(S.title, ai?.title ?? {})} <span class="dim">Introduction</span> ${src(S.intro, ai?.intro ?? {})}` +
-    (S.title != null || S.intro != null ? ` <button class="iconbtn" style="height:22px;padding:0 8px" id="story-revert">Undo my edits</button>` : "");
+    (S.title != null || S.intro != null ? ` <button class="iconbtn" style="height:22px;padding:0 10px" id="story-revert">Undo my edits</button>` : "");
   const rv = $("story-revert"); if (rv) rv.onclick = () => { S.title = null; S.intro = null; renderStory(); renderAudience(); share(); };
 }
 
