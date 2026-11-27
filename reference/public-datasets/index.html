@@ -1,0 +1,2487 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/reference/public-datasets/">
+      
+      
+        <link rel="prev" href="../product-feature-analysis/">
+      
+      
+        <link rel="next" href="../../LICENSING/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Public datasets - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#public-datasets" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Public datasets
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-sfm-and-mvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General SfM and MVS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General SfM and MVS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eth3d-high-res-multi-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ETH3D high-res multi-view
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colmap-sample-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COLMAP sample datasets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tanks-and-temples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tanks and Temples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dtu-mvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DTU MVS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-read-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not read today
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#radiance-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radiance fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Radiance fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mip-nerf-360" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mip-NeRF 360
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-read-today_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not read today
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indoor-robotics-and-pose-priors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indoor, robotics and pose priors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Indoor, robotics and pose priors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scannet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScanNet++
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arkitscenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARKitScenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tum-rgb-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TUM RGB-D
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-read-today_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not read today
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aerial-and-drone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aerial and drone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Aerial and drone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opendronemap-sample-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenDroneMap sample sets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Underwater
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Underwater">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sea-thru-akkaynak-and-treibitz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sea-thru (Akkaynak and Treibitz)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#squid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQUID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seathru-nerf-scenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SeaThru-NeRF scenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-underwater-sets-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other underwater sets found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-found-or-not-checked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not found or not checked
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-starter-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended starter set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reuse-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reuse rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not verified
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wip/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-sfm-and-mvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General SfM and MVS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General SfM and MVS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eth3d-high-res-multi-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ETH3D high-res multi-view
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colmap-sample-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COLMAP sample datasets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tanks-and-temples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tanks and Temples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dtu-mvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DTU MVS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-read-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not read today
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#radiance-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radiance fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Radiance fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mip-nerf-360" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mip-NeRF 360
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-read-today_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not read today
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indoor-robotics-and-pose-priors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indoor, robotics and pose priors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Indoor, robotics and pose priors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scannet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScanNet++
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arkitscenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARKitScenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tum-rgb-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TUM RGB-D
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-read-today_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not read today
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aerial-and-drone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aerial and drone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Aerial and drone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opendronemap-sample-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenDroneMap sample sets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Underwater
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Underwater">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sea-thru-akkaynak-and-treibitz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sea-thru (Akkaynak and Treibitz)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#squid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQUID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seathru-nerf-scenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SeaThru-NeRF scenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-underwater-sets-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other underwater sets found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-found-or-not-checked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not found or not checked
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-starter-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended starter set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reuse-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reuse rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not verified
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="public-datasets">Public datasets<a class="headerlink" href="#public-datasets" title="Permanent link">&para;</a></h1>
+<p>Until the owner shoots their own sets, development and the Step 0 prototypes
+(<a href="../../concept/RC-brief/">RC-brief §5</a>) run on public datasets. This page lists which exist, what ground truth
+each carries, what the licence lets the project do, and which prototype each fits. The question it answers: which
+sets can we reuse easily, and which carry a wall.</p>
+<p>As of 2026-11-24.</p>
+<p>Legend:</p>
+<ul>
+<li><strong>[V url]</strong> read today on the dataset's own page, repo, Zenodo record or licence file, or measured today with
+  an HTTP HEAD request or the Zenodo API. Page reads went through a summarising fetch tool, so a quoted licence
+  name is the tool's reading of the page; re-read the licence text before any redistribution.</li>
+<li><strong>[U]</strong> not read today; from memory or from a search snippet. Verify before relying on it.</li>
+<li>"unknown" means neither the page nor today's checks gave the value.</li>
+<li>No dataset was downloaded. Sizes come from page text or HEAD requests.</li>
+</ul>
+<h2 id="summary-table">Summary table<a class="headerlink" href="#summary-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Domain</th>
+<th>Images (count x res)</th>
+<th>Ground truth</th>
+<th>Size</th>
+<th>Licence</th>
+<th>Commercial OK?</th>
+<th>Friction</th>
+<th>Fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ETH3D high-res multi-view</td>
+<td>Indoor/outdoor SfM+MVS</td>
+<td>15 train scenes 420 images, 12 test scenes 445; 6048x4032 DSLR (Nikon D3X), NEF RAW included</td>
+<td>Faro Focus X 330 laser scans, GT poses</td>
+<td>4.7 GB JPG, 5.9 GB undistorted, 13.0 GB NEF RAW, 1.9 GB scan eval (training)</td>
+<td>CC BY-NC-SA 4.0</td>
+<td>No</td>
+<td>None for download; NC and SA</td>
+<td>P1, dense/mesh vs laser GT, P7b (RAW)</td>
+</tr>
+<tr>
+<td>COLMAP samples (South Building, Gerrard Hall, Person Hall, Graham Hall)</td>
+<td>Buildings, SfM</td>
+<td>128 / 100 / 330 / 1,273; resolution unknown</td>
+<td>None published</td>
+<td>unknown</td>
+<td>not stated on page</td>
+<td>unknown</td>
+<td>Links not resolved today</td>
+<td>P1, P3 (Graham Hall)</td>
+</tr>
+<tr>
+<td>Tanks and Temples</td>
+<td>Large scenes, SfM+MVS</td>
+<td>4K-video frames, 19 scenes</td>
+<td>Laser scans (training scenes only)</td>
+<td>unknown</td>
+<td>CC BY 4.0 text plus non-commercial grant</td>
+<td>No</td>
+<td>Google Drive; no registration</td>
+<td>P1, splat quality</td>
+</tr>
+<tr>
+<td>Mip-NeRF 360</td>
+<td>Unbounded scenes, radiance fields</td>
+<td>9 scenes; count and res unknown (read today: no)</td>
+<td>None; COLMAP poses</td>
+<td>12.5 GB (360_v2.zip)</td>
+<td>unknown</td>
+<td>unknown</td>
+<td>Direct link</td>
+<td>Splat quality</td>
+</tr>
+<tr>
+<td>DTU MVS</td>
+<td>Objects on turntable rig</td>
+<td>49 or 64 images x 1600x1200, 124 scans</td>
+<td>Structured-light point clouds, STL</td>
+<td>6.3 GB sample set up to 136 GB</td>
+<td>"Freely available for research use", cite paper</td>
+<td>unknown</td>
+<td>Large</td>
+<td>Dense accuracy on objects</td>
+</tr>
+<tr>
+<td>ScanNet++</td>
+<td>Indoor</td>
+<td>33 MP DSLR, iPhone RGB-D, 1000+ scenes</td>
+<td>Sub-millimetre laser scans, registered poses</td>
+<td>unknown</td>
+<td>ScanNet++ Terms of Use (PDF after signup)</td>
+<td>unknown</td>
+<td>Account plus approval, token</td>
+<td>P9 room</td>
+</tr>
+<tr>
+<td>ARKitScenes</td>
+<td>Indoor, iPhone/iPad LiDAR</td>
+<td>5,047 captures, 1,661 scenes</td>
+<td>ARKit poses, LiDAR mesh</td>
+<td>unknown</td>
+<td>Apple custom licence, non-commercial</td>
+<td>No</td>
+<td>Script download; custom licence</td>
+<td>P4, P9, P10 pose priors</td>
+</tr>
+<tr>
+<td>TUM RGB-D</td>
+<td>Indoor RGB-D SLAM</td>
+<td>640x480 Kinect, 30 Hz</td>
+<td>Motion-capture trajectories</td>
+<td>per sequence</td>
+<td>CC BY 4.0</td>
+<td>Yes</td>
+<td>None</td>
+<td>Pose-prior plumbing only</td>
+</tr>
+<tr>
+<td>CO3Dv2</td>
+<td>Objects, video</td>
+<td>many sequences; res unknown</td>
+<td>COLMAP-derived poses</td>
+<td>5.5 TB full, 8.9 GB single-sequence subset</td>
+<td>CC BY-NC 4.0 (codebase; data terms unknown)</td>
+<td>No</td>
+<td>Huge</td>
+<td>Not a fit</td>
+</tr>
+<tr>
+<td>ODM sample sets (odm_data_*)</td>
+<td>Aerial drone</td>
+<td>e.g. aukerman 77 entries in images/, seneca 167, langley 200, benchmark 50</td>
+<td>None</td>
+<td>per repo, unknown</td>
+<td>CC0-1.0 (aukerman, seneca checked via API)</td>
+<td>Yes</td>
+<td>None</td>
+<td>P3 large-set (small), aerial</td>
+</tr>
+<tr>
+<td>Sea-thru (D1-D5)</td>
+<td>Underwater, colour</td>
+<td>~1,100 linear PNG at 0.3x size, 5 sites</td>
+<td>Range maps (from Metashape SfM), colour charts</td>
+<td>38.4 GB</td>
+<td>CC BY-NC-SA 4.0</td>
+<td>No</td>
+<td>Kaggle/Hugging Face; RAW only on request</td>
+<td>P8 colour, range-dependent attenuation</td>
+</tr>
+<tr>
+<td>SQUID</td>
+<td>Underwater stereo</td>
+<td>57 stereo pairs, 4 Israeli sites</td>
+<td>Distance maps, calibration</td>
+<td>45.8 GB</td>
+<td>CC BY-NC-SA 4.0</td>
+<td>No</td>
+<td>Zenodo, direct</td>
+<td>P8 colour and scale checks</td>
+</tr>
+<tr>
+<td>SeaThru-NeRF scenes</td>
+<td>Underwater, radiance fields</td>
+<td>4 scenes; count and res unknown</td>
+<td>COLMAP poses</td>
+<td>unknown</td>
+<td>Repo code Apache-2.0; data licence unknown</td>
+<td>unknown</td>
+<td>Google Drive</td>
+<td>P8 splat quality</td>
+</tr>
+<tr>
+<td>Reefs4D</td>
+<td>Coral reef 3D models</td>
+<td>21 models, 7 reefs, 3 time points</td>
+<td>The models themselves (PLY)</td>
+<td>PLY files of 14-290 MB each</td>
+<td>CC BY-NC (Zenodo id cc-nc)</td>
+<td>No</td>
+<td>No source images seen in file list</td>
+<td>Not a fit for registration</td>
+</tr>
+<tr>
+<td>Submerged3D</td>
+<td>Deep-sea wrecks</td>
+<td>4 scenes x 20 images, 720p</td>
+<td>None stated</td>
+<td>18.5 MB listed, 5.4 GB stated</td>
+<td>CC BY 4.0</td>
+<td>Yes</td>
+<td>Zenodo</td>
+<td>Smoke test only</td>
+</tr>
+<tr>
+<td>AquaMVS Example Dataset 2</td>
+<td>Lab underwater MVS</td>
+<td>13-camera rig, 10 frames each</td>
+<td>ChArUco board geometry</td>
+<td>6.2 GB zip (8.6 GB)</td>
+<td>CC BY 4.0</td>
+<td>Yes</td>
+<td>Zenodo</td>
+<td>P8 refraction and MVS accuracy</td>
+</tr>
+</tbody>
+</table>
+<p>Rows without a [V] in the section below are [U].</p>
+<h2 id="general-sfm-and-mvs">General SfM and MVS<a class="headerlink" href="#general-sfm-and-mvs" title="Permanent link">&para;</a></h2>
+<h3 id="eth3d-high-res-multi-view">ETH3D high-res multi-view<a class="headerlink" href="#eth3d-high-res-multi-view" title="Permanent link">&para;</a></h3>
+<ul>
+<li>What: 15 training scenes (420 images) and 12 test scenes (445 images), indoor and outdoor, DSLR.
+  [V https://www.eth3d.net/datasets]</li>
+<li>Camera: Nikon D3X, 6048x4032, raw NEF, JPEG and undistorted JPEG all provided; original camera model
+  THIN_PRISM_FISHEYE. [V https://www.eth3d.net/documentation]</li>
+<li>Ground truth: Faro Focus X 330 laser scans with colour, three versions (raw, clean, eval); poses in COLMAP
+  text format. Stated accuracy: unknown, the documentation page points to the paper. [V
+  https://www.eth3d.net/documentation]</li>
+<li>Sizes (HEAD, 2026-11-24): <code>multi_view_training_dslr_jpg.7z</code> 5.05 GB; <code>..._undistorted.7z</code> 5.89 GB;
+  <code>..._raw.7z</code> 13.04 GB; <code>..._scan_eval.7z</code> 1.92 GB. [V https://www.eth3d.net/data/]</li>
+<li>Licence: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. [V https://www.eth3d.net/]</li>
+<li>Registration: none seen for downloads (direct HEAD requests succeed); the Submit link needs a login.</li>
+<li>Fits: P1 (GLOMAP vs COLMAP registration error against GT poses), dense and mesh accuracy against laser GT,
+  P7b RAW-to-set (the NEF files are the only public RAW set here with laser GT).</li>
+<li>Limit: only 15 training scenes; the largest is a few dozen to a hundred images; not a P3 distribution test.</li>
+</ul>
+<h3 id="colmap-sample-datasets">COLMAP sample datasets<a class="headerlink" href="#colmap-sample-datasets" title="Permanent link">&para;</a></h3>
+<ul>
+<li>South Building (128), Gerrard Hall (100), Person Hall (330), Graham Hall (1,273 images, interior and
+  exterior). Resolution, size, licence and ground truth are not stated on the page. [V
+  https://colmap.github.io/datasets.html]</li>
+<li>Download host is https://demuc.de/colmap/datasets/; the <code>*.zip</code> paths I guessed returned 404 today, so the
+  file names are unknown. [V]</li>
+<li>Fits: P1 smoke runs, Graham Hall as a mid-size (1,000+) registration set for P3. No GT, so registration rate and
+  reprojection error only.</li>
+<li>COLMAP software licence (BSD-3) is not the data licence; do not assume the data is BSD. [U]</li>
+</ul>
+<h3 id="tanks-and-temples">Tanks and Temples<a class="headerlink" href="#tanks-and-temples" title="Permanent link">&para;</a></h3>
+<ul>
+<li>8 intermediate, 5 advanced, 6 training scenes; images are uniformly sampled frames from 4K video at 29.97 fps;
+  training scenes carry laser-scan GT, COLMAP results, camera poses and alignment matrices. Download by Google Drive
+  links or a Python downloader with MD5 check; no registration required. [V https://www.tanksandtemples.org/download/]</li>
+<li>Licence page names CC BY 4.0, but its licence grant limits use to "non-commercial scientific research" and bars
+  making the data available to third parties without written permission. The two clauses conflict; treat the data
+  as non-commercial, no redistribution. [V https://www.tanksandtemples.org/license/]</li>
+<li>Fits: P1 and splat quality (the 3DGS paper uses these scenes). Video frames, not RAW stills.</li>
+</ul>
+<h3 id="dtu-mvs">DTU MVS<a class="headerlink" href="#dtu-mvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>124 scenes, 49 or 64 images each at 1600x1200, seven lighting conditions; structured-light point clouds and STL
+  reference models as GT. Downloads: SampleSet 6.3 GB, Points 6.3 GB, Points_MVS 45 GB, Surfaces 28 GB, Cleaned
+  136 GB, Rectified 123 GB. [V https://roboimagedata.compute.dtu.dk/?page_id=36]</li>
+<li>Terms: "freely available for research use", citation required. No named licence on the page. Commercial use
+  unknown. [V same page]</li>
+<li>Fits: object-scale dense accuracy. Controlled robot-arm rig, so it does not stress registration.</li>
+</ul>
+<h3 id="not-read-today">Not read today<a class="headerlink" href="#not-read-today" title="Permanent link">&para;</a></h3>
+<p>BlendedMVS, Strecha fountain/herzjesu, 1DSfM, Photo Tourism, IMC PhotoTourism, Replica, EuRoC: the two URLs I tried
+for 1DSfM and the ETH local-feature page returned 404, and I did not search the rest. [U] Photo Tourism and
+1DSfM are internet photos of landmarks with mixed copyright; assume research-only until read.</p>
+<h2 id="radiance-fields">Radiance fields<a class="headerlink" href="#radiance-fields" title="Permanent link">&para;</a></h2>
+<h3 id="mip-nerf-360">Mip-NeRF 360<a class="headerlink" href="#mip-nerf-360" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The scenes ship as <code>360_v2.zip</code>, 12,535,427,936 bytes (HEAD 2026-11-24), last modified 2022-03-28. [V
+  https://storage.googleapis.com/gresearch/refraw360/360_v2.zip]</li>
+<li>The project page read today did not state the licence, per-scene image counts or resolution. The multinerf repo
+  is Apache-2.0 and archived 2025-02-11; that licence covers code, not the photos. [V
+  https://github.com/google-research/multinerf]</li>
+<li>Fits: splat quality on held-out views. Unknown data licence means local development only.</li>
+</ul>
+<h3 id="not-read-today_1">Not read today<a class="headerlink" href="#not-read-today_1" title="Permanent link">&para;</a></h3>
+<p>NeRF synthetic (Blender), Deep Blending: [U]. Both are synthetic or research-released; check licences.</p>
+<h2 id="indoor-robotics-and-pose-priors">Indoor, robotics and pose priors<a class="headerlink" href="#indoor-robotics-and-pose-priors" title="Permanent link">&para;</a></h2>
+<h3 id="scannet">ScanNet++<a class="headerlink" href="#scannet" title="Permanent link">&para;</a></h3>
+<ul>
+<li>1000+ indoor scenes; sub-millimetre laser scans, 33 MP registered DSLR images, iPhone RGB-D streams, 360 degree
+  RGB-D panoramas added October 2025. [V https://scannetpp.mlsg.cit.tum.de/scannetpp/]</li>
+<li>Access: create an account, submit an application, wait for approval, receive a personal download token. Terms of
+  Use PDF shown after signup; commercial terms not read. [V same page]</li>
+<li>Fits: P9 (room), DSLR vs iPhone comparison, P4 pose priors. Gated; use only after the owner reads the Terms.</li>
+</ul>
+<h3 id="arkitscenes">ARKitScenes<a class="headerlink" href="#arkitscenes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>5,047 captures of 1,661 scenes, iPhone/iPad LiDAR RGB-D with ARKit poses and LiDAR surface reconstruction;
+  high-resolution data for 2,257 captures across 841 scenes. Download through <code>download_data.py</code>. [V
+  https://github.com/apple/ARKitScenes]</li>
+<li>LICENSE is an Apple custom licence granting a "personal, non-commercial" licence "for non-commercial purposes
+  only" (the text read covers the Apple Software; it is the only licence in the repo). Questions go to
+  ARKitScenes-license@group.apple.com. [V https://raw.githubusercontent.com/apple/ARKitScenes/main/LICENSE]</li>
+<li>Fits: the closest public analogue of the owner's iPhone capture app (P10) and ARKit pose priors (P4, P9).
+  Non-commercial: development use only.</li>
+</ul>
+<h3 id="tum-rgb-d">TUM RGB-D<a class="headerlink" href="#tum-rgb-d" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Kinect 640x480 at 30 Hz, motion-capture ground-truth trajectories (8 high-speed cameras, 100 Hz). CC BY 4.0;
+  code BSD-2-Clause; commercial use permitted. [V https://cvg.cit.tum.de/data/datasets/rgbd-dataset]</li>
+<li>Fits: only the pose-prior and depth plumbing. Not photogrammetry quality imagery.</li>
+</ul>
+<h3 id="not-read-today_2">Not read today<a class="headerlink" href="#not-read-today_2" title="Permanent link">&para;</a></h3>
+<p>Replica, EuRoC: [U].</p>
+<h2 id="objects">Objects<a class="headerlink" href="#objects" title="Permanent link">&para;</a></h2>
+<ul>
+<li>DTU: see above.</li>
+<li>CO3Dv2: 5.5 TB full set, 8.9 GB single-sequence subset, 20 GB download chunks; codebase CC BY-NC 4.0. [V
+  https://github.com/facebookresearch/co3d] Not a fit: size, NC, phone-quality video.</li>
+<li>OmniObject3D, Google Scanned Objects, Stanford 3D Scanning Repository: not read today. [U]</li>
+</ul>
+<h2 id="aerial-and-drone">Aerial and drone<a class="headerlink" href="#aerial-and-drone" title="Permanent link">&para;</a></h2>
+<h3 id="opendronemap-sample-sets">OpenDroneMap sample sets<a class="headerlink" href="#opendronemap-sample-sets" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The OpenDroneMap GitHub organisation hosts at least 18 <code>odm_data_*</code> repos (apt, benchmark, caliterra, copr, glam,
+  langley, pacifica, seneca, lewis, bellus, rv_nir, waterbury, toledo, aukerman, zoo, garfield_msp,
+  helenenschacht, monterey_road_bend). [V https://api.github.com/orgs/OpenDroneMap/repos]</li>
+<li>Aukerman, Seneca: licence CC0-1.0. [V repo licence API] <code>images/</code> entries: aukerman 77, seneca 167, langley 200,
+  benchmark 50 (counts of directory entries via the GitHub API, not verified as image counts). Camera, resolution
+  and size: unknown. No ground truth.</li>
+<li>Fits: aerial registration smoke tests and clone-and-go P3 trials at 100-200 images; too small for P3's 1,000+.</li>
+<li>Not read: UrbanScene3D, DJI samples. [U]</li>
+</ul>
+<h2 id="underwater">Underwater<a class="headerlink" href="#underwater" title="Permanent link">&para;</a></h2>
+<p>Public underwater sets with usable ground truth and a permissive licence are scarce. The best-known colour sets are
+non-commercial, and the RAW files are not in the public download.</p>
+<h3 id="sea-thru-akkaynak-and-treibitz">Sea-thru (Akkaynak and Treibitz)<a class="headerlink" href="#sea-thru-akkaynak-and-treibitz" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Five sites D1-D5, about 1,100 images, with range maps in metres (from Metashape SfM); zero depth means no value.
+  [V https://huggingface.co/datasets/bhowmikabhimanyu/seathru-dataset]</li>
+<li>Images are linear PNG at 0.3x original size. The original RAW files are not in the download; the authors say to
+  contact them. [V same page]</li>
+<li>38.4 GB; licence on the Hugging Face card is CC-BY-NC-SA-4.0. The Haifa page links Kaggle and says "RAW images"
+  are included, which conflicts with the card; resolve by reading the Kaggle page. [V
+  https://www.viseaon.haifa.ac.il/datasets]</li>
+<li>Original resolution, camera model, colour-chart presence: not read; the colour charts claim is [U].</li>
+<li>Fits: P8 colour against a reference target, range-dependent attenuation estimate. Non-commercial: development
+  use only.</li>
+</ul>
+<h3 id="squid">SQUID<a class="headerlink" href="#squid" title="Permanent link">&para;</a></h3>
+<ul>
+<li>57 stereo pairs, four sites in Israel (Red Sea: Katzaa coral reef 10-15 m, Satil wreck 20-30 m; Mediterranean:
+  Michmoret, Nachsolim), depths 3-30 m. RAW, TIF, calibration and distance maps included. [V
+  https://zenodo.org/records/5744037]</li>
+<li>Zips: Katzaa 12.1 GB, Michmoret 16.9 GB, Nachsolim 10.5 GB, Satil 6.2 GB, 45.8 GB total. Licence CC-BY-NC-SA 4.0.
+  [V same page]</li>
+<li>Satil, read 2026-11-25 (RC-P12): Nikon NEFs of 7380 x 4928; the TIFs are sRGB-encoded (not linear) and
+  clip red to zero on 78-99.9% of pixels, so colour work needs the RAW. Chart annotations (corners and patch
+  centres) for right-camera images ship with the evaluation code
+  (<code>underwater-dataset-evaluation-undisorted-params.zip</code> on the project page), not in the dataset zips; they sit
+  a few pixels off the published undistorted TIFs. The calibration is a MATLAB <code>stereoParameters</code> object,
+  unreadable outside MATLAB. [V RC-P12 README]</li>
+<li>Only stereo pairs, so not a full SfM set; the distance maps are the value.</li>
+<li>Fits: P8 scale and colour checks, RAW decode test for P7b-style handling underwater.</li>
+</ul>
+<h3 id="seathru-nerf-scenes">SeaThru-NeRF scenes<a class="headerlink" href="#seathru-nerf-scenes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Four scenes (IUI3 Red Sea, Curacao, Japanese Gardens Red Sea, Panama) per a search snippet; the repo ships
+  <code>images_wb/</code>, <code>sparse/0/</code> and <code>poses_bounds.npy</code>; Google Drive link; photo credit Matan Yuval. Image counts,
+  resolution, RAW: not stated. Repo code Apache-2.0; the data licence is not stated on the page read. [V
+  https://github.com/deborahLevy130/seathru_NeRF]</li>
+<li>Images are white-balanced and COLMAP poses are included, so they test splat quality, not registration.</li>
+<li>Fits: P8 splat quality on held-out views; the same set WaterSplatting evaluates on. [U for the snippet claim]</li>
+</ul>
+<h3 id="other-underwater-sets-found">Other underwater sets found<a class="headerlink" href="#other-underwater-sets-found" title="Permanent link">&para;</a></h3>
+<ul>
+<li>AquaMVS Example Dataset 2: 13-camera underwater rig, 10 synchronised frames per camera, independent ChArUco
+  board ground truth, calibration including water-surface depth; 6.2 GB zip (8.6 GB uncompressed); CC BY 4.0;
+  published 2026-07-02. Lab geometry, not a dive site. [V https://zenodo.org/records/21134749]</li>
+<li>Submerged3D: 4 deep-sea wreck scenes x 20 RGB images at 720p; no ground truth stated; CC BY 4.0. Too small for a
+  benchmark. [V https://zenodo.org/records/15482420]</li>
+<li>Reefs4D: 21 PLY models of seven coral reefs at three time points; Zenodo licence id <code>cc-nc</code>; the file list I saw
+  holds PLY files only, no source images. [V https://zenodo.org/api/records/7879992]</li>
+<li>RapidBenthos (12 photogrammetric models and underlying images, 5-15 m, coral reefs), a Zenodo record of an
+  Innsbruck synthetic two-media set, and a very-shallow-water coral set on Figshare surfaced in a search but were
+  not opened. [U]</li>
+<li>FLSea-VI (12 forward-looking visual-inertial sets, under 10 m, Kaggle): listed on the Haifa page; licence and
+  size not stated. [V https://www.viseaon.haifa.ac.il/datasets]</li>
+</ul>
+<h3 id="not-found-or-not-checked">Not found or not checked<a class="headerlink" href="#not-found-or-not-checked" title="Permanent link">&para;</a></h3>
+<p>No public underwater dataset with laser-scan or survey-grade GT on a full dive-scale 3D scene was found. Not
+checked: AQUALOC, the Underwater Caves dataset, VAROS, 100 Island Challenge, NOAA reef sets, TagLab sample data,
+wreck sets on Sketchfab. [U] The Eiffel Tower deep-sea set was not found.</p>
+<h2 id="recommended-starter-set">Recommended starter set<a class="headerlink" href="#recommended-starter-set" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Dataset</th>
+<th>Licence</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RC-P1 baseline registration (GLOMAP vs COLMAP)</td>
+<td>ETH3D high-res training scenes (JPG, 4.7 GB)</td>
+<td>CC BY-NC-SA 4.0</td>
+<td>GT poses and laser scans, no registration, direct link</td>
+</tr>
+<tr>
+<td>Dense and mesh accuracy vs laser GT; RAW (P7b)</td>
+<td>ETH3D scan_eval (1.9 GB) plus NEF set (13.0 GB)</td>
+<td>CC BY-NC-SA 4.0</td>
+<td>The only RAW-plus-laser public set found</td>
+</tr>
+<tr>
+<td>Splat quality, held-out views</td>
+<td>Mip-NeRF 360 (12.5 GB)</td>
+<td>unknown (code Apache-2.0)</td>
+<td>Standard splat benchmark; no GT, so read the licence before any release</td>
+</tr>
+<tr>
+<td>ARKit-style pose priors (P4, P9, P10)</td>
+<td>ARKitScenes</td>
+<td>Apple custom, non-commercial</td>
+<td>Closest analogue to the owner's iPhone capture; gated by licence terms; ScanNet++ is the alternative but needs approval</td>
+</tr>
+<tr>
+<td>Large set for P3 (1,000+)</td>
+<td>COLMAP Graham Hall (1,273 images)</td>
+<td>not stated</td>
+<td>Only 1,000+ set found; resolution unknown; no GT. Not high-res RAW, so it only exercises scale in image count; real P3 needs the owner's D850 set</td>
+</tr>
+<tr>
+<td>Underwater P8</td>
+<td>SQUID (RAW, distance maps, 45.8 GB) plus AquaMVS Example 2 (6.2 GB)</td>
+<td>CC-BY-NC-SA 4.0 and CC BY 4.0</td>
+<td>SQUID gives RAW and distances; AquaMVS gives refraction-aware GT under a permissive licence; SeaThru-NeRF scenes (Drive) for splat quality</td>
+</tr>
+</tbody>
+</table>
+<p>The best fits are restrictive: ETH3D, SQUID, Sea-thru and ARKitScenes all forbid commercial use. Only TUM RGB-D,
+AquaMVS, Submerged3D and the CC0 ODM sets are permissive, and none of them is a strong benchmark.</p>
+<h2 id="reuse-rules">Reuse rules<a class="headerlink" href="#reuse-rules" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Local development and prototypes: allowed under every licence listed, including non-commercial ones.</li>
+<li>Published benchmark results (numbers, plots, no data): allowed with citation; ETH3D, SQUID and Sea-thru require
+  attribution and share-alike for adaptations.</li>
+<li>Redistribute the data (including in this repo or on a shared artefact store): not under CC BY-NC-SA without
+  matching licence and attribution; not at all for Tanks and Temples (written permission required), ARKitScenes
+  (check the Apple terms), DTU, ScanNet++ (Terms of Use). Fetch from the source; commit only the download script.</li>
+<li>Ship derived models (weights trained on the data, a product that embeds results): not for any non-commercial
+  set. Treat a model trained or tuned on ETH3D, SQUID, Sea-thru, Tanks and Temples, ARKitScenes or CO3D as
+  non-commercial unless counsel says otherwise.</li>
+<li>Commercial-safe data: TUM RGB-D (CC BY 4.0), AquaMVS (CC BY 4.0), Submerged3D (CC BY 4.0), ODM CC0 sets.</li>
+<li>Never share an ScanNet++ download token or copy approved data to other machines without reading the Terms.</li>
+</ul>
+<h2 id="not-verified">Not verified<a class="headerlink" href="#not-verified" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Image resolution and size: COLMAP samples, Mip-NeRF 360 per scene, SeaThru-NeRF, ODM sets, Sea-thru original
+  resolution, ScanNet++ and ARKitScenes sizes.</li>
+<li>Licences not read: Mip-NeRF 360 data, SeaThru-NeRF data, ScanNet++ Terms of Use text, COLMAP sample data, DTU
+  (no named licence), CO3D data terms (only the codebase licence read).</li>
+<li>Datasets not opened at all: BlendedMVS, Strecha, 1DSfM, Photo Tourism, IMC, Replica, EuRoC, NeRF synthetic, Deep
+  Blending, OmniObject3D, Google Scanned Objects, Stanford scans, UrbanScene3D, DJI samples, AQUALOC, Underwater
+  Caves, VAROS, 100 Island Challenge, NOAA, TagLab, RapidBenthos, Sketchfab wrecks.</li>
+<li>Whether Sea-thru RAW is on Kaggle (the Haifa page says yes, the Hugging Face card says no).</li>
+<li>ETH3D laser accuracy figure, ETH3D registration wall beyond the download links I probed.</li>
+<li>GT accuracy of ScanNet++, ARKitScenes and DTU beyond the descriptions above.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

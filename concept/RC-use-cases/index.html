@@ -1,0 +1,2383 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/concept/RC-use-cases/">
+      
+      
+        <link rel="prev" href="../RC-architecture-sketch/">
+      
+      
+        <link rel="next" href="../../reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Use cases - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#first-use-cases-a-thought-experiment" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Use cases
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The cases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-same-journey-step-by-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The same journey, step by step
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-case-a-an-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Case A — an object
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Case A — an object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uc-a1-object-with-the-iphone-15-pro-the-full-walk-through" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-A1 · Object with the iPhone 15 Pro (the full walk-through)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-a2-object-with-the-gopro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-A2 · Object with the GoPro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-a3-uc-a4-object-with-the-nikon-d850-and-the-sony-a1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-A3 / UC-A4 · Object with the Nikon D850 and the Sony A1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-case-b-a-room" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Case B — a room
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Case B — a room">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uc-b1-room-with-the-iphone-15-pro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-B1 · Room with the iPhone 15 Pro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-b2-room-with-the-gopro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-B2 · Room with the GoPro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-b3-uc-b4-room-with-the-nikon-d850-and-the-sony-a1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-B3 / UC-B4 · Room with the Nikon D850 and the Sony A1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-case-c-a-car-in-a-car-park" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Case C — a car in a car park
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-case-d-the-motorbikes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Case D — the motorbikes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-case-e-the-mountain-bike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Case E — the mountain bike
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-what-the-thought-experiment-shows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. What the thought experiment shows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. What the thought experiment shows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-holds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What holds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-breaks-or-needs-care" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What breaks, or needs care
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indoors-against-outdoors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indoors against outdoors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#engine-capabilities-this-adds-to-the-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine capabilities this adds to the requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-prototype-proves-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which prototype proves what
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-the-owners-kit-and-answers-2026-11-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. The owner's kit and answers (2026-11-23)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wip/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The cases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-same-journey-step-by-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The same journey, step by step
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-case-a-an-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Case A — an object
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Case A — an object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uc-a1-object-with-the-iphone-15-pro-the-full-walk-through" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-A1 · Object with the iPhone 15 Pro (the full walk-through)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-a2-object-with-the-gopro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-A2 · Object with the GoPro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-a3-uc-a4-object-with-the-nikon-d850-and-the-sony-a1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-A3 / UC-A4 · Object with the Nikon D850 and the Sony A1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-case-b-a-room" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Case B — a room
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Case B — a room">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uc-b1-room-with-the-iphone-15-pro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-B1 · Room with the iPhone 15 Pro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-b2-room-with-the-gopro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-B2 · Room with the GoPro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uc-b3-uc-b4-room-with-the-nikon-d850-and-the-sony-a1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UC-B3 / UC-B4 · Room with the Nikon D850 and the Sony A1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-case-c-a-car-in-a-car-park" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Case C — a car in a car park
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-case-d-the-motorbikes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Case D — the motorbikes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-case-e-the-mountain-bike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Case E — the mountain bike
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-what-the-thought-experiment-shows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. What the thought experiment shows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. What the thought experiment shows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-holds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What holds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-breaks-or-needs-care" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What breaks, or needs care
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indoors-against-outdoors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indoors against outdoors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#engine-capabilities-this-adds-to-the-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine capabilities this adds to the requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-prototype-proves-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which prototype proves what
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-the-owners-kit-and-answers-2026-11-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. The owner's kit and answers (2026-11-23)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="first-use-cases-a-thought-experiment">First use cases — a thought experiment<a class="headerlink" href="#first-use-cases-a-thought-experiment" title="Permanent link">&para;</a></h1>
+<p><em>Working document. The owner's first real scans, walked through the
+<a href="../RC-architecture-sketch/">architecture sketch</a> one by one, as a conceptual proof: does the shape
+hold, what breaks, which options and recipes each case needs. Input to the prototypes, to RC-02 and
+to RC-04.</em></p>
+<p><strong>Version:</strong> 0.1 · Draft · 2026-11-23</p>
+<p>Device facts marked <em>(to verify)</em> come from general knowledge and were not checked against a
+source this session; the prototypes check them on the real devices.</p>
+<hr />
+<h2 id="1-the-cases">1. The cases<a class="headerlink" href="#1-the-cases" title="Permanent link">&para;</a></h2>
+<p>The owner works through the same subjects with each device, in this order:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Subject</th>
+<th>iPhone 15 Pro</th>
+<th>GoPro</th>
+<th>Nikon D850</th>
+<th>Sony A1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td><strong>Object</strong> — a Lego toy, a camera, a book, a pair of shoes</td>
+<td>UC-A1</td>
+<td>UC-A2</td>
+<td>UC-A3</td>
+<td>UC-A4</td>
+</tr>
+<tr>
+<td>B</td>
+<td><strong>Room</strong> — the owner's room, from inside</td>
+<td>UC-B1</td>
+<td>UC-B2</td>
+<td>UC-B3</td>
+<td>UC-B4</td>
+</tr>
+<tr>
+<td>C</td>
+<td><strong>Car</strong> — in a car park, outdoors</td>
+<td>UC-C1 (any device)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>D</td>
+<td><strong>Motorbikes</strong> (two)</td>
+<td>UC-D1 (any device)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>E</td>
+<td><strong>Mountain bike</strong></td>
+<td>UC-E1 (any device)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Cases A and B are the systematic series: one subject, four devices, so every device is compared
+on the same ground. C, D and E come along the way, with whichever device is at hand, and push the
+engine to its limits.</p>
+<h2 id="2-the-same-journey-step-by-step">2. The same journey, step by step<a class="headerlink" href="#2-the-same-journey-step-by-step" title="Permanent link">&para;</a></h2>
+<p>Every case follows the same eight steps through the architecture. UC-A1 walks them in full; the
+others describe only what differs.</p>
+<ol>
+<li><strong>Capture</strong> — what the device records, and what the owner should do.</li>
+<li><strong>Into the system</strong> — which face, which files, what the ingest stage reads.</li>
+<li><strong>Recipe</strong> — what the engine proposes from the evidence, and why.</li>
+<li><strong>Registration</strong> — how the photos line up, and what is likely to resist.</li>
+<li><strong>Scale and frame</strong> — where metric scale comes from, or why it is arbitrary.</li>
+<li><strong>Products</strong> — dense cloud, mesh, texture, splat.</li>
+<li><strong>Export</strong> — what leaves, in which format, for which tool.</li>
+<li><strong>Quality and advice</strong> — what the engine reports, and what it tells the owner to reshoot.</li>
+</ol>
+<hr />
+<h2 id="3-case-a-an-object">3. Case A — an object<a class="headerlink" href="#3-case-a-an-object" title="Permanent link">&para;</a></h2>
+<h3 id="uc-a1-object-with-the-iphone-15-pro-the-full-walk-through">UC-A1 · Object with the iPhone 15 Pro (the full walk-through)<a class="headerlink" href="#uc-a1-object-with-the-iphone-15-pro-the-full-walk-through" title="Permanent link">&para;</a></h3>
+<p><strong>The four objects are four different problems:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>What it tests</th>
+<th>Expected difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pair of shoes</td>
+<td>Matte, textured, closed shape</td>
+<td>Easy — the clean baseline</td>
+</tr>
+<tr>
+<td>Book</td>
+<td>Near-planar faces, sharp edges, thin pages; a flat cover is close to the degenerate planar case for two-view geometry</td>
+<td>Medium — needs views around the edges, not only of the covers</td>
+</tr>
+<tr>
+<td>Lego toy</td>
+<td>Small, glossy plastic, fine detail, repeated studs (repetitive texture fools matching)</td>
+<td>Medium to hard</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>Black body (little texture), glass lens (transparent and reflective), metal</td>
+<td>Hard — expect holes at the lens; the splat will look better than the mesh</td>
+</tr>
+</tbody>
+</table>
+<p><strong>1. Capture.</strong> What the iPhone offers, and what of it reaches the engine:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it gives</th>
+<th>How the engine gets it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main camera, 48 MP sensor; the Camera app saves 24 MP HEIF by default, 48 MP only in HEIF Max, JPEG Max or RAW Max at 1× (verified 2026-11-24)</td>
+<td>HEIC or JPEG, or ProRAW DNG</td>
+<td>Web upload, or AirDrop to the laptop then upload</td>
+</tr>
+<tr>
+<td>EXIF</td>
+<td>Focal length, lens id, exposure, GPS</td>
+<td>Read at ingest</td>
+</tr>
+<tr>
+<td>Lens switching</td>
+<td>The Camera app switches to the ultra-wide for close subjects (macro); it can be turned off with the Auto Macro button or Settings &gt; Camera &gt; Macro Control (verified 2026-11-24)</td>
+<td>EXIF lens id per image — the engine groups images by lens and calibrates each separately</td>
+</tr>
+<tr>
+<td>LiDAR depth</td>
+<td>Low-resolution metric depth</td>
+<td><strong>Not in plain Camera photos.</strong> Only through a capture app (Record3D, Polycam, Scaniverse) or our own capture app (RC-P11)</td>
+</tr>
+<tr>
+<td>ARKit camera poses</td>
+<td>Metric camera positions, gravity</td>
+<td>Same: only through a capture app's export</td>
+</tr>
+<tr>
+<td>Portrait-mode depth</td>
+<td>A depth map embedded in the HEIC <em>(to verify)</em></td>
+<td>Possible at ingest, but portrait mode is not a capture mode for photogrammetry</td>
+</tr>
+</tbody>
+</table>
+<p>The owner shoots 60–150 photos in two or three rings around the object at different heights, with
+overlap between neighbours, exposure and focus locked (long-press AE/AF lock), on a plain matte
+background, in diffuse light. <strong>The finding:</strong> the plain Camera app gives photos and EXIF only. The
+LiDAR and ARKit data the owner wants to reuse needs a capture app's export — which is exactly what
+the later iPhone app exists for. Until then there are two ways in: <em>photos-only</em> (Camera app) and
+<em>pose-and-depth</em> (a capture app's export).</p>
+<p><strong>2. Into the system.</strong> The owner opens the web UI on the phone and uploads. Risk: Safari may
+convert HEIC on upload: it transcodes a file whose type is not in the page's <code>accept</code> list (verified 2026-11-24), so the upload page lists HEIC and DNG explicitly; what the photo picker hands over is tested on the phone — acceptable for a first test, but the ingest stage
+records which happened. ProRAW DNG files come through the Files picker. A capture-app export comes
+in as a folder: images, intrinsics, poses, depth.</p>
+<p><strong>3. Recipe.</strong> Evidence: one device, 60–150 images, not sequential, no GPS worth trusting
+indoors, the owner tagged "object". The engine proposes <code>object-walkaround</code>: retrieval-plus-
+exhaustive pair selection (small set, so exhaustive is affordable), incremental COLMAP or GLOMAP
+(RC-P1 decides the default), automatic background mask. With a capture-app export, it proposes
+<code>object-walkaround+priors</code>: ARKit poses as priors, LiDAR depth as a dense-stage prior.</p>
+<p><strong>4. Registration.</strong> Shoes register cleanly. The book's covers alone would be near-degenerate;
+views of the spine and edges carry it. Lego studs produce repetitive matches; geometric
+verification rejects most of the false ones, and masks keep the background from dominating. The
+camera's glass returns false matches that move with the viewpoint; bundle adjustment marks those
+points as high-error, and they are filtered. <strong>What resists:</strong> the iPhone's per-photo processing
+(Smart HDR, Deep Fusion) tone-maps each photo differently, and ProRAW is captured together with that processing, so it is not radiometrically linear (verified 2026-11-24). Matching
+tolerates it; texturing does not — hence ProRAW and the develop stage.</p>
+<p><strong>5. Scale and frame.</strong> Photos-only: <strong>arbitrary scale</strong>, stated as such, unless the owner puts a
+marker (an AprilTag sheet) or a ruler in the scene, or enters one measured distance in the UI.
+With ARKit priors: <strong>metric from priors</strong>, in ARKit's gravity-aligned frame. The model's "up" is
+known from gravity (ARKit) or from the ground plane.</p>
+<p><strong>6. Products.</strong> Dense depth on the GB10 (CUDA) or the X3 (a HIP build, unproven); Poisson mesh;
+texture with exposure-matched images; a splat from the same poses (on the GB10 with gsplat, or with
+Brush on the laptop alone).</p>
+<p><strong>7. Export.</strong> GLB with textures (Blender, Godot, Unity, Unreal), USDZ (iPhone Quick Look), OBJ
+and PLY; the splat as GLB with <code>KHR_gaussian_splatting</code> and as PLY. Every export states units and
+up axis.</p>
+<p><strong>8. Quality and advice.</strong> Registered 142/150, with the reasons for the eight rejects (blur, too
+little overlap). Reprojection error per image. Coverage regions: "the underside of the shoe is not
+covered — turn it over and shoot one more ring, keeping the background"; "the lens of the camera is
+missing in the mesh; it is present in the splat."</p>
+<p><strong>Verdict.</strong> Works for shoes and the book; works with masks and care for Lego; the camera works as
+a splat and partially as a mesh. <strong>Options this case needs:</strong> lens grouping by EXIF; automatic
+background masks; a two-sided capture mode (object turned over between rings, merged as one
+model); a scale-entry tool; ProRAW through the develop stage.</p>
+<h3 id="uc-a2-object-with-the-gopro">UC-A2 · Object with the GoPro<a class="headerlink" href="#uc-a2-object-with-the-gopro" title="Permanent link">&para;</a></h3>
+<p><strong>Differs from A1:</strong>
+- <strong>Lens.</strong> GoPro photos in Wide/HyperView are strongly distorted; HERO13 photos offer Wide (16–34 mm) and Linear (19–39 mm) only, and RAW (.gpr) requires Wide (verified 2026-11-24); Linear
+  mode is dewarped in-camera to a near-pinhole image at some cost in field of view. The recipe
+  differs: a fisheye camera model for Wide, pinhole for Linear. The engine reads the lens mode from
+  metadata where it can (the GPMF spec defines field-of-view and projection tags; whether HERO13 photos write them is tested on a real file).
+- <strong>Close focus and resolution.</strong> The GoPro has fixed focus (minimum distance unpublished; measured on the camera); the Macro Lens Mod focuses at 11–75 cm and, like every lens mod, is calibrated as its own camera; a
+  small Lego model fills little of the wide frame, so effective resolution on the object is low.
+  Shoes and the book are better targets than Lego.
+- <strong>Capture.</strong> Time-lapse photo (a frame every 0.5 s) while walking around is the natural mode;
+  video works but brings rolling shutter and motion blur. For video the frame-select stage picks
+  sharp, well-spaced frames.
+- <strong>Metadata.</strong> GPMF carries gyro, accelerometer and gravity; gravity gives "up", and gyro could
+  seed rotations <em>(no evidence found yet of GPMF used as an SfM prior — an opening, not a given)</em>.
+- <strong>Into the system.</strong> SD card or USB to the laptop, then upload; Open GoPro over Wi-Fi later.</p>
+<p><strong>Verdict.</strong> Works for medium objects in Linear mode; Wide mode needs the fisheye model to be good;
+small objects are a poor fit. <strong>Options:</strong> fisheye camera model; frame selection for video and
+time-lapse; GPMF gravity as "up".</p>
+<h3 id="uc-a3-uc-a4-object-with-the-nikon-d850-and-the-sony-a1">UC-A3 / UC-A4 · Object with the Nikon D850 and the Sony A1<a class="headerlink" href="#uc-a3-uc-a4-object-with-the-nikon-d850-and-the-sony-a1" title="Permanent link">&para;</a></h3>
+<p><strong>Differs from A1:</strong>
+- <strong>Files.</strong> NEF and ARW RAW, 45.7 MP and 50.1 MP, tens of MB each — 150 photos is several GB.
+  LibRaw lists both cameras; whether the A1's compressed ARW variants decode correctly in rawpy is
+  unverified (RC-P5).
+- <strong>Develop.</strong> This is the case the develop stage exists for: one white balance and one exposure
+  across the set, a neutral tone curve, no per-photo look. Without it the texture shows seams.
+- <strong>Resolution pyramid.</strong> Matching at full 45–50 MP is slow and unnecessary; the engine extracts
+  features at a reduced size and keeps full resolution for dense depth and texture.
+- <strong>Lens.</strong> A prime or a zoom fixed at one focal length; aperture f/5.6–f/8; a tripod or a fast
+  shutter. The lens model from EXIF initialises calibration; a zoom moved mid-set splits the set
+  into calibration groups, which the engine detects from EXIF focal length.
+- <strong>Turntable option.</strong> With a DSLR on a tripod and the object on a turntable, the background is
+  static while the object turns. The background must be masked out or be featureless, or it pulls
+  the solution towards "the camera never moved". This is the <code>object-turntable</code> recipe.
+- <strong>Scale.</strong> A printed AprilTag board beside the object gives metric scale and up.</p>
+<p><strong>Verdict.</strong> The best object quality of the four devices; the heaviest data; the strongest test of
+the develop stage and of distribution (feature extraction over hundreds of large images fans out
+well). <strong>Options:</strong> RAW develop; resolution pyramid; calibration groups by focal length; turntable
+recipe with static-background exclusion; marker-based scale.</p>
+<hr />
+<h2 id="4-case-b-a-room">4. Case B — a room<a class="headerlink" href="#4-case-b-a-room" title="Permanent link">&para;</a></h2>
+<h3 id="uc-b1-room-with-the-iphone-15-pro">UC-B1 · Room with the iPhone 15 Pro<a class="headerlink" href="#uc-b1-room-with-the-iphone-15-pro" title="Permanent link">&para;</a></h3>
+<p><strong>What makes a room different from an object:</strong> the camera is inside the subject looking out.
+Walls are often plain (little texture); windows and mirrors reflect; lighting is mixed (daylight
+and lamps); furniture occludes. And the classic mistake: standing in the middle and turning on the
+spot gives no parallax — pure rotation is the degenerate case, and nothing triangulates.</p>
+<ul>
+<li><strong>Capture.</strong> Walk along the walls, facing across the room, in overlapping passes at two heights;
+  corners and doorways shot deliberately. Two modes:</li>
+<li><em>Photos-only</em> — the Camera app. Plain walls will resist registration.</li>
+<li><em>Pose-and-depth</em> — a capture app's export with ARKit poses and LiDAR depth. <strong>This is where
+    the iPhone's extra sensors matter most:</strong> ARKit poses hold the solution together across plain
+    walls, LiDAR depth gives geometry where photos have no texture, and the scale is metric.</li>
+<li><strong>Recipe.</strong> <code>interior</code>: sequential and retrieval pair selection, ARKit priors if present, the
+  learned first pass (MapAnything) when texture is low, TSDF fusion from LiDAR depth alongside
+  photo-based dense depth.</li>
+<li><strong>Registration.</strong> Photos-only: expect the room to break into pieces at plain walls; the engine
+  reports the separate components and where the links are missing ("the wall between the window and
+  the door has no overlap"). With priors: one model.</li>
+<li><strong>Scale and frame.</strong> Metric from ARKit, gravity-aligned; or one tape-measured wall length entered
+  in the UI.</li>
+<li><strong>Products.</strong> A metric mesh for measuring and for robotics-lab comparisons; a splat for viewing,
+  where a room looks far better than as a mesh.</li>
+<li><strong>Privacy.</strong> A room scan holds screens, documents and photos on walls; the project is marked
+  "never leaves home" by default.</li>
+</ul>
+<p><strong>Verdict.</strong> Photos-only is the honest stress test and may fail at plain walls; pose-and-depth is
+expected to work and is the case for the capture-app route. <strong>Options:</strong> pose priors; depth fusion;
+learned first pass for low texture; component reporting; the default "stays home" for interiors.</p>
+<h3 id="uc-b2-room-with-the-gopro">UC-B2 · Room with the GoPro<a class="headerlink" href="#uc-b2-room-with-the-gopro" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The wide field of view helps a room: more overlap per frame, more texture in each image, fewer
+  photos needed. The fisheye model is required.</li>
+<li>Indoors the GoPro's small sensor raises noise and lengthens exposure; video blurs in low light.
+  Time-lapse photo in good light, or video with plenty of light.</li>
+<li>No depth, no poses; GPMF gravity gives "up". Scale arbitrary without a measured distance.</li>
+</ul>
+<p><strong>Verdict.</strong> Likely registers better than iPhone photos-only thanks to the field of view; detail is
+lower. <strong>Options:</strong> fisheye model; frame selection; low-light warnings at ingest (ISO and shutter
+read from EXIF).</p>
+<h3 id="uc-b3-uc-b4-room-with-the-nikon-d850-and-the-sony-a1">UC-B3 / UC-B4 · Room with the Nikon D850 and the Sony A1<a class="headerlink" href="#uc-b3-uc-b4-room-with-the-nikon-d850-and-the-sony-a1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A wide lens (or the widest the owner has) and a tripod for low light; mixed light makes white
+  balance across the set matter even more — the develop stage again.</li>
+<li>Highest detail and the largest data; the case where distribution and rented workers start to
+  matter.</li>
+<li>No poses, no depth; scale from a tape measure or a marker on the wall.</li>
+</ul>
+<p><strong>Verdict.</strong> Works where there is texture; plain walls resist as with the iPhone photos-only.
+<strong>Options:</strong> as UC-B1 photos-only, plus RAW develop and tripod-aware capture advice.</p>
+<hr />
+<h2 id="5-case-c-a-car-in-a-car-park">5. Case C — a car in a car park<a class="headerlink" href="#5-case-c-a-car-in-a-car-park" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Size and height.</strong> About 4.5 m long and 1.5 m high; the roof needs views from above — a step
+  ladder, a pole, or the DJI Mini 4 Pro (a natural moment to bring the drone in).</li>
+<li><strong>Surfaces.</strong> Glossy paint and glass reflect the surroundings, and reflections move with the
+  viewpoint: false matches, holes in the mesh. Overcast light is far better than sun; a polarising
+  filter on the DSLR cuts reflections.</li>
+<li><strong>Outdoors.</strong> Other cars, people, moving shadows: masks and a moving-object filter. Sun moves
+  over a long capture; exposure locked anyway.</li>
+<li><strong>Recipe.</strong> <code>object-walkaround</code> at large scale, or <code>aerial</code> for the roof pass when the drone is
+  used, merged into one model through shared images.</li>
+<li><strong>Scale.</strong> The wheelbase from the car's specification, or a tape-measured distance; GPS (phone or
+  drone) gives rough scale and north.</li>
+<li><strong>Products.</strong> The splat is the showpiece; the mesh is good on matte parts (tyres, trim) and holed
+  on glass. Paint reconstructs if overcast.</li>
+</ul>
+<p><strong>Verdict.</strong> Works as a splat; works partially as a mesh; the drone pass is what makes the roof
+whole. <strong>Options:</strong> reflective-surface handling (masks, robust filtering); moving-object masks;
+multi-device merge (ground photos plus drone); scale from a known dimension.</p>
+<h2 id="6-case-d-the-motorbikes">6. Case D — the motorbikes<a class="headerlink" href="#6-case-d-the-motorbikes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Chrome, polished metal and black engine parts; thin cables and spokes; deep occlusions between
+  engine, frame and wheels.</li>
+<li>Capture in rings at several heights plus close passes into the engine bay; overcast light or a
+  shaded garage.</li>
+<li>The mesh struggles with thin and shiny parts; the splat handles them far better.</li>
+<li>Two motorbikes: the same recipe twice — a first use of the benchmark idea across subjects.</li>
+</ul>
+<p><strong>Verdict.</strong> Splat good, mesh partial; a strong showcase for "same poses, two products".
+<strong>Options:</strong> splat as the primary product for this subject type; mesh cleanup; close-pass capture
+advice.</p>
+<h2 id="7-case-e-the-mountain-bike">7. Case E — the mountain bike<a class="headerlink" href="#7-case-e-the-mountain-bike" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The hardest object: thin tubes, spokes, cables, and very little surface per view — most of each
+  photo is background seen <em>through</em> the bike.</li>
+<li>Masks are mandatory; a plain background (a wall, a sheet) makes them reliable. On a work stand,
+  the bike can be turned like a turntable — the <code>object-turntable</code> recipe with static background
+  exclusion.</li>
+<li>The mesh of the spokes is expected to fail; the frame and wheels' rims work. The splat renders
+  the spokes acceptably <em>(expected, not verified)</em>.</li>
+</ul>
+<p><strong>Verdict.</strong> The stress test RC-P1's order puts last for a reason. <strong>Options:</strong> strong masking;
+turntable recipe; thin-structure handling is a later research item (mesh from splats).</p>
+<hr />
+<h2 id="8-what-the-thought-experiment-shows">8. What the thought experiment shows<a class="headerlink" href="#8-what-the-thought-experiment-shows" title="Permanent link">&para;</a></h2>
+<h3 id="what-holds">What holds<a class="headerlink" href="#what-holds" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The <strong>eight-step journey fits every case</strong> without a new component: ingest, recipe, registration,
+  scale, products, export, quality and advice cover them all.</li>
+<li><strong>Recipes are necessary, not decoration.</strong> Within these first cases alone the engine needs at
+  least <code>object-walkaround</code>, <code>object-turntable</code>, <code>interior</code> and <code>aerial</code>, each differing in pair
+  selection, priors, masking and camera model.</li>
+<li><strong>Scale state earns its place.</strong> Half the cases end with arbitrary scale unless the owner adds a
+  marker or a measurement; the engine must say so every time.</li>
+<li><strong>Same poses, two products</strong> pays off on exactly the owner's subjects: glass, chrome, spokes.</li>
+</ul>
+<h3 id="what-breaks-or-needs-care">What breaks, or needs care<a class="headerlink" href="#what-breaks-or-needs-care" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Cases</th>
+<th>Answer in the design</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPhone LiDAR and ARKit are not in Camera-app photos</td>
+<td>A1, B1</td>
+<td>Two ingest routes: photos-only and pose-and-depth (capture-app export); the iPhone app later</td>
+</tr>
+<tr>
+<td>Per-photo processing in the iPhone (Smart HDR)</td>
+<td>A1, B1</td>
+<td>ProRAW plus the develop stage; detect inconsistent tone across the set at ingest</td>
+</tr>
+<tr>
+<td>Automatic lens switching (macro)</td>
+<td>A1</td>
+<td>Group by lens id from EXIF; calibrate per group; warn</td>
+</tr>
+<tr>
+<td>Safari HEIC to JPEG on upload</td>
+<td>A1, B1</td>
+<td>Record what arrived; offer the Files route for originals</td>
+</tr>
+<tr>
+<td>Fisheye distortion</td>
+<td>A2, B2</td>
+<td>Fisheye camera model in the recipe</td>
+</tr>
+<tr>
+<td>Rolling shutter and blur in video</td>
+<td>A2, B2</td>
+<td>Frame selection; prefer time-lapse photos</td>
+</tr>
+<tr>
+<td>Repetitive texture (Lego studs)</td>
+<td>A1–A4</td>
+<td>Geometric verification; masks; retrieval pairs</td>
+</tr>
+<tr>
+<td>Reflective and transparent surfaces</td>
+<td>A1 (camera), C, D</td>
+<td>Masks, robust filtering, splat as the faithful product</td>
+</tr>
+<tr>
+<td>Plain walls, pure rotation</td>
+<td>B1–B4</td>
+<td>Pose priors, LiDAR depth, the learned first pass; capture advice ("move, don't turn")</td>
+</tr>
+<tr>
+<td>Static background on a turntable</td>
+<td>A3, A4, E</td>
+<td><code>object-turntable</code> recipe with background exclusion</td>
+</tr>
+<tr>
+<td>Very large RAW sets</td>
+<td>A3, A4, B3, B4</td>
+<td>Resolution pyramid; distribution; resumable upload</td>
+</tr>
+<tr>
+<td>Thin structures</td>
+<td>D, E</td>
+<td>Splat first; mesh-from-splat later</td>
+</tr>
+<tr>
+<td>Roof and top views</td>
+<td>C</td>
+<td>The drone; multi-device merge</td>
+</tr>
+<tr>
+<td>Moving people and cars outdoors</td>
+<td>C</td>
+<td>Moving-object masks</td>
+</tr>
+</tbody>
+</table>
+<h3 id="indoors-against-outdoors">Indoors against outdoors<a class="headerlink" href="#indoors-against-outdoors" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Indoors</th>
+<th>Outdoors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Light</td>
+<td>Low and mixed: noise, long exposures, white-balance mismatch</td>
+<td>Strong and moving: harsh shadows, specular highlights; overcast is best</td>
+</tr>
+<tr>
+<td>Background</td>
+<td>Static, often plain</td>
+<td>Busy and moving: people, cars, trees in wind</td>
+</tr>
+<tr>
+<td>Scale sources</td>
+<td>ARKit, LiDAR, tape, markers</td>
+<td>GPS (rough), known dimensions, markers, drone</td>
+</tr>
+<tr>
+<td>Typical recipe</td>
+<td><code>interior</code>, <code>object-turntable</code></td>
+<td><code>object-walkaround</code>, <code>aerial</code></td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>High (homes) — stays home by default</td>
+<td>Lower; rented workers allowed by default</td>
+</tr>
+</tbody>
+</table>
+<h3 id="engine-capabilities-this-adds-to-the-requirements">Engine capabilities this adds to the requirements<a class="headerlink" href="#engine-capabilities-this-adds-to-the-requirements" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Two ingest routes for the iPhone: photos-only and pose-and-depth (capture-app exports first).</li>
+<li>Calibration groups by lens and focal length from EXIF.</li>
+<li>A fisheye camera model alongside the pinhole and Brown models.</li>
+<li>Frame selection for video and time-lapse.</li>
+<li>A resolution pyramid: features at reduced size, dense and texture at full size.</li>
+<li>Automatic background masks, and moving-object masks outdoors.</li>
+<li>Recipes: <code>object-walkaround</code>, <code>object-turntable</code> (static background exclusion), <code>interior</code>
+   (priors, depth fusion, learned first pass), <code>aerial</code>; multi-device merge across them.</li>
+<li>Scale entry: markers (AprilTag boards), one measured distance, or a known dimension.</li>
+<li>Ingest checks: tone inconsistency across the set, HEIC transcoding, low-light warnings.</li>
+<li>Component reporting when a capture breaks into pieces, with where the link is missing.</li>
+<li>Per-project "stays home" defaults by capture type.</li>
+</ol>
+<h3 id="which-prototype-proves-what">Which prototype proves what<a class="headerlink" href="#which-prototype-proves-what" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Proven by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UC-A1 shoes, book</td>
+<td>RC-P1 (baseline), RC-P8 (learned vs classical, with and without ARKit priors)</td>
+</tr>
+<tr>
+<td>UC-A1 Lego, camera</td>
+<td>RC-P1 extended; RC-P6 (splat vs mesh in the viewer)</td>
+</tr>
+<tr>
+<td>UC-A2</td>
+<td>RC-P1 (fisheye model on every machine)</td>
+</tr>
+<tr>
+<td>UC-A3, UC-A4</td>
+<td>RC-P5 (RAW develop), RC-P7 (distribution over large images)</td>
+</tr>
+<tr>
+<td>UC-B1</td>
+<td>RC-P8 (priors), plus <strong>RC-P10 — a room from inside</strong> (TSDF from LiDAR, plain walls, components)</td>
+</tr>
+<tr>
+<td>UC-B2–B4</td>
+<td>RC-P10</td>
+</tr>
+<tr>
+<td>UC-C1, D1, E1</td>
+<td>After Step 0 — the first real tests of the v1 recipes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-the-owners-kit-and-answers-2026-11-23">9. The owner's kit and answers (2026-11-23)<a class="headerlink" href="#9-the-owners-kit-and-answers-2026-11-23" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>GoPro:</strong> HERO13 Black. <em>(To verify: RAW photo (GPR) support and in which modes; lens modes
+  available in photo and time-lapse; whether the HB-series lens mods — Macro, Ultra Wide — are
+  worth testing for objects.)</em></li>
+<li><strong>Lenses:</strong> a wide range for both the D850 and the A1; the engine's recipes name what fits —
+  a macro or short-tele prime around 90–105 mm at f/8–f/11 on the tripod for small objects
+  (Lego, the camera), a normal prime around 35–50 mm for shoes, books and the motorbikes, a wide
+  prime around 20–24 mm for the room and the car. One focal length per capture set.</li>
+<li><strong>Tripod:</strong> yes. <strong>Neutral background:</strong> yes. <strong>Turntable:</strong> improvised — the <code>object-turntable</code>
+  recipe is tested from the start.</li>
+<li><strong>Markers and scale bars:</strong> acceptable in the first tests. A printed AprilTag board is the
+  default scale and "up" source for object captures.</li>
+<li><strong>iPhone pose-and-depth route:</strong> the owner is ready to build an internal iPhone capture app now
+  rather than depend on a third-party app. See RC-P11 in the <a href="../RC-brief/">brief</a>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

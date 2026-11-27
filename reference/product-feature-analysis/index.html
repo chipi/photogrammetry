@@ -1,0 +1,3735 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/reference/product-feature-analysis/">
+      
+      
+        <link rel="prev" href="../tools-overview/">
+      
+      
+        <link rel="next" href="../public-datasets/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Product feature analysis - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#product-feature-analysis-what-a-complete-photogrammetry-product-offers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Product feature analysis
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-agisoft-metashape-professional-23-feature-by-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Agisoft Metashape Professional 2.3, feature by feature
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Agisoft Metashape Professional 2.3, feature by feature">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-project-and-chunk-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Project and chunk management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Import
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-camera-calibration-and-lens-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Camera calibration and lens models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Alignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-tie-point-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Tie point cleanup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-markers-gcps-scale-bars-coded-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Markers, GCPs, scale bars, coded targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-coordinate-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 Coordinate systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-masks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 Masks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-depth-maps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.9 Depth maps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#110-point-clouds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.10 Point clouds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#111-mesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.11 Mesh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-texture-and-materials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.12 Texture and materials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-tiled-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.13 Tiled models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-dem-and-orthomosaic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.14 DEM and orthomosaic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-measurements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.15 Measurements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-4d-and-multi-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.16 4D and multi-frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#117-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.17 Reports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#118-export-formats-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.18 Export formats (summary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#119-network-and-cloud-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.19 Network and cloud processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#120-scripting-and-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.20 Scripting and batch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1a-metashape-mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1A. metashape-mcp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1A. metashape-mcp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tool-inventory-master-branch-names-grouped-by-module-v-gh-srcmetashape_mcptools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool inventory (master branch names, grouped by module) [V GH src/metashape_mcp/tools/]
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-other-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The other products
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The other products">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#realityscan-epic-games-ex-realitycapture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RealityScan (Epic Games, ex-RealityCapture)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pix4dmatic-pix4dcatch-pix4dcloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pix4Dmatic, PIX4Dcatch, PIX4Dcloud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3df-zephyr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3DF Zephyr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dji-terra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DJI Terra
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bentley-itwin-capture-modeler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bentley iTwin Capture Modeler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#polycam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Polycam
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kiri-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KIRI Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#luma-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Luma AI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaniverse-niantic-spatial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaniverse (Niantic Spatial)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apple-object-capture-and-reality-composer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apple Object Capture and Reality Composer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jawset-postshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jawset Postshot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nerfstudio-viewer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nerfstudio viewer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webodm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WebODM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#meshroom-alicevision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meshroom (AliceVision)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teleport-by-varjo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teleport by Varjo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sketchfab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sketchfab
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-underwater-workflows-and-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Underwater workflows and products
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-feature-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Feature matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-use-case-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Use-case mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-mvp-versus-complete-feature-set-judgement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. MVP versus complete feature set (judgement)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. MVP versus complete feature set (judgement)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-mvp-household-object-lego-room" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 1: MVP (household object, Lego, room)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-2-v1-all-use-cases-adequately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 2: v1 (all use cases adequately)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-3-complete-parity-plus-with-metashape-on-what-matters-to-this-owner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 3: complete (parity-plus with Metashape on what matters to this owner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-not-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Not verified
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wip/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-agisoft-metashape-professional-23-feature-by-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Agisoft Metashape Professional 2.3, feature by feature
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Agisoft Metashape Professional 2.3, feature by feature">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-project-and-chunk-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Project and chunk management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Import
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-camera-calibration-and-lens-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Camera calibration and lens models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Alignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-tie-point-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Tie point cleanup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-markers-gcps-scale-bars-coded-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Markers, GCPs, scale bars, coded targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-coordinate-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 Coordinate systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-masks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 Masks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-depth-maps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.9 Depth maps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#110-point-clouds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.10 Point clouds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#111-mesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.11 Mesh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-texture-and-materials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.12 Texture and materials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-tiled-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.13 Tiled models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-dem-and-orthomosaic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.14 DEM and orthomosaic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-measurements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.15 Measurements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-4d-and-multi-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.16 4D and multi-frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#117-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.17 Reports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#118-export-formats-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.18 Export formats (summary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#119-network-and-cloud-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.19 Network and cloud processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#120-scripting-and-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.20 Scripting and batch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1a-metashape-mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1A. metashape-mcp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1A. metashape-mcp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tool-inventory-master-branch-names-grouped-by-module-v-gh-srcmetashape_mcptools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool inventory (master branch names, grouped by module) [V GH src/metashape_mcp/tools/]
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-other-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The other products
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The other products">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#realityscan-epic-games-ex-realitycapture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RealityScan (Epic Games, ex-RealityCapture)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pix4dmatic-pix4dcatch-pix4dcloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pix4Dmatic, PIX4Dcatch, PIX4Dcloud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3df-zephyr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3DF Zephyr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dji-terra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DJI Terra
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bentley-itwin-capture-modeler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bentley iTwin Capture Modeler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#polycam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Polycam
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kiri-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KIRI Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#luma-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Luma AI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaniverse-niantic-spatial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaniverse (Niantic Spatial)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apple-object-capture-and-reality-composer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apple Object Capture and Reality Composer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jawset-postshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jawset Postshot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nerfstudio-viewer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nerfstudio viewer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webodm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WebODM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#meshroom-alicevision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meshroom (AliceVision)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teleport-by-varjo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teleport by Varjo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sketchfab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sketchfab
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-underwater-workflows-and-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Underwater workflows and products
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-feature-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Feature matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-use-case-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Use-case mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-mvp-versus-complete-feature-set-judgement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. MVP versus complete feature set (judgement)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. MVP versus complete feature set (judgement)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-mvp-household-object-lego-room" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 1: MVP (household object, Lego, room)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-2-v1-all-use-cases-adequately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 2: v1 (all use cases adequately)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-3-complete-parity-plus-with-metashape-on-what-matters-to-this-owner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 3: complete (parity-plus with Metashape on what matters to this owner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-not-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Not verified
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="product-feature-analysis-what-a-complete-photogrammetry-product-offers">Product feature analysis: what a complete photogrammetry product offers<a class="headerlink" href="#product-feature-analysis-what-a-complete-photogrammetry-product-offers" title="Permanent link">&para;</a></h1>
+<p>Date: 2026-11-23. Scope: features, workflows and user experience. Libraries, licences and platforms of
+the building blocks live in <code>tools-overview.md</code> and are not repeated here. Inputs:
+<a href="../../concept/RC-brief/">brief</a>, <a href="../../wip/research-metashape-underwater-2026-11-23/">Metashape and underwater research</a>,
+<a href="../../wip/research-landscape-2026-11-23/">landscape research</a>.</p>
+<h2 id="conventions">Conventions<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>[V]</code> = read on a primary page on 2026-11-23, URL in the tag or in the source key below. <code>[U]</code> = memory,
+  search snippet, an aggregator, or a page the fetch tool summarised without showing its text. <code>unknown</code> = not found.</li>
+<li>Source keys. <strong>MAN</strong> = <a href="https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf">https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf</a> (Metashape Professional 2.3 manual, PDF downloaded and searched as text).
+  <strong>API</strong> = <a href="https://www.agisoft.com/pdf/metashape_python_api_2_3_0.pdf">https://www.agisoft.com/pdf/metashape_python_api_2_3_0.pdf</a> (Python reference 2.3.0, dated 2025-12-31).
+  <strong>PYPI</strong> = <a href="https://pypi.org/pypi/metashape-mcp/json">https://pypi.org/pypi/metashape-mcp/json</a>. <strong>GH</strong> = <a href="https://github.com/jenkinsm13/metashape-mcp">https://github.com/jenkinsm13/metashape-mcp</a> (raw files and the GitHub API).</li>
+<li>Sections 6 and the "why" lines in sections 4 and 5 are judgement, labelled as such. Everything else is reporting.</li>
+<li>Web fetches of two Polycam pages, Sketchfab help and the AIMS reef SOP failed (403, 404, timeout). Claims from those sources are <code>[U]</code> or absent.</li>
+</ul>
+<hr />
+<h2 id="1-agisoft-metashape-professional-23-feature-by-feature">1. Agisoft Metashape Professional 2.3, feature by feature<a class="headerlink" href="#1-agisoft-metashape-professional-23-feature-by-feature" title="Permanent link">&para;</a></h2>
+<p>Metashape is a desktop application, perpetual node-locked licences (Standard $179, Professional $3,499 per the earlier research note, store page not re-read today). Python scripting, network processing, 4D, DEM and orthomosaic are Professional-only [V API overview; MAN].</p>
+<h3 id="11-project-and-chunk-management">1.1 Project and chunk management<a class="headerlink" href="#11-project-and-chunk-management" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A project holds chunks; a chunk holds one set of cameras, tie points, depth maps, point cloud, model, tiled model, DEM, orthomosaic and shapes [V MAN ch. 7 "Using chunks"].</li>
+<li>Chunks align to each other (<code>alignChunks</code>, methods by points, markers or cameras, with <code>fit_scale</code>) and merge (<code>Merge Chunks</code>) [V API <code>alignChunks</code>; MAN batch list].</li>
+<li>Batch Process runs an ordered job list over chunks. Job types include Align, Detect Markers, Generate Masks, Filter Point Cloud, Smooth/Decimate/Refine Model, Remove Lighting, Reset Region, Run Script, Save/Load Project, Export Texture, Export Tiled Model, Generate Report [V MAN "Batch process" list].</li>
+<li>Preferences expose GPU selection and "fine-level task subdivision", which splits some tasks into sub-jobs to cut memory use on large sets [V MAN ch. 3 and App. C].</li>
+<li>Reduce Overlap marks redundant images in an over-captured set [V MAN ch. 2 "Excessive image elimination"].</li>
+</ul>
+<h3 id="12-import">1.2 Import<a class="headerlink" href="#12-import" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Image formats: JPEG, JPEG 2000, JPEG XL, TIFF, DNG, PNG, OpenEXR, BMP, TGA, PGM/PPM, Norpix SEQ, AscTec ARA, MPO [V MAN "Loading source data"]. NEF and ARW are absent from the list; the manual says other formats must be converted first. It recommends lossless RAW-to-TIFF over JPEG [V MAN ch. 2].</li>
+<li>Video: Import Video extracts frames at a step or rate, with start and end times; it is frame extraction, not a video-native pipeline [V MAN; API <code>importVideo(frame_step, time_start, ...)</code>].</li>
+<li>Depth: Import Depth Images reads Dynamic Depth JPEG. The manual names iPhone and iPad TrueDepth (front camera) as the source; images with depth from other cameras load without depth. Rear LiDAR is not mentioned [V MAN].</li>
+<li>Laser scans: structured terrestrial and unstructured aerial scans align with photos (<code>align_laser_scans</code>, <code>match_laser_scans</code>) [V MAN overview; API <code>matchPhotos</code>, <code>alignCameras</code>].</li>
+<li>Satellite RPC, multispectral, thermal and multi-camera rigs are supported [V MAN overview, ch. 3].</li>
+<li>Trajectory, camera flight log, GCP, camera calibration and reference files import in many layouts [V MAN App. B].</li>
+</ul>
+<h3 id="13-camera-calibration-and-lens-models">1.3 Camera calibration and lens models<a class="headerlink" href="#13-camera-calibration-and-lens-models" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Models: frame, fisheye, spherical (equirectangular), cylindrical, RPC [V MAN App. D; ch. 3]. 2.3 adds equidistant and equisolid fisheye variants [U, from the earlier research note].</li>
+<li>Per-sensor calibration is estimated in alignment and refined in Optimize Cameras (focal, principal point, skew, K1-K4, P1-P2, B1-B2; <code>optimizeCameras(fit_f, fit_cx, fit_k1, fit_b1, ...)</code>) [V API].</li>
+<li>Adaptive camera model fitting turns on distortion terms progressively (<code>adaptive_fitting</code>) [V API <code>alignCameras</code>].</li>
+<li>Rolling-shutter compensation is a calibration option, with a visualisation of the effect per camera [V MAN ch. 4].</li>
+<li>Lens calibration from a printed chessboard pattern, and a calibration import/export, exist [V MAN ch. 2 and 4 headings].</li>
+<li>No water, port or refraction model appears in the manual's camera models [V MAN App. D; absence in a text search is a fact about the search, not proof].</li>
+</ul>
+<h3 id="14-alignment">1.4 Alignment<a class="headerlink" href="#14-alignment" title="Permanent link">&para;</a></h3>
+<p><code>matchPhotos</code> and <code>alignCameras</code> [V API]:</p>
+<ul>
+<li>Downscale (accuracy Highest = 4x upscale down to Lowest), key point limit (default 40,000), tie point limit (default 4,000; the manual recommends 10,000 elsewhere, earlier note), per-megapixel key point limit.</li>
+<li>Pair preselection: generic (low-resolution matching), reference (from GNSS or camera positions), estimated and sequential [V MAN ch. 3].</li>
+<li>Filter by mask; mask applies to key points or tie points; <code>filter_stationary_points</code> drops static features (turntable without masks); <code>guided_matching</code>; <code>keep_keypoints</code>; <code>reset_matches</code>.</li>
+<li><code>match_depth_maps</code> matches against imported depth; <code>match_laser_scans</code> includes scans.</li>
+<li><code>alignCamerasByReference</code> aligns from reference positions without matching (added 2.2.1) [V API change log].</li>
+<li>Task splitting (<code>subdivide_task</code>, work item sizes for cameras and pairs) is exposed in the API [V API].</li>
+</ul>
+<h3 id="15-tie-point-cleanup">1.5 Tie point cleanup<a class="headerlink" href="#15-tie-point-cleanup" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Gradual selection by criteria: reprojection error, reconstruction uncertainty, image count, projection accuracy; <code>cleanTiePoints</code> and <code>cleanModel</code> exist since 2.2.1 [V API change log; MAN ch. 4].</li>
+<li>Optimize Cameras re-runs bundle adjustment after removal [V MAN].</li>
+<li>Reference pane reports per-camera, per-marker and per-scale-bar errors, with tie point accuracy as a weighting parameter [V MAN ch. 4 "What do the errors mean"].</li>
+</ul>
+<h3 id="16-markers-gcps-scale-bars-coded-targets">1.6 Markers, GCPs, scale bars, coded targets<a class="headerlink" href="#16-markers-gcps-scale-bars-coded-targets" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Coded targets: circular (12 to 20 bit) and AprilTag families 16h5, 25h9, 36h10, 36h11, Circle 21h7, Standard 41h12, Standard 52h13. Detect Markers is a batch job; targets can be generated and printed by the program. The manual notes coded targets need many pixels per target and fit close range, not aerial work [V MAN ch. 4 "Coded targets"].</li>
+<li>Scale bars take a known distance between two markers, with accuracy; the report lists estimated distance and error [V MAN].</li>
+<li>Check points and control points are labelled in the Reference pane; accuracy per marker is set [V MAN].</li>
+<li>Fiducial detection exists (<code>detectFiducials</code>) [V API].</li>
+</ul>
+<h3 id="17-coordinate-systems">1.7 Coordinate systems<a class="headerlink" href="#17-coordinate-systems" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Local, projected and geographic systems, EPSG lookup, custom definitions, geoid models (<code>Geoid</code> class), reference import with rotation and accuracy columns, GNSS antenna offsets and bias [V MAN ch. 4; API change log 2.2.2 and class <code>Antenna</code>].</li>
+<li>Chunk region (bounding box) and transform are scriptable [V API].</li>
+<li>LiDAR and GNSS bias tools are listed in 2.3 [U, earlier note].</li>
+</ul>
+<h3 id="18-masks">1.8 Masks<a class="headerlink" href="#18-masks" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Sources: image alpha, file, background image, from reconstructed model, and automatic AI (<code>MaskingModeAI</code>, added 2.2) [V MAN ch. 6 "Using masks"; API change log].</li>
+<li>Masks apply to alignment key points or tie points, depth maps and texture [V MAN].</li>
+</ul>
+<h3 id="19-depth-maps">1.9 Depth maps<a class="headerlink" href="#19-depth-maps" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>buildDepthMaps(downscale=4, filter_mode, reuse_depth, ...)</code>; quality Ultra High down to Lowest; filtering Mild, Moderate, Aggressive, Disabled [V API; MAN ch. 3].</li>
+<li>Depth maps drive point cloud, model, DEM and tiled model reconstruction; GPU accelerated [V MAN GPU section].</li>
+</ul>
+<h3 id="110-point-clouds">1.10 Point clouds<a class="headerlink" href="#110-point-clouds" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>buildPointCloud(source_data=DepthMapsData, point_colors, point_confidence, ...)</code>; point confidence and normals; colourise from images [V API].</li>
+<li>Editing: selection tools, Filter Point Cloud by confidence, smooth, compact, calculate normals [V MAN ch. 6; API].</li>
+<li>Classification: ground points (<code>classifyGroundPoints</code>), general <code>classifyPoints</code> with a trained model, overlap point classification (2.2) [V API].</li>
+<li>Import and export LAS, LAZ, PLY, E57, PTS and others [V MAN App. B].</li>
+</ul>
+<h3 id="111-mesh">1.11 Mesh<a class="headerlink" href="#111-mesh" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>buildModel(source_data, surface_type=Arbitrary | HeightField, interpolation, face_count, ...)</code> from depth maps, point cloud, tie points, or laser scans [V API].</li>
+<li>Decimate, smooth, close holes (by size), remove components, clean model by criteria, refine model (photoconsistent refinement on GPU, <code>refineModel(downscale, iterations, smoothness)</code>) [V API; MAN ch. 6 "Editing model geometry"].</li>
+<li>Manual editing: select by tools, delete, fill, cut cross-sections [V MAN].</li>
+<li>Export: OBJ, 3DS, DAE, PLY, Alembic, STL, WRL, U3D, FBX, DXF, GLB, OSGB/OSGT, X3D, KMZ, LandXML, PDF [V MAN App. B]. USD and USDZ are not in the list.</li>
+</ul>
+<h3 id="112-texture-and-materials">1.12 Texture and materials<a class="headerlink" href="#112-texture-and-materials" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>buildUV(mapping_mode = Generic | Orthophoto | Adaptive orthophoto | Spherical | Camera | ..., page_count, texture_size)</code> [V API].</li>
+<li><code>buildTexture(blending_mode = Mosaic | Average | Max | Min | Disabled | NaturalBlending, texture_size=8192, downscale, sharpening, use_assigned_images, out_of_focus_filter)</code>. NaturalBlending is the 2.3 default [V API change log].</li>
+<li>Map types: diffuse, normal, occlusion, displacement. A high-detail model transfers its relief into the normal, occlusion and displacement maps of a low-polygon model ("Transfer Texture"); anti-aliasing casts several rays per texel when baking [V MAN ch. 3 "Building model texture"].</li>
+<li>Remove Lighting (delighting): single-colour or multi-colour mode, presets including one for rocks, internal blur, mesh noise suppression, optional external ambient-occlusion map and multiplier. The manual states removing shadows while keeping colour is ambiguous in general and the tool is heuristic [V MAN ch. 6 "Editing textures"; API <code>removeLighting</code>].</li>
+<li>Calibrate Colors (set-wide colour and optional white balance from the model) and Calibrate Reflectance (panels, sun sensor) [V API <code>calibrateColors</code>; MAN].</li>
+<li>Resize texture; texture editing tools (2.3) [V MAN heading "Editing textures"; details U].</li>
+<li>GPU texture blending uses Vulkan on Linux and Windows, for frame and fisheye cameras on NVIDIA [V MAN GPU section].</li>
+<li>PBR material export as a glTF with metal-rough maps: not found in the manual text [unknown].</li>
+</ul>
+<h3 id="113-tiled-models">1.13 Tiled models<a class="headerlink" href="#113-tiled-models" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>buildTiledModel(pixel_size, tile_size=256, source_data, face_count=20000, ...)</code> for large scenes; export to Cesium 3D Tiles 1.0 and 1.1, SLPK, 3MX, PhotoMesh, OSGB, TLS, ZIP archive [V API; MAN App. B].</li>
+</ul>
+<h3 id="114-dem-and-orthomosaic">1.14 DEM and orthomosaic<a class="headerlink" href="#114-dem-and-orthomosaic" title="Permanent link">&para;</a></h3>
+<ul>
+<li>DEM from point cloud or tiled model, DSM or DTM after ground classification; export GeoTIFF, ASC, BIL, XYZ, tile pyramids, KMZ, GPKG, MBTiles [V MAN App. B].</li>
+<li>Orthomosaic projected on DEM or mesh: geographic, planar, cylindrical projections; mosaic and average blending; seamline editing (<code>buildSeamlines</code>); hole filling; pansharpening; export GeoTIFF with tiling, tile pyramids [V MAN; API].</li>
+<li>Panorama stitching from rotation-only captures (<code>buildPanorama</code>) [V API].</li>
+<li>Contours from DEM (<code>buildContours</code>) [V API].</li>
+</ul>
+<h3 id="115-measurements">1.15 Measurements<a class="headerlink" href="#115-measurements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ruler distance along a polyline, area and perimeter of shapes, volume above a reference plane (best-fit, mean level or custom) on mesh and DEM, profile and cross-section cuts, point coordinates; stereoscopic measurement with a 3D display; vegetation indices (NDVI and others), powerline detection [V MAN ch. 5 headings and contents; the volume-plane options are U].</li>
+</ul>
+<h3 id="116-4d-and-multi-frame">1.16 4D and multi-frame<a class="headerlink" href="#116-4d-and-multi-frame" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Multiframe chunks hold images from synchronised, statically mounted cameras at several time moments. Frame coordinate systems match by construction. A timeline pane steps through frames [V MAN ch. 7 "4D processing"].</li>
+</ul>
+<h3 id="117-reports">1.17 Reports<a class="headerlink" href="#117-reports" title="Permanent link">&para;</a></h3>
+<p>The PDF or HTML processing report [V MAN ch. 3 "Generate Report"] lists: orthomosaic sketch; survey data (coverage area, altitude, GSD, camera info, overlap statistics); camera calibration per sensor with a distortion illustration; camera position and orientation error estimates; ground control and check point errors; scale bar errors; DEM sketch with resolution and density; LiDAR swath separation; plus system information and processing parameters (<code>exportReport(save_system_info, ...)</code> [V API]).</p>
+<h3 id="118-export-formats-summary">1.18 Export formats (summary)<a class="headerlink" href="#118-export-formats-summary" title="Permanent link">&para;</a></h3>
+<p>Meshes (section 1.11), tiled models (1.13), point clouds (LAS, LAZ, PLY, E57, OBJ and others), DEM and ortho (1.14), cameras (many layouts; the earlier note says COLMAP export arrived in 2.2, not re-read), shapes (SHP, DXF, KML, KMZ), tie points, reports [V MAN App. B]. Gaussian splats are not an import or export type; a text search of the manual finds "Gaussian" only in the blur-filter sentence and the key-point scale sentence [V MAN].</p>
+<h3 id="119-network-and-cloud-processing">1.19 Network and cloud processing<a class="headerlink" href="#119-network-and-cloud-processing" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Network: a server holds the task queue and does no processing; workers compute onto shared storage at one absolute path; clients submit; a Network Monitor shows queue and workers. Fine-level subdivision splits eligible tasks across workers; with it off, each chunk or frame goes to one worker [V MAN ch. 8].</li>
+<li>Cloud: Agisoft Cloud account with subscription, storage and processing hours; each operation asks "local or cloud"; mutually exclusive with network processing [V MAN ch. 8 "Cloud processing"].</li>
+<li>Claims in the overview: 50,000+ photos across a local cluster [V MAN overview].</li>
+</ul>
+<h3 id="120-scripting-and-batch">1.20 Scripting and batch<a class="headerlink" href="#120-scripting-and-batch" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Python scripting, Professional only. The 2.3.0 API reference says the engine is Python 3.8 [V API overview]; metashape-mcp says "embedded Python 3.12" [V PYPI]. The two disagree; unresolved.</li>
+<li>Entry points: GUI console, Tools &gt; Run Script, <code>-r script.py</code> on the command line, a stand-alone Python module (the change log mentions its <code>.pyi</code> stub) [V API].</li>
+<li>Every processing step is a <code>Chunk</code> method with a matching task class (<code>NetworkTask</code>, <code>ExportReport</code>, ...) that serialises for network submission [V API].</li>
+<li>Java API exists [V MAN ch. 7 heading].</li>
+<li>GPU: CUDA, OpenCL 1.2 and Vulkan for blending are named. Metal is not named. Supported-device table is Windows only [V MAN ch. 1].</li>
+</ul>
+<hr />
+<h2 id="1a-metashape-mcp">1A. metashape-mcp<a class="headerlink" href="#1a-metashape-mcp" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Source:</strong> repo <code>jenkinsm13/metashape-mcp</code> on GitHub, author Michael Jenkins ("Copyright (c) 2026 Michael Jenkins" in LICENSE) [V GH]. Licence MIT [V GH LICENSE; PyPI metadata fields author and licence are null, the README badge says MIT]. Repo created 2026-02-21, last push 2026-05-07, 37 stars, default branch <code>master</code> [V GitHub API]. PyPI releases 0.1.0, 0.2.0, 0.3.0; 0.3.0 uploaded 2026-02-27; requires Python 3.12 or newer [V PYPI]. Third-party, not Agisoft.</li>
+<li><strong>Architecture:</strong> a FastMCP server that runs inside Metashape Professional 2.3+ (GUI, or headless with <code>metashape -platform offscreen -r start_mcp_headless.py</code>) and serves Streamable HTTP on <code>127.0.0.1:8765/mcp</code>. A stdio proxy with a 24-hour timeout exists because Claude Code's HTTP transport drops calls after about 60 seconds; the README says dense cloud, mesh and texture calls run minutes to hours [V PYPI README]. There is no job handle: a tool call blocks until the step ends, with progress reported.</li>
+<li><strong>Counts:</strong> README and PyPI say 106 tools, 10 resources, 6 prompts in 15 modules. The master branch source has a 16th module, <code>diagnostics.py</code>, and a grep of <code>@mcp.tool</code> decorators finds 112 tool functions; PyPI 0.3.0 predates it or the README count is stale [V GH; my count, not a vendor figure].</li>
+</ul>
+<h3 id="tool-inventory-master-branch-names-grouped-by-module-v-gh-srcmetashape_mcptools">Tool inventory (master branch names, grouped by module) [V GH src/metashape_mcp/tools/]<a class="headerlink" href="#tool-inventory-master-branch-names-grouped-by-module-v-gh-srcmetashape_mcptools" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project and chunks (12)</td>
+<td><code>open_project</code>, <code>save_project</code>, <code>create_project</code>, <code>add_chunk</code>, <code>set_active_chunk</code>, <code>list_chunks</code>, <code>duplicate_chunk</code>, <code>merge_chunks</code>, <code>align_chunks</code>, <code>set_gpu_config</code>, <code>get_processing_status</code>, <code>cancel_processing</code></td>
+</tr>
+<tr>
+<td>Photos and import (5)</td>
+<td><code>add_photos</code>, <code>analyze_images</code>, <code>import_video</code>, <code>remove_cameras</code>, <code>rename_cameras</code></td>
+</tr>
+<tr>
+<td>Cameras and sensors (8)</td>
+<td><code>enable_cameras</code>, <code>select_cameras</code>, <code>set_sensor</code>, <code>list_sensors</code>, <code>import_masks</code>, <code>clear_masks</code>, <code>get_camera_metadata</code>, <code>set_camera_reference</code></td>
+</tr>
+<tr>
+<td>Alignment (6)</td>
+<td><code>match_photos</code>, <code>align_cameras</code>, <code>optimize_cameras</code>, <code>filter_tie_points</code>, <code>reset_camera_alignment</code>, <code>get_alignment_stats</code></td>
+</tr>
+<tr>
+<td>Dense and point cloud (12)</td>
+<td><code>build_depth_maps</code>, <code>build_point_cloud</code>, <code>filter_point_cloud</code>, <code>filter_points_by_confidence</code>, <code>classify_ground_points</code>, <code>assign_point_class</code>, <code>remove_points_by_class</code>, <code>calculate_point_normals</code>, <code>colorize_point_cloud</code>, <code>clear_depth_maps</code>, <code>clear_point_cloud</code>, <code>get_point_cloud_stats</code></td>
+</tr>
+<tr>
+<td>Mesh (8)</td>
+<td><code>build_model</code>, <code>decimate_model</code>, <code>smooth_model</code>, <code>clean_model</code>, <code>close_holes</code>, <code>refine_model</code>, <code>clear_model</code>, <code>get_model_stats</code></td>
+</tr>
+<tr>
+<td>Texture (5)</td>
+<td><code>build_uv</code>, <code>build_texture</code>, <code>calibrate_colors</code>, <code>calibrate_reflectance</code>, <code>remove_texture</code></td>
+</tr>
+<tr>
+<td>Survey products (8)</td>
+<td><code>build_dem</code>, <code>build_orthomosaic</code>, <code>build_tiled_model</code>, <code>build_contours</code>, <code>build_panorama</code>, <code>clear_dem</code>, <code>clear_orthomosaic</code>, <code>clear_tiled_model</code></td>
+</tr>
+<tr>
+<td>Export (10)</td>
+<td><code>export_model</code>, <code>export_point_cloud</code>, <code>export_orthomosaic</code>, <code>export_dem</code>, <code>export_tiled_model</code>, <code>export_cameras</code>, <code>export_tie_points</code>, <code>export_shapes</code>, <code>export_reference</code>, <code>export_report</code></td>
+</tr>
+<tr>
+<td>Import data (6)</td>
+<td><code>import_model</code>, <code>import_point_cloud</code>, <code>import_reference</code>, <code>import_cameras</code>, <code>import_shapes</code>, <code>create_shape</code></td>
+</tr>
+<tr>
+<td>Markers and scale (9)</td>
+<td><code>detect_markers</code>, <code>add_marker</code>, <code>refine_markers</code>, <code>list_markers</code>, <code>remove_marker</code>, <code>set_marker_reference</code>, <code>export_markers</code>, <code>add_scalebar</code>, <code>remove_scalebar</code></td>
+</tr>
+<tr>
+<td>Coordinates (8)</td>
+<td><code>set_crs</code>, <code>transform_chunk_crs</code>, <code>set_reference_settings</code>, <code>set_region</code>, <code>set_region_rotation</code>, <code>reset_region</code>, <code>get_chunk_bounds</code>, <code>update_transform</code></td>
+</tr>
+<tr>
+<td>Network (5)</td>
+<td><code>network_connect</code>, <code>network_submit_batch</code>, <code>network_list_batches</code>, <code>network_batch_status</code>, <code>network_abort_batch</code></td>
+</tr>
+<tr>
+<td>Viewport and console (3)</td>
+<td><code>capture_viewport</code>, <code>get_console_output</code>, <code>auto_save</code></td>
+</tr>
+<tr>
+<td>Scripting (1)</td>
+<td><code>execute_python</code> (arbitrary code inside Metashape with <code>Metashape</code>, <code>app</code>, <code>doc</code>, <code>chunk</code> bound)</td>
+</tr>
+<tr>
+<td>Diagnostics (6, master only)</td>
+<td><code>get_camera_spatial_stats</code>, <code>get_reprojection_error_by_region</code>, <code>check_alignment_continuity</code>, <code>compare_alignment_to_dem</code>, <code>generate_virtual_checkpoints</code>, <code>get_corridor_drift_report</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Resources (10)</strong> [V PYPI README]: <code>metashape://project/info</code>, <code>metashape://project/chunks</code>, and per chunk <code>.../summary</code>, <code>.../cameras</code> (alignment status and error), <code>.../sensors</code> (calibration), <code>.../tie_points</code> (count, projections, reprojection error), <code>.../point_cloud</code>, <code>.../model</code>, <code>.../dem</code>, <code>.../orthomosaic</code>.</p>
+<p><strong>Prompts</strong> [V GH prompts/ and README]: <code>aerial_survey_pipeline</code>, <code>close_range_pipeline</code>, <code>batch_export</code>, <code>road_corridor_pipeline</code> (master), <code>diagnose_alignment</code>, <code>optimize_quality_settings</code>.</p>
+<p><strong>Reading the inventory (judgement):</strong>
+- It mirrors Metashape's step list one tool per step, not a job model. The agent-facing shape this project wants differs: jobs with ids, stage results with quality state, variants, and "what to capture next".
+- Quality state is thin: resources return counts and error summaries; the six diagnostics tools (regional reprojection error, alignment continuity, virtual checkpoints) are the nearest thing to a coverage verdict, and they target road-corridor and aerial work.
+- No tools exist for splats, refraction, RAW, robot priors, per-image exposure, or comparing two reconstructions side by side. <code>execute_python</code> is the escape hatch for all of them.
+- All state lives in one running Metashape process (one active document and chunk).</p>
+<hr />
+<h2 id="2-the-other-products">2. The other products<a class="headerlink" href="#2-the-other-products" title="Permanent link">&para;</a></h2>
+<p>Price lines are as read today or <code>[U]</code>.</p>
+<h3 id="realityscan-epic-games-ex-realitycapture">RealityScan (Epic Games, ex-RealityCapture)<a class="headerlink" href="#realityscan-epic-games-ex-realitycapture" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> game and VFX asset creators, scan studios, small AEC.</li>
+<li><strong>Capture:</strong> RealityScan Mobile (iOS and Android; version 1.9 listed, August 2026) captures and processes objects from phone photos; desktop takes photos, laser scans and 360 camera footage [V <a href="https://www.realityscan.com/en-US">https://www.realityscan.com/en-US</a>].</li>
+<li><strong>Processing:</strong> local on Windows; cloud integration exists; AMD GPUs supported from 2.2 [V same page]. 2.1 added the CLI <code>importColmap</code> and a REST/gRPC Remote Command plugin [U, earlier note].</li>
+<li><strong>Outputs:</strong> meshes, textures, measurements, multiple export formats [V same page]; Unreal Engine integration and Nanite-ready meshes [U].</li>
+<li><strong>Distinct:</strong> masks, control points, CLI batch, the fastest alignment of the commercial desktop tools in public reputation [U]; the best fit with Unreal.</li>
+<li><strong>UX:</strong> workflow tabs (Alignment, Reconstruction, Texture) with a 3D scene view that shows registered components; "components" let a failed alignment be inspected and merged with control points [U].</li>
+<li><strong>Price:</strong> free under $1M revenue and for educators; seat subscription above [V same page].</li>
+</ul>
+<h3 id="pix4dmatic-pix4dcatch-pix4dcloud">Pix4Dmatic, PIX4Dcatch, PIX4Dcloud<a class="headerlink" href="#pix4dmatic-pix4dcatch-pix4dcloud" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> surveyors, AEC, inspection.</li>
+<li><strong>Capture:</strong> PIX4Dcatch (iOS) takes photogrammetry plus LiDAR with AR guidance, pause and resume, RTK, automatic GCP detection in Pro [V <a href="https://www.pix4d.com/product/pix4dcatch/">https://www.pix4d.com/product/pix4dcatch/</a>].</li>
+<li><strong>Processing:</strong> Pix4Dmatic desktop for large datasets; PIX4Dcloud for collaboration [V <a href="https://www.pix4d.com/product/pix4dmatic/">https://www.pix4d.com/product/pix4dmatic/</a>].</li>
+<li><strong>Outputs:</strong> point clouds, orthomosaics, DSM/DTM, meshes, contours and gaussian splats; LAZ, TIFF, DXF, SHP, OBJ, FBX [V same page].</li>
+<li><strong>Distinct:</strong> survey accuracy and CAD/GIS deliverables, a phone-to-desktop-to-cloud chain.</li>
+<li><strong>UX:</strong> guided capture with live coverage feedback on the phone [V Catch page, AR feedback; the coverage detail is U].</li>
+<li><strong>Price:</strong> Catch Discovery tier free; Matic is licensed, price not read [U].</li>
+</ul>
+<h3 id="3df-zephyr">3DF Zephyr<a class="headerlink" href="#3df-zephyr" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> surveyors, heritage, forensics, generalists who want a perpetual licence.</li>
+<li><strong>Capture:</strong> photos, video, drone, laser scans (registration inside the app) [V <a href="https://www.3dflow.net/3df-zephyr-photogrammetry-software/">https://www.3dflow.net/3df-zephyr-photogrammetry-software/</a>].</li>
+<li><strong>Processing:</strong> local; GPU count tied to edition [V same page].</li>
+<li><strong>Outputs:</strong> meshes, textures, orthophotos, orthomosaics, DEMs [V same page]; masking and measurements in-app.</li>
+<li><strong>Distinct:</strong> the full tool in one GUI at a lower price than Metashape Professional; free tier capped at 50 photos.</li>
+<li><strong>Price:</strong> Free (50 photos), Lite 199 EUR, 250 EUR per month, Professional 4,200 EUR perpetual with 12 months of updates, renewals at 20% [V same page].</li>
+</ul>
+<h3 id="dji-terra">DJI Terra<a class="headerlink" href="#dji-terra" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> DJI drone and enterprise mapping operators.</li>
+<li><strong>Capture:</strong> DJI flight missions; photogrammetry, LiDAR, multispectral [V <a href="https://enterprise.dji.com/dji-terra">https://enterprise.dji.com/dji-terra</a>].</li>
+<li><strong>Processing:</strong> local, with cluster and cloud processing; gaussian splatting reconstruction [V same page].</li>
+<li><strong>Outputs:</strong> 2D maps, 3D models, quality assessment reports [V same page].</li>
+<li><strong>Distinct:</strong> tight drone-to-result flow for DJI hardware. The owner's DJI Mini 4 Pro is a consumer drone; support for it in Terra is unknown.</li>
+<li><strong>Price:</strong> one-month trial with 500 photo cap; Standard and Flagship through dealers [V same page].</li>
+</ul>
+<h3 id="bentley-itwin-capture-modeler">Bentley iTwin Capture Modeler<a class="headerlink" href="#bentley-itwin-capture-modeler" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> infrastructure and AEC owners.</li>
+<li><strong>Capture:</strong> photos, point clouds, video [V <a href="https://www.bentley.com/software/itwin-capture-modeler/">https://www.bentley.com/software/itwin-capture-modeler/</a>].</li>
+<li><strong>Processing:</strong> on-prem engine or cloud services; hybrid and parallel clustering [V same page].</li>
+<li><strong>Outputs:</strong> reality meshes, gaussian splats, point clouds, orthophotos [V same page]; GCPs, masking, retouching, surface constraints; AI crack detection and feature extraction in cloud services.</li>
+<li><strong>Price:</strong> free data preparation, pay on processing (Flex), enterprise licences [V same page].</li>
+</ul>
+<h3 id="polycam">Polycam<a class="headerlink" href="#polycam" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> creators, real-estate and construction capture, AR/VR.</li>
+<li><strong>Capture modes:</strong> LiDAR, Photo, 360 photosphere, Object mode (mesh or gaussian splat), splats; floor plans and measurements from LiDAR only [U, search snippets quoting Polycam help]. Web and app both process photos [U].</li>
+<li><strong>Processing:</strong> cloud [U]. Limits per plan: 150 images free, 300 Basic, 2,000 Business and Enterprise; video 3, 5, 30 minutes [V <a href="https://poly.cam/pricing">https://poly.cam/pricing</a>].</li>
+<li><strong>Outputs:</strong> GLTF on the free plan; OBJ, FBX, DAE, STL, USDZ, PLY and point clouds (LAS, PTS, XYZ, DXF) above it; floor plan exports to CAD formats [V pricing page; U help snippet].</li>
+<li><strong>Distinct:</strong> one app and web library for LiDAR rooms, photogrammetry and splats; measurements and 2D/3D floor plans; shared team library; Content Management API on Enterprise [V pricing page].</li>
+<li><strong>UX:</strong> capture, wait, edit in a web viewer with crop and clean tools, share by link [U].</li>
+<li><strong>Price:</strong> Free; Basic $150/year; Business $300/year per user (Black Friday price, $400 list); Enterprise $1,200/year per user, 3 seats minimum [V pricing page].</li>
+</ul>
+<h3 id="kiri-engine">KIRI Engine<a class="headerlink" href="#kiri-engine" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> hobbyists and game asset makers on phones.</li>
+<li><strong>Capture modes:</strong> Photo Scan, LiDAR Scan with floor plans, Featureless Object Scan inside the 3DGS mode (shiny, transparent, plain objects), 3DGS [V <a href="https://www.kiriengine.app/">https://www.kiriengine.app/</a>].</li>
+<li><strong>Processing:</strong> cloud; the site names an API with details on a separate page [V same page; pay-per-credit and 3DGS-to-mesh are from the earlier note].</li>
+<li><strong>Outputs:</strong> quad mesh with PBR textures, high-poly and decimated versions, gaussian splat files, with mesh export from splats [V same page].</li>
+<li><strong>Distinct:</strong> AI auto-rigging, mesh cleanup and decimation built in, production-oriented exports; iOS, Android and web [V same page].</li>
+<li><strong>UX:</strong> capture guidance with shutter and EV controls [V same page].</li>
+<li><strong>Price:</strong> free tier plus Pro subscriptions [V same page; amounts unknown].</li>
+</ul>
+<h3 id="luma-ai">Luma AI<a class="headerlink" href="#luma-ai" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Luma's home page shows video generation models (Ray 3.2) and a brand model (Uni-1); it does not mention 3D capture, NeRF or splats [V <a href="https://lumalabs.ai/">https://lumalabs.ai/</a>]. Whether the capture app and API still exist: unknown. Treat as not a photogrammetry product today.</li>
+</ul>
+<h3 id="scaniverse-niantic-spatial">Scaniverse (Niantic Spatial)<a class="headerlink" href="#scaniverse-niantic-spatial" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> phone users, enterprise teams via Niantic Spatial.</li>
+<li><strong>Capture:</strong> phone, 360 cameras, drones, LiDAR, robots [V <a href="https://www.nianticspatial.com/products/capture">https://www.nianticspatial.com/products/capture</a>]; "self-service mobile and web app".</li>
+<li><strong>Processing:</strong> the page names on-demand and bring-your-own-data services; on-device processing is the long-standing claim [U].</li>
+<li><strong>Outputs:</strong> gaussian splats and meshes in SPZ, PLY, GLB, USDZ [V same page].</li>
+<li><strong>Distinct:</strong> free, on-device splat capture, SPZ as the compressed splat format [U for free and on-device].</li>
+<li><strong>Price:</strong> unknown for current tiers.</li>
+</ul>
+<h3 id="apple-object-capture-and-reality-composer">Apple Object Capture and Reality Composer<a class="headerlink" href="#apple-object-capture-and-reality-composer" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>PhotogrammetrySession</code> takes images with optional depth, gravity and masks, and returns USDZ at several detail levels (preview, reduced, medium, full, raw); macOS only for the framework, iOS capture through apps [U; the fetch tool returned a summary from memory, not the page].</li>
+<li><strong>Distinct:</strong> zero-parameter workflow, best matte-object results per effort on Apple silicon, USDZ for AR Quick Look. <strong>Price:</strong> free with the OS [U].</li>
+</ul>
+<h3 id="jawset-postshot">Jawset Postshot<a class="headerlink" href="#jawset-postshot" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> VFX and 3D artists making splats.</li>
+<li><strong>Capture:</strong> images (JPG, PNG, TIF, EXR, DNG, RAW), video (MOV, MP4, MKV), poses and points from COLMAP and other tools [V <a href="https://www.jawset.com/">https://www.jawset.com/</a>].</li>
+<li><strong>Processing:</strong> local training, no cloud; Windows with NVIDIA compute capability 7.5 or higher [V same page].</li>
+<li><strong>Outputs:</strong> PLY and splat formats; Unreal Engine and After Effects integrations; CLI [V same page].</li>
+<li><strong>Distinct:</strong> artist-friendly training with live preview, edit and clean tools, RAW and video in directly.</li>
+<li><strong>Price:</strong> free download; paid tiers not stated on the page.</li>
+</ul>
+<h3 id="nerfstudio-viewer">Nerfstudio viewer<a class="headerlink" href="#nerfstudio-viewer" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Web viewer launched by <code>ns-train</code> at <code>localhost:7007</code>: live training view, camera path editor, video render, crop box, export of mesh, point cloud and splat, remote use by SSH port forward, share URLs [V <a href="https://docs.nerf.studio/quickstart/viewer_quickstart.html">https://docs.nerf.studio/quickstart/viewer_quickstart.html</a>]. The pattern worth copying: the viewer is a client of the training process, so you watch training and steer it.</li>
+</ul>
+<h3 id="webodm">WebODM<a class="headerlink" href="#webodm" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User:</strong> drone mappers, local governments, farmers.</li>
+<li><strong>UI:</strong> map view, 3D view, measurement tools, plant health analysis; API; plugins [V <a href="https://github.com/OpenDroneMap/WebODM">https://github.com/OpenDroneMap/WebODM</a>].</li>
+<li><strong>Processing:</strong> engines ODX and LGT; processing nodes; AGPL-3.0; outputs maps, point clouds, elevation models, textured models, gaussian splats [V same page].</li>
+<li><strong>UX:</strong> projects, tasks with live console, a quality of "drop images, press go" with presets, side-by-side tile layers [U for the last two].</li>
+<li><strong>Price:</strong> free installers; hosted paid service [U].</li>
+</ul>
+<h3 id="meshroom-alicevision">Meshroom (AliceVision)<a class="headerlink" href="#meshroom-alicevision" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>UI:</strong> node graph editor, per-node attributes, logs and statistics, 2D/3D viewers, image gallery; smart caching reprocesses only downstream nodes; local or render farm execution [V <a href="https://github.com/alicevision/Meshroom">https://github.com/alicevision/Meshroom</a>].</li>
+<li><strong>Plugins:</strong> AliceVision (reconstruction, camera tracking, HDR, panorama, photometric stereo), AI segmentation from text, MeshroomHub plugins for depth estimation and splatting [V same page].</li>
+<li><strong>Distinct:</strong> every pipeline stage is inspectable and re-runnable; the graph is the project file.</li>
+<li><strong>Price:</strong> free, MPL-2.0 [V same page].</li>
+</ul>
+<h3 id="teleport-by-varjo">Teleport by Varjo<a class="headerlink" href="#teleport-by-varjo" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Paid iPhone and iPad capture app using gaussian splatting, with a PC VR viewer and export to Unity and Unreal; Teleport 2.0 (April 2025) accepts almost any camera including drone and DSLR [U, search snippets from Road to VR, Varjo news and others]. Current status in late 2026: unknown.</li>
+</ul>
+<h3 id="sketchfab">Sketchfab<a class="headerlink" href="#sketchfab" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The common web 3D sharing and viewing standard: upload, embed, annotations, AR and VR viewing, PBR materials, optional downloads [U; the help page fetch failed]. Splat support: unknown. Price: free tier with limits, paid plans [U].</li>
+</ul>
+<hr />
+<h2 id="3-underwater-workflows-and-products">3. Underwater workflows and products<a class="headerlink" href="#3-underwater-workflows-and-products" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Core tool:</strong> reef and wreck groups report Metashape as the reconstruction engine; one search summary says it is chosen for automatic per-dataset distortion calibration [U, search snippets quoting ISPRS and NOAA/AIMS documents; I did not read the documents].</li>
+<li><strong>Viewing and annotation:</strong> Viscore (viewer for large SfM reef models, used by the 100 Island Challenge) and TagLab (AI-assisted segmentation with SAM, GPL-3.0) are named in reef workflows; the earlier research note read both pages, I did not re-read them today [U]. A reef SOP summary says coral colonies are segmented in TagLab and data exported "in formats for GIS and TagLab" [U].</li>
+<li><strong>CoralNet:</strong> web service for point-annotation of 2D images by humans and a classifier [U, memory]. Whether it takes 3D inputs: unknown.</li>
+<li><strong>Scale:</strong> scale bars placed on the seabed at right angles touching at one end, at the wreck's depth when the port is flat [U, SHIPS project snippet]. Lasers and stereo bars: unknown for this project.</li>
+<li><strong>Ports:</strong> dome ports centred on the entrance pupil largely remove refraction; flat ports violate the pinhole model and change with depth [U, ISPRS snippets]; the earlier note read a 2020 ISPRS paper on radial weighting for flat ports [U here].</li>
+<li><strong>Colour:</strong> colour correction before processing is standard advice [U]; Sea-thru needs range per pixel [U, earlier note].</li>
+<li><strong>Product features:</strong> no commercial product in this list has an explicit refraction camera model or a depth-aware colour restoration step that I found. Polycam and KIRI have no underwater mode that I found. For Metashape, the manual shows no refraction model [V MAN App. D, absence]. Open-source: Refractive COLMAP (flat and dome ports, IROS 2024) and WaterSplatting exist [U here, read in the earlier note].</li>
+<li><strong>Unknown:</strong> what the AIMS and NOAA SOPs specify for alignment settings and marker use (fetch timed out); how much of current wreck practice uses Metashape versus RealityCapture or Pix4D; typical image counts and swim patterns; backscatter handling; moving fish and divers as masking tasks.</li>
+</ul>
+<hr />
+<h2 id="4-feature-matrix">4. Feature matrix<a class="headerlink" href="#4-feature-matrix" title="Permanent link">&para;</a></h2>
+<p>Legend: <strong>Y</strong> yes, <strong>P</strong> partial, <strong>N</strong> no, <strong>?</strong> unknown. Cells are my reading of the sources above; most non-Metashape cells rest on <code>[U]</code> evidence. Columns: MS = Metashape, RS = RealityScan, P4D = Pix4D (Matic, Catch, Cloud together), ZEP = Zephyr, POL = Polycam, KIR = KIRI, PS = Postshot, ODM = WebODM, MSH = Meshroom.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>MS</th>
+<th>RS</th>
+<th>P4D</th>
+<th>ZEP</th>
+<th>POL</th>
+<th>KIR</th>
+<th>PS</th>
+<th>ODM</th>
+<th>MSH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Capture and ingest</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Photos (JPEG, TIFF)</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Camera RAW decoded in-tool</td>
+<td>P (DNG only)</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>Y (RAW, DNG)</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td>Video input</td>
+<td>P (frame extraction)</td>
+<td>?</td>
+<td>?</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>?</td>
+<td>P</td>
+</tr>
+<tr>
+<td>Phone depth or LiDAR input</td>
+<td>P (TrueDepth)</td>
+<td>?</td>
+<td>Y (Catch)</td>
+<td>?</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td>Laser scan input</td>
+<td>Y</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td>Own mobile capture app</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Preprocessing and colour</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Set-wide colour calibration</td>
+<td>Y (Calibrate Colors)</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td>Masking (manual)</td>
+<td>Y</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>P</td>
+<td>?</td>
+<td>P</td>
+<td>N</td>
+<td>P</td>
+</tr>
+<tr>
+<td>Masking (AI)</td>
+<td>Y</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>N</td>
+<td>Y (plugin)</td>
+</tr>
+<tr>
+<td><strong>Alignment</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Known poses as priors</td>
+<td>Y (reference preselection, <code>alignCamerasByReference</code>)</td>
+<td>Y</td>
+<td>Y (GPS, RTK)</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>Y (COLMAP in)</td>
+<td>P (GPS)</td>
+<td>P</td>
+</tr>
+<tr>
+<td>Fisheye and spherical models</td>
+<td>Y</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>P</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Explicit water refraction model</td>
+<td>N</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Scale and georeference</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Coded targets, scale bars</td>
+<td>Y</td>
+<td>P</td>
+<td>P</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>P (GCP)</td>
+<td>N</td>
+</tr>
+<tr>
+<td>GCPs and CRS</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+<td>P</td>
+</tr>
+<tr>
+<td><strong>Dense and mesh</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Depth maps to dense cloud</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Mesh with hole closing, decimation</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Mesh from splat</td>
+<td>N</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>Y</td>
+<td>N</td>
+<td>?</td>
+<td>P (plugin)</td>
+</tr>
+<tr>
+<td>Tiled or LOD models</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>?</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Texture and materials</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>UV and texture atlas</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Normal, occlusion maps</td>
+<td>Y</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>Y (PBR)</td>
+<td>N</td>
+<td>N</td>
+<td>P</td>
+</tr>
+<tr>
+<td>De-lighting</td>
+<td>Y (Remove Lighting)</td>
+<td>P</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Splats</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Splat training</td>
+<td>N</td>
+<td>?</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>P (plugin)</td>
+</tr>
+<tr>
+<td>Meshes and splats from one pose set</td>
+<td>N</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>P</td>
+<td>P</td>
+<td>N</td>
+<td>P</td>
+<td>P</td>
+</tr>
+<tr>
+<td><strong>Asset export and game engines</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FBX, OBJ, GLB</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>P</td>
+</tr>
+<tr>
+<td>USD, USDZ</td>
+<td>N</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>Y</td>
+<td>?</td>
+<td>N</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td>Engine plugin or direct integration</td>
+<td>N</td>
+<td>Y (Unreal)</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>P</td>
+<td>Y (Unreal)</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Measurement and analysis</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Distance, area, volume</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y (paid)</td>
+<td>?</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>Floor plans</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Quality reporting</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Processing report (PDF)</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>Machine-readable quality state</td>
+<td>P (API objects)</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>P</td>
+<td>P</td>
+</tr>
+<tr>
+<td><strong>Visualisation and sharing</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>In-app viewer with editing</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Web share link</td>
+<td>P (cloud)</td>
+<td>P</td>
+<td>Y</td>
+<td>?</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>P</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Automation, API, agents</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Scripting API</td>
+<td>Y (Pro)</td>
+<td>P (CLI, REST)</td>
+<td>?</td>
+<td>?</td>
+<td>P (Enterprise API)</td>
+<td>Y (API)</td>
+<td>P (CLI)</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>MCP server</td>
+<td>P (third party)</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Distributed processing</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Multi-machine local pool</td>
+<td>Y (task level)</td>
+<td>?</td>
+<td>?</td>
+<td>P</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>Y (nodes)</td>
+<td>Y (render farm)</td>
+</tr>
+<tr>
+<td>Metal, CUDA, ROCm, CPU pool</td>
+<td>N (no Metal named)</td>
+<td>N (Windows; CUDA, AMD)</td>
+<td>?</td>
+<td>?</td>
+<td>N</td>
+<td>N</td>
+<td>N (NVIDIA)</td>
+<td>?</td>
+<td>N (CUDA)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-use-case-mapping">5. Use-case mapping<a class="headerlink" href="#5-use-case-mapping" title="Permanent link">&para;</a></h2>
+<p>"Best today" is judgement based on the evidence above and on the owner's gear.</p>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Features needed</th>
+<th>Best today and why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lego and small objects</strong></td>
+<td>Turntable or handheld capture; masks (AI and manual); stationary-point filtering; scale from a known object or targets; fine mesh with sharp edges; clean texture; hole closing; GLB or OBJ export</td>
+<td>Apple Object Capture for the zero-effort matte case [U]; Metashape for control (masks, stationary points, calibrate colours). RealityScan is a close rival and is free for the owner. KIRI for plain-coloured bricks (featureless mode).</td>
+</tr>
+<tr>
+<td><strong>Bike, motorbike, car</strong></td>
+<td>Thin tubes and spokes; glossy and reflective parts; masking of background; fixed scale; large image counts; decimated engine-ready mesh with normal maps; optional splat for the view-dependent shine</td>
+<td>Metashape or RealityScan for geometry; a splat (Postshot, Polycam) for reflective parts. No tool handles chrome well; none verified.</td>
+</tr>
+<tr>
+<td><strong>House interior</strong></td>
+<td>Low-texture walls; ARKit and LiDAR priors; robot poses; panorama or 360 capture; floor plan; measurements; scene-scale mesh; sharing</td>
+<td>Polycam for LiDAR rooms with floor plans and measurements [U]; RealityScan with 360 footage [V]. Metashape accepts TrueDepth only [V].</td>
+</tr>
+<tr>
+<td><strong>Building from drone</strong></td>
+<td>GPS priors, GCPs, CRS, orthomosaic and DEM, tiled model for large scenes, report</td>
+<td>Metashape or Pix4Dmatic for survey outputs; WebODM free and capable [V]. DJI Terra for DJI drones; Mini 4 Pro support unknown.</td>
+</tr>
+<tr>
+<td><strong>Underwater wreck and reef</strong></td>
+<td>Fisheye or dome-port calibration; refraction handling; colour restoration; scale bars at depth; moving-fish masks; large image sets; GIS or annotation export</td>
+<td>Metashape in practice (section 3); nobody models refraction or restores colour in the loop. Viewing with Viscore, annotation with TagLab [U]. Open gap.</td>
+</tr>
+<tr>
+<td><strong>Game-engine asset</strong></td>
+<td>Clean mesh, retopology or decimation, UV atlas, PBR maps (normal, AO, de-lit albedo), correct scale and up axis, FBX or GLB, LODs, engine import notes</td>
+<td>RealityScan with Unreal integration; KIRI for quad meshes with PBR and auto-rig [V]; Metashape for texture controls (de-lighting, normal-from-high-poly [V]). Godot, Unity, Blender paths: formats only (GLB, FBX, OBJ).</td>
+</tr>
+<tr>
+<td><strong>Robot capture set</strong></td>
+<td>Poses and intrinsics as input with a stated frame and scale; fisheye models; batch CLI and HTTP; reports with registration and reprojection numbers; metric output with provenance</td>
+<td>Metashape via reference import and Python [V API]; RealityScan CLI and Remote Command [U]; no product states scale and frame on its outputs as a contract. Open gap.</td>
+</tr>
+<tr>
+<td><strong>Agent-steered reconstruction</strong></td>
+<td>Job API with ids and status; machine-readable quality state; ability to change one stage and compare variants; capture advice; cancel and resume</td>
+<td>Metashape plus <code>metashape-mcp</code> (section 1A) is the only working example; one process, blocking calls, thin quality state. Open gap.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-mvp-versus-complete-feature-set-judgement">6. MVP versus complete feature set (judgement)<a class="headerlink" href="#6-mvp-versus-complete-feature-set-judgement" title="Permanent link">&para;</a></h2>
+<p>This section is a recommendation, not a finding. Differentiator marks (<strong>D</strong>) flag things the leaders do poorly or not at all, per the evidence above.</p>
+<h3 id="tier-1-mvp-household-object-lego-room">Tier 1: MVP (household object, Lego, room)<a class="headerlink" href="#tier-1-mvp-household-object-lego-room" title="Permanent link">&para;</a></h3>
+<p>The smallest set that stops the owner reaching for RealityScan, Polycam or Apple Object Capture on these scans.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Upload photos, RAW and video frames; EXIF and lens read</td>
+<td>Entry point for every use case.</td>
+</tr>
+<tr>
+<td><strong>D</strong> RAW decode (NEF, ARW, DNG, HEIC, ProRAW) with set-wide white balance and exposure</td>
+<td>Metashape lists DNG only [V MAN]; others need Lightroom.</td>
+</tr>
+<tr>
+<td>Alignment with a registered-image count and per-image status</td>
+<td>The first thing a user checks.</td>
+</tr>
+<tr>
+<td>Camera calibration estimated per lens, including fisheye, shown to the user</td>
+<td>GoPro and drone images need it.</td>
+</tr>
+<tr>
+<td>Masks: manual brush and an automatic subject mask</td>
+<td>Lego and turntable sets fail without them.</td>
+</tr>
+<tr>
+<td>Scale: set from a known distance or a marker pair; the model states "metric" or "arbitrary"</td>
+<td><strong>D</strong> (scale and frame stated); a table-stakes feature elsewhere.</td>
+</tr>
+<tr>
+<td>Dense reconstruction and a watertight textured mesh with hole closing and decimation</td>
+<td>The deliverable.</td>
+</tr>
+<tr>
+<td>Texture atlas with seam-free exposure</td>
+<td>Follows from the RAW stage.</td>
+</tr>
+<tr>
+<td>Export GLB, OBJ, PLY with a stated up axis and units</td>
+<td>Needed for Blender and Godot.</td>
+</tr>
+<tr>
+<td>Web viewer for mesh and point cloud, with a quality overlay (registered cameras, error)</td>
+<td>Quality is visible, not implied (brief section 3).</td>
+</tr>
+<tr>
+<td>Job list with live progress and logs; HTTP API mirroring every UI action</td>
+<td>One engine, three faces.</td>
+</tr>
+<tr>
+<td>MCP read tools: project state, per-image registration, reprojection error</td>
+<td><strong>D</strong> agent-native quality state; <code>metashape-mcp</code> offers counts, not verdicts.</td>
+</tr>
+<tr>
+<td>One worker on the laptop, one remote worker, jobs placed by capability</td>
+<td><strong>D</strong> hardware pooling, but at MVP only two machines.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Superseded on splats (2026-11-23):</strong> the owner decided splats are in the MVP, bounded — one
+splat per reconstruction from the same poses, GLB and PLY, held-out-view PSNR/SSIM as a quality
+metric (<a href="../../concept/RC-architecture-sketch/">architecture sketch</a> §9). The line below is
+this analysis's original recommendation.</p>
+</blockquote>
+<p>Not in the MVP: splats, tiled models, DEM and ortho, GCP and CRS work, de-lighting, normal maps, underwater, floor plans.</p>
+<h3 id="tier-2-v1-all-use-cases-adequately">Tier 2: v1 (all use cases adequately)<a class="headerlink" href="#tier-2-v1-all-use-cases-adequately" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D</strong> Splat training and viewer from the same pose set as the mesh</td>
+<td>Metashape has none; Polycam, KIRI and Postshot give a splat or a mesh per capture, not both from one pose set as a stated feature.</td>
+</tr>
+<tr>
+<td><strong>D</strong> Pose priors with stated frame and scale: ARKit, robot files, GPS, GoPro GPMF</td>
+<td>Robot and phone sets; no tool states frame and scale as an output contract.</td>
+</tr>
+<tr>
+<td><strong>D</strong> Hardware pool across Metal, CUDA, ROCm, CPU</td>
+<td>No product in this analysis lists Metal or mixed backends.</td>
+</tr>
+<tr>
+<td>Coded targets (AprilTag) and scale bars</td>
+<td>Large objects and wrecks.</td>
+</tr>
+<tr>
+<td>GCPs, CRS, georeferenced export, DEM and orthomosaic</td>
+<td>The drone building.</td>
+</tr>
+<tr>
+<td>Tiled or LOD model and a splat or mesh LOD path</td>
+<td>Whole-building scale.</td>
+</tr>
+<tr>
+<td>Normal and occlusion maps, de-lighting heuristic, LOD decimation, PBR glTF</td>
+<td>Game-engine assets.</td>
+</tr>
+<tr>
+<td>Measurement: distance, area, volume, floor plan from a mesh</td>
+<td>House interior.</td>
+</tr>
+<tr>
+<td>Processing report as PDF and JSON</td>
+<td>Reference-class parity [V MAN report contents].</td>
+</tr>
+<tr>
+<td><strong>D</strong> Variant comparison: two reconstructions of one capture side by side</td>
+<td>Meshroom-style inspectability, no commercial tool offers it.</td>
+</tr>
+<tr>
+<td>MCP write tools: start, cancel, change a stage, compare, "capture here next"</td>
+<td>Agent steering.</td>
+</tr>
+<tr>
+<td>Share link and export for Sketchfab, USDZ, SPZ</td>
+<td>Sharing.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-3-complete-parity-plus-with-metashape-on-what-matters-to-this-owner">Tier 3: complete (parity-plus with Metashape on what matters to this owner)<a class="headerlink" href="#tier-3-complete-parity-plus-with-metashape-on-what-matters-to-this-owner" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D</strong> Underwater: refraction model (flat and dome port), depth-aware colour restoration after geometry, uncorrected copy kept for features</td>
+<td>Not offered by Metashape [V MAN absence] or any product in section 2.</td>
+</tr>
+<tr>
+<td><strong>D</strong> Splat and mesh joint optimisation; mesh from splat at asset quality</td>
+<td>KIRI offers mesh from splat; quality unverified.</td>
+</tr>
+<tr>
+<td>Laser scan and depth fusion</td>
+<td>Metashape parity.</td>
+</tr>
+<tr>
+<td>4D multi-frame (synchronised camera rigs)</td>
+<td>Parity; low priority for the owner.</td>
+</tr>
+<tr>
+<td>Network job model with fine-grained subdivision (per image, per pair, per tile)</td>
+<td>Metashape splits per task with optional fine subdivision [V MAN]; this project aims lower in the pipeline.</td>
+</tr>
+<tr>
+<td>Classification, retopology, UV editing tools</td>
+<td>Asset polish.</td>
+</tr>
+<tr>
+<td>Annotation and Viscore/TagLab-style review for reefs</td>
+<td>Underwater monitoring.</td>
+</tr>
+<tr>
+<td>Engine plugins for Unreal, Unity, Godot, Blender</td>
+<td>Smooth import.</td>
+</tr>
+<tr>
+<td>Python SDK and CLI with feature parity to the API</td>
+<td>Metashape and RealityScan both offer one.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-not-verified">7. Not verified<a class="headerlink" href="#7-not-verified" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Metashape: 2.3 release notes (GNSS bias, texture editing, colour enhancement, fisheye variants) not re-read; volume-plane options; coordinate-system details beyond headings; Java API; whether PBR maps export in glTF; Python version discrepancy (3.8 in the API doc, 3.12 in metashape-mcp).</li>
+<li>metashape-mcp: master-branch counts are from a grep of decorators, not from running the server; resource list beyond the README unchecked; I did not run it or read tool bodies.</li>
+<li>Pricing of Metashape editions and RealityScan seats: from the earlier research note, store pages not re-read.</li>
+<li>RealityScan: mobile capabilities beyond the product page, Nanite output, UX claims (tabs, components) are from memory.</li>
+<li>Pix4D: Matic pricing, splat quality, live coverage feedback in Catch.</li>
+<li>Zephyr: feature depth beyond the product page; its scripting and splat support.</li>
+<li>DJI Terra: Mini 4 Pro support.</li>
+<li>Polycam: capture mode details and web processing rest on search snippets; the Help Center pages returned 403 or DNS failure.</li>
+<li>KIRI: pay-per-credit API and price amounts.</li>
+<li>Luma: whether any 3D capture product or API remains.</li>
+<li>Scaniverse: current tiers, on-device processing today.</li>
+<li>Apple Object Capture: the fetch returned a generic summary; every claim is <code>[U]</code>.</li>
+<li>Postshot: paid pricing and licence terms; platforms other than Windows.</li>
+<li>WebODM: UX patterns, hosted service price.</li>
+<li>Meshroom: current release features; CUDA requirement not stated on the page read.</li>
+<li>Teleport by Varjo: current status and pricing.</li>
+<li>Sketchfab: formats, splat support, limits (help page fetch failed).</li>
+<li>Underwater: AIMS and NOAA SOPs not read; usage share of Metashape versus others; Viscore and TagLab pages not re-read today; CoralNet details; laser and stereo scale methods; backscatter; moving subjects.</li>
+<li>The matrix: every non-Metashape cell is a reading of vendor marketing or memory, not a test. <code>?</code> cells are unknown, not "no".</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

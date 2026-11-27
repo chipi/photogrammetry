@@ -1,0 +1,4255 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/reference/photogrammetry-primer/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../tools-overview/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Photogrammetry primer - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#photogrammetry-primer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Photogrammetry primer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-photogrammetry-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What photogrammetry is
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What photogrammetry is">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-pipeline-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The pipeline at a glance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-camera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The camera
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The camera">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-pinhole-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The pinhole model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intrinsics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intrinsics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initial-focal-length-from-exif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial focal length from EXIF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lens-distortion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lens distortion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rolling-shutter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rolling shutter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-two-view-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Two-view geometry
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Two-view geometry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-epipolar-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The epipolar constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#essential-and-fundamental-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Essential and fundamental matrices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homography-and-degeneracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Homography and degeneracy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triangulation-and-the-baseline-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triangulation and the baseline trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-features-and-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Features and matching
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Features and matching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keypoints-and-descriptors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keypoints and descriptors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matching-the-ratio-test-and-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matching, the ratio test and verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pair-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pair selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-structure-from-motion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Structure from motion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Structure from motion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-pairs-to-a-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From pairs to a reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-bundle-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Bundle adjustment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Bundle adjustment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The objective
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robust-losses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robust losses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solving-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solving it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gauge-freedom-what-images-alone-cannot-tell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gauge freedom: what images alone cannot tell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixing-scale-and-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixing scale and frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uncertainty
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-learned-feed-forward-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Learned feed-forward reconstruction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Learned feed-forward reconstruction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-they-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What they are
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strengths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strengths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-classical-ba-still-verifies-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why classical BA still verifies them
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dense-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dense reconstruction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Dense reconstruction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The idea
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depth-maps-by-photometric-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth maps by photometric consistency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering-and-fusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtering and fusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolution-and-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolution and memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-good-poses-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why good poses matter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-surfaces-and-textures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Surfaces and textures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Surfaces and textures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-points-to-a-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From points to a surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleanup-decimation-and-level-of-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup, decimation and level of detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#texture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Texture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pbr-and-de-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PBR and de-lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-radiance-fields-and-gaussian-splatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Radiance fields and gaussian splatting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Radiance fields and gaussian splatting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nerf-in-one-paragraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NeRF in one paragraph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-gaussian-splatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D gaussian splatting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialisation-densification-and-pruning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initialisation, densification and pruning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strengths-and-weaknesses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strengths and weaknesses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-capture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Capture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Capture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overlap-parallax-and-angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overlap, parallax and angles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distance-and-ground-sampling-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distance and ground sampling distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharpness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sharpness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exposure-white-balance-and-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exposure, white balance and lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turntables-and-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turntables and masking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-versus-stills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video versus stills
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-raw-and-colour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. RAW and colour
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. RAW and colour">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-raw-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What RAW is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#white-balance-exposure-and-tone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        White balance, exposure and tone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-consistency-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why consistency matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colour-checkers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colour checkers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Underwater
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Underwater">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#refraction-at-the-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refraction at the port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colour-attenuation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colour: attenuation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backscatter-and-caustics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backscatter and caustics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sea-thru-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sea-thru model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale-underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scale underwater
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-frames-units-and-georeferencing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Frames, units and georeferencing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Frames, units and georeferencing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frames-and-handedness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frames and handedness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camera-pose-and-robot-pose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camera pose and robot pose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#world-and-map-frames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        World and map frames
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geographic-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geographic coordinates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-measuring-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Measuring quality
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. Measuring quality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reprojection-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reprojection error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registration-tracks-and-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registration, tracks and coverage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accuracy-against-the-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accuracy against the world
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splats-held-out-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splats: held-out views
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Glossary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Further reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wip/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-photogrammetry-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What photogrammetry is
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What photogrammetry is">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-pipeline-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The pipeline at a glance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-camera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The camera
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The camera">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-pinhole-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The pinhole model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intrinsics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intrinsics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initial-focal-length-from-exif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial focal length from EXIF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lens-distortion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lens distortion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rolling-shutter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rolling shutter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-two-view-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Two-view geometry
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Two-view geometry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-epipolar-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The epipolar constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#essential-and-fundamental-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Essential and fundamental matrices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homography-and-degeneracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Homography and degeneracy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triangulation-and-the-baseline-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triangulation and the baseline trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-features-and-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Features and matching
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Features and matching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keypoints-and-descriptors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keypoints and descriptors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matching-the-ratio-test-and-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matching, the ratio test and verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pair-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pair selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-structure-from-motion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Structure from motion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Structure from motion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-pairs-to-a-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From pairs to a reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-bundle-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Bundle adjustment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Bundle adjustment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The objective
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robust-losses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robust losses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solving-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solving it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gauge-freedom-what-images-alone-cannot-tell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gauge freedom: what images alone cannot tell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixing-scale-and-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixing scale and frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uncertainty
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-learned-feed-forward-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Learned feed-forward reconstruction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Learned feed-forward reconstruction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-they-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What they are
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strengths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strengths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-classical-ba-still-verifies-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why classical BA still verifies them
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dense-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dense reconstruction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Dense reconstruction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The idea
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depth-maps-by-photometric-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth maps by photometric consistency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering-and-fusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtering and fusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolution-and-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolution and memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-good-poses-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why good poses matter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-surfaces-and-textures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Surfaces and textures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Surfaces and textures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-points-to-a-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From points to a surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleanup-decimation-and-level-of-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup, decimation and level of detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#texture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Texture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pbr-and-de-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PBR and de-lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-radiance-fields-and-gaussian-splatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Radiance fields and gaussian splatting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Radiance fields and gaussian splatting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nerf-in-one-paragraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NeRF in one paragraph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-gaussian-splatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D gaussian splatting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialisation-densification-and-pruning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initialisation, densification and pruning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strengths-and-weaknesses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strengths and weaknesses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-capture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Capture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Capture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overlap-parallax-and-angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overlap, parallax and angles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distance-and-ground-sampling-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distance and ground sampling distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharpness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sharpness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exposure-white-balance-and-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exposure, white balance and lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turntables-and-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turntables and masking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-versus-stills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video versus stills
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-raw-and-colour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. RAW and colour
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. RAW and colour">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-raw-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What RAW is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#white-balance-exposure-and-tone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        White balance, exposure and tone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-consistency-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why consistency matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colour-checkers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colour checkers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Underwater
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Underwater">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#refraction-at-the-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refraction at the port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colour-attenuation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colour: attenuation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backscatter-and-caustics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backscatter and caustics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sea-thru-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sea-thru model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale-underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scale underwater
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-frames-units-and-georeferencing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Frames, units and georeferencing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Frames, units and georeferencing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frames-and-handedness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frames and handedness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camera-pose-and-robot-pose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camera pose and robot pose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#world-and-map-frames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        World and map frames
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geographic-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geographic coordinates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-measuring-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Measuring quality
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. Measuring quality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reprojection-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reprojection error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registration-tracks-and-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registration, tracks and coverage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accuracy-against-the-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accuracy against the world
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splats-held-out-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splats: held-out views
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-this-means-for-the-engine_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this means for the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Glossary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Further reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="photogrammetry-primer">Photogrammetry primer<a class="headerlink" href="#photogrammetry-primer" title="Permanent link">&para;</a></h1>
+<p>This document is the standing reference for the theory behind the engine. It exists so that the operator, who knows light, lenses and water better than linear algebra, and the coding agents, who know linear algebra better than reefs, share one vocabulary and one set of reasons. Every section explains the intuition first, then the maths, then states what the idea forces on the design. When a design question comes up, such as why a model must say whether its scale is metric, why a flat port breaks the pinhole model or why a splat is not a measurement, the answer starts here. Where this primer and the code disagree, one of them is wrong and the disagreement gets fixed, not tolerated.</p>
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-what-photogrammetry-is">What photogrammetry is</a></li>
+<li><a href="#2-the-camera">The camera</a></li>
+<li><a href="#3-two-view-geometry">Two-view geometry</a></li>
+<li><a href="#4-features-and-matching">Features and matching</a></li>
+<li><a href="#5-structure-from-motion">Structure from motion</a></li>
+<li><a href="#6-bundle-adjustment">Bundle adjustment</a></li>
+<li><a href="#7-learned-feed-forward-reconstruction">Learned feed-forward reconstruction</a></li>
+<li><a href="#8-dense-reconstruction">Dense reconstruction</a></li>
+<li><a href="#9-surfaces-and-textures">Surfaces and textures</a></li>
+<li><a href="#10-radiance-fields-and-gaussian-splatting">Radiance fields and gaussian splatting</a></li>
+<li><a href="#11-capture">Capture</a></li>
+<li><a href="#12-raw-and-colour">RAW and colour</a></li>
+<li><a href="#13-underwater">Underwater</a></li>
+<li><a href="#14-frames-units-and-georeferencing">Frames, units and georeferencing</a></li>
+<li><a href="#15-measuring-quality">Measuring quality</a></li>
+<li><a href="#16-glossary">Glossary</a></li>
+<li><a href="#17-further-reading">Further reading</a></li>
+</ol>
+<hr />
+<h2 id="1-what-photogrammetry-is">1. What photogrammetry is<a class="headerlink" href="#1-what-photogrammetry-is" title="Permanent link">&para;</a></h2>
+<p>Photogrammetry recovers the shape of the world from photographs. A photograph throws away one dimension: every pixel records light that arrived along a ray, and nothing says how far along the ray the surface sat. A single image cannot give depth. Two images of the same point from different positions can, because the two rays cross at the point. Photogrammetry is the discipline of finding those crossings for millions of points at once, while also discovering where the cameras were and how their lenses bend light.</p>
+<p>The difficulty is that nothing is known at the start. The camera positions are unknown, the point positions are unknown, and the only observations are pixel colours. The field's central trick is to solve everything together. If enough points are seen from enough views, the system of equations that ties points, cameras and pixel observations together has a unique answer, up to a small, well-understood ambiguity (section 6). The rest of the pipeline is engineering around that idea: finding which pixels in different photographs show the same point, solving for geometry robustly in the presence of wrong matches, then densifying and dressing the result.</p>
+<h3 id="the-pipeline-at-a-glance">The pipeline at a glance<a class="headerlink" href="#the-pipeline-at-a-glance" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> capture --&gt; develop --&gt; features --&gt; matching --&gt; SfM (poses + sparse points)
+ (photos,    (RAW to     (keypoints,  (pairs,        |
+  video,      matched     descriptors) verification) v
+  poses)      images)                          bundle adjustment
+                                                     |
+                  +----------------------------------+
+                  |                                  |
+                  v                                  v
+            dense MVS                        radiance-field branch
+            (depth maps, fusion)             (NeRF, 3D gaussian splatting)
+                  |                                  |
+                  v                                  v
+            surface (mesh)                       splat (.ply and kin)
+                  |
+                  v
+            texture (UV, materials)
+</code></pre></div>
+<p>Each stage consumes the output of the one before and adds a kind of knowledge:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Capture</td>
+<td>The scene</td>
+<td>Images, optionally poses, depth, GPS</td>
+</tr>
+<tr>
+<td>Develop</td>
+<td>RAW or camera JPEG</td>
+<td>Consistent, linear-light-aware images</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>Images</td>
+<td>Keypoints with descriptors</td>
+</tr>
+<tr>
+<td>Matching</td>
+<td>Descriptors</td>
+<td>Verified image pairs with point correspondences</td>
+</tr>
+<tr>
+<td>SfM</td>
+<td>Correspondences</td>
+<td>Camera poses, intrinsics, sparse 3D points</td>
+</tr>
+<tr>
+<td>Bundle adjustment</td>
+<td>All of the above</td>
+<td>Jointly refined poses and points</td>
+</tr>
+<tr>
+<td>Dense MVS</td>
+<td>Posed images</td>
+<td>Per-view depth maps, a dense point cloud</td>
+</tr>
+<tr>
+<td>Surface</td>
+<td>Dense points or depth</td>
+<td>Triangle mesh</td>
+</tr>
+<tr>
+<td>Texture</td>
+<td>Mesh and posed images</td>
+<td>UV-mapped colour, materials</td>
+</tr>
+<tr>
+<td>Radiance field</td>
+<td>Posed images, sparse points</td>
+<td>A model that renders novel views</td>
+</tr>
+</tbody>
+</table>
+<p>The radiance-field branch leaves the classical path after pose estimation. NeRF and 3D gaussian splatting do not build a surface; they fit a function or a cloud of translucent blobs so that rendering them from the known camera poses reproduces the photographs. They need the same poses the classical branch needs, which is why structure from motion stays at the centre of both.</p>
+<h3 id="what-this-means-for-the-engine">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine" title="Permanent link">&para;</a></h3>
+<p>The pipeline is a directed graph of stages whose outputs are typed artefacts, and the reconstruction data model holds every one of them with its units, frame and producing step. Poses are the hinge: both branches consume them, so pose quality is the first thing the engine measures and reports. Stages are separable, which is what lets the coordinator place feature extraction on one machine and dense stereo on another.</p>
+<hr />
+<h2 id="2-the-camera">2. The camera<a class="headerlink" href="#2-the-camera" title="Permanent link">&para;</a></h2>
+<h3 id="the-pinhole-model">The pinhole model<a class="headerlink" href="#the-pinhole-model" title="Permanent link">&para;</a></h3>
+<p>A camera maps a 3D point to a 2D pixel. The simplest faithful model is the pinhole: all light passes through one point, the centre of projection, and lands on an image plane behind it. A point at <span class="arithmatex">\((X, Y, Z)\)</span> in the camera frame, with <span class="arithmatex">\(Z\)</span> pointing forward along the optical axis, lands at</p>
+<div class="arithmatex">\[
+x = f \frac{X}{Z}, \qquad y = f \frac{Y}{Z}
+\]</div>
+<p>on the image plane. The division by <span class="arithmatex">\(Z\)</span> is the whole story of perspective: distant things shrink, and a pixel fixes a direction but not a distance.</p>
+<p>Two coordinate frames matter. The <strong>world frame</strong> is where the scene lives. The <strong>camera frame</strong> has its origin at the centre of projection, <span class="arithmatex">\(Z\)</span> forward, <span class="arithmatex">\(X\)</span> right, <span class="arithmatex">\(Y\)</span> down in the computer-vision convention. A rigid transform takes world points to camera points:</p>
+<div class="arithmatex">\[
+\mathbf{X}_c = R\,\mathbf{X}_w + \mathbf{t}
+\]</div>
+<p><span class="arithmatex">\(R\)</span> is a <span class="arithmatex">\(3 \times 3\)</span> rotation, <span class="arithmatex">\(\mathbf{t}\)</span> a translation. These are the <strong>extrinsics</strong>, written <span class="arithmatex">\([R \mid \mathbf{t}]\)</span>. They are a world-to-camera transform. The camera's centre in world coordinates is <span class="arithmatex">\(\mathbf{C} = -R^\top \mathbf{t}\)</span>, and confusing <span class="arithmatex">\(\mathbf{t}\)</span> with <span class="arithmatex">\(\mathbf{C}\)</span> is a classic source of mirrored and displaced reconstructions. A pose handed to the engine by another system, a robot or ARKit, is often the opposite direction, camera-to-world, and the direction must be stated, never assumed.</p>
+<h3 id="intrinsics">Intrinsics<a class="headerlink" href="#intrinsics" title="Permanent link">&para;</a></h3>
+<p>The <strong>intrinsic matrix</strong> converts camera-frame rays to pixels:</p>
+<div class="arithmatex">\[
+K = \begin{pmatrix} f_x &amp; s &amp; c_x \\ 0 &amp; f_y &amp; c_y \\ 0 &amp; 0 &amp; 1 \end{pmatrix},
+\qquad
+\lambda \begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K \,[R \mid \mathbf{t}] \begin{pmatrix} \mathbf{X}_w \\ 1 \end{pmatrix}
+\]</div>
+<p><span class="arithmatex">\(f_x, f_y\)</span> are the focal length measured in <strong>pixels</strong>, <span class="arithmatex">\((c_x, c_y)\)</span> is the principal point (where the optical axis meets the sensor, near the image centre but never exactly there), <span class="arithmatex">\(s\)</span> is skew (zero for any modern sensor), and <span class="arithmatex">\(\lambda\)</span> is the depth along the ray. Focal length in pixels, not millimetres, is what the geometry uses. Most pipelines set <span class="arithmatex">\(f_x = f_y\)</span> and fit one focal length.</p>
+<p>The camera is therefore described by six extrinsic numbers per image and a handful of intrinsics per lens. Photos taken with the same lens at the same focal setting share intrinsics, which is a powerful constraint: it lets one set of intrinsics be estimated from hundreds of images. A zoom lens or a lens that focuses by changing its internal geometry breaks the sharing, because its effective focal length changes with focus and zoom.</p>
+<h3 id="initial-focal-length-from-exif">Initial focal length from EXIF<a class="headerlink" href="#initial-focal-length-from-exif" title="Permanent link">&para;</a></h3>
+<p>Optimisation needs a starting value, and EXIF supplies one. If the image is <span class="arithmatex">\(W\)</span> pixels wide and the sensor is <span class="arithmatex">\(S_w\)</span> millimetres wide, a lens of focal length <span class="arithmatex">\(f_{mm}\)</span> has</p>
+<div class="arithmatex">\[
+f_{px} = f_{mm} \cdot \frac{W}{S_w}
+\]</div>
+<p>When the sensor width is unknown but the 35 mm-equivalent focal length <span class="arithmatex">\(f_{35}\)</span> is recorded, the same quantity follows from the 36 mm reference width: <span class="arithmatex">\(f_{px} = f_{35} \cdot W / 36\)</span> for the long side. The EXIF value is approximate: lenses breathe with focus, manufacturers round, and crops and in-camera processing change the effective sensor area. It is a prior to refine, not a measurement. Phones and action cameras often report a focal length after in-camera distortion correction, which means the image no longer follows the lens's raw geometry.</p>
+<h3 id="lens-distortion">Lens distortion<a class="headerlink" href="#lens-distortion" title="Permanent link">&para;</a></h3>
+<p>Real lenses bend straight lines. The standard correction works in normalised coordinates <span class="arithmatex">\((x, y) = (X/Z, Y/Z)\)</span> with <span class="arithmatex">\(r^2 = x^2 + y^2\)</span>. The <strong>Brown–Conrady</strong> model applies radial and tangential terms:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+x_d &amp;= x\,(1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + 2 p_1 x y + p_2 (r^2 + 2x^2) \\
+y_d &amp;= y\,(1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + p_1 (r^2 + 2y^2) + 2 p_2 x y
+\end{aligned}
+\]</div>
+<p>The <span class="arithmatex">\(k_i\)</span> are radial coefficients (barrel and pincushion), the <span class="arithmatex">\(p_i\)</span> tangential coefficients (a lens element slightly off-axis). Pixels follow from <span class="arithmatex">\(u = f_x x_d + c_x\)</span>, <span class="arithmatex">\(v = f_y y_d + c_y\)</span>. The model is a polynomial in <span class="arithmatex">\(r\)</span>, which behaves well up to moderate field angles and fails for very wide lenses, because the true relation between angle and image radius is not a polynomial in <span class="arithmatex">\(\tan\theta\)</span> and, at <span class="arithmatex">\(\theta \to 90^\circ\)</span>, <span class="arithmatex">\(\tan\theta\)</span> diverges.</p>
+<p><strong>Fisheye</strong> models work with the angle <span class="arithmatex">\(\theta\)</span> between the ray and the optical axis instead. The ideal <strong>equidistant</strong> projection is <span class="arithmatex">\(r = f\,\theta\)</span>: image radius grows linearly with angle, so a 180 degree field fits on a finite sensor. Real fisheye lenses deviate, and the <strong>OpenCV fisheye</strong> model, which follows the Kannala–Brandt form, adds a polynomial in <span class="arithmatex">\(\theta\)</span>:</p>
+<div class="arithmatex">\[
+r_d = f\,\theta_d, \qquad \theta_d = \theta\,(1 + k_1 \theta^2 + k_2 \theta^4 + k_3 \theta^6 + k_4 \theta^8)
+\]</div>
+<p>A GoPro in its wide modes is a fisheye in practice, and many of its "linear" modes are a software remap of a fisheye image. Using the wrong model leaves systematic residuals that the optimiser cannot absorb. Distortion parameters are estimated in the bundle adjustment, ideally from a set with strong geometry and a wide range of image positions for each feature, so that the edges of the frame are constrained.</p>
+<h3 id="rolling-shutter">Rolling shutter<a class="headerlink" href="#rolling-shutter" title="Permanent link">&para;</a></h3>
+<p>The pinhole model assumes the whole image is exposed in one instant. A <strong>global shutter</strong> does that. Most phones, action cameras and many mirrorless cameras in electronic-shutter mode use a <strong>rolling shutter</strong>, which exposes and reads rows one after another, so the top row and the bottom row see the world at times separated by roughly ten to thirty milliseconds, depending on the sensor. If the camera moves during that interval, each row has a slightly different pose, and the image is skewed, wobbled or bent: verticals lean in a pan, propellers bend.</p>
+<p>For a still photo from a held phone the effect is small. For video it matters, because the camera is moving continuously by design and the frames are taken at speed. The geometry then holds only approximately: the rigid-camera model leaves residuals that grow with velocity, and a naive bundle adjustment either absorbs them as error or distorts the intrinsics to compensate. Mechanical shutters on DSLRs, such as the D850 in normal mode, are not subject to this in the same way. Electronic-shutter modes on mirrorless bodies, including the Alpha 1, read out row by row and carry the rolling-shutter effect to a degree that depends on sensor readout speed.</p>
+<h3 id="what-this-means-for-the-engine_1">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_1" title="Permanent link">&para;</a></h3>
+<p>Every camera in the model carries an explicit intrinsics record: the model name (pinhole, Brown–Conrady, OpenCV fisheye), the parameters, the image size, and whether those values are EXIF-derived guesses, calibrated or fixed. The pose direction (world-to-camera or camera-to-world) is a named field, never an implicit convention. GoPro input defaults to a fisheye model; a wrong default is a quality bug that looks like a registration failure. Rolling-shutter sources, which means every phone and every GoPro video, are flagged on ingest so that frame selection favours slow motion and the quality report can attribute residuals to it. Intrinsics sharing is a data-model concept: images are grouped by lens and focus state, and the engine does not silently share across a zoom.</p>
+<hr />
+<h2 id="3-two-view-geometry">3. Two-view geometry<a class="headerlink" href="#3-two-view-geometry" title="Permanent link">&para;</a></h2>
+<h3 id="the-epipolar-constraint">The epipolar constraint<a class="headerlink" href="#the-epipolar-constraint" title="Permanent link">&para;</a></h3>
+<p>Take two photographs of the same scene. A point seen in the first image lies somewhere along a ray. That ray, seen from the second camera, is a line in the second image: the <strong>epipolar line</strong>. The corresponding point in the second image must lie on it. This turns a 2D search for a match into a 1D search, and it supplies the test that rejects false matches.</p>
+<p>All epipolar lines in an image pass through one point, the <strong>epipole</strong>, which is the image of the other camera's centre. The three-dimensional plane through both camera centres and the scene point is the <strong>epipolar plane</strong>.</p>
+<h3 id="essential-and-fundamental-matrices">Essential and fundamental matrices<a class="headerlink" href="#essential-and-fundamental-matrices" title="Permanent link">&para;</a></h3>
+<p>For calibrated cameras, with the pixel coordinates converted to normalised rays <span class="arithmatex">\(\hat{\mathbf{x}} = K^{-1}\mathbf{x}\)</span>, the constraint is</p>
+<div class="arithmatex">\[
+\hat{\mathbf{x}}'^{\top} E\, \hat{\mathbf{x}} = 0, \qquad E = [\mathbf{t}]_\times R
+\]</div>
+<p><span class="arithmatex">\(R\)</span> and <span class="arithmatex">\(\mathbf{t}\)</span> are the relative rotation and translation between the two cameras, and <span class="arithmatex">\([\mathbf{t}]_\times\)</span> is the skew-symmetric matrix of cross-product with <span class="arithmatex">\(\mathbf{t}\)</span>. The <strong>essential matrix</strong> <span class="arithmatex">\(E\)</span> has five degrees of freedom: three for rotation, two for the direction of translation. The magnitude of the translation is absent. Two images cannot say how far apart the cameras were in metres, only in which direction, and this is the first appearance of the scale ambiguity.</p>
+<p>With unknown intrinsics, the same constraint holds in pixels:</p>
+<div class="arithmatex">\[
+\mathbf{x}'^{\top} F\, \mathbf{x} = 0, \qquad F = K'^{-\top} E\, K^{-1}
+\]</div>
+<p>The <strong>fundamental matrix</strong> <span class="arithmatex">\(F\)</span> has rank 2 and seven degrees of freedom. It can be estimated from point correspondences alone, with at least seven, or eight in the simple linear method, and the calibrated case needs five. Decomposing <span class="arithmatex">\(E\)</span> gives four candidate <span class="arithmatex">\((R, \mathbf{t})\)</span> pairs, of which exactly one places the points in front of both cameras, the cheirality check.</p>
+<h3 id="homography-and-degeneracy">Homography and degeneracy<a class="headerlink" href="#homography-and-degeneracy" title="Permanent link">&para;</a></h3>
+<p>If the observed points all lie on a plane, or the camera only rotates without translating, the mapping between the two images is a <strong>homography</strong> <span class="arithmatex">\(H\)</span>, a <span class="arithmatex">\(3 \times 3\)</span> matrix with eight degrees of freedom that maps points directly to points rather than to lines. For a plane with unit normal <span class="arithmatex">\(\mathbf{n}\)</span> at distance <span class="arithmatex">\(d\)</span> from the first camera,</p>
+<div class="arithmatex">\[
+H = K' \left( R - \frac{\mathbf{t}\,\mathbf{n}^\top}{d} \right) K^{-1}
+\]</div>
+<p>This is a <strong>degenerate case</strong> for estimating <span class="arithmatex">\(E\)</span> and <span class="arithmatex">\(F\)</span>. All points on a plane satisfy the epipolar constraint for a whole family of fundamental matrices, so <span class="arithmatex">\(F\)</span> is not determined. Pure rotation, with no baseline, is worse: the points carry no depth information at all, since any depth is consistent with the same image motion. Robust pipelines therefore fit both <span class="arithmatex">\(H\)</span> and <span class="arithmatex">\(F\)</span> or <span class="arithmatex">\(E\)</span> to each pair and use the score to classify the pair: planar or rotation-only pairs do not initialise a reconstruction. A flat floor, a wall, a tabletop and a handheld pan are the practical triggers.</p>
+<h3 id="triangulation-and-the-baseline-trade-off">Triangulation and the baseline trade-off<a class="headerlink" href="#triangulation-and-the-baseline-trade-off" title="Permanent link">&para;</a></h3>
+<p>Given two cameras and a matched pixel pair, the two rays meet at the 3D point, in principle. With noise they do not, so the point is chosen to minimise reprojection error or, as a quick initialisation, the linear DLT solution. How accurately depth comes out depends on the angle between the rays, the <strong>parallax</strong> angle. For a baseline <span class="arithmatex">\(B\)</span> between cameras, focal length <span class="arithmatex">\(f\)</span> in pixels and a matching error of <span class="arithmatex">\(\sigma_d\)</span> pixels, the depth uncertainty at distance <span class="arithmatex">\(Z\)</span> is approximately</p>
+<div class="arithmatex">\[
+\sigma_Z \approx \frac{Z^2}{f\,B}\,\sigma_d
+\]</div>
+<p>Depth error grows with the square of distance and shrinks with baseline. A wide baseline gives accurate triangulation, but the views look different, so features are harder to match, occlusions grow and the overlap shrinks. A narrow baseline matches easily and triangulates badly. Capture is a balancing act between those two, which section 11 turns into numbers.</p>
+<h3 id="what-this-means-for-the-engine_2">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_2" title="Permanent link">&para;</a></h3>
+<p>The engine classifies every verified pair by the model that explains it (homography, essential, fundamental, or failed) and carries the triangulation angle as pair metadata. Initialisation of a reconstruction picks a pair with a wide enough angle and enough inliers, and refuses planar and rotation-only pairs. A scene dominated by a floor or a wall, a room scanned by turning on the spot, is a known weak case that the quality report names as such rather than reporting a mysterious failure. The per-point triangulation angle is stored, because depth confidence is a function of it.</p>
+<hr />
+<h2 id="4-features-and-matching">4. Features and matching<a class="headerlink" href="#4-features-and-matching" title="Permanent link">&para;</a></h2>
+<h3 id="keypoints-and-descriptors">Keypoints and descriptors<a class="headerlink" href="#keypoints-and-descriptors" title="Permanent link">&para;</a></h3>
+<p>To match photographs the engine needs to find points that can be recognised again from another angle. A <strong>keypoint</strong> is a location with local structure that stays identifiable under changes of viewpoint, scale and lighting: a corner, a blob, a texture patch. A <strong>descriptor</strong> is a vector summarising the patch around it, so that two descriptors close in the vector space show the same physical point.</p>
+<p><strong>SIFT</strong> is the classical workhorse: scale-space blob detection, orientation assignment and a 128-dimensional histogram-of-gradients descriptor. It is robust, well understood and slow-ish, and it remains the default in COLMAP. <strong>Learned</strong> detectors and descriptors, such as <strong>SuperPoint</strong> and <strong>ALIKED</strong>, are neural networks trained to produce repeatable keypoints and descriptors that match under harder conditions: wider baselines, lighting change, low texture. They are paired with learned matchers that reason about all the keypoints of two images at once. <strong>Dense matchers</strong> such as <strong>RoMa</strong> skip the sparse keypoint step and predict a correspondence for essentially every pixel with a confidence, which helps where sparse keypoints are scarce, at higher compute cost and with the need to select which matches to keep.</p>
+<h3 id="matching-the-ratio-test-and-verification">Matching, the ratio test and verification<a class="headerlink" href="#matching-the-ratio-test-and-verification" title="Permanent link">&para;</a></h3>
+<p>The simplest matcher takes each descriptor and finds its nearest neighbour in the other image. Nearest neighbours are often wrong, especially in repetitive texture. The <strong>ratio test</strong> compares the distance to the nearest neighbour with the distance to the second nearest and keeps the match only when the first is clearly smaller, commonly with a ratio around 0.8. A good match has one clear winner; an ambiguous one has two similar candidates.</p>
+<p>Surviving matches still include outliers, so each pair goes through <strong>geometric verification</strong>. <strong>RANSAC</strong> repeatedly picks a minimal random sample of matches, fits the model from it (a fundamental matrix, an essential matrix or a homography), counts how many other matches agree within a pixel threshold and keeps the model with the most inliers. The probability of drawing an all-inlier sample falls as the sample size grows and as the inlier fraction falls, so low inlier ratios need many iterations, which is why a smaller minimal solver such as the five-point essential matrix helps. A pair with too few inliers is discarded. What leaves this stage is not a bag of matches but a <strong>verified two-view geometry</strong>: inlier matches plus the model that explains them.</p>
+<h3 id="pair-selection">Pair selection<a class="headerlink" href="#pair-selection" title="Permanent link">&para;</a></h3>
+<p>With <span class="arithmatex">\(n\)</span> images there are <span class="arithmatex">\(n(n-1)/2\)</span> pairs. Matching every pair, <strong>exhaustive matching</strong>, is <span class="arithmatex">\(O(n^2)\)</span> and is perfect for tens to a few hundred images and ruinous for thousands. The alternatives:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How it picks pairs</th>
+<th>Good for</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exhaustive</td>
+<td>Every pair</td>
+<td>Small, unordered sets</td>
+<td><span class="arithmatex">\(O(n^2)\)</span></td>
+</tr>
+<tr>
+<td>Sequential</td>
+<td>Each image with its neighbours in capture order</td>
+<td>Video, ordered walks</td>
+<td><span class="arithmatex">\(O(n \cdot w)\)</span> for window <span class="arithmatex">\(w\)</span></td>
+</tr>
+<tr>
+<td>Vocabulary tree or retrieval</td>
+<td>Each image with the <span class="arithmatex">\(k\)</span> most similar by global descriptor</td>
+<td>Large unordered sets</td>
+<td><span class="arithmatex">\(O(n \cdot k)\)</span> plus indexing</td>
+</tr>
+<tr>
+<td>Spatial</td>
+<td>Images whose GPS or pose priors are close</td>
+<td>Drones, robots, ARKit</td>
+<td><span class="arithmatex">\(O(n \cdot k)\)</span> with a spatial index</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>Sequential plus loop-closure retrieval</td>
+<td>Long videos</td>
+<td>near linear</td>
+</tr>
+</tbody>
+</table>
+<p>Retrieval ranks images by visual similarity using a vocabulary of quantised descriptors or a learned global embedding. Spatial selection trusts a prior: a drone's GPS position or a robot's pose says which images can possibly overlap, with no image analysis at all. The risk of any non-exhaustive strategy is a missed pair, which can leave the pose graph disconnected or weakly linked. Sequential matching is also blind to loop closure, because the first and last image of a ring are far apart in the sequence.</p>
+<h3 id="what-this-means-for-the-engine_3">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_3" title="Permanent link">&para;</a></h3>
+<p>Pair selection is a pluggable policy, chosen from the capture type and the priors available, and the engine records which policy produced each pair. Matching cost scales with the pair count, so pair selection is the main lever on the whole pipeline's time and the natural unit for fan-out across workers. Verified two-view geometries are stored as first-class artefacts: they can be merged across workers, cached and reused when an image is added. The quality state exposes the pair graph, so an agent can see that two halves of a scene share only two links and ask for more overlap there.</p>
+<hr />
+<h2 id="5-structure-from-motion">5. Structure from motion<a class="headerlink" href="#5-structure-from-motion" title="Permanent link">&para;</a></h2>
+<h3 id="from-pairs-to-a-reconstruction">From pairs to a reconstruction<a class="headerlink" href="#from-pairs-to-a-reconstruction" title="Permanent link">&para;</a></h3>
+<p><strong>Structure from motion</strong> (SfM) takes the verified matches and produces camera poses, intrinsics and a sparse 3D point cloud. The central data structure is the <strong>track</strong>: one physical point seen as a chain of matched keypoints across several images. A track seen in two images supports a triangulation; a track seen in ten pins the point and the cameras far more tightly. Long, consistent tracks are the raw material of an accurate reconstruction.</p>
+<p>Two families of solver exist.</p>
+<p><strong>Incremental SfM</strong>, the approach of COLMAP, builds the model one image at a time. It initialises from a well-conditioned pair, triangulates their shared points, then repeatedly selects the next image that sees many already-triangulated points, <strong>registers</strong> it by solving a perspective-n-point (PnP) problem against the known 3D points, triangulates new points, and periodically runs bundle adjustment to keep errors from compounding. It is accurate and tolerant of bad data, because the model is checked and corrected at every step. It is also sequential in nature, does repeated bundle adjustment on a growing model and tends to slow down heavily as scenes grow. It can drift, and it can lock onto a wrong initialisation.</p>
+<p><strong>Global SfM</strong> estimates all poses together. <strong>GLOMAP</strong> is the recent practical example. It first solves <strong>rotation averaging</strong>: from the pairwise relative rotations, find the absolute rotation of every camera so that they agree as well as possible, which is robust because rotations are well constrained by two-view geometry. It then runs <strong>global positioning</strong>: find camera positions and point positions jointly, given the rotations, from the feature tracks, without the usual intermediate triangulation step. A final bundle adjustment refines the result. Global methods are much faster on large sets and have no incremental drift, because every constraint is used at once. They are less forgiving of a poisoned pair graph: a wrong relative rotation can corrupt the averaged solution, and quality of the input matches matters more.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Incremental (COLMAP)</th>
+<th>Global (GLOMAP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Order</td>
+<td>One image at a time</td>
+<td>All at once</td>
+</tr>
+<tr>
+<td>Speed on large sets</td>
+<td>Slows as the model grows</td>
+<td>Much faster</td>
+</tr>
+<tr>
+<td>Robustness to bad pairs</td>
+<td>High, corrected by repeated BA</td>
+<td>Lower, depends on pair filtering</td>
+</tr>
+<tr>
+<td>Failure style</td>
+<td>Drift, wrong initialisation, split models</td>
+<td>A global solve that is wrong everywhere</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Possibly several disconnected models</td>
+<td>One model where the graph is connected</td>
+</tr>
+</tbody>
+</table>
+<h3 id="failure-modes">Failure modes<a class="headerlink" href="#failure-modes" title="Permanent link">&para;</a></h3>
+<p>SfM fails in recognisable ways, each tied to the geometry or the matching:</p>
+<ul>
+<li><strong>Repetitive texture.</strong> Brick walls, tiles, windows and fences produce many plausible but false matches. Ratio tests reject some; those that survive can pass geometric verification and join the wrong parts of the scene.</li>
+<li><strong>Symmetry.</strong> A symmetrical building or a ring of identical objects can yield a reconstruction in which two sides are fused or a loop closes on the wrong face.</li>
+<li><strong>Low texture.</strong> Blank walls, sky, calm water, matte single-colour objects give no keypoints. The images may not register at all, or register on the background.</li>
+<li><strong>Reflective and transparent surfaces.</strong> The visible pattern is a view of something else and moves differently from the surface. Glass, polished paint, chrome and still water yield matches that obey the geometry of the reflected world, not the surface.</li>
+<li><strong>Moving subjects.</strong> People, fish, grass in the wind and waving kelp violate the assumption of a static scene. A rigid reconstruction cannot explain them, and they pollute matching and then dense reconstruction.</li>
+<li><strong>Insufficient parallax.</strong> A pure rotation or very small baseline gives no depth, as section 3 shows.</li>
+<li><strong>Mixed lenses and zooms</strong> that are treated as one camera.</li>
+</ul>
+<p>A reconstruction can end up in several <strong>components</strong>: separate models that never joined, each with its own arbitrary frame and scale. Reporting only the largest one hides a failed capture.</p>
+<h3 id="what-this-means-for-the-engine_4">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_4" title="Permanent link">&para;</a></h3>
+<p>The engine supports both solvers behind one interface, with global SfM as the fast path and incremental as the robust one, and it can run a global solve and verify it with a short incremental or bundle-adjustment pass. Every run reports the registration rate, the number of components and the images that did not register, because these are the answer to "did it work?". Masks, which exclude moving subjects and the sky from feature extraction, are first-class inputs. The failure-mode list above is the source for the capture guidance the engine gives to a person or a robot: low-texture rooms get a request for more oblique views and overlap, mirrors and glass get flagged.</p>
+<hr />
+<h2 id="6-bundle-adjustment">6. Bundle adjustment<a class="headerlink" href="#6-bundle-adjustment" title="Permanent link">&para;</a></h2>
+<h3 id="the-objective">The objective<a class="headerlink" href="#the-objective" title="Permanent link">&para;</a></h3>
+<p><strong>Bundle adjustment</strong> (BA) is the refinement at the heart of every pipeline. It adjusts all the camera poses, optionally the intrinsics, and all the 3D points at once so that the predicted pixel positions of the points match the observed ones as closely as possible. The name comes from the bundles of rays that connect each camera centre to its points, adjusted until they all fit.</p>
+<p>Let <span class="arithmatex">\(\pi(K_i, R_i, \mathbf{t}_i, \mathbf{X}_j)\)</span> project point <span class="arithmatex">\(j\)</span> into image <span class="arithmatex">\(i\)</span>, and let <span class="arithmatex">\(\mathbf{x}_{ij}\)</span> be the observed pixel. The objective is the sum of squared <strong>reprojection errors</strong>:</p>
+<div class="arithmatex">\[
+\min_{\{R_i, \mathbf{t}_i, K_i\},\{\mathbf{X}_j\}} \; \sum_{(i,j)\in \mathcal{O}} \rho\!\left( \left\| \pi(K_i, R_i, \mathbf{t}_i, \mathbf{X}_j) - \mathbf{x}_{ij} \right\|^2 \right)
+\]</div>
+<p>where <span class="arithmatex">\(\mathcal{O}\)</span> is the set of observations. Under Gaussian pixel noise this is the maximum-likelihood estimate, which is why reprojection error, measured in pixels, is both the quantity optimised and the headline quality number.</p>
+<h3 id="robust-losses">Robust losses<a class="headerlink" href="#robust-losses" title="Permanent link">&para;</a></h3>
+<p>Some observations are wrong: a false match that survived verification or a moving object. A squared loss gives a wrong observation enormous leverage. The robust function <span class="arithmatex">\(\rho\)</span> flattens the penalty for large residuals. A <strong>Huber</strong> loss grows linearly beyond a threshold, a <strong>Cauchy</strong> loss grows logarithmically, and a <strong>soft L1</strong> loss sits between. Outlier tracks are also removed explicitly by filtering observations whose error exceeds a threshold, then re-running the adjustment.</p>
+<h3 id="solving-it">Solving it<a class="headerlink" href="#solving-it" title="Permanent link">&para;</a></h3>
+<p>The problem is non-linear least squares, solved by <strong>Levenberg–Marquardt</strong>: at each step linearise the residuals around the current estimate, with Jacobian <span class="arithmatex">\(J\)</span> and residual vector <span class="arithmatex">\(\mathbf{r}\)</span>, and solve the damped normal equations</p>
+<div class="arithmatex">\[
+(J^\top J + \mu\,D)\,\boldsymbol{\delta} = -J^\top \mathbf{r}
+\]</div>
+<p>The damping <span class="arithmatex">\(\mu\)</span> interpolates between Gauss–Newton, fast near a solution, and gradient descent, safe far away. The step is accepted if the cost falls, and the damping is adjusted accordingly.</p>
+<p>For a thousand-image reconstruction with a million points the full system is far too large to solve densely, but it has structure. Each observation touches one camera and one point, so <span class="arithmatex">\(J^\top J\)</span> is block-sparse: camera blocks and point blocks, with cross terms only where a point is seen by a camera. The point-point block is <strong>block diagonal</strong>, one small <span class="arithmatex">\(3 \times 3\)</span> block per point, and cheap to invert. The <strong>Schur complement</strong> eliminates all the points analytically, leaving a much smaller <strong>reduced camera system</strong> whose size depends on the number of cameras only. Solve it, then back-substitute for the points. This is why BA scales to large sets, and why a camera count of a few thousand is comfortable while the point count can be in the millions.</p>
+<h3 id="gauge-freedom-what-images-alone-cannot-tell">Gauge freedom: what images alone cannot tell<a class="headerlink" href="#gauge-freedom-what-images-alone-cannot-tell" title="Permanent link">&para;</a></h3>
+<p>The objective depends only on pixel coordinates. Move, rotate and uniformly scale the whole scene, cameras and points together, and every projection stays exactly the same: a toy-sized scene photographed from toy-sized distances gives the same pictures as a building. A reconstruction from images alone is therefore defined only <strong>up to a similarity transform</strong>, <span class="arithmatex">\(\mathrm{Sim}(3)\)</span>, which has seven degrees of freedom:</p>
+<table>
+<thead>
+<tr>
+<th>Freedom</th>
+<th>DoF</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rotation</td>
+<td>3</td>
+<td>Which way is up, which way is north</td>
+</tr>
+<tr>
+<td>Translation</td>
+<td>3</td>
+<td>Where the origin is</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>1</td>
+<td>Whether a unit is a millimetre or a kilometre</td>
+</tr>
+</tbody>
+</table>
+<p>This is <strong>gauge freedom</strong>. The optimiser handles it by fixing the gauge arbitrarily: pinning the first camera, fixing one camera's translation and one distance, or by using a damping that makes the system solvable. Whatever it picks, the choice is arbitrary and has nothing to do with the world. A model in this state has <strong>arbitrary scale</strong>: its internal unit is meaningless until something fixes it.</p>
+<h3 id="fixing-scale-and-frame">Fixing scale and frame<a class="headerlink" href="#fixing-scale-and-frame" title="Permanent link">&para;</a></h3>
+<p>Something external must supply the seven numbers. The sources, in rough order of strength:</p>
+<ul>
+<li><strong>Known poses.</strong> A robot's odometry or SLAM output, an iPhone's ARKit track, a motion-capture or total-station rig. These carry metric scale and a frame directly.</li>
+<li><strong>GPS or GNSS.</strong> Drone and camera GPS give camera positions in a geographic frame. Consumer GPS is metres off in absolute terms, and noisy from image to image, so it fixes the similarity transform well over a large area and says little about fine detail. Survey-grade RTK and PPK are much better.</li>
+<li><strong>Scale bars and markers.</strong> Printed ArUco or AprilTag markers, or a scale bar with two targets at a known separation, give metric scale and, with several markers, frame. They are the underwater and small-object workhorse.</li>
+<li><strong>Known distances.</strong> A measured dimension of the object, such as the length of a wheelbase or the width of a doorway, fixes scale only.</li>
+<li><strong>Learned metric estimators.</strong> Feed-forward networks predict metric scale from appearance (section 7). Useful, not guaranteed, and needing verification.</li>
+<li><strong>Gravity.</strong> An accelerometer fixes the up direction of a phone's pose, which removes two rotational degrees of freedom.</li>
+</ul>
+<p>With external information there are two ways to use it. As a <strong>fixed constraint</strong>, the poses or positions are held exactly and the rest is solved around them. As a <strong>prior</strong>, they enter the objective as extra residuals weighted by their uncertainty: the optimiser may move the poses a little if the images disagree strongly enough. Priors are the default for anything that is measured with noise, such as GPS and ARKit, and fixed constraints suit exact data such as a simulator's poses. Treating noisy poses as exact corrupts the reconstruction, because pixel evidence is usually far more precise than the prior over short ranges. Treating exact poses as noisy loses the scale and frame that they provide for free. A common sequence is to run image-only BA, fit a similarity transform from the estimated camera centres to the prior positions, then run a final BA with the priors included.</p>
+<h3 id="uncertainty">Uncertainty<a class="headerlink" href="#uncertainty" title="Permanent link">&para;</a></h3>
+<p>BA gives more than a best estimate. At the optimum, the inverse of the (gauge-fixed) normal matrix <span class="arithmatex">\(J^\top J\)</span>, scaled by the residual variance, approximates the <strong>covariance</strong> of all the parameters: how tightly each pose and each point is determined. Points seen at small parallax have elongated covariance along the viewing ray. Cameras at the end of a chain with little overlap are uncertain. Two numbers matter in practice: the covariance of each point and the uncertainty of each pose, and both are far more informative than a single global reprojection error, which can look excellent on a geometrically weak model.</p>
+<h3 id="what-this-means-for-the-engine_5">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_5" title="Permanent link">&para;</a></h3>
+<p>Every model states its scale as one of two values: metric, with the source of the scale named, or arbitrary. It is never left implicit, and the frame (section 14) is stated alongside. The provenance record names which of the sources above supplied the gauge and how. The BA stage takes poses as priors with explicit covariances or as fixed, never silently as one or the other. Final models carry per-image pose uncertainty and per-point covariance or a summary of it, and the viewer and the agent read them. A model from images alone is flagged as "arbitrary scale" until a scale bar, a known distance or a metric estimator resolves it, and a metric estimate that has not been verified is labelled as an estimate.</p>
+<hr />
+<h2 id="7-learned-feed-forward-reconstruction">7. Learned feed-forward reconstruction<a class="headerlink" href="#7-learned-feed-forward-reconstruction" title="Permanent link">&para;</a></h2>
+<h3 id="what-they-are">What they are<a class="headerlink" href="#what-they-are" title="Permanent link">&para;</a></h3>
+<p>A new family of models skips the pipeline. <strong>DUSt3R</strong> and its successor <strong>MASt3R</strong> take image pairs and regress a <strong>pointmap</strong>: for every pixel, a 3D point in a shared coordinate frame. <strong>VGGT</strong>, <strong>MapAnything</strong> and <strong>Pi3</strong> extend this to many images at once, in a single forward pass of a transformer, predicting camera poses, intrinsics, depth maps and pointmaps. There is no feature extraction, no matching, no RANSAC and no incremental registration. The network has learned, from large datasets, what scenes look like and how views relate, and it outputs a geometric answer directly.</p>
+<p>What comes out varies by model: per-view depth, per-view pointmaps, camera extrinsics and intrinsics, and sometimes confidence maps. Some predict metric scale, because they were trained on metric data and learned how large things typically are; others return a normalised, arbitrary scale. MapAnything can also take extra inputs when available, such as known intrinsics or poses, and use them.</p>
+<h3 id="strengths">Strengths<a class="headerlink" href="#strengths" title="Permanent link">&para;</a></h3>
+<p>They are fast: seconds for tens of views, on a GPU. They work on conditions that defeat the classical pipeline, such as very little texture, small overlap and few views, because the network brings strong priors about scenes. They are therefore good <strong>initialisers</strong>: a rough pose and depth for every image that a classical pipeline can start from, replacing the expensive matching and registration stages. And they are plausible <strong>metric-scale estimators</strong>: a single number that says how big the scene probably is, when nothing else does.</p>
+<h3 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h3>
+<p>Resolution is limited. These networks process images at modest sizes, of order a few hundred to around five hundred pixels on the long side, so the output geometry is coarse next to a twenty-megapixel photograph. Memory and compute grow with the number of views, because the model attends across all of them, so a few dozen to a few hundred views is the practical regime, not thousands. Accuracy is that of a learned prior, not a measurement: errors are smooth and plausible rather than obviously wrong, and nothing in the output says where it is wrong. They are trained on particular kinds of scenes and degrade out of distribution: underwater imagery, strong refraction and unusual optics are not their home ground. They do not model the camera's lens beyond a simple model.</p>
+<h3 id="why-classical-ba-still-verifies-them">Why classical BA still verifies them<a class="headerlink" href="#why-classical-ba-still-verifies-them" title="Permanent link">&para;</a></h3>
+<p>A feed-forward output is a hypothesis. Bundle adjustment, run on the full-resolution images with matched features and the real lens model, tests the hypothesis against the pixels: if the predicted poses are right, reprojection error falls to a fraction of a pixel; if not, the error stays high and the failure is visible. The sensible use is as a first pass whose result is checked and refined classically, with the measured scale error against a known dimension deciding whether the metric estimate can be trusted.</p>
+<p>Licences vary across these models, and several sets of weights are non-commercial. A model's code licence and its weights' licence can differ, and both must be checked before a model enters a default configuration.</p>
+<h3 id="what-this-means-for-the-engine_6">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_6" title="Permanent link">&para;</a></h3>
+<p>Learned reconstruction is an optional stage that produces the same artefact types as the classical path: poses, intrinsics, depth. It feeds bundle adjustment as an initialisation or a prior and is never the final authority. The comparison of learned and classical output, on registration rate, reprojection error and scale error against a known dimension, is a standing measurement. Each model is registered with its licence class, and non-commercial weights are labelled and kept out of the default stack. Input to these models is downscaled, and the engine records that the result came from reduced-resolution images.</p>
+<hr />
+<h2 id="8-dense-reconstruction">8. Dense reconstruction<a class="headerlink" href="#8-dense-reconstruction" title="Permanent link">&para;</a></h2>
+<h3 id="the-idea">The idea<a class="headerlink" href="#the-idea" title="Permanent link">&para;</a></h3>
+<p>SfM yields a sparse cloud, thousands to hundreds of thousands of points, enough to place cameras but too sparse to see surfaces. <strong>Dense reconstruction</strong>, or <strong>multi-view stereo</strong> (MVS), estimates depth for nearly every pixel, given the now-known poses. It turns calibrated cameras into a dense 3D model of the scene's visible surfaces.</p>
+<h3 id="depth-maps-by-photometric-consistency">Depth maps by photometric consistency<a class="headerlink" href="#depth-maps-by-photometric-consistency" title="Permanent link">&para;</a></h3>
+<p>The principle is <strong>photometric consistency</strong>: if a pixel in a reference image sits on a surface at depth <span class="arithmatex">\(d\)</span>, then projecting that 3D point into neighbouring images lands on pixels that look alike. A wrong depth lands on unrelated pixels that do not. For each reference pixel, the algorithm searches over depth for the hypothesis that makes the neighbouring views agree best, usually using the similarity of a small patch around the pixel, for example normalised cross-correlation, rather than single pixels, because single pixels are noisy.</p>
+<p>The brute-force version is a <strong>plane sweep</strong>: step through candidate depths, warp the neighbouring images onto each fronto-parallel plane and score the agreement. It is simple and parallel but costs time and memory proportional to the number of depth candidates, and a fronto-parallel assumption fails on slanted surfaces.</p>
+<p><strong>PatchMatch stereo</strong> is the more efficient and more accurate approach, and it is the basis of COLMAP's dense stage. Each pixel holds a hypothesis of depth and surface normal. The hypotheses are initialised randomly, then iteratively improved by two ideas: neighbouring pixels likely belong to the same surface, so a good hypothesis propagates to its neighbours, and random perturbation of a hypothesis refines it. After a few sweeps over the image, good depth and normals emerge without exhaustively testing every depth. The method in COLMAP additionally selects, per pixel, which neighbouring views to use, because occlusion means that only some of them see the point (the paper's name for this is pixelwise view selection).</p>
+<h3 id="filtering-and-fusion">Filtering and fusion<a class="headerlink" href="#filtering-and-fusion" title="Permanent link">&para;</a></h3>
+<p>Raw depth maps contain errors: occlusions, textureless regions, reflections. Each depth map is filtered, keeping pixels whose depth agrees with the depth maps of other views when projected, a <strong>geometric consistency</strong> check, and whose photometric score is good. The survivors from all views are <strong>fused</strong>: points are lifted to 3D, merged where several views agree on the same location and written out as a dense, coloured point cloud, usually with normals.</p>
+<h3 id="resolution-and-memory">Resolution and memory<a class="headerlink" href="#resolution-and-memory" title="Permanent link">&para;</a></h3>
+<p>Dense cost scales with the number of pixels processed and the number of views used per pixel. Halving the resolution cuts the work by roughly four, and the point count of the result likewise. A fifty-megapixel image set processed at full resolution is expensive in GPU memory and time, and the benefit has a ceiling: the geometry cannot be more accurate than the pose and the calibration allow. Depth maps are usually computed at a reduced resolution that matches the accuracy of the poses, then fused.</p>
+<p>COLMAP's dense stereo needs a GPU: CUDA on NVIDIA, or a HIP build on AMD; its documentation describes no CPU or Metal path. This is a property of its implementation, not of the algorithm; the algorithm is portable, and other implementations exist for other backends.</p>
+<h3 id="why-good-poses-matter">Why good poses matter<a class="headerlink" href="#why-good-poses-matter" title="Permanent link">&para;</a></h3>
+<p>Dense matching assumes the epipolar geometry is exact. A pose error of a fraction of a pixel turns into a depth error and a smear, and a lens model that is wrong at the edge of the frame turns into a systematic shape error: flat surfaces that bow. The dense stage amplifies pose problems and rarely corrects them. Dense reconstruction after a poor registration yields a convincing-looking but wrong surface.</p>
+<h3 id="what-this-means-for-the-engine_7">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_7" title="Permanent link">&para;</a></h3>
+<p>Dense MVS is a placement-constrained stage. The COLMAP implementation needs CUDA, so the coordinator schedules it only to workers that advertise it, and an Apple silicon or AMD machine does the earlier stages and the later ones but not this one unless another implementation is used. Depth maps are separable per view, which makes them the natural unit to fan out, with fusion as the merge step. The engine records the resolution at which dense was run, and refuses to run dense on a model whose reprojection error or registration is poor, saying so rather than producing a convincing wrong surface. Robot and ARKit depth, from LiDAR or RGB-D, can substitute for or seed the photometric depth maps in the fusion.</p>
+<hr />
+<h2 id="9-surfaces-and-textures">9. Surfaces and textures<a class="headerlink" href="#9-surfaces-and-textures" title="Permanent link">&para;</a></h2>
+<h3 id="from-points-to-a-surface">From points to a surface<a class="headerlink" href="#from-points-to-a-surface" title="Permanent link">&para;</a></h3>
+<p>A point cloud has no connectivity, so it cannot be rendered solidly, simulated or placed in a game. A <strong>surface</strong> reconstruction turns points into a triangle mesh.</p>
+<p><strong>Poisson surface reconstruction</strong> treats the oriented points, positions plus normals, as samples of the gradient of an indicator function, 1 inside the object and 0 outside, and solves a Poisson equation for the function whose gradient best fits them. The surface is its level set at 0.5. The method is global, produces watertight surfaces, is robust to noise and smooths over holes, and works on an adaptive octree so that detail concentrates where points are dense. The costs are that normals must be good, that it hallucinates surface across gaps, creating bubble-like blobs where there are none, and that it needs a trim step: the per-vertex sample density is used to remove surface far from any data.</p>
+<p><strong>Delaunay-based meshing</strong> builds a tetrahedralisation of the points, labels each tetrahedron inside or outside using the camera-to-point visibility, since the space between a camera and a point it saw must be empty, and extracts the boundary. It uses visibility information that Poisson ignores, which handles thin structures and open scenes better, at higher complexity.</p>
+<p><strong>TSDF fusion</strong>, the truncated signed distance function, merges depth maps directly into a voxel grid. Each voxel stores the signed distance to the nearest surface, truncated near the surface and averaged across views, and a mesh comes out of the zero level set, extracted with marching cubes. It works naturally with depth from RGB-D sensors, LiDAR and robots, and runs incrementally as frames arrive. Resolution is limited by the voxel size, and memory grows with volume rather than surface, which suits rooms and objects better than city blocks without a sparse or hashed grid.</p>
+<h3 id="cleanup-decimation-and-level-of-detail">Cleanup, decimation and level of detail<a class="headerlink" href="#cleanup-decimation-and-level-of-detail" title="Permanent link">&para;</a></h3>
+<p>Raw meshes have noise, floating fragments, holes and tens of millions of triangles. Cleanup removes small disconnected components and non-manifold edges, fills holes and smooths lightly. <strong>Decimation</strong> reduces the triangle count by collapsing edges with the least geometric error, which preserves shape while cutting the count by orders of magnitude. A set of meshes at decreasing triangle counts, a <strong>level-of-detail</strong> (LOD) chain, serves a game engine, which draws near objects in detail and far objects cheaply. Geometry detail that decimation removes can be moved into <strong>normal maps</strong> baked from the high-resolution mesh onto the low-resolution one.</p>
+<h3 id="texture">Texture<a class="headerlink" href="#texture" title="Permanent link">&para;</a></h3>
+<p>A mesh gets colour by <strong>UV unwrapping</strong>: cutting the surface into charts that are flattened into a 2D texture atlas, with each triangle assigned a place in the atlas. Colour is then projected from the photographs. Each triangle is seen by several cameras, and the choice and combination of them is the substance of texturing. Selecting one best view per triangle, by viewing angle, distance and sharpness, gives crisp results with visible <strong>seams</strong> at the boundaries between views. Blending several views hides seams but blurs any misalignment. Multi-band blending, which blends low frequencies broadly and high frequencies narrowly, and explicit seam levelling are the usual remedies.</p>
+<p>Seams are overwhelmingly a consequence of the photographs disagreeing: <strong>exposure differences</strong>, white-balance shifts, vignetting, changing sun and clouds. Geometry-driven blending cannot fix inputs whose colours disagree, which is why consistent development of the whole set (section 12) is a precondition and not a polish step.</p>
+<h3 id="pbr-and-de-lighting">PBR and de-lighting<a class="headerlink" href="#pbr-and-de-lighting" title="Permanent link">&para;</a></h3>
+<p>A texture from photographs is <strong>baked lighting</strong>: it contains the shadows, highlights and colour cast of the moment of capture. A game engine wants <strong>physically based rendering</strong> (PBR) materials, with separate maps for albedo (the base colour, free of lighting), normal, roughness and metalness, which the engine relights. Recovering albedo requires <strong>de-lighting</strong>: removing shading, shadows and, where possible, specular highlights from the captured texture. Diffuse capture conditions (section 11) and cross-polarised light, which removes specular reflection at capture time, make this tractable. De-lighting from a single bad capture is an approximation, and roughness and metalness are generally estimated or authored rather than measured.</p>
+<h3 id="what-this-means-for-the-engine_8">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_8" title="Permanent link">&para;</a></h3>
+<p>Surface reconstruction is selectable, with Poisson as the default for closed objects, a visibility-based method for open or thin scenes and TSDF for depth-sensor input, and each mesh records its method and parameters. Meshes carry a LOD chain and, for game targets, baked normal maps. Texturing consumes the developed, consistent images, and the engine warns when exposure or white balance varies across the set. A textured model states whether its colour is baked lighting or de-lit albedo, and a game-asset export is a distinct, named profile with polygon budget, texture size and scale.</p>
+<hr />
+<h2 id="10-radiance-fields-and-gaussian-splatting">10. Radiance fields and gaussian splatting<a class="headerlink" href="#10-radiance-fields-and-gaussian-splatting" title="Permanent link">&para;</a></h2>
+<h3 id="nerf-in-one-paragraph">NeRF in one paragraph<a class="headerlink" href="#nerf-in-one-paragraph" title="Permanent link">&para;</a></h3>
+<p>A <strong>neural radiance field</strong> represents a scene as a function, a small neural network, that takes a 3D position and a viewing direction and returns a colour and a density. To render a pixel, the method casts a ray through the scene, samples points along it, queries the network and composites the colours front to back weighted by density, which is differentiable volume rendering. Training adjusts the network so that renderings from the known camera poses match the photographs. The result renders novel views with striking realism, including view-dependent effects, but is slow to train and render in its original form and has no explicit surface.</p>
+<h3 id="3d-gaussian-splatting">3D gaussian splatting<a class="headerlink" href="#3d-gaussian-splatting" title="Permanent link">&para;</a></h3>
+<p><strong>3D gaussian splatting</strong> (3DGS) keeps the idea of fitting a scene to photographs but replaces the network with an explicit set of millions of 3D gaussian blobs, each of which carries:</p>
+<ul>
+<li>a <strong>mean</strong> <span class="arithmatex">\(\boldsymbol{\mu}\)</span>, its centre in 3D,</li>
+<li>a <strong>covariance</strong> <span class="arithmatex">\(\Sigma\)</span>, describing its extent and orientation, parameterised as a scale vector <span class="arithmatex">\(\mathbf{s}\)</span> and a rotation <span class="arithmatex">\(R\)</span> so that <span class="arithmatex">\(\Sigma = R\,\mathrm{diag}(\mathbf{s})^2 R^\top\)</span> stays positive semi-definite,</li>
+<li>an <strong>opacity</strong> <span class="arithmatex">\(\alpha\)</span>,</li>
+<li>a <strong>colour</strong> expressed in <strong>spherical harmonics</strong> (SH), a basis for functions on the sphere, so that colour changes with viewing direction; the standard setup uses degree 3, 16 coefficients per colour channel.</li>
+</ul>
+<p>Rendering is <strong>differentiable rasterisation</strong>, not ray marching. Each gaussian is projected to the image as a 2D ellipse, using the camera transform and the local linearisation of the projection:</p>
+<div class="arithmatex">\[
+\Sigma' = J\,W\,\Sigma\,W^\top J^\top
+\]</div>
+<p>with <span class="arithmatex">\(W\)</span> the world-to-camera rotation and <span class="arithmatex">\(J\)</span> the Jacobian of the perspective projection at the gaussian's centre. The 2D gaussians are sorted by depth, tiled and alpha-composited front to back:</p>
+<div class="arithmatex">\[
+C = \sum_{i} c_i\,\alpha_i \prod_{j&lt;i} (1 - \alpha_j)
+\]</div>
+<p>where <span class="arithmatex">\(\alpha_i\)</span> is the opacity times the 2D gaussian's falloff at the pixel. Every step is differentiable, so a photometric loss between the rendering and the photograph, an L1 term combined with a structural similarity term, produces gradients for the means, scales, rotations, opacities and SH coefficients of every gaussian. This is fast enough to render in real time and to train in minutes to tens of minutes.</p>
+<h3 id="initialisation-densification-and-pruning">Initialisation, densification and pruning<a class="headerlink" href="#initialisation-densification-and-pruning" title="Permanent link">&para;</a></h3>
+<p>Training starts from the <strong>sparse points of SfM</strong>, one gaussian per point, with small isotropic scale and colour from the point. This is why 3DGS needs good poses and a reasonable sparse cloud: the poses define the photographic constraints, and the points seed the geometry. An optimisation from random initialisation works on easy scenes and fails on hard ones.</p>
+<p>The fixed set of seeds is not enough, so training performs <strong>adaptive density control</strong>. Gaussians whose positional gradient is large, meaning that the area is under-reconstructed, are <strong>cloned</strong> if small, to fill in missing geometry, or <strong>split</strong> if large, to refine detail. Gaussians with near-zero opacity, or that have become huge, are <strong>pruned</strong>. Opacity is periodically reset towards zero so that gaussians that do not earn their keep fade out and are removed. The count therefore grows and shrinks to fit the scene.</p>
+<h3 id="strengths-and-weaknesses">Strengths and weaknesses<a class="headerlink" href="#strengths-and-weaknesses" title="Permanent link">&para;</a></h3>
+<p>Splats are good at what meshes find hard: <strong>view-dependent appearance</strong>, such as glints, sheen and reflections, through the SH colour; <strong>thin and fuzzy things</strong>, such as hair, foliage, wire and kelp, which a surface cannot represent; and soft, volumetric content. They render in real time on ordinary GPUs and look photographic.</p>
+<p>They are bad at what metrology needs. A splat is a set of blobs that reproduces the photographs from the training viewpoints. It has <strong>no clean geometry</strong>: the gaussians do not lie on a surface, floaters hang in the air, and the depth rendered from a splat is a composite. Appearance can be correct while the position is wrong, because a view-dependent colour can cheat geometry. It is a poor basis for measurement, collision and engine-ready assets, and its quality away from the training views is unconstrained.</p>
+<p><strong>Meshes from splats</strong> is an open area. Methods such as <strong>2DGS</strong> (two-dimensional gaussian surfels, which have a well-defined normal and intersect rays at a single depth) and <strong>PGSR</strong> (planar-based gaussian splatting with geometric regularisation) change the representation or add geometry losses so that surfaces can be extracted. Results are improving, but the field has no settled recipe that matches classical dense reconstruction for accuracy.</p>
+<h3 id="what-this-means-for-the-engine_9">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_9" title="Permanent link">&para;</a></h3>
+<p>A splat is a rendering artefact of the model, not a geometric one, and the engine labels it so: it is never the source of a measurement or a scale, and exports of splats say that. Splat training consumes the poses and sparse points from the same SfM and BA run as the mesh path, so both representations share one frame and scale. Quality for splats uses held-out view metrics (section 15) because there is no ground-truth geometry to compare against. Mesh-from-splat extraction is an experimental option, compared against classical mesh output and not trusted by default. Training needs a GPU backend, which is a placement constraint like dense MVS.</p>
+<hr />
+<h2 id="11-capture">11. Capture<a class="headerlink" href="#11-capture" title="Permanent link">&para;</a></h2>
+<p>All the processing above amplifies the capture. The photographs set a ceiling on quality that no algorithm raises.</p>
+<h3 id="overlap-parallax-and-angles">Overlap, parallax and angles<a class="headerlink" href="#overlap-parallax-and-angles" title="Permanent link">&para;</a></h3>
+<p>Neighbouring views overlap by <strong>60 to 80 percent</strong>: enough that each point appears in several images and that features match, with enough baseline between them for useful parallax. Aerial mapping, where the flight is planned, often goes higher: around 80 percent forward and 70 percent side overlap. Less overlap leaves holes and weak links; much more adds data without adding geometry, because the baseline shrinks.</p>
+<p>The scene must be seen from <strong>varied angles</strong>: parallax is what carries depth. Walking in an arc around an object, rather than rotating on the spot, gives baseline. Several rings at different heights, and some oblique views, constrain a shape better than one flat ring. Corners, concavities and undersides need dedicated views, since a surface seen only at grazing angles reconstructs poorly. Close-ups for detail should be tied into a wider set with intermediate distances, so that the zooming-in is registered and not left as an island.</p>
+<h3 id="distance-and-ground-sampling-distance">Distance and ground sampling distance<a class="headerlink" href="#distance-and-ground-sampling-distance" title="Permanent link">&para;</a></h3>
+<p>The size on the object that one pixel covers is the <strong>ground sampling distance</strong> (GSD):</p>
+<div class="arithmatex">\[
+\mathrm{GSD} = \frac{p \cdot Z}{f}
+\]</div>
+<p>with <span class="arithmatex">\(p\)</span> the pixel pitch on the sensor, <span class="arithmatex">\(Z\)</span> the distance to the surface and <span class="arithmatex">\(f\)</span> the focal length, in the same units. A camera with a pixel pitch of 4.4 µm and a 24 mm lens at 10 m has a GSD of about 1.8 mm. For a drone, <span class="arithmatex">\(Z\)</span> is the flying height. The achievable accuracy is typically a small multiple of the GSD, and the distance is therefore a design parameter: halve the distance, or double the focal length, to halve the GSD.</p>
+<h3 id="sharpness">Sharpness<a class="headerlink" href="#sharpness" title="Permanent link">&para;</a></h3>
+<p>Matching and texturing depend on sharp pixels. <strong>Shutter speed</strong> must beat both subject motion and hand shake, and a common guide is a reciprocal of the focal length or faster, with image stabilisation helping for the camera but not for the subject. <strong>Aperture</strong> trades depth of field against <strong>diffraction</strong>: stopping down widens the sharp zone, but the Airy disk grows, with a diameter of about <span class="arithmatex">\(2.44\,\lambda\,N\)</span> for wavelength <span class="arithmatex">\(\lambda\)</span> and f-number <span class="arithmatex">\(N\)</span>. At f/11 and 550 nm that is about 15 µm, several pixels on a high-resolution sensor, so there is a sweet spot, often f/5.6 to f/8 on a full-frame camera. <strong>Depth of field</strong> matters for close work: a macro subject needs the whole object inside the sharp zone, or focus stacking. A shot that is out of focus on the object produces few keypoints and a soft texture. High ISO is better than blur, and noise is better than motion.</p>
+<h3 id="exposure-white-balance-and-lighting">Exposure, white balance and lighting<a class="headerlink" href="#exposure-white-balance-and-lighting" title="Permanent link">&para;</a></h3>
+<p><strong>Lock exposure and white balance</strong> for a capture so that the images agree: aperture, shutter speed and ISO fixed in manual, or at least exposure compensation disciplined, and a fixed white balance. Automatic changes between frames cause the colour seams and brightness steps that appear in the texture. Shooting RAW makes the rest recoverable (section 12).</p>
+<p><strong>Light</strong> should be diffuse: overcast sky, a shaded area, a lightbox. Hard shadows move as the camera moves, which violates the assumption that the scene looks the same from every angle, and they bake into textures. <strong>Specular highlights</strong> slide across a glossy surface as the camera moves and so do not belong to the surface; photometric matching and surface reconstruction both fail there. <strong>Cross-polarisation</strong>, with a polariser on the light and a perpendicular one on the lens, removes the specular reflection and leaves the diffuse colour, which helps shiny objects and de-lighting. Moving lights, or a moving shadow of the photographer, create a different illumination in every frame.</p>
+<h3 id="turntables-and-masking">Turntables and masking<a class="headerlink" href="#turntables-and-masking" title="Permanent link">&para;</a></h3>
+<p>For small objects, the camera can stay still and the object rotate on a turntable. A caution: the background then does not move with the object, so the background features, which are static, agree with a camera that has not moved while the object features agree with one that has. Mixed motion confuses the SfM. The remedy is <strong>masking</strong>: segmenting the object so that features come only from it, or a featureless background and a surface with targets or texture. A turntable with a patterned base can supply features on the turntable itself, which rotates with the object. Masks are also how people, vehicles and other moving subjects are kept out of a scene.</p>
+<h3 id="video-versus-stills">Video versus stills<a class="headerlink" href="#video-versus-stills" title="Permanent link">&para;</a></h3>
+<p>Video is easy to capture and delivers continuous coverage, but it has costs: lower resolution than stills, compression, motion blur from long exposures at low frame rates and rolling shutter (section 2). Adjacent frames are nearly identical, so using all of them adds cost and little baseline. <strong>Frame selection</strong> keeps frames that are sharp, by a blur measure such as the variance of the Laplacian, and sufficiently separated in motion that the baseline is useful, usually by sampling on camera displacement or optical flow instead of a fixed frame interval. Stills are preferable where resolution and quality matter, and video where coverage and speed do.</p>
+<h3 id="what-this-means-for-the-engine_10">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_10" title="Permanent link">&para;</a></h3>
+<p>The engine states what good capture needs and judges a capture after the fact, so these numbers drive the quality report: overlap and parallax per region, estimated GSD per image, a blur score per image, exposure and white-balance variance across the set. It ingests video through frame selection by sharpness and motion, and records the policy. It treats diffuse-light, locked-exposure sets as the reference case and flags deviations. Its capture advice to a person or a robot names the weakest region and the view that would improve it.</p>
+<hr />
+<h2 id="12-raw-and-colour">12. RAW and colour<a class="headerlink" href="#12-raw-and-colour" title="Permanent link">&para;</a></h2>
+<h3 id="what-raw-is">What RAW is<a class="headerlink" href="#what-raw-is" title="Permanent link">&para;</a></h3>
+<p>A camera sensor counts photons per pixel. A <strong>RAW</strong> file stores those counts almost as they were read, so the data is <strong>linear</strong>: double the light, double the value. Each pixel sits under a colour filter, red, green or blue, arranged in a <strong>Bayer mosaic</strong>, usually with twice as many green as red or blue, so each pixel measures one colour only. <strong>Demosaicing</strong> interpolates the two missing colours at every pixel to give a full-colour image. The file also carries a black level, a white (saturation) level and often a camera-specific colour matrix and an as-shot white balance, as metadata.</p>
+<p>A camera JPEG has been through a pipeline that the RAW has not: demosaic, white balance, a colour transform, a tone curve, sharpening, noise reduction and 8-bit compression. Those steps are not reversible, and they are not the same from one shot to the next, because auto white balance and scene-dependent tone mapping vary.</p>
+<h3 id="white-balance-exposure-and-tone">White balance, exposure and tone<a class="headerlink" href="#white-balance-exposure-and-tone" title="Permanent link">&para;</a></h3>
+<p><strong>White balance</strong> scales the red, green and blue channels so that a neutral object comes out neutral under the light it was lit by. The channels are multiplied by gains; the sensor's native response is then converted to a standard colour space by a matrix. <strong>Exposure</strong> is a multiplier on the linear values, a change of one stop being a factor of two. These are cheap, exact operations in linear space, and they are where RAW wins, because the headroom of 12 to 14 bits is preserved.</p>
+<p>Displays and files are not linear. The <strong>tone curve</strong> compresses the linear values into the range of the output, and the <strong>gamma</strong> encoding of sRGB, close to a power of 1/2.2, spends bits where human vision is more sensitive, in the shadows. Image-processing operations such as blending, resizing and averaging are physically meaningful in linear light and subtly wrong in gamma-encoded values, which is one reason to do the calculation in linear space and apply the curve last.</p>
+<h3 id="why-consistency-matters">Why consistency matters<a class="headerlink" href="#why-consistency-matters" title="Permanent link">&para;</a></h3>
+<p>Feature matching tolerates some variation, but descriptors work best when the same point looks alike across images, and large brightness and colour differences cost matches. Texturing is far less tolerant: the final colour of a surface is a blend of several photographs, and where the photographs disagree, the blend shows steps and seams. <strong>Splats</strong> are the most exposed. A gaussian splat fits the photographs as given, so a set in which exposure and white balance drift trains a scene with colour and brightness that depend on the view, "baked" into the gaussians' appearance, or floaters that explain the differences. Auto exposure and auto white balance in the camera, or a per-image Lightroom adjustment, make each image internally pleasing and the set mutually inconsistent.</p>
+<p>The remedy is to <strong>develop the whole set with one recipe</strong>: one white balance for the set (or one computed from a reference), one exposure, one tone curve, applied to linear data, with only a deliberate per-image exposure correction when the capture's own exposure changed. The goal is for a given surface point to give nearly the same value in every image that sees it.</p>
+<h3 id="colour-checkers">Colour checkers<a class="headerlink" href="#colour-checkers" title="Permanent link">&para;</a></h3>
+<p>A <strong>colour checker</strong>, a card with known patches, photographed in the scene's light gives ground truth for white balance and, with several patches, for a colour correction matrix from camera to a standard space. A grey card alone fixes white balance and exposure. One shot of the card per lighting condition is enough to calibrate a set shot in constant light. Under changing light, such as sun and cloud, or at changing depth underwater, the card can only calibrate the moment it was photographed.</p>
+<h3 id="what-this-means-for-the-engine_11">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_11" title="Permanent link">&para;</a></h3>
+<p>The imaging stage decodes RAW to linear data, sets one white balance and exposure for the whole set, applies one tone curve and writes the developed images that all later stages read. The developed images are artefacts with their recipe recorded, so that a result can be traced back to the develop settings. The engine measures and reports exposure and white-balance variance across a set and warns before texturing or splat training. A colour checker or grey card image in the set is detected and used. Developed images are kept at the highest bit depth the downstream stage accepts, and the 8-bit JPEG path is a fallback, not the reference.</p>
+<hr />
+<h2 id="13-underwater">13. Underwater<a class="headerlink" href="#13-underwater" title="Permanent link">&para;</a></h2>
+<p>Underwater imagery breaks three assumptions of the previous sections at once: the camera geometry, the colour and the clarity of the medium.</p>
+<h3 id="refraction-at-the-port">Refraction at the port<a class="headerlink" href="#refraction-at-the-port" title="Permanent link">&para;</a></h3>
+<p>A housing puts a window, the <strong>port</strong>, between the camera and the water. Light bends where it crosses between media of different refractive index, as <strong>Snell's law</strong> says:</p>
+<div class="arithmatex">\[
+n_1 \sin\theta_1 = n_2 \sin\theta_2
+\]</div>
+<p>with <span class="arithmatex">\(n \approx 1.00\)</span> for air and about <span class="arithmatex">\(1.33\)</span> for water; seawater is slightly higher.</p>
+<p>A <strong>flat port</strong> is a plane window. A ray leaving the water bends towards the normal as it enters the air behind the glass, so objects appear closer and larger, and the field of view narrows, by roughly the factor 1.33 for a camera whose pupil sits near the port. The key point for geometry is that the bend depends on the angle at which the ray meets the port, and the rays do not meet at a single centre of projection any longer. The camera plus flat port is a <strong>non-single-viewpoint</strong> camera: the rays in water, traced back, are tangent to a caustic rather than passing through one point. Distortion is then a function of <strong>distance to the object</strong> as well as of image position. A radial distortion polynomial, tuned for one distance, absorbs part of the effect but not all of it: the model is only approximate, and the residual grows with the viewing angle and changes with distance. It is the basis for the common observation that flat-port underwater models bow, even when the reprojection error looks tolerable. A correct treatment models the refraction explicitly, with the port's distance from the camera, its thickness and normal, and traces rays through it.</p>
+<p>A <strong>dome port</strong> is a spherical window. If the camera's <strong>entrance pupil</strong> is at the centre of the sphere, every ray from the water meets the dome at normal incidence and passes undeviated; the dome then acts as a lens that forms a virtual image of the scene, closer than the object, that the lens focuses on. The projection is then close to pinhole with the original field of view, and the distortion terms can absorb the residual. In practice, the centring is imperfect and the virtual image is close, so lenses must focus near, and the model remains approximate for a misaligned dome. Domes are the preferred geometry for photogrammetry.</p>
+<h3 id="colour-attenuation">Colour: attenuation<a class="headerlink" href="#colour-attenuation" title="Permanent link">&para;</a></h3>
+<p>Water absorbs light, and it absorbs different wavelengths at different rates: <strong>red</strong> is attenuated first, within a few metres, then orange and yellow, leaving blue and green. A photograph at depth is blue-green and loses saturation with distance from the subject, since the path from light to subject to camera is long. Colour loss depends on the <strong>range</strong> from camera to subject, not on depth alone, and on the water's properties, which vary with place, season and plankton. A strobe restores colour near the camera; it lights the subject at a distance of metres and cannot light the reef at ten.</p>
+<h3 id="backscatter-and-caustics">Backscatter and caustics<a class="headerlink" href="#backscatter-and-caustics" title="Permanent link">&para;</a></h3>
+<p>Particles in the water scatter light back into the lens. <strong>Backscatter</strong> is the veiling haze, or the white specks of a strobe lighting suspended particles near the lens. It is added to the image in addition to the subject signal, and it reduces contrast, and it grows with range until it saturates at the colour of the water. In shallow, sunlit water the surface waves focus light into moving bright networks on the seabed, <strong>caustics</strong>, that move from frame to frame: they are lighting that is not part of the scene, and they break the static-scene assumption in the same way as moving shadows.</p>
+<h3 id="the-sea-thru-model">The Sea-thru model<a class="headerlink" href="#the-sea-thru-model" title="Permanent link">&para;</a></h3>
+<p>Akkaynak and Treibitz modelled underwater image formation per colour channel <span class="arithmatex">\(c\)</span> as the sum of two components that behave differently with the range <span class="arithmatex">\(z\)</span>:</p>
+<div class="arithmatex">\[
+I_c = J_c\,e^{-\beta_c^{D} z} + B_c^{\infty}\left(1 - e^{-\beta_c^{B} z}\right)
+\]</div>
+<p><span class="arithmatex">\(J_c\)</span> is the unattenuated colour of the surface, the one the image should show. The first term is the <strong>direct signal</strong>, which decays exponentially with range at a rate <span class="arithmatex">\(\beta^D_c\)</span>. The second is <strong>backscatter</strong>, which rises with range and saturates at a veiling light <span class="arithmatex">\(B^\infty_c\)</span> with its own coefficient <span class="arithmatex">\(\beta^B_c\)</span>. The two coefficients differ — the revised image formation model of Akkaynak and Treibitz (CVPR 2018) showed that backscatter is governed by a different coefficient from the direct signal, and the authors' earlier work, cited there, that the coefficients depend on range, the scene and the imaging conditions rather than on the water alone. Sea-thru (CVPR 2019) applies that model to images with known range. Earlier simple models used one coefficient per channel for both terms.</p>
+<p>The formula inverts if range is known: subtract the backscatter, divide by the attenuation, and recover <span class="arithmatex">\(J\)</span>. This is why <strong>geometry comes first and colour second</strong>. A reconstruction produces a depth, a range from the camera, for every pixel, through the poses and the dense or mesh geometry. A single image has no such range. With it, the correction becomes a physically grounded per-pixel operation instead of a global colour filter. The estimation of coefficients, from colour charts or from the scene's own statistics, is part of the method and is not trivial.</p>
+<h3 id="scale-underwater">Scale underwater<a class="headerlink" href="#scale-underwater" title="Permanent link">&para;</a></h3>
+<p>Scale cannot come from GPS, which does not penetrate water. It comes from <strong>scale bars</strong> placed in the scene, from <strong>fixed-spacing lasers</strong> that project two or more dots a known distance apart onto the subject, from <strong>coded markers</strong> such as AprilTags, from a known dimension of a structure, or from a vehicle's own pose sources: a diver's depth gauge, an ROV's navigation. Because refraction distorts the apparent size, a scale bar that is measured through a flat port inherits the same error unless the refraction is modelled.</p>
+<h3 id="what-this-means-for-the-engine_12">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_12" title="Permanent link">&para;</a></h3>
+<p>The camera model for an underwater set includes the port type, with a flat-port refraction model as a distinct option from pinhole plus distortion, and the engine records which was used. The quality report separates "residuals consistent with an unmodelled flat port" from other failures. The imaging stage does not apply a global white balance to an underwater set as though it were air, and range-dependent colour correction runs after reconstruction, using per-pixel range from the geometry, and writes its coefficients to the provenance. Scale for underwater models comes from scale bars, lasers, markers or a known dimension, and the model states which, because the GPS path is closed. Moving subjects (fish, kelp) and caustics are masked or flagged.</p>
+<hr />
+<h2 id="14-frames-units-and-georeferencing">14. Frames, units and georeferencing<a class="headerlink" href="#14-frames-units-and-georeferencing" title="Permanent link">&para;</a></h2>
+<h3 id="frames-and-handedness">Frames and handedness<a class="headerlink" href="#frames-and-handedness" title="Permanent link">&para;</a></h3>
+<p>Every coordinate belongs to a <strong>frame</strong>: a choice of origin and axes. The engine uses <strong>right-handed</strong> frames: with <span class="arithmatex">\(X\)</span> to the right and <span class="arithmatex">\(Y\)</span> forward, <span class="arithmatex">\(Z\)</span> points up, and the rotation that takes one to another has determinant <span class="arithmatex">\(+1\)</span>. A mirrored frame, which has determinant <span class="arithmatex">\(-1\)</span>, is not a rotation and silently flips the model. Conventions differ among the tools the engine touches. Computer vision camera frames, as used by COLMAP and OpenCV, put <span class="arithmatex">\(Z\)</span> forward, <span class="arithmatex">\(X\)</span> right and <span class="arithmatex">\(Y\)</span> down. Robotics conventions put <span class="arithmatex">\(X\)</span> forward, <span class="arithmatex">\(Y\)</span> left and <span class="arithmatex">\(Z\)</span> up. Graphics and game engines vary: some are <span class="arithmatex">\(Y\)</span>-up, some <span class="arithmatex">\(Z\)</span>-up and some are left-handed. Every import and export converts between them and states the convention.</p>
+<p>All lengths are in <strong>metres</strong> inside the engine, and a model that has only arbitrary scale says so; it never carries a unit that is not true. Angles are in radians internally.</p>
+<h3 id="camera-pose-and-robot-pose">Camera pose and robot pose<a class="headerlink" href="#camera-pose-and-robot-pose" title="Permanent link">&para;</a></h3>
+<p>A <strong>camera pose</strong> is the transform between the camera frame and a world frame. A <strong>robot pose</strong> is the transform of the robot's body frame, whose origin is often at the base or the centre of the wheel axle, in a map or world frame. A camera mounted on a robot is related to the body by a fixed <strong>extrinsic calibration</strong>, so the camera pose is the robot pose composed with that mount transform:</p>
+<div class="arithmatex">\[
+T_{\text{world}\leftarrow\text{camera}} = T_{\text{world}\leftarrow\text{body}}\; T_{\text{body}\leftarrow\text{camera}}
+\]</div>
+<p>Forgetting the mount transform, or applying it in the wrong order or direction, is the usual reason that robot-supplied poses give a model that is offset or rotated by a constant. The notation <span class="arithmatex">\(T_{a\leftarrow b}\)</span> is used throughout, since it makes composition a matter of matching adjacent subscripts.</p>
+<h3 id="world-and-map-frames">World and map frames<a class="headerlink" href="#world-and-map-frames" title="Permanent link">&para;</a></h3>
+<p>A reconstruction has an internal frame, fixed by the gauge (section 6), and a <strong>world</strong> or <strong>map</strong> frame, which is the frame of the robot's map, of the site or of the geographic system. The transform from one to the other is the similarity transform that the georeferencing step estimates. Both frames, and the transform between them, are stored; neither replaces the other, so that a model can be re-aligned without re-running the reconstruction.</p>
+<h3 id="geographic-coordinates">Geographic coordinates<a class="headerlink" href="#geographic-coordinates" title="Permanent link">&para;</a></h3>
+<p>Drone work brings <strong>geographic coordinates</strong>. <strong>WGS84</strong> is the global reference system used by GPS: latitude, longitude and height on a reference ellipsoid. Latitude and longitude are angles, not distances, and a degree of longitude shrinks with latitude, so they are poor coordinates for geometry. Two conversions follow. <strong>ECEF</strong> is a global Cartesian frame centred on the Earth's centre. A <strong>local ENU</strong> frame (east, north, up) is a Cartesian frame tangent to the ellipsoid at a chosen origin and is a right-handed frame in metres, appropriate for a site of up to a few kilometres. Reconstruction runs in a local frame, and the transform to WGS84 is attached as metadata.</p>
+<p>Heights need care. GPS heights are <strong>ellipsoidal</strong>, above the WGS84 ellipsoid; maps and elevations are usually <strong>orthometric</strong>, above a geoid model of mean sea level; the two differ by tens of metres in places. Drone EXIF may record altitude relative to the take-off point, or a barometric altitude, rather than either. The source and reference of every height must be known before it is used as a constraint.</p>
+<h3 id="what-this-means-for-the-engine_13">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_13" title="Permanent link">&para;</a></h3>
+<p>Every artefact states its frame, its handedness and its units, and the data model stores transforms with a named source and target frame, never a bare matrix. Import and export adapters carry the convention conversions and are tested against known geometry. The robot seam depends on getting the mount transform and the pose direction right, which is why the contract between the engine and a robot states them. Georeferenced models are stored in a local ENU frame with the WGS84 origin recorded, and the height reference of any input altitude is a required field. A model in a non-metric, arbitrary frame says so instead of pretending.</p>
+<hr />
+<h2 id="15-measuring-quality">15. Measuring quality<a class="headerlink" href="#15-measuring-quality" title="Permanent link">&para;</a></h2>
+<p>A reconstruction that looks right can be wrong, and a number that looks excellent can describe a weak model. Quality is therefore a set of measurements, read together.</p>
+<h3 id="reprojection-error">Reprojection error<a class="headerlink" href="#reprojection-error" title="Permanent link">&para;</a></h3>
+<p>The <strong>reprojection error</strong> is the pixel distance between each observed keypoint and the projection of its triangulated point. Report the <strong>mean</strong>, which BA minimises, and the <strong>distribution</strong>: median, a high percentile and the share of observations above a threshold. A mean of 0.5 px with a long tail of bad tracks is a different model from a mean of 0.5 px with a tight spread. A low reprojection error does not prove accuracy: a model with too few points, a short baseline or too flexible a camera model fits its own observations well and still has the wrong shape. Its scale is also tied to the image resolution, so error is compared at equal resolution.</p>
+<h3 id="registration-tracks-and-coverage">Registration, tracks and coverage<a class="headerlink" href="#registration-tracks-and-coverage" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Registration rate</strong>: the share of input images that received a pose. The first measure of whether the capture worked. Report which images failed.</li>
+<li><strong>Components</strong>: how many disconnected models resulted, and the share of images in the largest.</li>
+<li><strong>Track length</strong>: the mean and distribution of the number of images per 3D point. Longer tracks mean tighter geometry.</li>
+<li><strong>Points per image</strong>: sparse points visible per image; a low value flags a weak or low-texture image.</li>
+<li><strong>Coverage</strong>: where in the scene and in the image the observations lie, and where in space the cameras are. Gaps in angular coverage predict holes and weak geometry. Observations clustered in the middle of the frame under-constrain the lens distortion.</li>
+<li><strong>Triangulation angle</strong> and the resulting <strong>uncertainty</strong> of the points and poses (section 6).</li>
+</ul>
+<h3 id="accuracy-against-the-world">Accuracy against the world<a class="headerlink" href="#accuracy-against-the-world" title="Permanent link">&para;</a></h3>
+<p>Internal consistency is not accuracy. Accuracy needs an external reference.</p>
+<ul>
+<li><strong>Scale error against a known dimension</strong>: measure a length in the model and compare it to the real one, as a percentage. This is the simplest honest test, and it is the right test of a metric-scale estimate.</li>
+<li><strong>Control points versus check points</strong>: <strong>control points</strong> are targets with known coordinates that enter the adjustment and fix the frame. <strong>Check points</strong> are targets with known coordinates that are withheld from the adjustment and compared with the model afterwards. Error at the check points is the independent measure of accuracy; error at the control points is not, because the optimiser has already fitted them. A model with excellent control residuals and poor check residuals is over-fitted or biased.</li>
+<li><strong>Comparison with reference geometry</strong>: for robot data with ground truth, the distance between the model and the known scene geometry, within a stated tolerance.</li>
+</ul>
+<h3 id="splats-held-out-views">Splats: held-out views<a class="headerlink" href="#splats-held-out-views" title="Permanent link">&para;</a></h3>
+<p>A splat has no geometry to measure, so its quality is photometric. Hold out some of the registered images from training, render the model from their poses and compare the rendering with the photograph:</p>
+<ul>
+<li><strong>PSNR</strong>, peak signal-to-noise ratio, the pixel-wise error on a log scale, higher is better, which is simple and misses structural differences.</li>
+<li><strong>SSIM</strong>, structural similarity, which compares local luminance, contrast and structure.</li>
+<li><strong>LPIPS</strong>, a learned perceptual distance based on deep-network features, where lower is better, and closer to human judgement of blur and texture.</li>
+</ul>
+<p>The three are reported together on views the training never saw. They measure how well the model reproduces photographs, and say nothing about geometric accuracy.</p>
+<h3 id="what-this-means-for-the-engine_14">What this means for the engine<a class="headerlink" href="#what-this-means-for-the-engine_14" title="Permanent link">&para;</a></h3>
+<p>Quality is state, not a log line: each of the measurements above is stored per reconstruction, per image and per region, and surfaced through the interface, the API and the MCP server alike. The headline for a model is a short table that always includes registration rate, component count, reprojection error as mean and tail, the scale source and, when available, an error against a known dimension or check points. Check points are a distinct input type from control points, and the engine refuses to report accuracy from points that it also fitted. Splat metrics are labelled as photometric and are never presented as accuracy.</p>
+<hr />
+<h2 id="16-glossary">16. Glossary<a class="headerlink" href="#16-glossary" title="Permanent link">&para;</a></h2>
+<p><strong>Albedo.</strong> The base colour of a surface with lighting removed.</p>
+<p><strong>Alpha compositing.</strong> Combining semi-transparent layers front to back, weighted by opacity.</p>
+<p><strong>Arbitrary scale.</strong> A reconstruction whose unit has no relation to metres, as produced from images alone.</p>
+<p><strong>ArUco, AprilTag.</strong> Printed square fiducial markers with an ID, detectable in images and used for scale, pose and frame.</p>
+<p><strong>Backscatter.</strong> Light scattered by particles in a medium back into the camera, veiling the image.</p>
+<p><strong>Baseline.</strong> The distance between two camera centres.</p>
+<p><strong>Bayer mosaic.</strong> The pattern of red, green and blue filters over a sensor's pixels.</p>
+<p><strong>Brown–Conrady model.</strong> A lens distortion model with radial and tangential polynomial terms.</p>
+<p><strong>Bundle adjustment (BA).</strong> Joint refinement of poses, intrinsics and points by minimising reprojection error.</p>
+<p><strong>Camera frame.</strong> The coordinate frame fixed to the camera, with the origin at the centre of projection.</p>
+<p><strong>Caustics.</strong> Bright, moving light patterns focused by a rippling water surface.</p>
+<p><strong>Check point.</strong> A point with known coordinates withheld from adjustment and used to test accuracy.</p>
+<p><strong>Component.</strong> One connected reconstruction among possibly several from the same image set.</p>
+<p><strong>Control point.</strong> A point with known coordinates that enters the adjustment and fixes the frame.</p>
+<p><strong>Covariance.</strong> A matrix describing the uncertainty of an estimate and the correlation among its parts.</p>
+<p><strong>Cross-polarisation.</strong> Polarisers on light and lens, at right angles, that remove specular reflection.</p>
+<p><strong>Decimation.</strong> Reducing a mesh's triangle count while preserving shape.</p>
+<p><strong>De-lighting.</strong> Removing baked lighting from a texture to recover albedo.</p>
+<p><strong>Demosaicing.</strong> Interpolating a full-colour image from the Bayer mosaic.</p>
+<p><strong>Dense reconstruction.</strong> Estimating depth or 3D points for nearly every pixel given poses.</p>
+<p><strong>Descriptor.</strong> A vector summarising the neighbourhood of a keypoint for matching.</p>
+<p><strong>Dome port, flat port.</strong> Spherical and planar windows of an underwater housing.</p>
+<p><strong>Entrance pupil.</strong> The apparent aperture of a lens as seen from the front; the effective centre of projection.</p>
+<p><strong>Epipolar line, epipole, epipolar constraint.</strong> The line in one image on which the match of a point in the other must lie; the image of the other camera's centre; the rule that expresses this.</p>
+<p><strong>Essential matrix.</strong> The <span class="arithmatex">\(3 \times 3\)</span> matrix of rank 2 relating normalised points in two calibrated views, with 5 degrees of freedom.</p>
+<p><strong>Extrinsics.</strong> The rotation and translation relating the world frame to the camera frame.</p>
+<p><strong>Feature, keypoint.</strong> A repeatable, distinctive image location.</p>
+<p><strong>Fundamental matrix.</strong> The <span class="arithmatex">\(3 \times 3\)</span> rank-2 matrix relating pixel points in two views, with 7 degrees of freedom.</p>
+<p><strong>Gamma, tone curve.</strong> The non-linear encoding that maps linear light to display values.</p>
+<p><strong>Gauge freedom.</strong> The part of a solution that the data cannot determine; here, the seven degrees of a similarity transform.</p>
+<p><strong>Geometric verification.</strong> Testing putative matches against a geometric model, typically with RANSAC.</p>
+<p><strong>Global SfM.</strong> Solving all poses together via rotation averaging and global positioning.</p>
+<p><strong>Ground sampling distance (GSD).</strong> The footprint of one pixel on the surface.</p>
+<p><strong>Homography.</strong> A <span class="arithmatex">\(3 \times 3\)</span> projective map between two images of a plane, or of a rotating camera.</p>
+<p><strong>Incremental SfM.</strong> Building a reconstruction by registering images one at a time.</p>
+<p><strong>Intrinsics.</strong> Camera parameters that do not depend on pose: focal length, principal point, distortion.</p>
+<p><strong>Level of detail (LOD).</strong> A set of versions of a mesh at different complexity.</p>
+<p><strong>Levenberg–Marquardt.</strong> The damped non-linear least-squares algorithm used in bundle adjustment.</p>
+<p><strong>LPIPS, PSNR, SSIM.</strong> Image-similarity metrics used to judge renderings.</p>
+<p><strong>Marching cubes.</strong> An algorithm that extracts a mesh from a level set on a voxel grid.</p>
+<p><strong>Multi-view stereo (MVS).</strong> Dense reconstruction from multiple calibrated views.</p>
+<p><strong>NeRF.</strong> A neural radiance field: a network mapping position and direction to colour and density.</p>
+<p><strong>Normal map.</strong> A texture storing surface-normal detail for a lower-resolution mesh.</p>
+<p><strong>Orthometric height, ellipsoidal height.</strong> Height above the geoid (mean sea level) and above the WGS84 ellipsoid.</p>
+<p><strong>PatchMatch.</strong> A randomised search that propagates good depth and normal hypotheses between neighbouring pixels.</p>
+<p><strong>Photometric consistency.</strong> The principle that a correct depth makes corresponding pixels look alike.</p>
+<p><strong>PBR.</strong> Physically based rendering; materials described by albedo, roughness, metalness and normals.</p>
+<p><strong>Pointmap.</strong> A per-pixel map of 3D points in a shared frame, as predicted by feed-forward models.</p>
+<p><strong>Poisson reconstruction.</strong> Surface extraction from oriented points by solving a Poisson equation.</p>
+<p><strong>Principal point.</strong> The image point where the optical axis meets the sensor.</p>
+<p><strong>Prior.</strong> Information about a quantity included in an estimate with a weight, as opposed to a hard constraint.</p>
+<p><strong>RANSAC.</strong> Random sample consensus: robust model fitting by repeated minimal sampling.</p>
+<p><strong>Ratio test.</strong> Keeping a match only when the best candidate is clearly closer than the second best.</p>
+<p><strong>Reprojection error.</strong> The pixel distance between an observation and the projection of its estimated 3D point.</p>
+<p><strong>Robust loss.</strong> A cost function that limits the influence of large residuals.</p>
+<p><strong>Rolling shutter.</strong> Row-by-row exposure, so that rows are captured at different times.</p>
+<p><strong>Rotation averaging.</strong> Estimating absolute rotations from pairwise relative ones.</p>
+<p><strong>Schur complement.</strong> The elimination of point parameters in bundle adjustment, leaving a smaller camera system.</p>
+<p><strong>Sim(3).</strong> The group of similarity transforms: rotation, translation and uniform scale, 7 degrees of freedom.</p>
+<p><strong>Spherical harmonics.</strong> A basis for functions on the sphere, used for view-dependent colour.</p>
+<p><strong>Splat.</strong> A 3D gaussian used as a rendering primitive; also the whole scene made of them.</p>
+<p><strong>Structure from motion (SfM).</strong> Recovering camera poses and sparse 3D points from images.</p>
+<p><strong>Track.</strong> A set of matched keypoints across images that corresponds to one 3D point.</p>
+<p><strong>Triangulation.</strong> Locating a 3D point from its projections in two or more calibrated views.</p>
+<p><strong>TSDF.</strong> Truncated signed distance function; a voxel representation used to fuse depth maps into a surface.</p>
+<p><strong>UV unwrapping.</strong> Mapping a 3D surface to 2D texture coordinates.</p>
+<p><strong>White balance.</strong> Per-channel gains that make neutral objects neutral under the scene's light.</p>
+<p><strong>WGS84, ECEF, ENU.</strong> The global geodetic datum used by GPS; the Earth-centred Cartesian frame; the local east-north-up frame.</p>
+<hr />
+<h2 id="17-further-reading">17. Further reading<a class="headerlink" href="#17-further-reading" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd edition, Cambridge University Press, 2004. The reference for sections 2, 3 and 6.</li>
+<li>Szeliski, R. <em>Computer Vision: Algorithms and Applications</em>, 2nd edition, Springer, 2022. A broad modern survey.</li>
+<li>Schönberger, J. L. and Frahm, J.-M. "Structure-from-Motion Revisited", CVPR 2016. The incremental pipeline of COLMAP.</li>
+<li>Schönberger, J. L., Zheng, E., Frahm, J.-M. and Pollefeys, M. "Pixelwise View Selection for Unstructured Multi-View Stereo", ECCV 2016. The dense stage of COLMAP.</li>
+<li>Kazhdan, M., Bolitho, M. and Hoppe, H. "Poisson Surface Reconstruction", Eurographics Symposium on Geometry Processing, 2006.</li>
+<li>Mildenhall, B. et al. "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis", ECCV 2020.</li>
+<li>Kerbl, B., Kopanas, G., Leimkühler, T. and Drettakis, G. "3D Gaussian Splatting for Real-Time Radiance Field Rendering", ACM Transactions on Graphics (SIGGRAPH), 2023.</li>
+<li>Akkaynak, D. and Treibitz, T. "Sea-thru: A Method for Removing Water from Underwater Images", CVPR 2019.</li>
+<li>Pan, L., Baráth, D., Pollefeys, M. and Schönberger, J. L. "Global Structure-from-Motion Revisited", ECCV 2024. The GLOMAP paper.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1901 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/wip/step0-closeout-2026-11-27/">
+      
+      
+        <link rel="prev" href="../step0-status/">
+      
+      
+        <link rel="next" href="../gpu-rental-p7/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Step 0 close-out report - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#step-0-close-out-report-2026-11-27" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 0 close-out report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-step-0-set-out-to-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Step 0 set out to do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcome-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-prototypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The prototypes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-evidence-says-about-the-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the evidence says about the vision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-seven-complaints-first-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The seven complaints, first numbers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-mock-ups-settled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the mock-ups settled
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decided-by-the-owner-during-step-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decided by the owner during Step 0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#carried-into-the-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Carried into the build
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-rc-01-vision-can-take-from-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What RC-01 Vision can take from this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-step-0-set-out-to-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Step 0 set out to do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcome-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-prototypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The prototypes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-evidence-says-about-the-vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the evidence says about the vision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-seven-complaints-first-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The seven complaints, first numbers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-mock-ups-settled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the mock-ups settled
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decided-by-the-owner-during-step-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decided by the owner during Step 0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#carried-into-the-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Carried into the build
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-rc-01-vision-can-take-from-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What RC-01 Vision can take from this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="step-0-close-out-report-2026-11-27">Step 0 close-out report (2026-11-27)<a class="headerlink" href="#step-0-close-out-report-2026-11-27" title="Permanent link">&para;</a></h1>
+<p>The input to RC-01 Vision. It states what Step 0 set out to prove, what it proved and did not,
+what the mock-ups settled, and what carries into the build. The numbers come from
+<a href="../step0-status/">Step 0 status and findings</a> and from each prototype's and mock-up's README,
+which hold the full results and their "Not covered" lists; this report adds no new measurement.</p>
+<h2 id="what-step-0-set-out-to-do">What Step 0 set out to do<a class="headerlink" href="#what-step-0-set-out-to-do" title="Permanent link">&para;</a></h2>
+<p>Two tracks ran side by side (<a href="../../concept/RC-brief/">brief</a> §5). The <strong>prototypes</strong> (RC-P1 to
+RC-P13) prove how the technology works; a prototype counts as proven when it meets its stated
+criterion, and a failure with its evidence is also a result. The <strong>mock-ups</strong> (RC-M1 to RC-M8)
+work out how the product looks and behaves; a mock-up is done when the owner has judged its
+concepts on screen. Step 0 ends when the mock-ups have the owner's verdicts and this report is
+written (owner, 2026-11-27). Everything ran on public datasets with published references; the
+owner's own captures and the friend's dive set come after.</p>
+<h2 id="outcome-at-a-glance">Outcome at a glance<a class="headerlink" href="#outcome-at-a-glance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Proven</th>
+<th>Partly proven</th>
+<th>Not proven</th>
+<th>Deferred or not started</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prototypes (13)</td>
+<td>9: RC-P1, P2, P3, P4, P5 (one scene), P6, P8, P9 (the fixture), P12 (one clause moved)</td>
+<td>1: RC-P13</td>
+<td>1: RC-P10</td>
+<td>2: RC-P7 (deferred to the build), RC-P11 (waits on pose priors)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Mock-ups (8)</th>
+<th>Kept by the owner</th>
+<th>Not built</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>7: RC-M1 to RC-M7, every concept kept; RC-M5 and the coach added to RC-M1 and RC-M2 judged good to go as a prototype (2026-11-27)</td>
+<td>RC-M8 (after RC-P11)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-prototypes">The prototypes<a class="headerlink" href="#the-prototypes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Prototype</th>
+<th>Status</th>
+<th>What it showed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RC-P1 Registration on every machine</td>
+<td>Proven</td>
+<td>COLMAP and GLOMAP register kicker, courtyard and pipes on the X3, the M4 Pro and the GB10. GLOMAP maps 3–4 times faster with the same pose accuracy and about twice the reprojection error (1.9–2.9 px against 1.1–1.3 px), cause unknown</td>
+</tr>
+<tr>
+<td>RC-P2 The expensive stages on the GPUs</td>
+<td>Proven</td>
+<td>Dense depth on courtyard in 1,169 s through CUDA on the GB10 and 3,205 s through HIP on the X3 (a ROCm container, COLMAP's new HIP backend); a gsplat splat on the GB10</td>
+</tr>
+<tr>
+<td>RC-P3 Quality state an agent can read</td>
+<td>Proven</td>
+<td>An agent with three MCP read tools names the held-out region on both scenes, once the removal is local</td>
+</tr>
+<tr>
+<td>RC-P4 Dense, mesh, texture and splat, measured</td>
+<td>Proven</td>
+<td>Courtyard F1 at 5 cm 0.35 from RC-P1's poses, 0.88 from ground-truth poses; splats at PSNR 27.7 (garden) and 29.2 (counter); every one of the seven complaints has a first number</td>
+</tr>
+<tr>
+<td>RC-P5 RAW to a consistent set</td>
+<td>Proven on one scene</td>
+<td>The minimal rawpy route registers 14 of 14 with the most even white balance and is chosen</td>
+</tr>
+<tr>
+<td>RC-P6 Mesh and splat in the browser</td>
+<td>Proven</td>
+<td>Mesh and a 1,000,000-gaussian splat together in three.js and Spark: 59.9 fps on the X3's iGPU, 58.8–60.0 on the M4 Pro (60 Hz display), 50.0 on the iPhone 15 Pro against 30</td>
+</tr>
+<tr>
+<td>RC-P7 Distribution on a large set</td>
+<td>Deferred to the build (owner, 2026-11-26)</td>
+<td>Not run; the <a href="../gpu-rental-p7/">GPU rental spec</a> is ready</td>
+</tr>
+<tr>
+<td>RC-P8 Learned and classical, compared</td>
+<td>Proven</td>
+<td>MapAnything plus bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). An agreement check gets 15 of 16 runs right with no wrong pass</td>
+</tr>
+<tr>
+<td>RC-P9 A robot's capture set</td>
+<td>Proven on the 1.2 m fixture</td>
+<td>Scale error 0.021% (limit 0.5%), placement 0.18% of extent (limit 1%); frame conversions checked by render, wrong conventions fail</td>
+</tr>
+<tr>
+<td>RC-P10 A room from inside</td>
+<td>Not proven</td>
+<td>183 of 190 Faro distances within 2% or 2 cm; the seven failures are one 1.05 m passage, the mesh's own. Photos only: one of five rooms registers as one model, and <code>recon components</code> reports the breaks</td>
+</tr>
+<tr>
+<td>RC-P11 The iPhone capture app</td>
+<td>Not started</td>
+<td>Starts once RC-P8 or RC-P10 shows pose priors help; RC-P10's finding (with poses and depth the rooms meet the wall limit, photos only four of five split) is the evidence, and the owner puts it in context</td>
+</tr>
+<tr>
+<td>RC-P12 Underwater</td>
+<td>Proven, one clause moved</td>
+<td>Refractive model +0.017% scale and 1.15 mm RMSE against pinhole −1.50% and 5.83 mm (−4.8% on one frame). One white balance on the RAW makes grey patches grey at 6–19 m (median 1.4°). Ranges from our own reconstruction fail on SQUID; that clause moved to the open benchmark's site scene S1</td>
+</tr>
+<tr>
+<td>RC-P13 A structured model</td>
+<td>Partly proven, closed by the owner</td>
+<td>Room 13 of 13 dimensions within 2% or 2 cm of Faro; cave 11 of 17 within 2% or 5 cm (not met); drone 50 of 50 check points within 2σ after one shift from control points, 0.25–0.38 m of the offset unexplained; buildings 31 of 49 at IoU 0.5 against 80% needed (not met)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-the-evidence-says-about-the-vision">What the evidence says about the vision<a class="headerlink" href="#what-the-evidence-says-about-the-vision" title="Permanent link">&para;</a></h2>
+<p>The vision sentence under consideration in the brief is: "A reconstruction engine that always
+says what it knows and what it does not — scale, frame, coverage, uncertainty — so that a person,
+a robot or an agent can decide what to capture next, above water and below." Step 0 tested each
+part of it.</p>
+<p><strong>Scale comes from priors and references, never from pixels alone.</strong> With exact poses a robot's
+set lands within 0.021% scale (RC-P9); RTK priors on half a drone's photos fix scale to +0.025%
+(RC-P8, RC-P13); a learned model's metric scale is off by up to 41% (RC-P8), so it never sets
+scale. A photos-only reconstruction has no scale, and the mock-ups say so on screen (RC-M1's "scale: arbitrary"). The
+drone and building segments show a second limit: a focal length 0.6–1.3% long trades against
+flying height, so the surface reads 0.3–1.1 m low until control points or a calibrated lens
+pin it.</p>
+<p><strong>Frame is a contract that can be checked.</strong> The robot set's axes, handedness and quaternion
+order are verified by render, and both wrong conventions fail (RC-P9).</p>
+<p><strong>Coverage predicts error, and an agent can read it.</strong> On RC-P10's room, surfaces no frame saw
+are 52.4 mm from the Faro scan and those seen by 32 or more frames 14.7 mm (RC-M2). An agent
+with read tools finds a held-out region (RC-P3). Where to stand next is the engine's job: an
+agent inventing positions put 0 of 3 shots where a photographer can stand, and 3 of 3 with the
+engine's spots (RC-M3).</p>
+<p><strong>Uncertainty can be carried per element.</strong> A structured model tags every wall, floor and
+passage as measured, inferred or unknown with its sigma (RC-P13); the room meets its reference on
+every measured dimension and marks 1.92 m² of floor it never saw as unknown, not guessed.</p>
+<p><strong>Underwater is a scale problem first.</strong> A pinhole calibration through a flat port misses scale
+by up to 4.8% depending on where the object is; a refractive model holds ±0.28% (RC-P12). Colour
+needs the RAW: the published TIFs clip red to zero on 78–99.9% of pixels. The cast at 6–19 m is
+one global tint; what changes with range is contrast, which the simple backscatter fit restores
+unevenly.</p>
+<p><strong>The central bet is not yet tested.</strong> That splitting the work across machines and a rented GPU
+beats the best single machine (RC-P7) is the reason the project exists, and Step 0 did not run
+it. What exists is the ground under it: the same registration on three machines and three
+architectures (RC-P1), dense depth on CUDA and HIP (RC-P2), and the measurement that dense depth
+and a splat together need up to 50 GB of GPU memory.</p>
+<h2 id="the-seven-complaints-first-numbers">The seven complaints, first numbers<a class="headerlink" href="#the-seven-complaints-first-numbers" title="Permanent link">&para;</a></h2>
+<p>The brief turns each of the owner's complaints into a measurement (§0). Each now has a first
+number (RC-P4, RC-P12):</p>
+<table>
+<thead>
+<tr>
+<th>Complaint</th>
+<th>First number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blurry, smeared textures</td>
+<td>A texel covers a median 10.2 mm on seen faces; 89% of the textured area comes from one photo</td>
+</tr>
+<tr>
+<td>Noisy or melted geometry</td>
+<td>Courtyard F1 at 5 cm: 0.35 from our poses, 0.88 from ground-truth poses; poses decide dense quality</td>
+</tr>
+<tr>
+<td>Holes</td>
+<td>16% of the courtyard mesh's faces are seen by no photo</td>
+</tr>
+<tr>
+<td>Colour seams</td>
+<td>Median ΔE 2.48 across seams against 2.14 inside patches</td>
+</tr>
+<tr>
+<td>Wrong colour underwater</td>
+<td>Grey patches a median 31.1° from grey with the camera's white balance, 1.4° after one white balance on the RAW (15 charts, 6–19 m)</td>
+</tr>
+<tr>
+<td>Untrustworthy scale</td>
+<td>Pinhole underwater up to −4.8%; learned metric scale up to 41% off; robot priors 0.021%</td>
+</tr>
+<tr>
+<td>Slow</td>
+<td>GLOMAP maps 3–4 times faster than COLMAP; dense depth 1,169 s (GB10, CUDA) against 3,205 s (X3, HIP)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-the-mock-ups-settled">What the mock-ups settled<a class="headerlink" href="#what-the-mock-ups-settled" title="Permanent link">&para;</a></h2>
+<p>Seven mock-ups were built on real prototype output, except RC-M5, which is synthetic by design.
+The owner kept every concept of RC-M1 to RC-M7, the coach on RC-M1 and RC-M2 included; what goes into the product is
+decided when the build starts. The patterns they share (<a href="../visual-ideas/">visual ideas</a>):</p>
+<ul>
+<li><strong>The reconstruction as a story with evidence</strong> (RC-M1, RC-M3): the run replayed camera by
+  camera, a debrief whose every claim opens its evidence in the scene, and a claim without
+  evidence flagged.</li>
+<li><strong>Quality on the surface</strong> (RC-M2): light and shadow by how many frames saw a surface,
+  confidence as solid or hatched, the reference beside the estimate where one exists.</li>
+<li><strong>The gap list as the brief for the next capture</strong> (RC-M1): each gap with where to stand, what
+  to shoot and why, a site map, and the same list as JSON for a robot.</li>
+<li><strong>Recipes as node graphs, compared by the node that differs</strong>, with cost estimated before and
+  measured after (RC-M4).</li>
+<li><strong>A presentation that stays honest</strong> (RC-M6): a path through the photos, the splat where it
+  holds and the mesh where it does not, and an "About this model" card on every shared link.</li>
+<li><strong>Underwater made visible</strong> (RC-M7): the water's colour against each correction, and the
+  refraction as a lens that can be switched off.</li>
+<li><strong>A camera is its photo</strong>: every scene draws a camera as its image where it was taken.</li>
+<li><strong>AI is optional, and a coach when present</strong> (owner, 2026-11-27): every view works from
+  geometry and rules alone; with the person's own AI connected it explains why, orders a plan
+  from the engine's own actions, says how to know it worked and what the facts cannot say, and
+  every number it writes is checked against the fact it cites. One recorded call each on RC-M1,
+  M2 and M7 cost US<span class="arithmatex">\(0.038–0.082; RC-M5's five tutor calls cost US\)</span>0.083 together. Unsupported
+  statements per mock-up: 0 (RC-M1, RC-M7), 1 (RC-M2), 3 of 51 (RC-M5). One wrong statement
+  without a number got through on RC-M1; the checker cannot catch such a statement.</li>
+<li><strong>What an AI call costs depends on its context, not its prompt</strong>: the same call cost US<span class="arithmatex">\(1.75
+  with an agent's default context and US\)</span>0.028 without it (RC-M4).</li>
+</ul>
+<h2 id="decided-by-the-owner-during-step-0">Decided by the owner during Step 0<a class="headerlink" href="#decided-by-the-owner-during-step-0" title="Permanent link">&para;</a></h2>
+<ul>
+<li>AI is optional; Recce is complete without it, and is an MCP server for a person's own agent
+  (2026-11-27).</li>
+<li>The learned route is an optional second route beside COLMAP, kept only after the agreement
+  check, never the source of scale (RC-P8).</li>
+<li>Recipes, per-device corrections and tuned settings live in a separate private repository; the
+  public engine keeps them separable (2026-11-26).</li>
+<li>RC-P7 moves to the build phase; RC-P10 stays not proven with its cause recorded, pose
+  refinement moves to the build; RC-P13 closes partly proven; the cave tolerance is 2% or 5 cm
+  (2026-11-26 and 2026-11-27).</li>
+<li>The underwater benchmark capture is decided after the rest of Step 0 (2026-11-26).</li>
+</ul>
+<h2 id="carried-into-the-build">Carried into the build<a class="headerlink" href="#carried-into-the-build" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Open</th>
+<th>Where it stands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distribution across machines and a rented GPU (RC-P7)</td>
+<td>Not run; the deciding test of the project's central bet</td>
+</tr>
+<tr>
+<td>The iPhone capture app (RC-P11) and its mock-up (RC-M8)</td>
+<td>Not started; whether RC-P10's finding opens it is the owner's call</td>
+</tr>
+<tr>
+<td>Pose refinement</td>
+<td>The first lever on dense quality (F1 0.35 against 0.88), and the untried fix for RC-P10's short walls</td>
+</tr>
+<tr>
+<td>Why RC-P1's poses sit 6.1 cm from courtyard's truth; why GLOMAP's reprojection is twice COLMAP's</td>
+<td>Not investigated</td>
+</tr>
+<tr>
+<td>Splats seen from outside the capture positions</td>
+<td>Needles and floaters; quality was not a clause of RC-P6</td>
+</tr>
+<tr>
+<td>Building outlines (RC-P13)</td>
+<td>31 of 49 at IoU 0.5; merged neighbours and roof-against-wall outlines fail</td>
+</tr>
+<tr>
+<td>The underwater ranges clause (RC-P12) and the benchmark capture</td>
+<td>Moved to the benchmark's site scene S1; capture decided later</td>
+</tr>
+<tr>
+<td>Engine language and UI stack</td>
+<td>Python stays; Rust was to close on RC-P1, RC-P2 and RC-P7, and RC-P7 is missing. The UI stack is decided on the mock-ups' evidence</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-rc-01-vision-can-take-from-this">What RC-01 Vision can take from this<a class="headerlink" href="#what-rc-01-vision-can-take-from-this" title="Permanent link">&para;</a></h2>
+<p>These are proposals for the owner, drawn from the evidence above:</p>
+<ul>
+<li>The vision sentence holds as written: each of its parts (scale, frame, coverage, uncertainty,
+  the next capture, above water and below) has a working first result.</li>
+<li>Scale is stated, never inferred: from priors, references or control points, or reported as
+  arbitrary. A learned model may propose poses; it never sets scale.</li>
+<li>The engine supplies positions, numbers and verdicts; an AI explains, orders and coaches, and is
+  checked against the engine.</li>
+<li>Distribution remains untested; where it sits in the build's order is open.</li>
+</ul>
+<p>Decided by the owner after this report (2026-11-27): the first case is the owner's home with the iPhone app, objects first and then a whole room, leading into the robot cases; learn mode is a feature inside the product. Both are recorded in the <a href="../../concept/RC-brief/">brief</a> §4.</p>
+<h2 id="not-covered">Not covered<a class="headerlink" href="#not-covered" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Public data only.</strong> No owner capture and no dive set; one scene per prototype in several
+  cases (RC-P5 on pipes, RC-P9 on its fixture, RC-P12 on one site and one rig).</li>
+<li><strong>This report summarises;</strong> it does not re-run or re-check any number. The prototype READMEs
+  are authoritative.</li>
+<li><strong>Mock-up verdicts are on concepts,</strong> not on finished design; RC-M2 to RC-M7 had one phase each.</li>
+<li><strong>No cost model</strong> for a full capture end to end: per-stage times exist for single scenes, not
+  for a 1,500-photo set.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

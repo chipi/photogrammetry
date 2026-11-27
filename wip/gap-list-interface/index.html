@@ -1,0 +1,2347 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/wip/gap-list-interface/">
+      
+      
+        <link rel="prev" href="../research-drone-phone-datasets-2026-11-26/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Gap list as an interface - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-gap-list-as-an-interface-for-software" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gap list as an interface
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-short-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The short design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The short design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#robotics-labs-answers-2026-11-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robotics-lab's answers (2026-11-24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-operators-decisions-2026-11-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The operator's decisions (2026-11-24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-what-robotics-lab-needs-in-its-own-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. What robotics-lab needs, in its own terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-gap-list-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. The gap-list document
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. The gap-list document">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-the-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 The example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-the-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 The fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-viewpoints-and-what-a-consumer-may-and-may-not-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Viewpoints, and what a consumer may and may not do
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-the-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 The lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-faces-one-verb-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Faces: one verb list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. The loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-changes-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Changes needed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Alternatives considered
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-open-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Open questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-short-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The short design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The short design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#robotics-labs-answers-2026-11-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robotics-lab's answers (2026-11-24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-operators-decisions-2026-11-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The operator's decisions (2026-11-24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-what-robotics-lab-needs-in-its-own-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. What robotics-lab needs, in its own terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-gap-list-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. The gap-list document
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. The gap-list document">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-the-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 The example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-the-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 The fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-viewpoints-and-what-a-consumer-may-and-may-not-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Viewpoints, and what a consumer may and may not do
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-the-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 The lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-faces-one-verb-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Faces: one verb list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. The loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-changes-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Changes needed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Alternatives considered
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-open-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Open questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="the-gap-list-as-an-interface-for-software">The gap list as an interface for software<a class="headerlink" href="#the-gap-list-as-an-interface-for-software" title="Permanent link">&para;</a></h1>
+<p>Date: 2026-11-24. Status: draft. A design note, not a decision; nothing here is built on either side.</p>
+<p>Question from the owner: robots are a main consumer, and robotics-lab has a mission control and a planner. They need the gaps and shot cards through MCP (and the HTTP API and CLI) so their planning gets feedback from Recce. The human side is solved by shot cards (<a href="../visual-ideas/">visual ideas</a>, idea 21); this note solves it for other software.</p>
+<p>Sources read, in this repository: <a href="../../concept/RC-brief/">brief</a> §2 and §4, <a href="../../concept/RC-architecture-sketch/">architecture sketch</a> §2, §3, §5, §9, §10, <a href="../visual-ideas/">visual ideas</a>, <a href="../robotics-lab-contract/">robotics-lab contract</a>, <a href="../capture-set-amendments/">capture-set amendments</a>, and <code>mockups/RC-M1-run/README.md</code> (outside <code>docs/</code>, so not linked).</p>
+<p>Sources read, in robotics-lab (read-only, <code>main</code> of 2026-11-24), under <code>https://github.com/chipi/robotics-lab/blob/main/</code>:</p>
+<ul>
+<li><code>docs/rfc/RFC-0025-mvp1-to-mvp2.md</code> (§3.5, §3.6, §5, §5.1)</li>
+<li><code>docs/rfc/RFC-0005-missions.md</code> and <code>docs/rfc/RFC-0006-mission-control.md</code></li>
+<li><code>docs/rfc/RFC-0014-mission-control.md</code> (§3.1 to §3.5, §3.8)</li>
+<li><code>apps/mission-control/CONTRACT.md</code> and <code>apps/mission-control/src/mission_control/mcp_server.py</code></li>
+<li><code>apps/mission-control/src/mission_control/auth.py</code></li>
+<li><code>libs/runner/CONTRACT.md</code> and <code>docs/uxs/UXS-001-miniview.md</code></li>
+</ul>
+<p>Marked "(inferred)": a statement I conclude rather than read.</p>
+<h2 id="1-the-short-design">1. The short design<a class="headerlink" href="#1-the-short-design" title="Permanent link">&para;</a></h2>
+<p>The gap list is a versioned JSON document, <code>gaps.json</code>, written next to <code>provenance.json</code> by every reconstruction. Every face serves that one document and a small set of verbs over it. A gap carries its frame and scale state, a machine check that says whether a consumer may use its viewpoints as goals, and a stable id. The next capture set cites those ids. After the re-run, Recce returns a diff that says which gaps closed, which stayed open and why, and how far each new photo landed from the viewpoint it was meant to fill. Recce advises and never commands: reachability, no-go areas and the decision to move stay with the consumer.</p>
+<h3 id="robotics-labs-answers-2026-11-24">Robotics-lab's answers (2026-11-24)<a class="headerlink" href="#robotics-labs-answers-2026-11-24" title="Permanent link">&para;</a></h3>
+<p>Sent to the robotics-lab session on 2026-11-24; its reply, with the facts it cites checked in its
+<code>mission-control</code> working copy (commit b84eea8). Decisions on its side are the operator's: the
+amendments in section 6 and answers c, e and f are recommendations, not acceptances, and are
+deferred to MVP 2 (MVP 1 is in wrap-up).</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answer</th>
+<th>Kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a. Does <code>point</code> take a yaw?</td>
+<td>No. <code>point</code> is <code>{x, y, frame?: "site" \| "map"}</code> (<code>apps/mission-control/CONTRACT.md</code> line 99). RFC-0025's "contract 1.3: point gets yaw" is stale (1.3 shipped as calibration; the navigator contract is at 1.7); robotics-lab fixes that line. Yaw exists only on <code>start_pose {x, y, yaw}</code> and the <code>go_to_object</code> result <code>stand {x, y, yaw, frame}</code>.</td>
+<td>Fact</td>
+</tr>
+<tr>
+<td>a. Conventions</td>
+<td>Yaw in radians about +z, zero along +x, counter-clockwise positive (REP-103; robotics-lab's <code>docs/wip/SENSORS-VS-ROS.md</code>). Quaternions: runfiles store <code>[w, x, y, z]</code> (ADR-0016); the wire to Foxglove and ROS uses named <code>{x, y, z, w}</code> (<code>libs/runfile/src/runfile/wire.py</code>).</td>
+<td>Fact</td>
+</tr>
+<tr>
+<td>b. Who mints a frame identity?</td>
+<td>Nobody today: frames are names (<code>site</code>, <code>map</code>). Since navigator contract 1.5 a goal's frame is set per goal by <code>start_pose</code>, and the answer's <code>placed {pose, frame}</code> gives mapd's frame in the map's. A site has <code>dock_pose {x, y, yaw, frame, robot, set_from}</code>. Nothing proves two maps are one frame after relocalisation; that is an open MVP 2 question.</td>
+<td>Fact</td>
+</tr>
+<tr>
+<td>c. Actor profile</td>
+<td>Recommend robotics-lab's robot file: <code>capabilities.sensors</code> already lists <code>[{id, kind, ...}]</code> and the duck has a <code>camera</code> block; a camera entry (mount, height, pitch range, field of view) extends it.</td>
+<td>Recommendation</td>
+</tr>
+<tr>
+<td>d. MCP transport</td>
+<td>Robotics-lab's MCP is stdio only, a client of a local HTTP API with bearer tokens; remote access is <code>tailscale serve</code> plus tokens (<code>docs/wip/STAGING-CUTOVER.md</code>). Recommend: Recce serves its own HTTP API on the tailnet with a token, and a stdio MCP server on the agent's machine is its client.</td>
+<td>Recommendation</td>
+</tr>
+<tr>
+<td>e. <code>capture_view</code> or <code>point</code> with a burst</td>
+<td>A separate <code>capture_view</code> kind: each goal kind has one done-condition, and "a burst recorded" differs from "within 0.25 m". Needs a navigator contract bump and the capture trigger.</td>
+<td>Recommendation</td>
+</tr>
+<tr>
+<td>f. Robot claim lease</td>
+<td>Shorter than a human's; the only precedent is Mission Control's drive lock lease (<code>lock/renew</code>).</td>
+<td>Recommendation</td>
+</tr>
+</tbody>
+</table>
+<p>What changes here as a result:</p>
+<ul>
+<li>Viewpoints keep <code>planar.yaw</code> in REP-103 terms (radians, zero along +x, counter-clockwise), and
+  any quaternion is named field by field (<code>{x, y, z, w}</code>), never a bare array.</li>
+<li>Until <code>capture_view</code> exists, a planner can send only a position (<code>point</code> has no heading), so a
+  viewpoint's heading reaches the robot only through a human or a later goal kind. The loop in
+  section 5 works for position today and for heading after the amendment.</li>
+<li><code>frame.id</code> comes from robotics-lab once its frame identity exists (decision 5 below). Until
+  then Recce mints a model-frame id of its own and treats any two ids as different frames:
+  <code>usable_as_goal</code> stays false across frame ids.</li>
+<li>Recce's transport follows answer d: its HTTP API on the tailnet with tokens, a stdio MCP
+  client beside the agent. Open question 4 below is answered by that.</li>
+</ul>
+<h3 id="the-operators-decisions-2026-11-24">The operator's decisions (2026-11-24)<a class="headerlink" href="#the-operators-decisions-2026-11-24" title="Permanent link">&para;</a></h3>
+<p>The owner decided the amendments the same day, taking robotics-lab's recommendations; robotics-lab
+records them in its RFC-0025 §5.1, "The gap list".</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Amendment</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>gaps.json</code> in "what we want back"</td>
+<td>Yes: pulled, a file beside <code>provenance.json</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Manifest <code>site</code>, <code>targets</code>, <code>frame_id</code></td>
+<td><code>site</code> and <code>targets</code> yes; <code>frame_id</code> only once frame identity (5) is designed</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>capture_view</code> goal kind</td>
+<td>Yes, its own kind; after the Burger's cameras (robotics-lab step 11), with a navigator contract version that gives a goal a yaw</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Camera entry in robot capabilities</td>
+<td>Yes, in the profile's <code>capabilities.sensors</code>; Recce reads the robot file and keeps no actor format of its own</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Frame identity</td>
+<td>Robotics-lab mints it: one id per map of a site, minted when the map is made, kept across a relocalisation only when the navigator says so (its RFC-0025 §7 item 10)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Recce MCP slot</td>
+<td>Yes: Recce's HTTP API on the tailnet with a token; a stdio MCP on the agent's machine is its client</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Claim lease</td>
+<td>A robot's is shorter than a person's</td>
+</tr>
+</tbody>
+</table>
+<p>Also decided on robotics-lab's side: Recce models feed Gazebo scenes (the import is robotics-lab's
+to design in MVP 2, its RFC-0025 Q21), and the NXT's Pi module gets a depth camera and maps with
+mapd (Q16). Open questions 3 (actor profile), 4 (transport) and 6 (frame identity) below are
+settled by these decisions.</p>
+<h2 id="2-what-robotics-lab-needs-in-its-own-terms">2. What robotics-lab needs, in its own terms<a class="headerlink" href="#2-what-robotics-lab-needs-in-its-own-terms" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Where robotics-lab says it</th>
+<th>What follows for the gap list</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Goals are small typed records with a validated schema; an unknown kind is refused</td>
+<td>RFC-0014 §3.4.1; <code>CONTRACT.md</code>, Goals. Kinds: <code>point {x, y, frame?}</code>, <code>go_to_object</code>, <code>go_to_area</code>, <code>explore</code>, <code>inventory</code></td>
+<td>No kind takes a camera viewpoint. A planner turns a viewpoint into a <code>point</code> goal (position plus heading) or waits for a new kind (section 6).</td>
+</tr>
+<tr>
+<td>A robot pose in a goal is planar: <code>{x, y, yaw}</code>, site frame, metres and radians</td>
+<td><code>CONTRACT.md</code>, <code>start_pose</code>; <code>libs/runner/CONTRACT.md</code>, <code>start_pose</code>. Yaw is radians, zero along +x, counter-clockwise positive (REP-103; robotics-lab answer a)</td>
+<td>Each viewpoint carries a <code>planar</code> projection in that shape, with the 3D pose beside it.</td>
+</tr>
+<tr>
+<td>Frames have names (<code>world</code>, <code>map</code>, <code>site</code>, robot frames); every response with a position names its <code>frame</code></td>
+<td>RFC-0025 §3.6; <code>CONTRACT.md</code> header; RFC-0014 §3.2.1</td>
+<td>The gap list names its frame on every position.</td>
+</tr>
+<tr>
+<td>A run's <code>map</code> frame equals the site frame only when the robot starts at the dock; otherwise <code>localisation.frame</code> is <code>run</code></td>
+<td>RFC-0014 §3.5.1, §3.5.4, §3.3.2</td>
+<td>A frame needs an identity, not only a name: two <code>map</code> frames of two runs differ.</td>
+</tr>
+<tr>
+<td>The scale trap: a model is metric in the poses' frame, or an explicit transform with the scale stated, or "arbitrary"</td>
+<td>RFC-0025 §5, §5.1</td>
+<td>The gap list repeats the scale state and gates its own viewpoints on it.</td>
+</tr>
+<tr>
+<td>Camera pose, not robot pose; the model job applies the mount (camera to base)</td>
+<td>RFC-0025 §5; <code>cameras.json</code> in §5.1</td>
+<td>Viewpoints are camera poses. The consumer subtracts its own mount.</td>
+</tr>
+<tr>
+<td>Who triggers a capture, and a scan goal to viewpoints, is "later" and "not designed"</td>
+<td>RFC-0025 §3.5 (roadmap step 6), §5.1</td>
+<td>Recce cannot assume a robot action exists. The design offers one proposal (section 6).</td>
+</tr>
+<tr>
+<td>Nothing reads a 3D model yet; a pleasing model is not collision-safe</td>
+<td>RFC-0025 §3.5 ("do not build yet"), §5.1</td>
+<td>Gaps are advice. The consumer checks its own map.</td>
+</tr>
+<tr>
+<td>A goal refused for a robot says why, in a field a client can show</td>
+<td>RFC-0014 §3.2.1</td>
+<td>Each viewpoint has <code>usable_as_goal</code> and <code>unusable_reason</code>.</td>
+</tr>
+<tr>
+<td>Agents are clients of one API; the MCP server exposes it with an allow-list, the client name is fixed, an agent runs on the simulator unless the operator allows more, and only the operator draws areas</td>
+<td>RFC-0014 §3.2, §3.9; <code>mcp_server.py</code> (<code>ALLOWED</code>, <code>target</code> is <code>sim</code>); <code>auth.py</code> (a token names the client)</td>
+<td>Recce copies the shape: tools are one call each, claims carry a client name, dismissing a gap is the operator's.</td>
+</tr>
+<tr>
+<td>Agent first: anything a page shows is a command, and the reverse</td>
+<td>UXS-001 (principle at line 23); <a href="../../concept/RC-brief/">brief</a> §2</td>
+<td>Section 4 gives one verb list for all faces.</td>
+</tr>
+</tbody>
+</table>
+<p>How results flow back today: they do not. RFC-0025 §5 draws a model job that moves data across the seam and receives <code>mesh.ply</code>, <code>cloud.ply</code> and <code>provenance.json</code>. Nothing in robotics-lab consumes them, and RFC-0025 is Accepted with "nothing in it built". There is no return path for gaps, and no robotics-lab object a gap attaches to except two candidates: a site (RFC-0014 §3.5.1: id, name, site frame, dock pose) with its operator-drawn areas (§3.5.3: polygons in the site frame, <code>GET /sites/{s}/areas/at</code>), and the goal run (a goal run holds <code>result</code> and a <code>run_key</code>). A gap attaches to a site by the frame, and to an area by geometry, which Mission Control computes (inferred; Recce knows no areas).</p>
+<h2 id="3-the-gap-list-document">3. The gap-list document<a class="headerlink" href="#3-the-gap-list-document" title="Permanent link">&para;</a></h2>
+<h3 id="31-the-example">3.1 The example<a class="headerlink" href="#31-the-example" title="Permanent link">&para;</a></h3>
+<p>The kicker case: ETH3D, no pose priors, so the scale is arbitrary. All numbers below are illustrative, not engine output. Only the style of the photo ids (<code>DSC_6487.JPG</code>) comes from the RC-M1 mock-up.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"gap_list"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gl-7f3a2c"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"computed_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-24T14:02:11Z"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"kicker"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"capture_set"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cs-01"</span><span class="p">,</span><span class="w"> </span><span class="nt">"manifest"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">"sha256"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b1c4...e9"</span><span class="p">,</span><span class="w"> </span><span class="nt">"run_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                   </span><span class="nt">"site"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"targets"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"reconstruction"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rec-glomap-01"</span><span class="p">,</span><span class="w"> </span><span class="nt">"strategy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"poses/glomap"</span><span class="p">,</span><span class="w"> </span><span class="nt">"recipe"</span><span class="p">:</span><span class="w"> </span><span class="s2">"object-walkaround"</span><span class="p">,</span>
+<span class="w">                      </span><span class="nt">"recipe_version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">"engine"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"recon"</span><span class="p">,</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0.0"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                      </span><span class="nt">"provenance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"file"</span><span class="p">:</span><span class="w"> </span><span class="s2">"provenance.json"</span><span class="p">,</span><span class="w"> </span><span class="nt">"sha256"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5d0a...41"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"ruleset"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gaps-1"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"frame"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">,</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"frm-rec-glomap-01"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"axes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"handedness"</span><span class="p">:</span><span class="w"> </span><span class="s2">"right"</span><span class="p">,</span><span class="w"> </span><span class="nt">"up"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"scale_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arbitrary"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"placement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w"> </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"no pose priors, no markers"</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"pose_convention"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"camera_to_world"</span><span class="p">,</span><span class="w"> </span><span class="nt">"camera_axes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"opencv"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"measurement"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"rankings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"gap-0005"</span><span class="p">,</span><span class="s2">"gap-0001"</span><span class="p">,</span><span class="s2">"gap-0004"</span><span class="p">,</span><span class="s2">"gap-0002"</span><span class="p">,</span><span class="s2">"gap-0003"</span><span class="p">],</span>
+<span class="w">                </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"gap-0002"</span><span class="p">,</span><span class="s2">"gap-0001"</span><span class="p">,</span><span class="s2">"gap-0003"</span><span class="p">,</span><span class="s2">"gap-0004"</span><span class="p">,</span><span class="s2">"gap-0005"</span><span class="p">],</span>
+<span class="w">                </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"gap-0005"</span><span class="p">,</span><span class="s2">"gap-0004"</span><span class="p">,</span><span class="s2">"gap-0001"</span><span class="p">,</span><span class="s2">"gap-0002"</span><span class="p">,</span><span class="s2">"gap-0003"</span><span class="p">],</span>
+<span class="w">                </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"gap-0001"</span><span class="p">,</span><span class="s2">"gap-0003"</span><span class="p">,</span><span class="s2">"gap-0002"</span><span class="p">,</span><span class="s2">"gap-0004"</span><span class="p">,</span><span class="s2">"gap-0005"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"complete_for"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"gaps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gap-0001"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"thin_angle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"region"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w"> </span><span class="nt">"since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-24T14:02:11Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"claims"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"attempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"matched_from"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"severity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"major"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.78</span><span class="p">,</span><span class="w"> </span><span class="nt">"basis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"median_angle_deg 6.1 &lt; 15; depth_rel_sigma 0.21"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.91</span><span class="p">},</span><span class="w"> </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.55</span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.60</span><span class="p">},</span><span class="w"> </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.70</span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sphere"</span><span class="p">,</span><span class="w"> </span><span class="nt">"centre"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">1.10</span><span class="p">,</span><span class="w"> </span><span class="mf">0.35</span><span class="p">,</span><span class="w"> </span><span class="mf">0.52</span><span class="p">],</span><span class="w"> </span><span class="nt">"radius"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.31</span><span class="p">,</span><span class="w"> </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"points"</span><span class="p">:</span><span class="w"> </span><span class="mi">4120</span><span class="p">,</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"DSC_6487.JPG"</span><span class="p">,</span><span class="s2">"DSC_6488.JPG"</span><span class="p">,</span><span class="s2">"DSC_6490.JPG"</span><span class="p">,</span><span class="s2">"DSC_6491.JPG"</span><span class="p">],</span>
+<span class="w">                    </span><span class="nt">"triangulation_angle_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"median"</span><span class="p">:</span><span class="w"> </span><span class="mf">6.1</span><span class="p">,</span><span class="w"> </span><span class="nt">"p10"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.4</span><span class="p">,</span><span class="w"> </span><span class="nt">"p90"</span><span class="p">:</span><span class="w"> </span><span class="mf">11.0</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"depth_rel_sigma"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.21</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">"ring"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"bins"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"bin_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nt">"azimuth_frame"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">,</span>
+<span class="w">                              </span><span class="nt">"seen"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="nt">"unseen_arcs_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">90</span><span class="p">,</span><span class="mi">330</span><span class="p">]]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"close_when"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"median_angle_deg_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nt">"photos_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">"points_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"viewpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vp-0001a"</span><span class="p">,</span><span class="w"> </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"primary"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"pose"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">1.92</span><span class="p">,</span><span class="mf">-0.41</span><span class="p">,</span><span class="mf">0.88</span><span class="p">],</span><span class="w"> </span><span class="nt">"look_at"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">1.10</span><span class="p">,</span><span class="mf">0.35</span><span class="p">,</span><span class="mf">0.52</span><span class="p">],</span><span class="w"> </span><span class="nt">"up"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"planar"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"relative"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"to_photo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6487.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"orbit_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"yaw"</span><span class="p">:</span><span class="w"> </span><span class="mi">-38</span><span class="p">,</span><span class="w"> </span><span class="nt">"pitch"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"distance_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"acceptance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arc"</span><span class="p">,</span><span class="w"> </span><span class="nt">"about"</span><span class="p">:</span><span class="w"> </span><span class="s2">"region.centre"</span><span class="p">,</span><span class="w"> </span><span class="nt">"azimuth_range_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">150</span><span class="p">],</span>
+<span class="w">                        </span><span class="nt">"distance_ratio_range"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.4</span><span class="p">],</span><span class="w"> </span><span class="nt">"elevation_range_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">-10</span><span class="p">,</span><span class="mi">25</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"tolerance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position_m"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"position_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.12</span><span class="p">,</span><span class="w"> </span><span class="nt">"look_at_cone_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"roll_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"usable_as_goal"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"unusable_reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scale_state_arbitrary"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"landmark"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"photo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6487.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nearest photo to the suggested viewpoint"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The dent on the left side is seen from one direction only"</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">"instruction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stand where DSC_6487 was taken, orbit left about 40 degrees around the dent at the same distance, and take 3 photos 10 degrees apart."</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rays from the existing photos are nearly parallel, so depth is uncertain."</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"baseline_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                 </span><span class="nt">"overlap_min"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6</span><span class="p">,</span><span class="w"> </span><span class="nt">"capture_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"locked_exposure"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gap-0002"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"thin_angle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"region"</span><span class="p">,</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w"> </span><span class="nt">"since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-24T14:02:11Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"claims"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"attempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"matched_from"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"severity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"major"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.66</span><span class="p">,</span><span class="w"> </span><span class="nt">"basis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"median_angle_deg 8.3 &lt; 15"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.60</span><span class="p">},</span><span class="w"> </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.80</span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.50</span><span class="p">},</span><span class="w"> </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.52</span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sphere"</span><span class="p">,</span><span class="w"> </span><span class="nt">"centre"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-0.62</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">,</span><span class="w"> </span><span class="mf">0.47</span><span class="p">],</span><span class="w"> </span><span class="nt">"radius"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.40</span><span class="p">,</span><span class="w"> </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"points"</span><span class="p">:</span><span class="w"> </span><span class="mi">6890</span><span class="p">,</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"DSC_6521.JPG"</span><span class="p">,</span><span class="s2">"DSC_6522.JPG"</span><span class="p">,</span><span class="s2">"DSC_6523.JPG"</span><span class="p">],</span>
+<span class="w">                    </span><span class="nt">"triangulation_angle_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"median"</span><span class="p">:</span><span class="w"> </span><span class="mf">8.3</span><span class="p">,</span><span class="w"> </span><span class="nt">"p10"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span><span class="w"> </span><span class="nt">"p90"</span><span class="p">:</span><span class="w"> </span><span class="mf">14.2</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"depth_rel_sigma"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.15</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">"ring"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"bins"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"bin_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nt">"azimuth_frame"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">,</span>
+<span class="w">                              </span><span class="nt">"seen"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="nt">"unseen_arcs_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">],[</span><span class="mi">270</span><span class="p">,</span><span class="mi">360</span><span class="p">]]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"close_when"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"median_angle_deg_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nt">"photos_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">"points_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"viewpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vp-0002a"</span><span class="p">,</span><span class="w"> </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"primary"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"pose"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-0.20</span><span class="p">,</span><span class="mf">-0.90</span><span class="p">,</span><span class="mf">0.60</span><span class="p">],</span><span class="w"> </span><span class="nt">"look_at"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-0.62</span><span class="p">,</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.47</span><span class="p">],</span><span class="w"> </span><span class="nt">"up"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"planar"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"relative"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"to_photo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6522.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"orbit_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"yaw"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="nt">"pitch"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"distance_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.1</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"acceptance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arc"</span><span class="p">,</span><span class="w"> </span><span class="nt">"about"</span><span class="p">:</span><span class="w"> </span><span class="s2">"region.centre"</span><span class="p">,</span><span class="w"> </span><span class="nt">"azimuth_range_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">300</span><span class="p">,</span><span class="mi">360</span><span class="p">],</span>
+<span class="w">                        </span><span class="nt">"distance_ratio_range"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.4</span><span class="p">],</span><span class="w"> </span><span class="nt">"elevation_range_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">-10</span><span class="p">,</span><span class="mi">25</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"tolerance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position_m"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"position_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.12</span><span class="p">,</span><span class="w"> </span><span class="nt">"look_at_cone_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"roll_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"usable_as_goal"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"unusable_reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scale_state_arbitrary"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"landmark"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"photo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6522.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nearest photo to the suggested viewpoint"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The rear panel is seen from a narrow arc"</span><span class="p">,</span><span class="w"> </span><span class="nt">"instruction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"From DSC_6522, orbit right about 45 degrees and shoot the panel."</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Narrow viewing arc."</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"baseline_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"overlap_min"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6</span><span class="p">,</span><span class="w"> </span><span class="nt">"capture_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"locked_exposure"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gap-0003"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"few_photos"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"region"</span><span class="p">,</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w"> </span><span class="nt">"since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-24T14:02:11Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"claims"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"attempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"matched_from"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"severity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"minor"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.41</span><span class="p">,</span><span class="w"> </span><span class="nt">"basis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1380 points seen by exactly 2 photos"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.35</span><span class="p">},</span><span class="w"> </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.45</span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.30</span><span class="p">},</span><span class="w"> </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.62</span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sphere"</span><span class="p">,</span><span class="w"> </span><span class="nt">"centre"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span><span class="w"> </span><span class="mf">1.02</span><span class="p">,</span><span class="w"> </span><span class="mf">0.30</span><span class="p">],</span><span class="w"> </span><span class="nt">"radius"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.25</span><span class="p">,</span><span class="w"> </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"points"</span><span class="p">:</span><span class="w"> </span><span class="mi">1380</span><span class="p">,</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"DSC_6540.JPG"</span><span class="p">,</span><span class="s2">"DSC_6541.JPG"</span><span class="p">],</span><span class="w"> </span><span class="nt">"observations_per_point"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">"median"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"triangulation_angle_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"median"</span><span class="p">:</span><span class="w"> </span><span class="mf">17.0</span><span class="p">,</span><span class="w"> </span><span class="nt">"p10"</span><span class="p">:</span><span class="w"> </span><span class="mf">9.0</span><span class="p">,</span><span class="w"> </span><span class="nt">"p90"</span><span class="p">:</span><span class="w"> </span><span class="mf">24.0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"close_when"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"observations_per_point_median_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">"photos_min"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"viewpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vp-0003a"</span><span class="p">,</span><span class="w"> </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"primary"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"pose"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.40</span><span class="p">,</span><span class="mf">1.60</span><span class="p">,</span><span class="mf">0.55</span><span class="p">],</span><span class="w"> </span><span class="nt">"look_at"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">1.02</span><span class="p">,</span><span class="mf">0.30</span><span class="p">],</span><span class="w"> </span><span class="nt">"up"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"planar"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"relative"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"to_photo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6541.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"orbit_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"yaw"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"pitch"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"distance_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.9</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"acceptance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arc"</span><span class="p">,</span><span class="w"> </span><span class="nt">"about"</span><span class="p">:</span><span class="w"> </span><span class="s2">"region.centre"</span><span class="p">,</span><span class="w"> </span><span class="nt">"azimuth_range_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">130</span><span class="p">],</span>
+<span class="w">                        </span><span class="nt">"distance_ratio_range"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">1.3</span><span class="p">],</span><span class="w"> </span><span class="nt">"elevation_range_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"tolerance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position_m"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"position_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.15</span><span class="p">,</span><span class="w"> </span><span class="nt">"look_at_cone_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nt">"roll_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"usable_as_goal"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"unusable_reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scale_state_arbitrary"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"landmark"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"photo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6541.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nearest photo to the suggested viewpoint"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Underside of the front edge: two photos only"</span><span class="p">,</span><span class="w"> </span><span class="nt">"instruction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"From DSC_6541, step a little closer and tilt up 10 degrees; take 2 extra photos."</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Points seen by two photos cannot be checked against a third."</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"baseline_deg"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"overlap_min"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span><span class="w"> </span><span class="nt">"capture_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"locked_exposure"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gap-0004"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"photo_not_joined"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"photo"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w"> </span><span class="nt">"since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-24T14:02:11Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"claims"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"attempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"matched_from"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"severity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"major"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.70</span><span class="p">,</span><span class="w"> </span><span class="nt">"basis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image not registered; location unknown"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.72</span><span class="p">},</span><span class="w"> </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.30</span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.95</span><span class="p">},</span><span class="w"> </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.40</span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"photo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6602.JPG"</span><span class="p">,</span><span class="w"> </span><span class="nt">"sha256"</span><span class="p">:</span><span class="w"> </span><span class="s2">"77ae...0c"</span><span class="p">,</span><span class="w"> </span><span class="nt">"sensor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cam-0"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"solver"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"tried_pairs"</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="nt">"best_inliers"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="nt">"reason_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"too_few_matches"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"prior_pose"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"close_when"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"photo_registered"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"viewpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">      </span><span class="nt">"landmark"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6602 did not join the model"</span><span class="p">,</span><span class="w"> </span><span class="nt">"instruction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retake the shot from the same place with a neighbouring view: two photos that overlap it by half."</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Only 11 consistent matches; the solver needs more."</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"overlap_min"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nt">"retake_of"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DSC_6602.JPG"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gap-0005"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"no_scale"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reconstruction"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w"> </span><span class="nt">"since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-24T14:02:11Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"claims"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"attempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"matched_from"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"severity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"major"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span><span class="p">,</span><span class="w"> </span><span class="nt">"basis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scale_state arbitrary; no priors, no markers"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"measurement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">1.00</span><span class="p">},</span><span class="w"> </span><span class="nt">"web_viewing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.05</span><span class="p">},</span>
+<span class="w">                    </span><span class="nt">"robot_localisation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">1.00</span><span class="p">},</span><span class="w"> </span><span class="nt">"game_asset"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rank"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nt">"score"</span><span class="p">:</span><span class="mf">0.60</span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"pose_priors"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"markers"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"priors_rejected"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"close_when"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"scale_state_not"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arbitrary"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"viewpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">      </span><span class="nt">"landmark"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The model has no real-world size"</span><span class="p">,</span><span class="w"> </span><span class="nt">"instruction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Put a scale bar or a measured object in view of at least 3 photos, or tell Recce one measured distance."</span><span class="p">,</span><span class="w"> </span><span class="nt">"why"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Without a reference length every size and distance is unitless."</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"hints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"known_length"</span><span class="p">,</span><span class="w"> </span><span class="nt">"min_visible_in_photos"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"alternatives"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"pose_priors"</span><span class="p">,</span><span class="w"> </span><span class="s2">"marker"</span><span class="p">,</span><span class="w"> </span><span class="s2">"scale_hint"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="32-the-fields">3.2 The fields<a class="headerlink" href="#32-the-fields" title="Permanent link">&para;</a></h3>
+<p>Top level.</p>
+<ul>
+<li><code>gap_list</code> is the integer schema version. A reader accepts its own and older versions and refuses a newer one, the rule robotics-lab already applies to <code>manifest.json</code> (RFC-0025 §5.1). Fields are only added within a version; a reader ignores fields and <code>kind</code> values it does not know.</li>
+<li><code>id</code> is content-addressed from the reconstruction, the ruleset and the thresholds. The same input gives the same id and the same list, as <code>provenance.json</code> promises.</li>
+<li><code>capture_set</code> echoes the manifest: <code>id</code>, <code>manifest</code> version, <code>sha256</code>, the source <code>run_id</code>, an optional <code>site</code> (proposal, section 6) and <code>targets</code>, the gap ids this capture set was taken for.</li>
+<li><code>reconstruction</code> names the strategy, recipe, engine version and the <code>provenance.json</code> it belongs to. Two strategies on one capture are two reconstructions and two gap lists (the RC-M1 mock-up shows GLOMAP and incremental side by side); a gap never moves between them.</li>
+<li><code>ruleset</code> names the thresholds that produced the list (<code>gaps-1</code>: 15 degrees median angle, 3 photos, and so on; the values are placeholders until RC-P3 measures them (inferred)).</li>
+<li><code>purpose</code>, <code>rankings</code>, <code>complete_for</code>: the list is ranked for all four purposes at once, so a consumer picks without a second call. <code>complete_for</code> is true when no gap of level major or above remains open for that purpose.</li>
+<li><code>pose_convention</code> states how a pose is read. It follows the manifest field proposed in <a href="../capture-set-amendments/">capture-set amendments</a> §3.</li>
+</ul>
+<p><code>frame</code> (critical).</p>
+<ul>
+<li><code>name</code> and <code>id</code>: the id changes whenever the frame's definition changes. A consumer compares it with its own frame identity before using a position.</li>
+<li><code>axes</code>: <code>up</code> is <code>"+z"</code> when the frame is gravity-aligned and <code>null</code> when it is not (a pure structure-from-motion frame has no known up).</li>
+<li><code>units</code>: <code>"m"</code> or <code>"model"</code>.</li>
+<li><code>scale_state</code>: <code>metric</code>, <code>metric-from-priors</code>, <code>scaled-by-markers</code> or <code>arbitrary</code> (<a href="../../concept/RC-architecture-sketch/">architecture sketch</a> §2).</li>
+<li><code>placement</code>: whether the frame is registered to a named external frame. <code>status</code> is <code>exact</code> (priors with <code>source: truth</code>), <code>estimated</code> (priors with <code>source: belief</code>, with <code>residual_rms_m</code>, <code>priors_used</code>, <code>priors_rejected</code>) or <code>none</code>.</li>
+</ul>
+<p>Each gap.</p>
+<ul>
+<li><code>id</code>: allocated by Recce per project, never reused, kept when a gap is matched across re-runs (<code>status.matched_from</code> names the earlier list and gap). Matching is by kind plus region overlap, or by photo id. A merge or split is recorded in the diff.</li>
+<li><code>kind</code>: <code>thin_angle</code>, <code>few_photos</code>, <code>photo_not_joined</code>, <code>no_scale</code> now; <code>holes</code>, <code>blurred_photo</code>, <code>missing_colour_reference</code>, <code>disconnected_components</code> later. <code>scope</code> says whether the gap lives in a <code>region</code>, a <code>photo</code> or the whole <code>reconstruction</code>.</li>
+<li><code>severity</code>: intrinsic to the evidence and the same for every purpose. <code>level</code> is <code>critical</code>, <code>major</code>, <code>minor</code> or <code>info</code>; <code>score</code> is 0 to 1; <code>basis</code> is a plain statement of the numbers behind it.</li>
+<li><code>priority</code>: rank and score per purpose. Purpose changes order and level of urgency, never the evidence. A <code>no_scale</code> gap is first for measurement and rank 5 for web viewing.</li>
+<li><code>region</code>: sphere (<code>centre</code>, <code>radius</code>) in the frame's units, or <code>null</code> where the location is unknown or does not apply.</li>
+<li><code>evidence</code>: points, photo ids, triangulation angle percentiles, a scale-free <code>depth_rel_sigma</code> (depth uncertainty as a fraction of range, valid in any frame), the coverage <code>ring</code> (azimuth bins; <code>seen</code> holds photo counts per bin; <code>unseen_arcs_deg</code> lists the empty arcs), observations per point, the solver's <code>reason_code</code> for a photo that did not join, and <code>prior_pose</code> where the image carried one (a robot's belief), which tells where the photo was probably taken.</li>
+<li><code>close_when</code>: the machine-checkable criterion the re-run evaluates. It travels with the gap so the consumer knows what "done" means before it plans.</li>
+<li><code>viewpoints</code>: see below.</li>
+<li><code>landmark</code>: the nearest existing photo, used to recognise the spot. It is a photo id; the image itself is served only to clients holding the image scope (section 6).</li>
+<li><code>text</code>: the human card (<code>title</code>, <code>instruction</code>, <code>why</code>). The same text feeds the web shot card, so humans and machines read one source.</li>
+<li><code>hints</code>: how much to capture: <code>baseline_deg</code> and <code>baseline_m</code> (metric only), <code>photos</code> min and target, <code>overlap_min</code>, <code>capture_mode</code>, and per kind extras such as <code>retake_of</code> or the scale <code>reference</code> kinds.</li>
+<li><code>status</code>: the lifecycle (section 3.4).</li>
+</ul>
+<h3 id="33-viewpoints-and-what-a-consumer-may-and-may-not-do">3.3 Viewpoints, and what a consumer may and may not do<a class="headerlink" href="#33-viewpoints-and-what-a-consumer-may-and-may-not-do" title="Permanent link">&para;</a></h3>
+<p>A viewpoint is a candidate, never an order. Fields: <code>pose</code> (position, <code>look_at</code>, <code>up</code>; no quaternion is primary, because robotics-lab states no order for its quaternions (RFC-0025 §3.3, truth row); an optional <code>quaternion_xyzw</code> is named when present), <code>planar</code> (<code>{x, y, yaw, frame}</code> in the robotics-lab shape plus <code>camera_height_m</code>, present only when the frame is gravity-aligned and metric), <code>relative</code> (the viewpoint expressed from a landmark photo: orbit angles about the region centre and a distance ratio; scale-free), <code>acceptance</code> (an arc or annular sector, so a planner may pick any reachable point inside it), <code>tolerance</code> (position radius, a cone half-angle for the look-at direction, roll), and the gate: <code>usable_as_goal</code> with <code>unusable_reason</code>.</p>
+<p>Recce knows no free space. The <code>pose</code> may lie inside a wall. The <code>acceptance</code> region is how a planner finds a reachable point; the planner checks reachability, no-go areas and clearances (RFC-0014 §3.4.8) itself.</p>
+<p>Rules by frame state. <code>usable_as_goal</code> is computed by Recce from this table; a consumer reads the flag and does not re-derive it.</p>
+<table>
+<thead>
+<tr>
+<th><code>scale_state</code></th>
+<th><code>placement.status</code></th>
+<th>Consumer may</th>
+<th>Consumer may not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>arbitrary</code></td>
+<td><code>none</code></td>
+<td>Use kind, severity, priority, counts, evidence ratios, <code>text</code>, <code>hints</code> in counts and angles, the landmark photo, <code>relative</code> and its distance ratio. Show a human the card.</td>
+<td>Treat any position, radius, baseline or tolerance as metres; send <code>pose</code> or <code>planar</code> as a goal; write anything into a map; compare positions with its own frame. <code>up</code> is <code>null</code>: no heading from the model frame is a compass or gravity direction.</td>
+</tr>
+<tr>
+<td><code>scaled-by-markers</code></td>
+<td><code>none</code></td>
+<td>The above, plus metric sizes and distances inside the model.</td>
+<td>Place viewpoints in the robot frame: the frame is the markers', not the robot's. A consumer with its own alignment (three or more point pairs, a landmark photo with a known pose) may transform it; Recce does not vouch for the result.</td>
+</tr>
+<tr>
+<td><code>metric-from-priors</code></td>
+<td><code>estimated</code>, frame id equal to the consumer's</td>
+<td>Use <code>pose</code> and <code>planar</code> as candidate goals after its own reachability check, and the tolerance as acceptance bounds. <code>usable_as_goal</code> is true only where <code>residual_rms_m</code> is under half the viewpoint's <code>position_m</code>.</td>
+<td>Skip the check against its map and guardrails; treat a viewpoint as collision-safe.</td>
+</tr>
+<tr>
+<td><code>metric-from-priors</code></td>
+<td><code>estimated</code>, frame id different (another run's <code>map</code>)</td>
+<td>Use as <code>scaled-by-markers</code> above.</td>
+<td>Assume that two <code>map</code> frames match (RFC-0014 §3.5.4).</td>
+</tr>
+<tr>
+<td><code>metric</code> or priors with <code>source: truth</code></td>
+<td><code>exact</code></td>
+<td>As the row above <code>estimated</code>, with the tolerance at its tightest. Typical case: a simulator capture set.</td>
+<td>Treat truth as safe to drive.</td>
+</tr>
+</tbody>
+</table>
+<p>The same rule in one line: Recce never turns a number into metres that the frame does not carry. When it cannot, it says so in <code>unusable_reason</code> (<code>scale_state_arbitrary</code>, <code>frame_not_registered</code>, <code>frame_id_mismatch</code>, <code>residual_too_large</code>, <code>up_unknown</code>).</p>
+<p>A second, short example, the same gap in a robot capture set with exact priors (all values illustrative):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">"frame"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"map"</span><span class="p">,</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"frm-run-0042-map"</span><span class="p">,</span><span class="w"> </span><span class="nt">"axes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"handedness"</span><span class="p">:</span><span class="s2">"right"</span><span class="p">,</span><span class="nt">"up"</span><span class="p">:</span><span class="s2">"+z"</span><span class="p">,</span><span class="nt">"units"</span><span class="p">:</span><span class="s2">"m"</span><span class="p">},</span>
+<span class="w">           </span><span class="nt">"scale_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric-from-priors"</span><span class="p">,</span>
+<span class="w">           </span><span class="nt">"placement"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exact"</span><span class="p">,</span><span class="w"> </span><span class="nt">"registered_to"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"site"</span><span class="p">,</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"site-home"</span><span class="p">},</span>
+<span class="w">                          </span><span class="nt">"residual_rms_m"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.02</span><span class="p">,</span><span class="w"> </span><span class="nt">"priors_used"</span><span class="p">:</span><span class="w"> </span><span class="mi">212</span><span class="p">,</span><span class="w"> </span><span class="nt">"priors_rejected"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="nt">"viewpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vp-0007a"</span><span class="p">,</span><span class="w"> </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"primary"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"pose"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">2.31</span><span class="p">,</span><span class="mf">1.40</span><span class="p">,</span><span class="mf">0.18</span><span class="p">],</span><span class="w"> </span><span class="nt">"look_at"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">3.05</span><span class="p">,</span><span class="mf">2.12</span><span class="p">,</span><span class="mf">0.22</span><span class="p">],</span><span class="w"> </span><span class="nt">"up"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"planar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"x"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.31</span><span class="p">,</span><span class="w"> </span><span class="nt">"y"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.40</span><span class="p">,</span><span class="w"> </span><span class="nt">"yaw"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.77</span><span class="p">,</span><span class="w"> </span><span class="nt">"camera_height_m"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.18</span><span class="p">,</span><span class="w"> </span><span class="nt">"frame"</span><span class="p">:</span><span class="w"> </span><span class="s2">"site"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"tolerance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"position_m"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.15</span><span class="p">,</span><span class="w"> </span><span class="nt">"look_at_cone_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"roll_deg"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"usable_as_goal"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"unusable_reason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span>
+</code></pre></div>
+<p>A <code>no_scale</code> gap on a robot capture set is a contract failure, not a capture gap: the set promised priors, so the gap's <code>evidence.priors_rejected</code> names why the engine did not use them, and its severity for <code>robot_localisation</code> is <code>critical</code>.</p>
+<h3 id="34-the-lifecycle">3.4 The lifecycle<a class="headerlink" href="#34-the-lifecycle" title="Permanent link">&para;</a></h3>
+<p><code>status.state</code> moves as follows.</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+<th>Set by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td>Found, nobody has claimed it</td>
+<td>Recce, on computing</td>
+</tr>
+<tr>
+<td><code>planned</code></td>
+<td>A consumer has a plan for it: <code>claims</code> holds <code>{client, plan_ref, until}</code></td>
+<td>The consumer, <code>mark_gap_planned</code>; <code>until</code> expires like a lock lease (RFC-0017 lease, inferred as a model) and the gap returns to <code>open</code></td>
+</tr>
+<tr>
+<td><code>captured</code></td>
+<td>A capture set naming the gap in <code>targets</code> was ingested; the re-run is pending</td>
+<td>Recce, on ingest</td>
+</tr>
+<tr>
+<td><code>closed</code></td>
+<td>The re-run met <code>close_when</code></td>
+<td>Recce</td>
+</tr>
+<tr>
+<td><code>still_open</code></td>
+<td>The re-run ran, the gap was targeted and <code>close_when</code> is not met; <code>attempts</code> increments and <code>last_delta</code> holds the change in evidence</td>
+<td>Recce</td>
+</tr>
+<tr>
+<td><code>dismissed</code></td>
+<td>The operator waived it, with a reason ("unreachable", "not needed")</td>
+<td>The operator only; an agent token cannot (as areas, <code>mcp_server.py</code>)</td>
+</tr>
+<tr>
+<td><code>superseded</code></td>
+<td>Merged into another gap by the matcher</td>
+<td>Recce</td>
+</tr>
+</tbody>
+</table>
+<p>Several clients can claim one gap (a phone and a robot); claims are information, not locks, because a gap is not a safety resource. A gap not targeted by a capture keeps its state across a re-run if it still exists, and closes with <code>closed_by: "incidental"</code> if the new data met <code>close_when</code> anyway.</p>
+<h2 id="4-faces-one-verb-list">4. Faces: one verb list<a class="headerlink" href="#4-faces-one-verb-list" title="Permanent link">&para;</a></h2>
+<p>One list of verbs; each face spells it in its own way. Reads are open to every client token; the writes noted below need the named scope.</p>
+<table>
+<thead>
+<tr>
+<th>Verb</th>
+<th>MCP tool</th>
+<th>HTTP (proposed prefix <code>/api/v1</code>)</th>
+<th>CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>list</td>
+<td><code>list_gaps(project, reconstruction?, purpose?, status?, kind?, min_severity?, since_seq?)</code></td>
+<td><code>GET /projects/{p}/gaps?...</code></td>
+<td><code>recon gaps list</code></td>
+</tr>
+<tr>
+<td>get</td>
+<td><code>get_gap(id)</code></td>
+<td><code>GET /gaps/{id}</code></td>
+<td><code>recon gaps get ID</code></td>
+</tr>
+<tr>
+<td>brief</td>
+<td><code>gap_brief(project, purpose, actor?, max_gaps?, frame_id?)</code></td>
+<td><code>POST /projects/{p}/gaps/brief</code></td>
+<td><code>recon gaps brief --purpose P --actor FILE</code></td>
+</tr>
+<tr>
+<td>card</td>
+<td><code>get_shot_card(id, format)</code> (<code>json</code>, <code>markdown</code>, <code>png</code>)</td>
+<td><code>GET /gaps/{id}/card</code></td>
+<td><code>recon gaps card ID</code></td>
+</tr>
+<tr>
+<td>plan</td>
+<td><code>mark_gap_planned(ids, plan_ref, until?)</code> (scope <code>plan</code>)</td>
+<td><code>POST /gaps/{id}/plan</code></td>
+<td><code>recon gaps plan ID --ref R</code></td>
+</tr>
+<tr>
+<td>release</td>
+<td><code>release_gap(ids)</code> (scope <code>plan</code>)</td>
+<td><code>DELETE /gaps/{id}/plan</code></td>
+<td><code>recon gaps release ID</code></td>
+</tr>
+<tr>
+<td>dismiss</td>
+<td>not offered to agents</td>
+<td><code>POST /gaps/{id}/dismiss</code> (scope <code>operator</code>)</td>
+<td><code>recon gaps dismiss ID --reason R</code></td>
+</tr>
+<tr>
+<td>diff</td>
+<td><code>get_gap_diff(from, to?)</code></td>
+<td><code>GET /gap-lists/{to}/diff?from=</code></td>
+<td><code>recon gaps diff A.json B.json</code></td>
+</tr>
+<tr>
+<td>watch</td>
+<td><code>watch_gaps(project, since_seq)</code> (poll) and the resource subscription</td>
+<td><code>GET /events?since=</code> (server-sent events)</td>
+<td><code>recon gaps watch</code></td>
+</tr>
+<tr>
+<td>export</td>
+<td><code>export_gap_list(id)</code></td>
+<td><code>GET /gap-lists/{id}</code></td>
+<td><code>recon gaps export</code>, and <code>gaps.json</code> in every <code>--out</code></td>
+</tr>
+</tbody>
+</table>
+<p>Notes on each.</p>
+<ul>
+<li><code>gap_brief</code> is the machine form of a shot card list. Input: a purpose, an <code>actor</code> profile (kind <code>phone</code>, <code>drone</code>, <code>ground-robot</code>, <code>arm</code>; camera <code>height_m</code>, <code>pitch_range_deg</code>, <code>fov_deg</code>, <code>min_standoff_m</code>; a ground robot's profile is derivable from its <code>cameras.json</code> mount and robot file (inferred)), and optionally the consumer's <code>frame_id</code>. Output: the top <code>max_gaps</code> for that purpose, re-ranked, each with only the viewpoints the actor can reach in principle (camera height and pitch range checked, no map), <code>planar</code> filled for planar actors, a <code>dropped</code> list with the reason per omitted gap, and the same <code>frame</code> block. A consumer that skips <code>gap_brief</code> and reads <code>list_gaps</code> gets the full document.</li>
+<li><code>mark_gap_planned</code> is how the loop closes on the Recce side before capture. It records the client name from the token (the token is the identity, <code>auth.py</code>) and a <code>plan_ref</code> that is opaque to Recce, for example <code>mc:goal-run/123</code>.</li>
+<li><code>get_gap_diff</code> answers "what changed": per gap <code>closed</code>, <code>still_open</code> with <code>delta</code>, <code>new</code>, <code>regressed</code>, <code>merged</code>, and a <code>targets_report</code> (section 5, step 8).</li>
+<li>Resources. The gap list is also an MCP resource: <code>recon://projects/{p}/gaps</code> (the latest list), <code>recon://gap-lists/{id}</code> and <code>recon://gaps/{id}</code>. A client that subscribes receives resource-updated notifications when a new list or a status change lands. The dependable path is the poll with <code>since_seq</code>: robotics-lab's own MCP server exposes tools only (inferred from <code>mcp_server.py</code>), and its event stream already uses numbered events with <code>since</code> and a <code>gap</code> event for a ring that no longer holds the missed ones (<code>CONTRACT.md</code>, The event stream). Recce copies that: events <code>gap-list-ready</code>, <code>gap-status</code>, <code>gap-diff-ready</code>, each with <code>seq</code>.</li>
+<li>Shape of replies. Success is <code>{"ok": true, ...}</code>, failure <code>{"ok": false, "error": {"code", "message"}}</code>, with honest status codes: the robotics-lab envelope, so a client written for one speaks to the other (proposal).</li>
+<li>Auth. Per-client bearer tokens, the token names the client; <code>plan</code> and <code>release</code> need scope <code>plan</code>; images (landmark photos) need scope <code>images</code>; <code>dismiss</code> needs <code>operator</code>. The MCP server is a client of the HTTP API with an allow-list of routes, as robotics-lab's is (<code>mcp_server.py</code>). Its transport is open (section 8).</li>
+<li>File mode. <code>recon --images D --manifest M --out O</code> writes <code>O/gaps.json</code> with no server. <code>--previous O1/gaps.json</code> carries gap ids and lineage into the new list, so the loop works on files alone; statuses <code>planned</code> and <code>dismissed</code> need the server and do not exist in file mode.</li>
+</ul>
+<h2 id="5-the-loop">5. The loop<a class="headerlink" href="#5-the-loop" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Capture.</strong> A robot or phone writes a capture set. The manifest carries the frame, the pose priors (<code>source: truth|belief</code>) and, new, the <code>frame</code> identity and the <code>site</code> (<a href="../capture-set-amendments/">capture-set amendments</a> already add <code>pose_convention</code>; section 6 adds the rest).</li>
+<li><strong>Reconstruct.</strong> <code>recon</code> or the API runs the stages and writes <code>gaps.json</code> beside <code>provenance.json</code>. The frame block carries the placement result.</li>
+<li><strong>Fetch.</strong> The planner (an outside agent holding both the <code>mission-control</code> and a <code>recon</code> MCP server, or Mission Control's model job) calls <code>gap_brief(project, purpose="robot_localisation", actor=&lt;profile&gt;, frame_id=&lt;site frame id&gt;)</code>.</li>
+<li><strong>Check the frame.</strong> If every returned viewpoint has <code>usable_as_goal: true</code>, the planner proceeds. If not, it uses the qualitative parts only (<code>text</code>, <code>relative</code>, counts) and either asks the operator for a capture by hand or raises a scale gap to the operator. No guess substitutes for the flag.</li>
+<li><strong>Transform and plan.</strong> The planner transforms into its goal frame: none when the frame ids match, else its own transform for that run, which Mission Control knows from the dock pose (<code>start_pose</code>, <code>dock_pose</code>: <code>CONTRACT.md</code>). It subtracts the camera mount to get a base pose (RFC-0025 §5), picks a reachable point inside <code>acceptance</code>, checks its map and guardrails, then creates a goal: today <code>point {x, y, frame}</code>, with no heading (robotics-lab answer a; RFC-0025's yaw line is stale), and <code>capture_view</code> once it exists. An agent's run goes to the simulator first (<code>target: sim</code>), and a real run needs the operator, so a gap list is rehearsed in Gazebo before it moves a real robot (RFC-0014 §3.4.2, <code>mcp_server.py</code>).</li>
+<li><strong>Claim.</strong> The planner calls <code>mark_gap_planned(ids, plan_ref="mc:goal-run/123")</code>.</li>
+<li><strong>Execute and record.</strong> The robot reaches the stand pose, takes the burst (<code>hints.photos</code>, <code>hints.baseline_deg</code>) with locked settings, and the model job writes a new capture set with <code>targets: [{"gap":"gap-0001","viewpoint":"vp-0001a","goal_run":123}]</code> and the same <code>site</code> and <code>frame</code> identity.</li>
+<li><strong>Re-run and report.</strong> Recce ingests the set into the same project and sets the targeted gaps to <code>captured</code>. The cached stages are reused, so only what the new photos touch re-runs (<a href="../../concept/RC-architecture-sketch/">architecture sketch</a> §3). It computes a new gap list with matched ids and a diff. The diff reports, per gap: <code>closed</code>, <code>still_open</code> with the evidence delta (for example median angle 6.1 to 11.8 degrees against 15 needed, so "one more photo from the far side"), <code>new</code> gaps the extra photos exposed, <code>regressed</code> gaps, and a <code>targets_report</code> per target: which new photos registered, <code>viewpoint_hit</code> (<code>position_error</code>, <code>look_at_error_deg</code> against the tolerance), and a <code>miss_reason</code> (<code>photo_not_joined</code>, <code>outside_tolerance</code>, <code>blurred</code>, <code>wrong_region</code>). The <code>targets_report</code> is the feedback for planning: a consistent 0.3 m stand-off error tells the planner that its mount or localisation has a bias.</li>
+<li><strong>Notify.</strong> <code>gap-diff-ready</code> on the event stream and the resource update. The planner reads <code>get_gap_diff</code>, updates its plan, and repeats until <code>complete_for[purpose]</code> is true or the operator dismisses what is left.</li>
+</ol>
+<h2 id="6-changes-needed">6. Changes needed<a class="headerlink" href="#6-changes-needed" title="Permanent link">&para;</a></h2>
+<p>All proposals. Neither project writes into the other's repository; robotics-lab items go as messages, as <a href="../robotics-lab-contract/">the contract note</a> records.</p>
+<p>Recce.</p>
+<ul>
+<li>Gap computation as a stage that writes <code>gaps.json</code>, with the RC-P3 quality state as its input. Thresholds are data in the ruleset.</li>
+<li>A <code>placement</code> result in the reconstruction's frame (fit of the priors to the reconstruction, residual, rejected priors) so <code>frame.placement</code> exists. This sits on RC-P9.</li>
+<li>Gap lineage and status in the metadata store (open question 3 of the sketch).</li>
+<li>The verbs of section 4 on the three faces, one implementation behind them.</li>
+<li>The manifest reader accepts <code>site</code>, <code>frame</code>, <code>targets</code>, and writes them back into <code>gaps.json</code>.</li>
+<li>Fixtures: the RC-P9 Blender room with exact poses (expected: planar viewpoints usable), the kicker (expected: nothing usable, <code>no_scale</code> present), and one capture set with deliberately wrong priors (expected: <code>no_scale</code> critical for robots).</li>
+<li>Image scope for landmark photos; gap lists never embed pixels. Home scans hold faces and documents, and the lists reveal room layout, so the retention rules of the sketch's §8 apply to gap lists too.</li>
+</ul>
+<p>Robotics-lab (amendments to RFC-0025 §5.1, proposed).</p>
+<ul>
+<li>"What we want back" gains <code>gaps.json</code>, with the frame rules of section 3.3.</li>
+<li>The manifest gains <code>site {id, frame_id}</code>, <code>frame_id</code> for the pose frame (a run's <code>map</code> plus its start identity), and <code>targets</code>.</li>
+<li>A goal kind for capture, in RFC-0014 §3.4.1's style: <code>capture_view {pose or planar, tolerance, burst {photos, baseline_deg}, gap_ids}</code>, done when the burst is recorded, <code>result</code> naming the capture set. Without it, a planner can send the robot to the stand pose but nothing triggers the burst (RFC-0025 §5.1 leaves "who triggers a capture" open).</li>
+<li>The robot file's <code>capabilities</code> gain a camera entry (mount, height, pitch range, field of view) so an actor profile is derived, not typed.</li>
+<li>Site export carries the dock pose and the frame identity, so a planner proves a frame match.</li>
+<li>A named place for a recon MCP server in the agent's configuration, beside <code>mission-control</code>, with its own token and client name.</li>
+</ul>
+<h2 id="7-alternatives-considered">7. Alternatives considered<a class="headerlink" href="#7-alternatives-considered" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Push (Recce calls Mission Control or a webhook) against pull (consumer reads).</strong> Pull wins. The seam is files and a command line, and neither project writes into the other (RFC-0025 §5); Recce does not know a consumer's address; a consumer that is offline loses nothing. A push adds failure handling for the consumer that Recce has no reason to own. A CLI <code>--on-ready COMMAND</code> hook is the one push offered, for local scripts.</li>
+<li><strong>A ROS-style action</strong> (<code>CaptureViews.action</code>: goal, feedback, result). Rejected as the primary shape. A capture-and-reconstruct session spans hours and days and many processes, so a goal-feedback-result pairing between two live nodes does not model it; a document persists, diffs, replays in a test, and is read by an agent or a human. robotics-lab is ROS-aligned in names, with no ROS foundation yet (ADR-0001) and a ROS 2 bridge only in MVP 2, so an action needs the bridge first. A thin adapter that publishes <code>planar</code> as <code>geometry_msgs/PoseStamped</code> can follow the bridge (inferred). An action does fit one case, live progress while the robot shoots a burst; that case is out of scope here.</li>
+<li><strong>Gaps inside <code>provenance.json</code>.</strong> Rejected. Provenance records how a result was made and is fixed by its hashes; gap status changes with every claim and re-run, and the gap ids must outlive any one reconstruction. The two documents point at each other by hash.</li>
+<li><strong>One document per purpose.</strong> Rejected for the list; accepted for the brief. The list stays purpose-neutral in evidence and carries all four rankings. <code>gap_brief</code> renders a per-purpose, per-actor view on request.</li>
+<li><strong>Recce emits Mission Control goals.</strong> Rejected. It couples Recce to goal kinds, frames and guardrails it does not own, and a goal refused by a navigator would need a feedback path anyway. Recce emits poses and acceptance regions; the planner owns goals.</li>
+<li><strong>Route planning inside Recce.</strong> Rejected; idea 21 says "not route planning". Recce has no map.</li>
+</ul>
+<h2 id="8-open-questions">8. Open questions<a class="headerlink" href="#8-open-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Gap matching across re-runs. Region overlap works while the frame is stable; after a re-solve in which the frame moves, matching can split or merge gaps. The rule needs evidence from RC-P1 runs of the same set with added photos.</li>
+<li>Gap thresholds and severity formulas (the 15 degrees and 3 photos are placeholders). RC-P3 sets them against ground truth; the <code>ruleset</code> field exists so changing them is visible.</li>
+<li>Actor profile format: Recce's own, or robotics-lab's robot file (VDA factsheet names, RFC-0014 §3.3.1) extended? One format would avoid a translation layer.</li>
+<li>MCP transport. <em>Answered by robotics-lab (d):</em> Recce's HTTP API on the tailnet with tokens, and a stdio MCP server on the agent's machine as its client.</li>
+<li>Whether the claim lease should be shorter for a robot than for a human, and whether Recce ever stops offering a gap a robot repeatedly missed (<code>attempts</code> is recorded; the policy is not).</li>
+<li>Frame identity: who mints <code>frame_id</code> for a run's <code>map</code>, and how a planner proves two ids describe the same frame after a relocalisation (RFC-0025 §3.6 "map &lt;- world epochs" is not verified in code).</li>
+<li>Gaps on geometry that exists only in products (holes need a mesh). The schema is open-ended in <code>kind</code>; whether holes are listed by region or by mesh face ids is undecided.</li>
+<li>Which purposes exist beyond the four, and who owns their definitions: Recce, or the consumer passing weights to <code>gap_brief</code>.</li>
+</ol>
+<h2 id="9-not-covered">9. Not covered<a class="headerlink" href="#9-not-covered" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Nothing is built or measured. The example numbers are invented; the field set is a design, not a result of running the engine. No gap has been computed by Recce yet.</li>
+<li>The gap kinds after the first four: holes, blur and exposure, missing colour reference underwater, disconnected components. Their evidence fields, their close criteria and their viewpoints are not designed.</li>
+<li>Underwater and aerial frames (GPS, ENU, refractive geometry) and any actor but phone and ground robot. The <code>actor</code> list names <code>drone</code> and <code>arm</code> without a design for them.</li>
+<li>Live feedback while the robot shoots (a running "ghost camera" on the robot), and any on-device Recce.</li>
+<li>The robotics-lab side beyond reading: I read the Mission Control contract, the MCP server and RFCs, not the planner module (<code>planner.py</code>), the navigator code, flotilla's approvals or the Gazebo and Nav2 bridge. Mission Control's <code>/plan</code> takes words and returns goals; how an LLM planner would consume a gap list is not designed, and no prompt is proposed here.</li>
+<li>The yaw zero direction and quaternion order in robotics-lab are not stated in the documents I read (inferred in section 2); a code check of <code>geometry.py</code> and <code>wire.py</code> is still to be made.</li>
+<li>Flotilla: how its policy and approvals (RFC-0005, RFC-0014 §3.4.7) gate a capture goal that a gap produced. The simulator-first rule is cited; the approval path is not.</li>
+<li>Authorisation detail: token scopes are named, not specified; revocation and rotation follow robotics-lab's <code>auth.py</code> only by analogy (inferred).</li>
+<li>Privacy beyond the sentence in section 6: retention of gap lists, redaction in shot-card images, and whether a landmark thumbnail may leave the tailnet.</li>
+<li>Throughput and size: how large a gap list grows on a thousand-image set (a gap per region on a large site) and whether <code>list_gaps</code> needs paging; the limit of gaps in <code>gap_brief</code> is a parameter without a default.</li>
+<li>The human shot card and the top-down map (idea 21, M2): this note does not change them; it shares their <code>text</code> field.</li>
+<li>Validation of the design with a consumer: no robotics-lab maintainer has read it. It goes to that project as a message when the owner approves.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

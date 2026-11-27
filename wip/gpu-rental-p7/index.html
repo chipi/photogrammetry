@@ -1,0 +1,2126 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/wip/gpu-rental-p7/">
+      
+      
+        <link rel="prev" href="../step0-closeout-2026-11-27/">
+      
+      
+        <link rel="next" href="../underwater-benchmark-spec/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>GPU rental for RC-P7 - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gpu-rental-spec-for-rc-p7-2026-11-24" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GPU rental for RC-P7
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-p7-needs-from-the-rented-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What P7 needs from the rented machine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What P7 needs from the rented machine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpu-class-and-vram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU class and VRAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-ram-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU, RAM, disk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#os-and-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OS and image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hours" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hours
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Access pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-provider-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Provider comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-launch-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Launch checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Launch checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-p7-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What P7 records
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-p7-needs-from-the-rented-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What P7 needs from the rented machine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What P7 needs from the rented machine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpu-class-and-vram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU class and VRAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-ram-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU, RAM, disk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#os-and-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OS and image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hours" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hours
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Access pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-provider-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Provider comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-launch-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Launch checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Launch checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-p7-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What P7 records
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="gpu-rental-spec-for-rc-p7-2026-11-24">GPU rental spec for RC-P7 (2026-11-24)<a class="headerlink" href="#gpu-rental-spec-for-rc-p7-2026-11-24" title="Permanent link">&para;</a></h1>
+<p>Decision input for the owner. RC-P7 (<a href="../../concept/RC-brief/">brief</a>, "RC-P7 — Distribution on a large set") needs one rented GPU beside the GB10 and the X3. This note states what that machine must be, compares providers on prices read from their own pages today, recommends two options with a cost cap, and lists the launch and teardown steps. Nothing is rented and no account exists yet.</p>
+<p>Tags: <code>[V]</code> the figure was read on the provider's own page or price API on 2026-11-24 (the URL is inline). <code>[unverified]</code> the figure comes from a search snippet, a third-party page, memory or an estimate, or the provider's page did not load. Estimates are marked as such.</p>
+<h2 id="1-what-p7-needs-from-the-rented-machine">1. What P7 needs from the rented machine<a class="headerlink" href="#1-what-p7-needs-from-the-rented-machine" title="Permanent link">&para;</a></h2>
+<h3 id="the-job">The job<a class="headerlink" href="#the-job" title="Permanent link">&para;</a></h3>
+<p>RC-P7's criterion is dense depth per view split across the GB10, the X3 and one rented GPU, plus registration cut into clusters solved on different machines. The rented machine takes one slice of each.</p>
+<ul>
+<li><strong>Input:</strong> COLMAP's Graham Hall, 1,273 images, six archive parts totalling 11.78 GB [V] (<code>graham-hall.zip</code> 1.29 GB plus <code>.z01</code> to <code>.z05</code> at 2.10 GB each; sizes from the HTTP headers of the release assets listed on <a href="https://demuc.de/colmap/datasets/">https://demuc.de/colmap/datasets/</a>). The page gives no pixel size.</li>
+<li><strong>Dense slice:</strong> about one third of the views, roughly 425, through <code>pycolmap.patch_match_stereo</code> (CUDA), photometric then geometric pass. The slice is the unit the split assigns; the share per machine is set by the coordinator, so the rented GPU may get more or less.</li>
+<li><strong>Registration cluster (optional on this node):</strong> one overlapping cluster of roughly 400 images: GPU SIFT extraction, matching, then COLMAP incremental or GLOMAP mapping. This stage runs mostly on the CPU and fits the same node.</li>
+<li><strong>Not needed:</strong> gsplat. RC-P7 measures depth and registration, so the gsplat figure below only sizes the node if the owner later adds a splat to the same rental.</li>
+</ul>
+<h3 id="gpu-class-and-vram">GPU class and VRAM<a class="headerlink" href="#gpu-class-and-vram" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Measured on the GB10 in RC-P2</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>patch_match_stereo</code>, 2000 px</td>
+<td>up to 1,483 MiB of GPU memory, 86.6% average GPU utilisation</td>
+<td>8 GB would run it at 2000 px</td>
+</tr>
+<tr>
+<td>gsplat, 7,000 steps, 2000 px</td>
+<td>4.95 GB peak torch memory, 6.6 GB process memory</td>
+<td>12 GB is enough</td>
+</tr>
+<tr>
+<td>Full resolution (6048 x 4032 class)</td>
+<td>not measured</td>
+<td>unknown; PatchMatch memory grows with image area</td>
+</tr>
+</tbody>
+</table>
+<p>Requirement: an NVIDIA GPU with at least 16 GB of VRAM and a CUDA 12 or CUDA 13 driver. 24 GB (RTX 4090, L4, A10, A5000) leaves room for a full-resolution run; 48 GB (L40S, A6000) removes the question. No Blackwell requirement: x86_64 and Ada or Ampere cards are enough, and the PyPI/conda wheels cover them.</p>
+<p>Speed is the unknown. The GB10 took 30.8 s per view (1,168.7 s for 38 views at 2000 px, RC-P2). No rented card has been timed. Estimate: a 4090 or L40S runs 1x to 3x the GB10's rate, so 10 to 31 s per view; 425 views take 1.2 to 3.7 h. The first 20 views on the rented node replace this estimate with a measurement.</p>
+<h3 id="cpu-ram-disk">CPU, RAM, disk<a class="headerlink" href="#cpu-ram-disk" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Requirement</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vCPU</td>
+<td>8 or more</td>
+<td>feature extraction, fusion and mapping run on the CPU</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>32 GB minimum, 64 GB preferred</td>
+<td>the dense run raised host memory by 10 GB on the GB10, gsplat by 13 GB (RC-P2); mapping a 400-image cluster needs more</td>
+</tr>
+<tr>
+<td>Disk</td>
+<td>200 GB</td>
+<td>archives 11.8 GB, extracted images about the same, dense workspace estimate below</td>
+</tr>
+</tbody>
+</table>
+<p>Dense workspace: RC-P2's 38-view workspace is 3.1 GB at 2000 px, 82 MB per view (undistorted image, photometric and geometric depth, normals, consistency graph). Estimate for 425 views: 35 GB; for all 1,273: 104 GB. Keep the 200 GB disk so a larger share fits without a restart.</p>
+<h3 id="network">Network<a class="headerlink" href="#network" title="Permanent link">&para;</a></h3>
+<p>The node pulls the images straight from the GitHub release, so the home uplink carries almost nothing.</p>
+<table>
+<thead>
+<tr>
+<th>Transfer</th>
+<th>Direction</th>
+<th>Size (estimate)</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Graham Hall archives</td>
+<td>GitHub to node</td>
+<td>11.8 GB [V]</td>
+<td>minutes on a datacenter link</td>
+</tr>
+<tr>
+<td>Slice list, camera database, sparse model, scripts</td>
+<td>X3 to node</td>
+<td>under 1 GB</td>
+<td>seconds</td>
+</tr>
+<tr>
+<td>Geometric depth maps for 425 views (float32, 2000 x 1295 is 10.4 MB each, uncompressed)</td>
+<td>node to X3</td>
+<td>about 4.4 GB; about 13 GB for all 1,273</td>
+<td>50 Mbit/s: 12 min (4.4 GB) or 35 min (13 GB); 500 Mbit/s: 1 to 3.5 min</td>
+</tr>
+<tr>
+<td>Registration cluster model</td>
+<td>node to X3</td>
+<td>under 1 GB</td>
+<td>seconds</td>
+</tr>
+</tbody>
+</table>
+<p>The X3's real uplink and downlink are not measured; the times above are arithmetic on the stated link speeds. If the dense step returns normals and photometric maps as well, the download is about 3x larger. Return only the geometric depth maps and the fused slice.</p>
+<h3 id="os-and-image">OS and image<a class="headerlink" href="#os-and-image" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ubuntu 22.04 or 24.04 on x86_64, NVIDIA driver with CUDA 12 or 13.</li>
+<li>Either a VM with root (Docker allowed), or a container pod. A VM runs <code>tailscaled</code> with a TUN device. A container pod usually has no TUN device and needs <code>tailscaled --tun=userspace-networking</code>, which makes the node reachable by SSH from the tailnet but not a route for other traffic <code>[unverified]</code>.</li>
+<li>Software: pycolmap with CUDA (RC-P1 and RC-P2 used conda-forge <code>pycolmap=4.2.1</code>, <code>has_cuda</code> True, on aarch64). Whether the x86_64 conda-forge build of the same version has a CUDA variant, and whether the <code>colmap/colmap</code> Docker image matches that version, are <code>[unverified]</code>; the first launch step checks <code>pycolmap.has_cuda</code>.</li>
+</ul>
+<h3 id="hours">Hours<a class="headerlink" href="#hours" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Boot, Tailscale, environment, dataset download and extraction</td>
+<td>0.5 to 1 h</td>
+</tr>
+<tr>
+<td>Dense depth, 425 views</td>
+<td>1.2 to 3.7 h (section above)</td>
+</tr>
+<tr>
+<td>Registration cluster (SIFT, exhaustive match, mapping, about 400 images)</td>
+<td>0.2 to 0.5 h; RC-P1 matched 38 images in 5 to 10 s and matching scales with pairs, so 400 images is about 100x; mapping scales worse</td>
+</tr>
+<tr>
+<td>Transfer back and checks</td>
+<td>0.2 to 0.5 h</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>2 to 5 h; plan 5 h</td>
+</tr>
+</tbody>
+</table>
+<h3 id="access-pattern">Access pattern<a class="headerlink" href="#access-pattern" title="Permanent link">&para;</a></h3>
+<p>SSH from the X3. Preferred: the node joins the owner's tailnet with an ephemeral, tagged auth key and the X3 reaches it by its tailnet name; no public SSH port is exposed. Fallback: plain SSH to the provider's public IP with a key, restricted to the X3's address where the provider has a firewall. The coordinator on the X3 pushes work over SSH and pulls results with <code>rsync</code>.</p>
+<h2 id="2-provider-comparison">2. Provider comparison<a class="headerlink" href="#2-provider-comparison" title="Permanent link">&para;</a></h2>
+<p>Prices as of 2026-11-24, in the provider's currency, on-demand, one GPU, Linux, excluding VAT unless stated.</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Relevant GPUs and price per hour</th>
+<th>Billing</th>
+<th>Egress</th>
+<th>Storage</th>
+<th>Custom image / Docker</th>
+<th>Spot</th>
+<th>EU region</th>
+<th>Sign-up</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RunPod (<a href="https://www.runpod.io/pricing">pricing</a>)</td>
+<td>Community / Secure [V]: RTX 4090 $0.34 / $0.89; L4 $0.44 / $0.69; L40S $0.79 / $1.09; A100 PCIe $1.19 / $2.09; H100 PCIe $1.99 / $2.89; A5000 $0.16 / $0.27; A6000 $0.33 / $0.69</td>
+<td>per second [V]</td>
+<td>none: "no fees for data ingress or egress" (<a href="https://docs.runpod.io/pods/pricing">docs</a>) [V]</td>
+<td>container disk $0.10/GB/mo; volume $0.10 running, $0.20 stopped; network volume $0.07 under 1 TB [V]</td>
+<td>pods are containers from any image; Docker inside a pod is not available <code>[unverified]</code></td>
+<td>not in the docs read [V]; a spot tier exists on the console <code>[unverified]</code></td>
+<td>datacenters in EU <code>[unverified]</code></td>
+<td>prepaid credit, balance zero stops pods; default $80/h spend limit [V]</td>
+</tr>
+<tr>
+<td>Vast.ai (<a href="https://vast.ai/pricing">pricing</a>)</td>
+<td>marketplace; per-host prices. The RTX 4090 page showed no offers at fetch time (<a href="https://vast.ai/pricing/gpu/RTX-4090">page</a>) [V]; "from $0.309" is a search snippet <code>[unverified]</code></td>
+<td>per second [V]</td>
+<td>charged per byte, rate set by host, not stated on the pricing page (<a href="https://docs.vast.ai/documentation/instances/pricing">docs</a>) [V]</td>
+<td>charged while stopped; delete the instance to stop it [V]</td>
+<td>Docker image template, container instances [V]</td>
+<td>interruptible, "often 50%+ cheaper" [V]</td>
+<td>filter by host country <code>[unverified]</code></td>
+<td>prepaid credit</td>
+</tr>
+<tr>
+<td>Lambda (<a href="https://lambda.com/pricing">pricing</a>)</td>
+<td>A6000 $1.09; A100 $1.99; GH200 $2.59; H100 SXM $4.89; no 4090 or L40S listed [V]</td>
+<td>one-minute increments (<a href="https://docs.lambda.com/public-cloud/billing/">docs</a>) [V]</td>
+<td>none: "you are not charged for ingress or egress" [V]</td>
+<td>filesystem billed per GiB-month in one-hour increments, "$0.20 per GiB per month" given as an example, not a current price [V]</td>
+<td>VMs with SSH; Docker preinstalled <code>[unverified]</code></td>
+<td>none seen <code>[unverified]</code></td>
+<td><code>europe-central-1</code>, Germany (<a href="https://docs.lambda.com/public-cloud/on-demand/">docs</a>) [V]; capacity per region not checked</td>
+<td>card; instance quota and capacity availability <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>DigitalOcean GPU Droplets (Paperspace's GPU line; <a href="https://www.digitalocean.com/pricing/gpu-droplets">pricing</a>)</td>
+<td>RTX 4000 Ada $0.76; RTX 6000 Ada $1.57; L40S $1.57; H100 $4.41 [V]</td>
+<td>per second, five-minute minimum [V]; powered-off droplets still bill [V]</td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>VM with SSH, GPU-ready images <code>[unverified]</code></td>
+<td>spot and 12-month reserved listed [V]</td>
+<td>EU GPU region <code>[unverified]</code></td>
+<td>account with card; GPU access may need approval <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>Hetzner GPU servers (<a href="https://www.hetzner.com/dedicated-rootserver/matrix-gpu/">matrix</a>)</td>
+<td>GEX45 RTX PRO 4000 24 GB: EUR 0.34 plus EUR 209 setup; GEX63 RTX PRO 6000 96 GB: EUR 1.60 plus EUR 999 setup; GEX131: EUR 2.40 plus EUR 1,499 setup [V]</td>
+<td>hourly, with a one-off setup fee [V]</td>
+<td>unlimited traffic included [V]</td>
+<td>local disks <code>[unverified]</code></td>
+<td>Ubuntu, Debian installed on dedicated hardware [V]</td>
+<td>none</td>
+<td>Helsinki; Falkenstein for GEX131 [V]</td>
+<td>the setup fee makes a few-hour run cost EUR 209 or more; not suitable</td>
+</tr>
+<tr>
+<td>Google Cloud (<a href="https://cloud.google.com/products/compute/pricing/accelerator-optimized">pricing</a>)</td>
+<td>g2-standard-8 (1x L4, 24 GB, 8 vCPU, 32 GiB): $0.8536; a2-highgpu-1g (1x A100 40 GB, 12 vCPU, 85 GiB): $3.673 [V]. The first price column of the page is quoted; the region of each column was not extracted <code>[unverified]</code></td>
+<td>per second, one-minute minimum <code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>custom images and Docker supported <code>[unverified]</code></td>
+<td>Spot VMs listed; spot value on the page for a2-highgpu-1g is $2.00 in the second column <code>[unverified]</code></td>
+<td><code>europe-west4</code> is listed for G2 (<a href="https://cloud.google.com/compute/gpus-pricing">search result</a>) <code>[unverified]</code></td>
+<td>GPU quota starts at zero and needs a request <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>AWS (<a href="https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/20261123171005/eu-north-1/index.json">price list, eu-north-1</a>)</td>
+<td>Stockholm, Linux, shared [V]: g4dn.xlarge (T4 16 GB) $0.558; g6.xlarge (L4 24 GB, 4 vCPU, 16 GiB) $0.8536; g5.xlarge (A10G 24 GB) $1.067; g6.2xlarge (L4, 8 vCPU, 32 GiB) $1.0369; g6e.xlarge (L40S 48 GB, 4 vCPU, 32 GiB) $1.974</td>
+<td>per second, 60-second minimum (<a href="https://aws.amazon.com/ec2/pricing/on-demand/">page</a>) [V]</td>
+<td>100 GB per month free to the internet; the per-GB price beyond it was not read [V]</td>
+<td>EBS price not read <code>[unverified]</code></td>
+<td>AMIs, Deep Learning AMIs <code>[unverified]</code></td>
+<td>Spot exists <code>[unverified]</code></td>
+<td>Stockholm and Frankfurt in the price index [V]</td>
+<td>GPU instance vCPU quota starts at zero and needs a request <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>Azure (<a href="https://prices.azure.com/api/retail/prices">retail price API</a>)</td>
+<td>West Europe, Linux, pay-as-you-go [V]: NC4as_T4_v3 (T4 16 GB, 4 vCPU) $0.658; NV36ads_A10_v5 (A10 24 GB, 36 vCPU) $4.16; NC24ads_A100_v4 (A100 80 GB, 24 vCPU) $4.775</td>
+<td>per second <code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>custom images supported <code>[unverified]</code></td>
+<td>Spot VMs exist <code>[unverified]</code></td>
+<td>West Europe [V]</td>
+<td>GPU quota request <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>Scaleway (<a href="https://www.scaleway.com/en/pricing/gpu">pricing</a>)</td>
+<td>L4-1-24G EUR 0.79; L40S-1-48G EUR 1.40; H100-1-80G EUR 2.52 <code>[unverified]</code> (search snippet of the pricing page; the page returned 403 to the fetch tool). <code>H100-1-80G</code> and <code>H100-SXM</code> types exist in the public product API for <code>fr-par-2</code> [V]</td>
+<td>per minute <code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>VMs with SSH; Docker <code>[unverified]</code></td>
+<td>none seen <code>[unverified]</code></td>
+<td>Paris and Warsaw <code>[unverified]</code></td>
+<td>EU company, card; GPU quota <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>OVHcloud (<a href="https://www.ovhcloud.com/en/public-cloud/gpu/">GPU page</a>)</td>
+<td>L4, L40S, H100 offered; "from approximately $0.60/hour" for entry options; no per-GPU price read [V]; USD 200 trial credit for new accounts [V]</td>
+<td>per hour (price page, [V])</td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>VMs, Docker <code>[unverified]</code></td>
+<td>none seen <code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>card, identity check <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>Verda (formerly DataCrunch; <a href="https://verda.com/rtx-pro-6000">RTX PRO 6000 page</a>)</td>
+<td>RTX PRO 6000 96 GB: $3.04 on demand, $1.52 spot [V]; V100 16 GB $0.256 (<a href="https://verda.com/gpu-instances">instances page</a>) [V]. A search snippet quoted $1.89 for the RTX PRO 6000 and L40S; it conflicts with the page and is not used</td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td>block storage and shared filesystems offered [V]</td>
+<td>instance boots in about 30 s; console, CLI, Terraform, SkyPilot [V]</td>
+<td>spot contracts [V]</td>
+<td>European operator; datacenter locations <code>[unverified]</code></td>
+<td>self-service, no sales call [V]</td>
+</tr>
+<tr>
+<td>Genesis Cloud</td>
+<td>pricing page failed the TLS handshake in the fetch tool; nothing read</td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+<td><code>[unverified]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Reading the table:</p>
+<ul>
+<li>Two providers charge no data transfer (RunPod, Lambda), which matters because the depth maps return to the X3: 4 to 13 GB each way costs nothing there.</li>
+<li>Hetzner's setup fee rules it out for a run of hours.</li>
+<li>AWS, Google Cloud and Azure cost 2x to 6x the marketplace price for comparable VRAM and add quota requests; they stay as the fallback when an organisation account is required.</li>
+<li>RunPod's Community versus Secure gap is 2.6x for the 4090 ($0.34 versus $0.89). Community hosts are third-party machines.</li>
+</ul>
+<h2 id="3-recommendation">3. Recommendation<a class="headerlink" href="#3-recommendation" title="Permanent link">&para;</a></h2>
+<p><strong>Cheapest sensible: RunPod, RTX 4090 24 GB, Community Cloud, $0.34 per hour [V].</strong> Per-second billing, no egress fee, any container image, 24 GB covers a full-resolution trial. Fall back to Secure Cloud at $0.89 per hour if the Community pod is slow to start or reclaimed. Cost for a 5-hour run:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compute, 5 h at $0.34</td>
+<td>$1.70 (Secure: $4.45)</td>
+</tr>
+<tr>
+<td>Disk, 200 GB container disk at $0.10/GB/month, about 6 h</td>
+<td>about $0.17</td>
+</tr>
+<tr>
+<td>Egress and ingress</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>about $2 (Secure: about $5)</td>
+</tr>
+</tbody>
+</table>
+<p>Cap: load $10 of prepaid credit and no more; the pod stops itself at a zero balance [V]. Teardown when the run ends regardless of the balance.</p>
+<p><strong>More reliable: Scaleway L40S-1-48G, EUR 1.40 per hour <code>[unverified]</code>, Paris or Warsaw.</strong> A full VM with root (TUN device, Docker, plain Tailscale), 48 GB of VRAM, an EU operator and EU data location. The price rests on a search snippet because the pricing page refused the fetch tool; the owner confirms it in the console before launch. If Scaleway's GPU quota or stock blocks the launch, AWS <code>g6e.xlarge</code> in <code>eu-north-1</code> (L40S, $1.974 per hour [V]) is the fallback with a verified price.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compute, 5 h at EUR 1.40</td>
+<td>EUR 7.00</td>
+</tr>
+<tr>
+<td>Block storage, 200 GB for 6 h</td>
+<td>under EUR 1 <code>[unverified]</code></td>
+</tr>
+<tr>
+<td>Egress</td>
+<td>not read <code>[unverified]</code>; the depth maps are about 4 to 13 GB</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>about EUR 8</td>
+</tr>
+</tbody>
+</table>
+<p>Cap: EUR 20, set as a billing alert and enforced by deleting the instance at the 8-hour mark.</p>
+<p>The cheap option gives the first measurement. The reliable one covers the case where Community hardware misbehaves (disk speed, reclaim) and distorts the wall-clock number P7 records.</p>
+<h2 id="4-launch-checklist">4. Launch checklist<a class="headerlink" href="#4-launch-checklist" title="Permanent link">&para;</a></h2>
+<p>Owner actions are marked (owner). No account, key or resource is created by the agent.</p>
+<ol>
+<li><strong>Account (owner).</strong> Create the provider account (RunPod first). Use the email of record and turn on two-factor authentication.</li>
+<li><strong>Payment (owner).</strong> RunPod: add prepaid credit of $10. Scaleway: add a card and set a billing alert at EUR 20. Do not enable auto top-up.</li>
+<li><strong>SSH key (owner).</strong> Add the public key of the X3's <code>~/.ssh/id_ed25519.pub</code> in the provider console. The private key stays on the X3.</li>
+<li><strong>Tailscale auth key (owner).</strong> In the Tailscale admin console create an auth key that is <strong>ephemeral</strong>, <strong>reusable off</strong>, <strong>pre-approved</strong>, tagged (for example <code>tag:rental</code>), with an expiry of 24 h. The owner creates it and pastes it into the node shell; the agent never receives it, and it is never committed. Add an ACL entry that lets the X3 reach <code>tag:rental</code> and nothing in the other direction.</li>
+<li><strong>Image.</strong> RunPod: template <code>runpod/pytorch</code> with a CUDA 12.x tag (check the tag in the console), container disk 200 GB, GPU RTX 4090 Community. Scaleway: Ubuntu 24.04 GPU image with the NVIDIA driver, a 200 GB volume. Confirm with <code>nvidia-smi</code> that the driver reports CUDA 12 or 13.</li>
+<li><strong>Join the tailnet (on the node).</strong>
+   <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://tailscale.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+sudo<span class="w"> </span>tailscale<span class="w"> </span>up<span class="w"> </span>--auth-key<span class="o">=</span><span class="s2">"</span><span class="nv">$TS_AUTHKEY</span><span class="s2">"</span><span class="w"> </span>--hostname<span class="o">=</span>recce-p7-rental<span class="w"> </span>--advertise-tags<span class="o">=</span>tag:rental<span class="w"> </span>--ssh<span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+   In a container pod with no TUN device: <code>tailscaled --tun=userspace-networking --socket=/tmp/tailscaled.sock &amp;</code> then <code>tailscale --socket=/tmp/tailscaled.sock up ...</code> with the same flags. Check from the X3: <code>tailscale ping recce-p7-rental</code> and <code>ssh root@recce-p7-rental nvidia-smi</code>.</li>
+<li><strong>Environment (on the node).</strong> Install micromamba and create the P1 environment: <code>micromamba create -p ~/p7env -c conda-forge python=3.12 pycolmap=4.2.1 numpy</code>. Run <code>~/p7env/bin/python -c "import pycolmap; print(pycolmap.has_cuda)"</code>. If it prints <code>False</code>, stop and record it; do not build COLMAP by hand without asking (the node costs money while idle).</li>
+<li><strong>Data.</strong> On the node, pull the archives directly:
+   <div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/p7/graham<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/p7/graham
+<span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span>graham-hall.zip<span class="w"> </span>graham-hall.z0<span class="o">{</span><span class="m">1</span>..5<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>curl<span class="w"> </span>-fLO<span class="w"> </span>https://github.com/colmap/colmap/releases/download/3.11.1/<span class="nv">$f</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+zip<span class="w"> </span>-FF<span class="w"> </span>graham-hall.zip<span class="w"> </span>--out<span class="w"> </span>graham-hall-combined.zip<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>unzip<span class="w"> </span>-q<span class="w"> </span>graham-hall-combined.zip
+</code></pre></div>
+   From the X3, send the slice list, scripts and sparse model: <code>rsync -avz --partial ~/.cache/recce/runs/p7/handoff/ root@recce-p7-rental:~/p7/handoff/</code>.</li>
+<li><strong>Run.</strong> Start the dense slice detached (<code>long-job</code> skill) and sample the GPU every 5 s as in RC-P2 (<code>sample_gpu.sh</code>). Time the first 20 views and compare with the 10 to 31 s per view estimate; if the rate is worse than the GB10's 30.8 s, stop and report before spending more hours.</li>
+<li><strong>Pull results.</strong> <code>rsync -avz --partial --info=progress2 root@recce-p7-rental:~/p7/out/ ~/.cache/recce/runs/p7/rental/</code>. Record the byte count and the elapsed time.</li>
+<li><strong>Teardown.</strong> Copy the results and the logs first, then delete the instance. RunPod: terminate the pod (a stopped pod with a volume still bills for the disk; stopped volume disk costs $0.20/GB/month [V]) and delete any network volume. Scaleway: delete the instance and its volumes and its flexible IP. The ephemeral Tailscale node disappears from the admin console after it goes offline; remove it by hand if it stays listed and revoke the auth key.</li>
+<li><strong>Verify nothing keeps billing.</strong> Provider console: instances list empty, volumes list empty, IP list empty; the balance on RunPod (or the cost view on Scaleway) checked again after one hour and shows no movement. Tailscale admin: no <code>tag:rental</code> machine, auth key revoked.</li>
+</ol>
+<h3 id="what-p7-records">What P7 records<a class="headerlink" href="#what-p7-records" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Where it comes from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wall-clock per phase (boot, setup, download, dense depth, registration, return)</td>
+<td>timestamps in the run log</td>
+</tr>
+<tr>
+<td>Seconds per view on the rented GPU, against the GB10's 30.8 s and the X3's figure</td>
+<td>first 20 views and the whole slice</td>
+</tr>
+<tr>
+<td>Transfer time and bytes, each direction, with the measured X3 link speed</td>
+<td><code>rsync</code> summary</td>
+</tr>
+<tr>
+<td>Billed cost: compute, storage, egress, from the provider's invoice or balance, not the estimate</td>
+<td>console</td>
+</tr>
+<tr>
+<td>Idle time between rental start and the first dense view</td>
+<td>log timestamps</td>
+</tr>
+<tr>
+<td>GPU name, driver, CUDA, pycolmap build, <code>has_cuda</code></td>
+<td><code>nvidia-smi</code>, <code>pip</code>/<code>conda list</code></td>
+</tr>
+<tr>
+<td>The result against the fastest single machine, and the break-even set size if splitting does not pay (the brief's closing sentence of RC-P7)</td>
+<td>RC-P7 results table</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-not-covered">5. Not covered<a class="headerlink" href="#5-not-covered" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Real speed of any rented card.</strong> No GPU in this note was timed on PatchMatch. The 10 to 31 s per view range is an assumption of 1x to 3x the GB10; it can be wrong in both directions.</li>
+<li><strong>Full-resolution memory.</strong> RC-P2 measured 2000 px only. Graham Hall's pixel size is not on the dataset page, so the full-resolution VRAM and time are unknown.</li>
+<li><strong>x86_64 CUDA pycolmap.</strong> Not checked that a CUDA build of pycolmap 4.2.1 exists for x86_64 on conda-forge, or that the <code>colmap/colmap</code> image matches it.</li>
+<li><strong>Prices not read on a provider page:</strong> Vast.ai per-GPU prices (listing empty for the 4090 at fetch time), Scaleway (page returned 403; snippet only), OVHcloud per-GPU prices, Verda L40S and A100 prices (a snippet conflicts with the page), Genesis Cloud (TLS failure), and all of DigitalOcean's, Google Cloud's and Azure's egress and storage prices. Google Cloud's region per price column was not extracted.</li>
+<li><strong>Availability and stock.</strong> Whether an RTX 4090 Community pod, a Scaleway L40S, a Lambda GPU in <code>europe-central-1</code> or a Hetzner server is free today was not checked; stock changes by the minute.</li>
+<li><strong>Quotas and sign-up friction.</strong> GPU quota requests, identity checks and approval waits at Google Cloud, AWS, Azure, Scaleway and OVHcloud were not tested; no account was created.</li>
+<li><strong>Tailscale inside RunPod pods.</strong> The userspace-networking route is the documented Tailscale mode for containers without TUN but was not run on RunPod.</li>
+<li><strong>Spot and interruptible reliability.</strong> Reclaim rates were not measured; the plan avoids spot for the timed run.</li>
+<li><strong>The X3's internet uplink and downlink.</strong> Not measured; every transfer time is arithmetic on a stated speed.</li>
+<li><strong>The X3 HIP path (RC-P2) and the GB10 schedule.</strong> The split's other two machines are outside this note; the rented GPU's share depends on them.</li>
+<li><strong>Tax.</strong> Prices exclude VAT unless the page said otherwise; the Lambda page states exclusion [V], the others were not checked.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

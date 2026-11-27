@@ -1,0 +1,1808 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/wip/research-drone-phone-datasets-2026-11-26/">
+      
+      
+        <link rel="prev" href="../research-ux-inspiration-2026-11-24/">
+      
+      
+        <link rel="next" href="../gap-list-interface/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Research, drone and phone datasets - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#public-datasets-for-recce-step-0-drone-and-smartphone-captures" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Research, drone and phone datasets
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#group-a-drone-uav-imagery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group A: drone (UAV) imagery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Group A: drone (UAV) imagery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#best-three-for-group-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best three for Group A
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-b-smartphone-captures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group B: smartphone captures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Group B: smartphone captures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#best-three-for-group-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best three for Group B
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-to-recce-needs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping to Recce needs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#could-not-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Could not verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#group-a-drone-uav-imagery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group A: drone (UAV) imagery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Group A: drone (UAV) imagery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#best-three-for-group-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best three for Group A
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-b-smartphone-captures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group B: smartphone captures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Group B: smartphone captures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#best-three-for-group-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best three for Group B
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-to-recce-needs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping to Recce needs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#could-not-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Could not verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="public-datasets-for-recce-step-0-drone-and-smartphone-captures">Public datasets for Recce Step 0: drone and smartphone captures<a class="headerlink" href="#public-datasets-for-recce-step-0-drone-and-smartphone-captures" title="Permanent link">&para;</a></h1>
+<p>Date of search: 2026-11-26, by a research subagent; the EuroSDR RPAS record (licence CC BY 4.0, 43.1 GB, Phase 2 9.9 GB) was re-checked against Zenodo's API afterwards. Method: web search plus fetch of dataset pages, repositories, Zenodo records and papers. Nothing was downloaded. Where a fact comes from a search snippet and not from a page I fetched, or a page was silent, the item appears under "Could not verify".</p>
+<p>Already known and not re-checked here: OpenDroneMap sample sets (no ground truth), ARKitScenes (in use), ETH3D, Mip-NeRF 360, Tanks and Temples.</p>
+<h2 id="group-a-drone-uav-imagery">Group A: drone (UAV) imagery<a class="headerlink" href="#group-a-drone-uav-imagery" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Images</th>
+<th>Metadata</th>
+<th>Ground truth</th>
+<th>Licence</th>
+<th>Size</th>
+<th>Fit for Recce</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EuroSDR RPAS benchmark, Wards Hill Quarry, UK (Newcastle Univ., 2021; Zenodo 10.5281/zenodo.10059050, v2 Oct 2023)</td>
+<td>DJI P4 RTK: 430 nadir + 59/70 oblique per flight (two flights). DJI P1 (45 MP): 974 nadir + 25 oblique. Lidar flights also carry 254 and 252 optical images. Site 350 x 250 m, P4 flights at 55 m</td>
+<td>RTK corrections on/off per phase, local GNSS base station data, GCP coordinates; released in three phases (no ground control, then base/RTK, then GCP coordinates)</td>
+<td>Independent surveyed checkpoints (GNSS, mm-level) plus GCPs, a terrestrial laser scan of the quarry, a total-station road profile (245 points), five evaluation areas</td>
+<td>CC BY 4.0 (Zenodo record)</td>
+<td>43.1 GB total: Phase1.7z 33.2 GB, Phase2.7z 9.9 GB, Phase3 tiny, coordinates xlsx 30 kB. Phase 2 (9.9 GB) can be fetched alone</td>
+<td>Best match. Same site flown with and without RTK, so pose-prior quality is a controlled variable; checkpoints and TLS give metric scale and frame checks; the P1 flight is about 1,000 images. A direct drone analogue of the RC-P8 prior test. Which phase holds which images is not confirmed from the record page</td>
+</tr>
+<tr>
+<td>UseGeo, Hessigheim, Germany (FBK 3DOM, ISPRS Scientific Initiative 2021-22; github.com/3DOM-FBK/UseGeo)</td>
+<td>829 images across 3 datasets, 7952 x 5304 px, GSD about 2 cm, 80 m AGL, 80% forward / 60% side overlap</td>
+<td>Camera poses and interior calibration provided; ground-truth depth maps 1989 x 1320</td>
+<td>UAV LiDAR (about 50 pts/m2) as reference, ground-truth depth per image, MVS point clouds</td>
+<td>CC BY-NC-SA 4.0 (non-commercial, share-alike)</td>
+<td>Not stated on the pages fetched; three separate downloads, one per dataset</td>
+<td>Good for MVS and dense-depth scoring against LiDAR; non-commercial licence blocks any product reuse. No confirmation of GNSS-per-image or GCPs</td>
+</tr>
+<tr>
+<td>Hessigheim 3D (H3D), Univ. Stuttgart IFP (Kolle et al., 2021)</td>
+<td>Two oblique Sony Alpha 6000 cameras, GSD 1.5-3 cm at 50 m; four epochs (2016 manned lidar, Mar 2018, Nov 2018, Mar 2019)</td>
+<td>Georeferenced by a hybrid (lidar plus image) adjustment</td>
+<td>Riegl VUX-1LR UAV lidar, about 800 pts/m2, 11 classes labelled; textured mesh</td>
+<td>Not stated on pages fetched; access through a download/subscription section</td>
+<td>Not stated</td>
+<td>Lidar-quality reference over a village, multi-epoch. Delivered products are point cloud and mesh; raw image availability and licence unconfirmed. UseGeo borrowed from this site</td>
+</tr>
+<tr>
+<td>ISPRS/EuroSDR High Density Aerial Image Matching (Stuttgart IFP)</td>
+<td>Zurich oblique: 135 images (3 strips x 9 stations x 5 views), GSD 6 cm nadir; Vaihingen/Enz: 36 images, GSD 20 cm; Munchen: 15 images, GSD 10 cm</td>
+<td>Interior and exterior orientation given (Inpho project files)</td>
+<td>Zurich: terrestrial lidar on facades; Vaihingen and Munchen: median DSM of participant solutions (not an independent measurement)</td>
+<td>Registration and signed user agreement (FTP)</td>
+<td>Vaihingen 180 MB per image (PAN), 537 MB per image (RGB); Munchen 15552 x 14144 px 16-bit</td>
+<td>Crewed-aircraft frames, not UAV, and old. Useful only as a metric-camera cross-check. The Dortmund and Toronto sets named in the brief were not found on the page; only Zurich, Vaihingen and Munchen appear there</td>
+</tr>
+<tr>
+<td>Mill 19 (Mega-NeRF, CMU, 2022; github.com/cmusatyalab/mega-nerf)</td>
+<td>Building 1,940 images and Rubble 1,678 images, 4608 x 3456 px; Parrot ANAFI</td>
+<td>Drone carried GPS and IMU; the archives hold "refined camera poses" (PixSfM)</td>
+<td>None. Poses are SfM output, no laser or GCP reference</td>
+<td>Repository MIT; dataset licence not stated separately</td>
+<td>Not stated; two .tgz files (building-pixsfm, rubble-pixsfm)</td>
+<td>Good for the 1,000+ image distribution test and for large-scene splatting timing. Useless for metric or frame checks</td>
+</tr>
+<tr>
+<td>UrbanScene3D (Shenzhen Univ./vcc.tech, ECCV 2022)</td>
+<td>128k+ images over 16 scenes (10 synthetic, 6 real; 136 km2); real campus scenes PolyTech and ArtSci named on the page</td>
+<td>Not stated on the page</td>
+<td>Trimble X7 laser scans of real scenes; CAD ground truth for synthetic scenes</td>
+<td>Non-commercial only, citation mandatory, no redistribution</td>
+<td>1.43 TB (Google Drive, Baidu, Dropbox)</td>
+<td>Very large and licensed non-commercially; only a stress test for distribution. Subset fetchability unconfirmed</td>
+</tr>
+<tr>
+<td>GauU-Scene V2 (2024; arXiv 2404.04880)</td>
+<td>4,693 images over 6 scenes (424 to 1,215 each), 5472 x 3648, DJI Matrice 300</td>
+<td>Georeferenced in UTM 50N from drone logs</td>
+<td>Zenmuse L1 LiDAR, 627.5M points, 6.67 km2; LiDAR registered to a COLMAP model by scale/rotation/translation fit (not surveyed control)</td>
+<td>CC BY 4.0 (paper statement)</td>
+<td>92.1 GB raw; download link was an anonymous project page, not confirmed live</td>
+<td>Good: permissive licence, LiDAR reference, 1,000-image scenes. The alignment to LiDAR is itself estimated, so it limits absolute scale checks</td>
+</tr>
+<tr>
+<td>SkyLume (HKUST-GZ, arXiv 2512.14200)</td>
+<td>109K+ images, 10 urban regions, three times of day, five views (nadir + 4 oblique), 6252 x 4168</td>
+<td>RTK-guided flights on DJI M350 RTK</td>
+<td>Zenmuse L2 LiDAR: 5 cm horizontal, 4 cm vertical; per-frame depth and normals; unified 6-DoF poses</td>
+<td>Paper: CC BY-NC-SA 4.0; project page states no licence</td>
+<td>Preview about 1.5 TB (OneDrive), full about 3 TB (Hugging Face, announced)</td>
+<td>Illumination-robustness test at city scale; far too large for Step 0 unless a single region can be pulled (not confirmed). Licence statements disagree</td>
+</tr>
+<tr>
+<td>WildUAV (Univ. of Cluj / Florea et al.)</td>
+<td>4 mapping sequences (5280 x 3956) and 11 video sequences (3840 x 2160); DJI Matrice 210 RTK V2, Zenmuse X5s</td>
+<td>Per-image intrinsics, rotation, translation, height above sea level</td>
+<td>Depth and poses from SfM/MVS (no laser or surveyed control)</td>
+<td>Custom WildUAV_License.pdf in repo (terms not read)</td>
+<td>191 GB (175 GB mapping + 16 GB video); access by Microsoft Forms request</td>
+<td>Natural scenes, monocular depth. Reference is photogrammetry itself; low value for ground truth, access gated</td>
+</tr>
+<tr>
+<td>UAVD4L (Wu et al., 3DV 2024)</td>
+<td>Not stated on the repo page; query images in wide and zoom configurations, synthetic renders</td>
+<td>IMU rotation priors recorded; GPS-denied design</td>
+<td>Query poses in text files; reference is a textured mesh from oblique photography (about 2.5 km2)</td>
+<td>Not stated</td>
+<td>Baidu Netdisk only, size not stated</td>
+<td>Localisation benchmark, not a reconstruction one. Baidu-only hosting and no licence make it a poor choice</td>
+</tr>
+<tr>
+<td>SensatUrban (Oxford, 2021)</td>
+<td>Point clouds only (about 3 billion points, 7.6 km2, three UK cities)</td>
+<td>none</td>
+<td>Semantic labels, no images</td>
+<td>Not confirmed</td>
+<td>Not confirmed</td>
+<td>Does not serve a photos-to-model engine; images are not released. Listed to close the question</td>
+</tr>
+<tr>
+<td>ENRICH-Aerial (Marelli et al., 2023)</td>
+<td>Synthetic renders of Launceston, five-view oblique</td>
+<td>Camera parameters, GCPs</td>
+<td>Rendered depth and models</td>
+<td>Not checked</td>
+<td>Not checked</td>
+<td>Synthetic; excluded from real-data use</td>
+</tr>
+</tbody>
+</table>
+<p>Brief mention of known sets: OpenDroneMap samples (no ground truth), ETH3D (DSLR, TLS ground truth), Mip-NeRF 360 and Tanks and Temples (ground-level), all outside the new work here.</p>
+<h3 id="best-three-for-group-a">Best three for Group A<a class="headerlink" href="#best-three-for-group-a" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>EuroSDR RPAS benchmark.</strong> CC BY 4.0, surveyed checkpoints, GCPs, a TLS cloud and a road profile, and the same site flown with no RTK and with RTK. It is the only candidate where drone GPS quality is the experiment variable, so it answers the pose-prior question the way RC-P8 did for ETH3D and ARKitScenes. The 9.9 GB Phase 2 file keeps the first fetch small; the P1 flight reaches about 1,000 images.</li>
+<li><strong>GauU-Scene V2.</strong> CC BY 4.0 (stated in the paper), six scenes of 424 to 1,215 images with drone-log georeferencing and a LiDAR reference. Use it for the 1,000+ image and coverage-report tests. Its LiDAR alignment is fitted, so do not use it as an absolute-scale oracle.</li>
+<li><strong>UseGeo.</strong> LiDAR reference, ground-truth depth and 829 images at 7952 x 5304, small enough to run whole. Non-commercial and share-alike, so it suits internal prototypes and published results only, not shipped fixtures. Mill 19 is the fallback for a scale-only distribution test with no ground truth.</li>
+</ol>
+<h2 id="group-b-smartphone-captures">Group B: smartphone captures<a class="headerlink" href="#group-b-smartphone-captures" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Images</th>
+<th>Metadata</th>
+<th>Ground truth</th>
+<th>Licence</th>
+<th>Size</th>
+<th>Fit for Recce</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ScanNet++ v2 (TUM, ICCV 2023)</td>
+<td>1,006 scenes; iPhone 13 Pro RGB 1920 x 1440 at 60 FPS (video plus subsampled frames), LiDAR depth 256 x 192 (16-bit PNG, mm); 33 MP DSLR; the paper counts 460 scenes and 3.7M iPhone RGB-D frames</td>
+<td>ARKit camera-to-world poses, intrinsics, depth, RGB video</td>
+<td>Faro Focus Premium laser scans (mean point spacing 0.9 mm); DSLR and iPhone registered to the scan. 12 iPhone test scenes withhold geometry</td>
+<td>ScanNet++ Terms of Use (read in full): non-commercial research and education only, commercial use prohibited, sharing only with colleagues who sign the same terms, signature by hand, application needed</td>
+<td>Default package (low-res DSLR, iPhone, meshes, semantics) 1.5 TB; scene-wise download possible with token</td>
+<td>Strongest iPhone plus laser set: ARKit poses against a laser mesh for a metric and pose-accuracy test. The licence blocks commercial use and redistribution, and approval takes time. Per-scene fetch not confirmed from the page</td>
+</tr>
+<tr>
+<td>MuSHRoom (HKU / Tampere, WACV 2024)</td>
+<td>10 rooms, 40 sequences (2 Kinect + 2 iPhone 12 Pro Max per room); iPhone frames 994 x 738</td>
+<td>Polycam poses (iPhone) and Spectacular AI poses, COLMAP-refined global poses, depth, point clouds</td>
+<td>Faro Focus 3D X130 laser mesh, registered by RANSAC then colour ICP (an estimated, not surveyed, alignment)</td>
+<td>Conflicting: Zenodo record (iPhone part 2) says CC BY 4.0; arXiv paper says CC BY-NC-ND 4.0; project page says CC BY-SA 4.0</td>
+<td>Zenodo iPhone part 36.3 GB; files "restricted, login required" per the record page</td>
+<td>Small, room-scale, laser reference, iPhone LiDAR depth. Poses come from Polycam, not raw ARKit. Resolve the licence conflict before any use</td>
+</tr>
+<tr>
+<td>LaMAR (ETH Zurich + Microsoft, ECCV 2022)</td>
+<td>Hundreds of trajectories over 2 years in 3 large indoor and outdoor sites (CAB, HGE, LIN); phones and HoloLens; ScanCapture iOS app</td>
+<td>iPhone ARKit and Android ARCore sessions, IMU, lidar, depth, radio signals; faces and plates blurred</td>
+<td>NavVis scanner and laser scans; trajectories aligned automatically to the scans. Test ground truth withheld</td>
+<td>Docs CC BY 4.0, code MIT; the data terms are behind an access form and not read</td>
+<td>Not stated</td>
+<td>The one set that carries both ARKit and ARCore poses, which is what the Android capture-app question needs. Ground truth is a localisation reference, not a mesh. Access needs a request form</td>
+</tr>
+<tr>
+<td>Map-free Relocalization (Niantic, ECCV 2022)</td>
+<td>655 scenes (460 train, 65 val, 130 test) of phone video</td>
+<td><code>poses_device.txt</code> holds the phone SDK tracking poses (ARKit or ARCore); metric absolute poses for train images</td>
+<td>Reconstruction-derived poses (not a laser reference)</td>
+<td>Non-commercial ("This code is for non-commercial use")</td>
+<td>Not stated; train, val, test zip files plus optional depth archives</td>
+<td>Many small object-scale scenes with both OS tracking poses and scale-ambiguity tests; weak as a laser-referenced set</td>
+</tr>
+<tr>
+<td>ADVIO (Aalto, ECCV 2018)</td>
+<td>23 sequences (4.5 km total): iPhone (60 fps video, IMU, barometer, ARKit poses), Google Pixel (ARCore poses), Tango</td>
+<td>ARKit and ARCore pose tracks logged in parallel with raw sensors</td>
+<td>6-DoF pose from IMU integration plus known fixation points, 100 Hz</td>
+<td>CC BY-NC 4.0</td>
+<td>Each sequence 71-255 MB; about 5.1 GB uncompressed; Zenodo</td>
+<td>Small, direct way to compare ARKit and ARCore drift against reference tracks on identical walks. Trajectory-only truth; no geometry</td>
+</tr>
+<tr>
+<td>Objectron (Google, CVPR 2021)</td>
+<td>15,000 video clips, 4M annotated images, 9 object categories, 10 countries</td>
+<td>ARKit or ARCore camera poses, sparse point clouds, planes per frame</td>
+<td>3D object boxes (annotated), not a scanned scene</td>
+<td>Computational Use of Data Agreement 1.0 (C-UDA-1.0)</td>
+<td>1.9 TB raw, 4.4 TB total; Google Cloud Storage, index for per-subset fetch</td>
+<td>Real Android ARCore data at scale, but object-centric; no scene geometry. Useful only to test reading ARCore pose records</td>
+</tr>
+<tr>
+<td>MobileBrick (Oxford Active Vision, CVPR 2023)</td>
+<td>135 training sequences, 18 evaluation sequences of LEGO models, captured with a mobile device</td>
+<td>Low-resolution depth; ARKit named as the depth source on the page</td>
+<td>Exact geometry from known LEGO bricks (no scanner)</td>
+<td>Repository MIT; paper CC BY-NC-ND 4.0</td>
+<td>Not stated</td>
+<td>Gives exact metric ground truth for small objects, handy for scale and accuracy unit tests. The device model and pose source are not confirmed</td>
+</tr>
+<tr>
+<td>egenioussBench (egeniouss EU project / ISPRS, 2025)</td>
+<td>412 validation images with poses, 42 test images (withheld); handheld smartphone on a tactical-grade INS</td>
+<td>Centimetre-accurate poses via PPK and GCP/CP-aided adjustment</td>
+<td>Airborne 3D mesh (UltraCam Osprey 4.1, about 1550 m) and CityGML LoD2</td>
+<td>CC BY-NC-ND 4.0</td>
+<td>Not stated</td>
+<td>Street-level phone images with surveyed-grade poses against an aerial mesh; ties group A to group B. Not an ARKit/ARCore set; the pose source is an INS</td>
+</tr>
+<tr>
+<td>OpenLORIS-Scene (2019)</td>
+<td>Wheeled-robot sensors</td>
+<td>none from phones</td>
+<td>Mocap or lidar-SLAM poses</td>
+<td>CC BY-ND 4.0</td>
+<td>Not checked</td>
+<td>Not a smartphone set; excluded</td>
+</tr>
+<tr>
+<td>Stray Scanner</td>
+<td>App only</td>
+<td>Records colour, LiDAR depth, confidence, poses and IMU from iPhone</td>
+<td>none</td>
+<td>none</td>
+<td>none</td>
+<td>No public dataset found; the app is a capture tool, not a dataset</td>
+</tr>
+</tbody>
+</table>
+<h3 id="best-three-for-group-b">Best three for Group B<a class="headerlink" href="#best-three-for-group-b" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>ScanNet++ iPhone part.</strong> Only set with raw ARKit poses and iPhone LiDAR depth registered to sub-millimetre laser scans on 1,000+ rooms. Apply early because approval is by hand; confirm licence fit first, since commercial use is prohibited.</li>
+<li><strong>LaMAR.</strong> The only verified source of both iPhone ARKit and Android ARCore device poses, with laser-scan alignment. It tests the Android capture-app pose pipeline and metric alignment outdoors as well as in. Access is by form and sizes are unknown.</li>
+<li><strong>MuSHRoom (iPhone part) for a small laser-referenced set, with ADVIO for ARKit versus ARCore drift.</strong> MuSHRoom is one 36 GB download of ten rooms with a Faro mesh, but its licence is stated three different ways. ADVIO is 5 GB, parallel iPhone and Pixel tracks, CC BY-NC. Use ADVIO if only an Android versus iOS comparison is needed.</li>
+</ol>
+<h2 id="mapping-to-recce-needs">Mapping to Recce needs<a class="headerlink" href="#mapping-to-recce-needs" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Drone GPS as pose prior (RC-P8 style): EuroSDR RPAS phases 1 and 2 compare no-RTK and RTK priors against surveyed checkpoints. Mill 19 and GauU-Scene supply drone-log positions but no independent reference.</li>
+<li>Metric scale and frame checks: EuroSDR RPAS (GCP and checkpoint coordinates, TLS), ScanNet++ and MuSHRoom (laser meshes), MobileBrick (exact brick geometry).</li>
+<li>1,000+ image distribution: EuroSDR P1 flight (about 1,000), Mill 19 (1,940 and 1,678), GauU-Scene scenes (up to 1,215), UrbanScene3D and SkyLume (far larger and non-commercial).</li>
+<li>Android device poses: LaMAR (ARCore), ADVIO (Pixel ARCore), Map-free (ARCore or ARKit, undistinguished), Objectron (ARCore or ARKit, undistinguished).</li>
+<li>Licence flag for everything above: only EuroSDR RPAS (CC BY 4.0) and GauU-Scene (CC BY 4.0 in the paper) are clearly permissive. Non-commercial or restricted: UseGeo, ScanNet++, UrbanScene3D, SkyLume (per paper), Map-free, ADVIO, egenioussBench. Unclear: MuSHRoom, H3D, UAVD4L, WildUAV, LaMAR data, Mill 19 data.</li>
+</ul>
+<h2 id="could-not-verify">Could not verify<a class="headerlink" href="#could-not-verify" title="Permanent link">&para;</a></h2>
+<ul>
+<li>EuroSDR RPAS: which phase archives hold which flights; exact camera EXIF content (GPS tags) in the images; whether the quarry TLS cloud and the checkpoints sit in Phase 1, 2 or 3 files (the paper says data came in phases; the Zenodo page lists only archive sizes).</li>
+<li>UseGeo: GNSS per image, GCP use, LiDAR sensor accuracy, download sizes, and whether the GitHub README holds licence text beyond the one statement relayed by the page fetch. The FBK dataset page and the paper PDF returned no detail (the paper PDF returned HTTP 403).</li>
+<li>H3D: licence, download sizes, and whether original images (not only point cloud and mesh) are released.</li>
+<li>Dortmund and Toronto/Vaihingen oblique benchmark sets named in the task: the IFP benchmark page lists Zurich oblique, Vaihingen/Enz and Munchen; Dortmund and Toronto did not appear in the fetched text, and no download size was shown.</li>
+<li>Mill 19: GPS/IMU presence in the released archives, dataset licence (only the repository MIT licence seen), archive sizes.</li>
+<li>UrbanScene3D: per-image GPS or poses for the real scenes, image count of the real scenes, whether a single scene can be fetched.</li>
+<li>GauU-Scene V2: working download URL (the paper hides it for review) and per-scene sizes.</li>
+<li>SkyLume: real licence (paper says CC BY-NC-SA 4.0, project page says none) and whether one region can be fetched without the 1.5 TB preview.</li>
+<li>WildUAV: licence terms in WildUAV_License.pdf and image counts.</li>
+<li>UAVD4L: image counts, licence, file sizes (Baidu hosting only).</li>
+<li>SensatUrban: licence and size (not checked after finding it contains no images).</li>
+<li>ScanNet++: whether single scenes can be downloaded alone; per-scene size; the claim that iPhone poses are raw ARKit output comes from the documentation page ("ARKit poses") but the v2 poses may have been refined (the news item mentions updated poses, not read in detail).</li>
+<li>MuSHRoom: which of the three licence statements governs the data; whether any raw ARKit (not Polycam) poses ship.</li>
+<li>LaMAR: data licence and per-scene sizes (behind the access form); counts of ARKit versus ARCore sessions.</li>
+<li>Map-free: whether any session is Android or the poses are all ARKit; download size.</li>
+<li>ADVIO: image frame count and resolution (not read).</li>
+<li>Objectron: counts of Android versus iOS clips.</li>
+<li>MobileBrick: device model, pose source and download size.</li>
+<li>egenioussBench: download size and the smartphone model.</li>
+<li>Stray Scanner: public datasets recorded with it. None found, so none are listed.</li>
+<li>Google ARCore-specific dataset beyond Objectron and LaMAR, and any Android phone-with-ToF-plus-TLS dataset: searched, none found; the searches may have missed one.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

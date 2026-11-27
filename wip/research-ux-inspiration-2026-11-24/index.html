@@ -1,0 +1,1870 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/wip/research-ux-inspiration-2026-11-24/">
+      
+      
+        <link rel="prev" href="../visual-ideas/">
+      
+      
+        <link rel="next" href="../research-drone-phone-datasets-2026-11-26/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Research, UX inspiration - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ux-inspiration-research-for-the-scene-and-the-explanations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Research, UX inspiration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-autodesk-and-the-generative-3d-wave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Autodesk and the generative 3D wave
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-creative-3d-tools-winning-new-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Creative 3D tools winning new users
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-colour-finishing-and-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Colour, finishing and media
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-iphone-and-ipad-capture-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. iPhone and iPad capture apps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-craft-in-design-and-productivity-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Craft in design and productivity tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-engineering-and-high-tech-visualisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Engineering and high-tech visualisation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-explanatory-and-interactive-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Explanatory and interactive work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ai-native-and-multimodal-ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. AI-native and multimodal UX
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patterns-worth-stealing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns worth stealing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#new-ideas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New ideas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-autodesk-and-the-generative-3d-wave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Autodesk and the generative 3D wave
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-creative-3d-tools-winning-new-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Creative 3D tools winning new users
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-colour-finishing-and-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Colour, finishing and media
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-iphone-and-ipad-capture-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. iPhone and iPad capture apps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-craft-in-design-and-productivity-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Craft in design and productivity tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-engineering-and-high-tech-visualisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Engineering and high-tech visualisation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-explanatory-and-interactive-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Explanatory and interactive work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ai-native-and-multimodal-ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. AI-native and multimodal UX
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patterns-worth-stealing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns worth stealing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#new-ideas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New ideas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="ux-inspiration-research-for-the-scene-and-the-explanations">UX inspiration research for the scene and the explanations<a class="headerlink" href="#ux-inspiration-research-for-the-scene-and-the-explanations" title="Permanent link">&para;</a></h1>
+<p>Date: 2026-11-24. Method: web search and page fetches run on 2026-11-24, outside photogrammetry software on purpose, harvesting interaction concepts from current products and explanatory work. Every fetched page was summarised by a small model before it reached the author, so a [V] claim is accurate to that summary and not to the page's exact wording; a claim that needs exact wording needs a second read before it enters a UX spec. Frame and scene follow the "Two registers in one interface" paragraph of the <a href="../../concept/RC-brief/">brief</a> §2 and the eight ideas in <a href="../visual-ideas/">visual ideas</a>.</p>
+<p>Legend:</p>
+<ul>
+<li>[V] read on a primary page today; the URL follows the claim. Vendor documentation, vendor blogs and the author's own site count as primary. Trade press that reports on a vendor is marked "(trade press)".</li>
+<li>[U] from memory, from a search-result snippet, or from a page that failed to load. Unconfirmed; treat as a lead, not a fact. A snippet URL is given where one exists.</li>
+</ul>
+<p>Idea numbers #1 to #8 refer to the table in <a href="../visual-ideas/">visual ideas</a>. "NEW" refers to the list in the section "New ideas" below.</p>
+<h2 id="1-autodesk-and-the-generative-3d-wave">1. Autodesk and the generative 3D wave<a class="headerlink" href="#1-autodesk-and-the-generative-3d-wave" title="Permanent link">&para;</a></h2>
+<p><strong>Flow Studio 3D Editor and Canvas.</strong> Flow Studio splits generative work into two surfaces. The Canvas is a node-based 2D workspace for image and video generation and refinement; the 3D Editor is a spatial surface where characters, environments, camera tracks and motion capture are assembled "before generation occurs", with blocking, composition and camera movement set by hand rather than by prompt. [V] https://digitalproduction.com/2026/08/04/autodesk-flow-studio-adds-3d-editor-and-canvas/ (trade press). The pattern: direct the scene spatially first, then let the model render it. The delight is control without a text box; the person points, the machine fills in.</p>
+<p>Recce mapping: the same inversion applies to capture planning. A ghost camera (#3) is placed in 3D by hand or by an agent, and the engine then judges the plan. The Canvas-versus-3D-Editor split also maps to Recce's two registers: a node-like run view in the frame, the spatial scene in the viewport.</p>
+<p><strong>Neural Layer and AI Rigging.</strong> AI Rigging places skeletal joints on a generated character "in a few clicks" and previews the rig in the app before export to Maya, Blender or Unreal; Neural Layer refines materials and lighting inside a Live Action project without a traditional render pipeline, priced at 15 credits per second of footage. [V] https://blogs.autodesk.com/media-and-entertainment/2026/04/28/introducing-ai-rigging-and-neural-layer-in-autodesk-flow-studio/ . The pattern that transfers is the visible cost per unit of output: the price is stated next to the action. Recce runs on the owner's hardware, so the equivalent is a stated time and energy estimate on a recipe before it runs.</p>
+<p><strong>Wonder 3D, text and image to 3D.</strong> Flow Studio adds a generative model for text to 3D and image to 3D, available at all subscription levels. [U] search snippet, https://adsknews.autodesk.com/en/news/autodesk-flow-studio-launches-wonder-3d-gen-ai-model-to-help-creators-make-3d-characters-and-objects-faster-and-easier/ . Relevance to Recce is indirect: a generated model has no coverage or uncertainty, a reconstruction has both, and that is the product difference to make visible.</p>
+<p><strong>Neural CAD and Project Bernini.</strong> Autodesk describes foundation models trained on CAD data, shown first as Project Bernini in May 2024, aimed at Fusion and Forma, where "you will watch the neural CAD engine reason through your request". [U] search snippet, https://www.autodesk.com/design-make/articles/neural-cad (the page returned HTTP 403 to the fetch). The claim to test later is the UX phrase "watch it reason": the reasoning is shown as an event stream the person can follow, which is the shape of idea #5.</p>
+<p><strong>Forma analysis layers.</strong> Forma runs sun, wind, noise, microclimate and embodied-carbon analyses on a massing model and re-evaluates within seconds of an edit, using ML predictors for the rapid versions. [U] search snippet, https://illustrarch.com/articles/design-softwares/73363-autodesk-forma-review.html (the vendor page returned HTTP 403). The concept is an analysis painted onto the model that updates live while the person moves geometry. In Recce the analysis is coverage and uncertainty; the live-edit equivalent is dragging a ghost camera and watching the surrounding surface relight (#3, #4) from a cheap predictor, with the exact recomputation following later.</p>
+<p><strong>Maya, 3ds Max, Fusion recent UX.</strong> A search returned a trade-press headline that Autodesk released major updates across Maya, 3ds Max, Flow Studio and Arnold. [U] https://awn.com/print/news/autodesk-releases-major-updates-across-maya-3ds-max-flow-studio-and-arnold . The article was not read. The Autodesk University 2026 announcements page returned HTTP 403, so no AU 2026 claim is made here.</p>
+<h2 id="2-creative-3d-tools-winning-new-users">2. Creative 3D tools winning new users<a class="headerlink" href="#2-creative-3d-tools-winning-new-users" title="Permanent link">&para;</a></h2>
+<p><strong>Blender 5.0 (released 2025-11-18).</strong> The release notes list: "Full Screen Area" renamed "Focus Mode"; more than 300 theme settings removed and the rest unified, including a shared playhead appearance across editors; group nodes show a stack indicator and open on double-click, with clickable breadcrumbs to navigate back out; a Swap Node operator (Shift+S) replaces a node type and keeps its connections; a "Reduce Motion" option; tree views gain multi-select, F2 rename and name search; animation editors share unified footer playback controls. [V] https://developer.blender.org/docs/release_notes/5.0/user_interface/ and https://developer.blender.org/docs/release_notes/5.0/ . Three transferable patterns: breadcrumbed drill-in for nested structure (a run contains stages, a stage contains steps), swap-in-place for a strategy that keeps its connections (COLMAP to GLOMAP with the inputs and outputs preserved, matching #6), and a Reduce Motion switch that Recce needs because idea #1 is animation-heavy.</p>
+<p><strong>Spline.</strong> A browser 3D tool with real-time multi-user editing, states and events for interaction, and publishing the same scene to web, iOS (SwiftUI) and Android. It exposes an MCP server so Claude, ChatGPT or Cursor agents can read the scene, write changes and frame views, and the person keeps editing the same file without a re-import. [V] https://spline.design/ . This is the closest existing example of Recce's agent face working on the visible scene: the agent edits what the person sees, in place. Mapping: an agent debrief (#5) that moves the camera to frame its evidence and drops annotations into the scene the person can then move or delete.</p>
+<p><strong>Womp.</strong> Browser modelling built on SDF/CSG "Liquid 3D" shapes that blend and merge, with iridescent and holographic material finishes, and an ordering path to physical prints. [V] https://womp.com/ . The concept is soft blending as the default response to input: shapes melt together instead of intersecting with hard edges. For Recce this suggests uncertainty drawn as a soft field that merges between neighbouring cameras (#4) rather than a patchwork of per-point colours.</p>
+<p><strong>Plasticity.</strong> Direct editing with no history tree, curvature-continuous fillets and surface blends. [V] https://www.plasticity.xyz/ . The recorded concept is direct manipulation with immediate geometric feedback. The feel (not the CAD content) is the reference for dragging a ghost camera.</p>
+<p><strong>Shapr3D.</strong> One interface across Windows, Mac, iPad, iPhone and Apple Vision Pro, Apple Pencil and SpaceMouse input, review links that open in a browser, and a claim that most users build a first model within 15 minutes. [V] https://www.shapr3d.com/ . The pattern is the browser review link: a reviewer needs no install. Recce's web UI is that by construction, so a shareable read-only link to a presentation scene (#7) is the matching feature.</p>
+<p><strong>Nomad Sculpt.</strong> The fetched page covered licensing only (activation per computer, a 15-day offline grace). [V] https://nomadsculpt.com/ . No UX claim about its gesture model is made from a read page. [U] From memory, Nomad's strength is a dense tool set made usable on a phone by large touch targets and a bottom tool shelf; unconfirmed.</p>
+<p><strong>Houdini.</strong> SideFX describes every action as a node, with nodes wired into networks that "define a 'recipe' that can be tweaked to explore different creative paths". [V] https://www.sidefx.com/products/houdini/ . The word is the same one Recce uses. Mapping: a Recce recipe is a node network whose comparison view (#6) highlights which node's parameter differs, rather than diffing two flat settings lists. [U] From memory, Houdini's geometry spreadsheet shows per-point attributes at any node and the viewport shows the network's state at the selected node; if confirmed, it is the model for "inspect the reconstruction as it stood after this stage".</p>
+<p><strong>Godot 4.5.</strong> Adds screen-reader support through AccessKit for the Project Manager, standard UI nodes and the inspector, translation preview in the editor viewport, colour swatches beside colour values in scripts, multi-node selection while debugging a running game, and editor language switching without restart. [V] https://godotengine.org/releases/4.5/ . The transferable idea is inline preview of a value where it is written: a swatch next to a colour. In Recce, a number in the inspector (overlap 0.7, focal length 24 mm) carries a small drawing beside it.</p>
+<p><strong>Cinema 4D 2027.</strong> Scatter (surface population), Liquid FX (foam, spray, bubbles) and Redshift speedups, plus viewport, node-editing and scene-management refinements. [V] https://www.maxon.net/en/cinema-4d . No UX concept beyond feature names was extracted. Unreal Engine 5.7 release notes returned HTTP 403, so nothing is claimed about the UE editor.</p>
+<h2 id="3-colour-finishing-and-media">3. Colour, finishing and media<a class="headerlink" href="#3-colour-finishing-and-media" title="Permanent link">&para;</a></h2>
+<p><strong>DaVinci Resolve 21.</strong> One application divided into page-sized workspaces (Photo, Cut, Edit, Color, Fusion, Fairlight, Deliver) switched with one click, with camera-original quality throughout; the Color page offers HDR colour wheels, curves, a node graph and Power Windows. [V] https://www.blackmagicdesign.com/products/davinciresolve . The concept is task pages: the same project, a different room per job. Recce's equivalent is a small set of rooms (Capture review, Registration, Coverage, Compare, Present, Debrief) over one run, each with its own tool set. [U] From memory, Resolve's still-store split-screen wipe compares a graded frame with a reference; it is the interaction behind #6.</p>
+<p><strong>Final Cut Pro.</strong> A magnetic timeline that keeps clips in sync while the editor experiments; Magnetic Mask separating people and objects without a green screen; Object Tracker; Visual Search and Transcript Search that find footage by what is in it or said in it. [V] https://www.apple.com/final-cut-pro/ . Two transfers: search by content (find "the photos that see the left hull" through the scene, not through file names) and tracking that attaches an annotation to a moving subject.</p>
+<p><strong>Capture One.</strong> Tethering with live view and focus assistance, custom workspaces and shortcuts, assisted masking, style matching. [V] https://www.captureone.com/en/features . Tethering is the pattern: a result appears on a large screen the moment the shutter fires. For Recce, a live capture session (a phone or a robot streaming photos) shows each frame registering into the model within seconds.</p>
+<p><strong>Lightroom.</strong> Release notes mention Assisted Culling with a Faces panel showing eye-sharpness and eyes-open scores per face, Adaptive Profiles, and a Color Variance slider. [U] search snippet, https://helpx.adobe.com/dk/lightroom/desktop/introduction/release-notes.html . The idea to keep is culling with a per-item score shown next to the thumbnail: each input photo carries a blur score, an overlap score and a "holds up N matches" count.</p>
+<p><strong>Halide.</strong> Mark III lists a 14-bit RAW waveform, colour zebras, focus peaking, a focus loupe and histograms, with a minimal-processing mode (Process Zero). [U] search snippet, https://lux.camera/halide-mark-iii/ (the vendor page returned HTTP 404 at a guessed path). The pattern is the measurement overlay: the image stays whole and the analysis lies over it as zebras and peaking, toggled by one control. Recce's coverage and confidence layers (#3, #4) take this form: overlays on the scene, one toggle each, never a separate chart.</p>
+<p><strong>Darkroom.</strong> Not fetched. [U] No claim is made.</p>
+<h2 id="4-iphone-and-ipad-capture-apps">4. iPhone and iPad capture apps<a class="headerlink" href="#4-iphone-and-ipad-capture-apps" title="Permanent link">&para;</a></h2>
+<p><strong>Apple Object Capture guided capture (WWDC23 session 10191).</strong> The session describes: automatic image selection by sharpness, clarity and exposure; a capture dial that shows which areas of the object have enough images and shows completion; real-time guidance on lighting (avoid dark places), movement speed (slow and smooth), distance (the object must fit in frame) and keeping the object in view; a state machine of initializing, ready, detecting, capturing, finishing, completed; a flip flow with advice on which objects to flip (rigid, texture-rich) and which not (deformable, symmetric or repetitive texture, textureless) and a recommended three passes; an ObjectCapturePointCloudView to review before processing; and a poses output giving camera position and orientation per image. [V] https://developer.apple.com/videos/play/wwdc2023/10191 . The delight of the dial is that coverage is a shape the person completes, a ring that fills, not a percentage. The point-cloud review before processing is the same instinct as #1 applied to capture.</p>
+<p>Mapping to Recce: the dial is a template for a coverage glyph (#3) that works on a phone, on a robot operator's tablet and in the web UI. The flip advice is a model of a capture recommendation that names its reason ("symmetric texture: do not flip") instead of stating a rule.</p>
+<p><strong>Polycam.</strong> One app combining LiDAR, photogrammetry, Gaussian splat and non-LiDAR capture; real-time haptic and visual feedback during a walk-through; LiDAR meshes appear while scanning. [U] search snippet, https://poly.cam/blog/lidar-vs-photogrammetry-which-3d-scanning-method-is-right-for-you (the homepage host did not resolve). The pattern is haptic feedback as guidance: a buzz when coverage is thin. Whether Recce's capture companion exists is a scope question for the owner; the pattern is recorded here for that decision.</p>
+<p><strong>Scaniverse.</strong> Now delivered under Niantic Spatial's Capture platform: a web and mobile app, inputs from phones, 360 cameras, drones, LiDAR and robots, outputs SPZ (an open splat format), PLY, GLB and USDZ, private by default. [V] https://www.nianticspatial.com/products/capture . The page has no capture-UX detail.</p>
+<p><strong>KIRI Engine.</strong> Photo scan, LiDAR scan, 3D Gaussian splatting, a featureless-object mode for shiny or transparent items, quad meshes with PBR materials and AI auto-rigging. [V] https://www.kiriengine.app/ . The featureless-object mode is a named response to a known failure; Recce's failure explanations (#2, #4) name the failure the same way.</p>
+<p><strong>Luma.</strong> The fetched homepage now presents video-generation products (Ray 3.2, Uni-1, Luma Skills) and an Open Physical AI Lab. [V] https://lumalabs.ai/ . The page offers no capture-UX detail.</p>
+<p><strong>RealityScan and Reality Composer.</strong> Both fetches failed (HTTP 403 and 404). Nothing is claimed.</p>
+<h2 id="5-craft-in-design-and-productivity-tools">5. Craft in design and productivity tools<a class="headerlink" href="#5-craft-in-design-and-productivity-tools" title="Permanent link">&para;</a></h2>
+<p><strong>Linear.</strong> The 2024 redesign moved theme generation from HSL to LCH ("perceptually uniform", so a red and a yellow at lightness 50 look equally light) and cut 98 variables per theme to three: base colour, accent colour and contrast, with high-contrast variants. The work took about six weeks. [V] https://linear.app/now/how-we-redesigned-the-linear-ui . Two direct transfers. The frame's tokens should be generated from three inputs, which keeps the calm register consistent and gives a high-contrast theme at no cost. Every colour ramp in the scene (coverage, confidence) should be built in a perceptually uniform space so equal steps look equal; that is a correctness requirement for an honest uncertainty display, not decoration.</p>
+<p><strong>Raycast.</strong> A keyboard-first launcher with a command palette, more than 1,000 extensions and built-in AI chat. [V] https://www.raycast.com/ . Rerun, below, also ships a command palette. A palette lets Recce expose every action (go to stage, compare recipes, show gaps, narrate) without growing the chrome, and the same verb list is the MCP tool list: one vocabulary for people and agents.</p>
+<p><strong>Figma.</strong> The Figma blog's current themes: an agent now present in FigJam and Slides (the page dates the expansion to November 2026), code layers that put working prototypes on the canvas, 3D transforms combined with motion. [V] https://www.figma.com/blog/ . The pattern is the agent living where the work is, on the canvas, and its output remaining editable objects. [U] From memory, Figma's named multiplayer cursors and comment pins anchored to a spot on the canvas are the model for anchored notes on a 3D point.</p>
+<p><strong>Arc and Dia.</strong> Dia has an assistant in the address bar and sidebar that chats about open tabs, saved prompts called Skills, and a stated plan to bring Arc's sidebar back. [U] search snippet, https://techcrunch.com/2025/11/03/dias-ai-browser-starts-adding-arcs-greatest-hits-to-its-feature-set . The concept is the assistant that sees what the person sees. Recce's agent receives the current view, selection and time cursor as context.</p>
+<p><strong>Things.</strong> Not fetched. [U] No claim made.</p>
+<p><strong>visionOS.</strong> The HIG page lists windows, glass material, ornaments, depth, eye and hand input and comfort as the design elements. [V] https://developer.apple.com/design/human-interface-guidelines/designing-for-visionos (summary level only). Two ideas to carry from memory, both unconfirmed here: [U] glass lets the world show through the panel, so panels over a 3D scene could keep the scene legible behind them; [U] ornaments attach controls to the edge of an object instead of floating in a toolbar, which suggests per-object controls that sit beside the selected cluster.</p>
+<h2 id="6-engineering-and-high-tech-visualisation">6. Engineering and high-tech visualisation<a class="headerlink" href="#6-engineering-and-high-tech-visualisation" title="Permanent link">&para;</a></h2>
+<p><strong>Rerun.</strong> The viewer is built from a Blueprint panel (what is shown and how), a Selection panel (details and configuration of the selected item), a Timeline panel that "gives you controls over what point in time you're looking at on which timeline for the rest of the viewer", and a viewport of arrangeable Views. A command palette opens with Cmd/Ctrl+K, and views carry an info icon that reveals usage guidance on hover. [V] https://rerun.io/docs/reference/viewer/overview . Timelines are plural: log time by default, a log tick opt-in, and custom timelines added by the logger, holding only 64-bit integers (sequence, nanosecond timestamp, duration). Data logged as static belongs to every timeline, including ones not yet created, and takes precedence over temporal data. [V] https://rerun.io/docs/concepts/timelines . Recce maps this directly. A run has several timelines (photo order, capture time, registration order, iteration of bundle adjustment), and the person picks which one drives the scene. Camera intrinsics and the scale reference are static data valid at every time. The existing frame already follows robotics-lab's Rerun-like look; this research adds the plural timelines and the static layer as concrete mechanics.</p>
+<p><strong>Foxglove.</strong> "20+ panels on one synchronized timeline" including point clouds, camera feeds, transforms and plots; semantic search over image and video topics with text prompts; saved prompts that run as agents on webhooks or schedules. [V] https://foxglove.dev/ . Panel docs: drag and drop topics onto a panel for instant visualisation, a purple border for the selected panel, panel settings as importable JSON. [V] https://docs.foxglove.dev/docs/visualization/panels/introduction . Recce's mapping: scene, photo strip, match graph and residual plot share one time cursor, so scrubbing registration moves all four. Semantic search by prompt over the photo set ("photos that look at the stern") reuses the Final Cut search idea.</p>
+<p><strong>Cesium.</strong> Streams 3D Tiles (buildings, photogrammetry, point clouds), takes CZML and GeoJSON, offers first-class time-dynamic visualisation "for simulations, real-time telemetry, and 4D", and switches among 3D, 2D and 2.5D Columbus views. [V] https://cesium.com/platform/cesiumjs/ . Photogrammetry arrives as 3D Tiles, so Recce's export is a Cesium input; the concept to take is time-dynamic as a first-class dimension, which a run replay (#1) is.</p>
+<p><strong>NASA Eyes.</strong> Browser apps for the solar system (time controls over 1950 to 2050 with fast-forward and rewind, 150 missions), asteroids (30,000 near-Earth objects), Earth (carbon dioxide, ozone, sea level), exoplanets (5,500 systems), DSN Now (real-time spacecraft links), and Mars 2020 EDL (a landing simulation). [V] https://science.nasa.gov/eyes/ . The concept is real data wrapped in a play-and-scrub frame with a time range the person can see the edges of. The EDL app is a replay of a single critical event, the model for a "replay the moment registration broke" shortcut.</p>
+<p><strong>NVIDIA Omniverse.</strong> Modular libraries on OpenUSD, SimReady validation that checks an asset against simulation requirements before use, RTX sensor output (camera, lidar, radar), freely available for development and production as of May 2026. [V] https://www.nvidia.com/en-us/omniverse/ . SimReady is the pattern for a readiness check: an asset passes or fails named requirements before it enters a downstream use. Recce's quality report for a robotics or survey consumer is the same shape: "scale known, frame known, coverage at least X, ready for use Y".</p>
+<p><strong>Flightradar24, Google Earth, Tesla, F1 telemetry, Palantir, robotics fleet UIs.</strong> The Flightradar24 blog and the Palantir Gotham page returned nothing usable (HTTP 403 and an empty summary), the F1 fetch redirected to the homepage, and Google Earth, Tesla and fleet UIs were not fetched. Everything below is [U], from memory. [U] Flightradar24 pairs a live map with a playback slider and a trail behind each aircraft, so recent history is drawn as a fading line; the matching Recce idea is a fading trail behind each camera showing where it was before bundle adjustment moved it. [U] F1 broadcast graphics pair a speed trace with a position on the track map, and call out one number against a reference lap; the matching idea is a delta against a reference recipe, drawn on the scene. [U] Tesla's in-car view renders only what the sensors believe is there, including ghosted objects when confidence is low; this is the direct precedent for #4. [U] Situational displays in the Palantir style centre an object-and-link graph with a map and a timeline; the matching idea is the match graph (#2) as a linked panel next to the scene.</p>
+<h2 id="7-explanatory-and-interactive-work">7. Explanatory and interactive work<a class="headerlink" href="#7-explanatory-and-interactive-work" title="Permanent link">&para;</a></h2>
+<p><strong>Bartosz Ciechanowski.</strong> The most recent article on his index is "Moon" (17 December 2024), built from draggable 3D simulators where the reader moves bodies and changes velocities, time-scrubbing sliders, camera controls that lock on a body or orbit freely, parameter sliders for mass, distance and eccentricity, side-by-side space and surface views, and an observer figurine the reader places anywhere on Earth. [V] https://ciechanow.ski/ . The index may be dated; newer articles may exist that the fetch did not show. The concepts to take: each diagram has one or two controls, the same object is shown from two viewpoints at once, and the reader's finger is the instrument. Recce mapping: a "why triangulation needs a baseline" explainer where the reader drags two camera icons apart and the uncertainty ellipsoid of a point shrinks; a second view shows the same point from above. Each such mini-lab lives next to the term it explains in the inspector.</p>
+<p><strong>Distill.</strong> The momentum article uses sliders for step size and momentum with live phase diagrams, an error decomposition per eigenvalue animated as parameters change, and side-by-side loss curves of two methods. [V] https://distill.pub/2017/momentum/ . Distill ran from 2016 to 2021 and is on an indefinite hiatus; its stated belief is that "reactive diagrams allow for a type of communication not possible in static mediums". [V] https://distill.pub/about/ . The pattern for #6: two curves from two recipes on shared axes with the parameter that separates them under the reader's hand.</p>
+<p><strong>Bret Victor, Learnable Programming.</strong> Principles stated on the page: show the data; make meaning transparent (labels on hover, annotations connecting code to output); visualise flow over time so the reader scrubs execution; eliminate hidden state or make it visible; create by reacting, starting from something visible and adjusting; move from concrete to abstract in small steps. [V] https://worrydream.com/LearnableProgramming/ . These six apply nearly line for line. Show the data: the match is a line, not a count. Hidden state: the intermediate pose estimate after each iteration is drawn, because the engine's belief at step k is the hidden state of a reconstruction. Scrub: #1. Concrete to abstract: the first explanation of coverage is one photo's frustum, then two, then the whole set.</p>
+<p><strong>Nicky Case.</strong> Explorable explanations including The Evolution of Trust and a tool for nested, expandable explanations (Nutshell), all under a public-domain waiver. [V] https://ncase.me/ . Nutshell's idea, an explanation that expands inline inside a sentence, fits a debrief (#5): a sentence says "twelve photos hold the left side" and the phrase opens to show them, with no navigation away.</p>
+<p><strong>3Blue1Brown.</strong> The newest lesson as of today is dated 17 November 2026 (compression and arithmetic coding). [V] https://www.3blue1brown.com/ . The page says nothing about method. [U] From memory, the lessons are built in the author's Manim library and rely on one persistent visual object transformed step by step; the lesson for Recce is object permanence, so the cloud on screen at step k is the same object as at step k-1, morphing, never cut.</p>
+<p><strong>Observable and the Pudding (scrollytelling).</strong> The Observable homepage returned HTTP 429 and the Pudding process page returned 404. [U] From memory, scrollytelling binds a sticky scene to scroll position so each paragraph triggers a camera move or a state change; it is the delivery form of #7 (a presentation is a scroll or a click path through camera positions) and of a shareable debrief page.</p>
+<h2 id="8-ai-native-and-multimodal-ux">8. AI-native and multimodal UX<a class="headerlink" href="#8-ai-native-and-multimodal-ux" title="Permanent link">&para;</a></h2>
+<p>Evidence from this pass: Spline's MCP (agents read the scene, write changes, frame views, and the human keeps editing in the same file) [V] https://spline.design/ ; Figma's agent arriving in more canvases and producing editable layers [V] https://www.figma.com/blog/ ; Foxglove's semantic search and saved-prompt agents [V] https://foxglove.dev/ ; Flow Studio's 3D Editor, which puts a spatial step before generation [V] https://digitalproduction.com/2026/08/04/autodesk-flow-studio-adds-3d-editor-and-canvas/ (trade press); Dia's assistant that reads open tabs [U] https://techcrunch.com/2025/11/03/dias-ai-browser-starts-adding-arcs-greatest-hits-to-its-feature-set . No page fetched in this pass documents a product that shows an agent's evidence as clickable citations; that pattern comes from memory ([U]: search products that attach numbered sources to claims, and coding agents that show tool calls as a collapsible log). It is the central pattern for #5 and appears in the ranked table as an adopted rule, not a copied feature: every sentence in a debrief carries a handle to the photos, matches or numbers behind it, and activating the handle moves the camera there.</p>
+<p>Rules distilled from the V items above for the agent face:</p>
+<ol>
+<li>The agent edits the shared scene, not a copy (Spline).</li>
+<li>Its output stays editable and deletable (Figma).</li>
+<li>It receives the current selection and time cursor as context (Dia, [U]).</li>
+<li>It states the cost of a step before it runs (Flow Studio credits, [V] Autodesk blog above).</li>
+<li>It searches the photo set by meaning (Foxglove).</li>
+</ol>
+<h2 id="patterns-worth-stealing">Patterns worth stealing<a class="headerlink" href="#patterns-worth-stealing" title="Permanent link">&para;</a></h2>
+<p>Ranked by expected effect on the "wow" and the understanding, then by cost.</p>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Pattern</th>
+<th>Source</th>
+<th>What it does in Recce</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>One shared time cursor driving every panel, with plural timelines and a static layer</td>
+<td>Rerun, Foxglove [V]</td>
+<td>Scrubbing registration moves scene, photo strip, match graph and residual plot together; the person chooses photo order, capture time or iteration as the axis</td>
+<td>#1, NEW 1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Completion ring for coverage</td>
+<td>Apple capture dial [V]</td>
+<td>A ring or sphere glyph that fills as angles are covered; works on a phone, a tablet, the web UI</td>
+<td>#3, NEW 5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Every claim carries a clickable handle to its evidence</td>
+<td>Agent UX pattern [U], Spline MCP [V]</td>
+<td>A debrief sentence opens its photos and matches and flies the camera there</td>
+<td>#5, NEW 2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Show hidden state, scrub flow, concrete to abstract</td>
+<td>Bret Victor [V]</td>
+<td>The engine's pose belief after each iteration is drawn; explanations build from one frustum to the full set</td>
+<td>#1, #2, NEW 3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Reader-driven mini-lab beside a term</td>
+<td>Ciechanowski, Distill [V]</td>
+<td>Drag two cameras apart and watch a point's uncertainty ellipsoid shrink; one control, two viewpoints</td>
+<td>#4, NEW 4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Analysis as overlay with one toggle each</td>
+<td>Halide zebras and peaking [U], Forma layers [U]</td>
+<td>Coverage and confidence laid over the scene as toggleable overlays that never replace it</td>
+<td>#3, #4</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Perceptually uniform colour ramps and a three-input theme</td>
+<td>Linear [V]</td>
+<td>Coverage and confidence ramps built in LCH, so equal data steps look equal; frame tokens from base, accent and contrast</td>
+<td>#3, #4, NEW 6</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Recipe as a node network with swap-in-place</td>
+<td>Houdini [V], Blender Swap Node [V]</td>
+<td>Compare two recipes by the node whose parameter differs; swap a strategy and keep its connections</td>
+<td>#6</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Command palette with one verb list for people and agents</td>
+<td>Raycast, Rerun [V]</td>
+<td>Cmd+K reaches every action; the same verbs form the MCP tool list</td>
+<td>NEW 7</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Drill in with breadcrumbs, double-click to enter</td>
+<td>Blender 5.0 [V]</td>
+<td>Run, stage, step navigation without losing place</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Soft blending as the default</td>
+<td>Womp [V]</td>
+<td>Uncertainty rendered as a field that merges between cameras, not a patchwork</td>
+<td>#4</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Inline expandable explanation</td>
+<td>Nutshell (Nicky Case) [V]</td>
+<td>A phrase in the debrief opens in place to show the photos</td>
+<td>#5</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Readiness check against named requirements</td>
+<td>Omniverse SimReady [V]</td>
+<td>The quality report states "ready for use Y" with the requirements it checked</td>
+<td>NEW 8</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Browser review link, no install</td>
+<td>Shapr3D [V]</td>
+<td>A read-only link to a presentation scene</td>
+<td>#7</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Reduce Motion switch</td>
+<td>Blender 5.0 [V]</td>
+<td>Required once #1 animates by default</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Fading trail behind a moving object</td>
+<td>Flightradar24 [U]</td>
+<td>Camera positions before and after bundle adjustment as a fading trail</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Compare as a wipe on one view</td>
+<td>Resolve still store [U]</td>
+<td>The split slider already in #6, with a reference lap style delta</td>
+<td>#6</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Tethered live result</td>
+<td>Capture One [V]</td>
+<td>A streaming capture session registers each frame within seconds</td>
+<td>NEW 9</td>
+</tr>
+</tbody>
+</table>
+<h2 id="new-ideas">New ideas<a class="headerlink" href="#new-ideas" title="Permanent link">&para;</a></h2>
+<p>These are suggestions beyond the eight in <a href="../visual-ideas/">visual ideas</a>, each a direction to mock, not a decision.</p>
+<ol>
+<li><strong>Plural timelines.</strong> The run has a timeline per axis (photo order, capture time, registration order, optimiser iteration), a picker chooses which drives the scene, and static facts (intrinsics, scale reference) belong to all of them. Source: Rerun [V].</li>
+<li><strong>Evidence handles.</strong> Each sentence and each number in a debrief or report has a handle. Activating it selects the underlying photos or matches in the scene and flies the camera. A sentence without a handle is flagged in the report as an unsupported claim. Source: agent pattern [U], Spline [V].</li>
+<li><strong>The engine's belief at step k.</strong> A scrubbable view of what the engine believed at each iteration, including poses it later discarded. Source: Bret Victor, hidden state [V].</li>
+<li><strong>Mini-labs.</strong> A short set of reader-driven demonstrations (baseline and triangulation, overlap and match count, blur and feature count, rolling shutter and straight lines, refraction and apparent focal length) embedded beside the term in the inspector, each with one or two controls. Source: Ciechanowski, Distill [V].</li>
+<li><strong>A shared coverage glyph.</strong> One ring or sphere glyph drawn identically in the web UI, a phone companion and an operator tablet, so a person who learned it on one surface reads it on the others. Source: Apple capture dial [V].</li>
+<li><strong>Honest colour.</strong> A rule that every ramp in the scene is perceptually uniform, with a colour-blind-safe variant and a luminance-only fallback, and a "what does this colour mean" legend that opens from any overlay. Source: Linear [V].</li>
+<li><strong>One verb list.</strong> A single registry of actions powers the command palette, the CLI subcommands, the HTTP routes and the MCP tools. Source: Raycast, Rerun [V]; the registry itself is a design inference, not copied.</li>
+<li><strong>Readiness stamps.</strong> The quality report ends with named downstream uses (survey, robot localisation, print, web viewing) and a pass, fail or unknown for each against stated requirements. Source: Omniverse SimReady [V].</li>
+<li><strong>Live registration during capture.</strong> For a streaming source, each arriving frame registers into the model in view; a frame that fails to register is shown as a ghost at its expected pose. Source: Capture One tethering [V], Apple point-cloud preview [V].</li>
+<li><strong>The agent as a scene editor.</strong> The agent places ghost cameras, labels and a camera path directly into the scene through MCP, and the person moves or deletes them. Source: Spline [V].</li>
+<li><strong>Replay the moment.</strong> One click replays the few iterations around the registration step with the largest residual jump. Source: NASA Eyes EDL replay [V], Flightradar24 playback [U].</li>
+<li><strong>Frame the cost.</strong> Every recipe shows a time and energy estimate before it runs and the measured figure after. Source: Flow Studio credits [V].</li>
+</ol>
+<h2 id="not-covered">Not covered<a class="headerlink" href="#not-covered" title="Permanent link">&para;</a></h2>
+<p>What the pass did not check, and why. Treat every item as an open lead.</p>
+<p>Pages that failed or returned nothing usable:</p>
+<ul>
+<li>Autodesk University 2026 announcements (HTTP 403), the Autodesk neural CAD article (403), the Forma environmental-analysis page (403), the Revit Forma wind analysis page (not fetched). Forma, neural CAD and Bernini rest on search snippets only.</li>
+<li>Blender's own 5.0 release page (403) and the CG Channel Blender review (403); the Blender claims rest on the developer release notes only, which cover the UI and not the headline features.</li>
+<li>Unreal Engine 5.7 release notes (403): no UE editor claim of any kind. Unreal's Sequencer, MegaLights and editor mode changes are unchecked.</li>
+<li>RealityScan (403), Reality Composer (404), Apple's ObjectCaptureSession documentation page (it returned a title only) and the Apple Object Capture capture-guidance article (404).</li>
+<li>Polycam (host did not resolve): capture guidance rests on one snippet. Scaniverse's own capture UX (its page redirected to an enterprise product page with no UX detail). Luma's capture product (the page now shows video generation).</li>
+<li>Observable (HTTP 429), the Pudding (404), Palantir Gotham (empty summary), the F1 page (redirect, not followed), Flightradar24's blog (403), Halide's own page (404) and the Rerun blueprint page (404).</li>
+</ul>
+<p>Arenas or items not attempted:</p>
+<ul>
+<li>Darkroom, Things, Tesla visualisation, Google Earth, robotics fleet UIs, the Houdini viewport and spreadsheet behaviour, Capture One layers and styles, Lightroom's before and after modes, Resolve scopes, Maya and 3ds Max UX changes, Fusion's UX, Shapr3D's Apple Pencil gestures, Nomad's gestures, Spline's AI generation, Arc's boosts, 3Blue1Brown's tooling (all from memory where mentioned, otherwise absent).</li>
+<li>Bartosz Ciechanowski's articles other than the index summary; the summary may predate newer articles. No Distill article beyond momentum.</li>
+<li>Whether any shipping product shows agent evidence as clickable citations inside a 3D scene. The nearest finding is Spline's MCP, which does not cite evidence.</li>
+</ul>
+<p>Limits of method:</p>
+<ul>
+<li>Every [V] came through a model-generated summary of the fetched page, not a raw read. Counts, names and dates are likelier to be right than the nuance of a phrase. Trade-press items (Flow Studio 3D Editor) report on the vendor and are not the vendor's own words.</li>
+<li>No product was run, so every statement about delight is an inference from a description, not an observation of use. No video, motion or interaction was seen; patterns such as the capture dial and Rerun's timeline are known only as text.</li>
+<li>Nothing here was tested against Recce's data. RC-P6 is the place to test any of these on the ETH3D kicker scene; the mini-lab, evidence-handle and plural-timeline ideas need a mock before a UX spec.</li>
+<li>No claim was made about licensing. Several sources (Spline, Foxglove, Omniverse, Resolve) are proprietary; Rerun and Cesium are open source, and Recce takes concepts from all of them, not code.</li>
+<li>The search tool is US-only and reported results as of today; snippets can be stale.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

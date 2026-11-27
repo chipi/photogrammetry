@@ -1,0 +1,1751 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/wip/step0-status/">
+      
+      
+        <link rel="prev" href="../hardware-and-parallelism/">
+      
+      
+        <link rel="next" href="../step0-closeout-2026-11-27/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Step 0 status and findings - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#step-0-status-and-findings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 0 status and findings
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/tools-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prototypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prototypes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#findings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Findings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mock-ups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mock-ups
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resume-here-handover-2026-11-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resume here (handover, 2026-11-25)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-for-the-owner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open, for the owner
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prototypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prototypes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#findings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Findings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mock-ups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mock-ups
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resume-here-handover-2026-11-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resume here (handover, 2026-11-25)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-for-the-owner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open, for the owner
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="step-0-status-and-findings">Step 0 status and findings<a class="headerlink" href="#step-0-status-and-findings" title="Permanent link">&para;</a></h1>
+<p>Where the prototypes and mock-ups of <a href="../../concept/RC-brief/">Step 0</a> stand, and what they found.
+Each prototype's README in <code>prototypes/</code> holds its full numbers and its "Not covered" list; this
+page is the summary. Updated 2026-11-25; see "Resume here" for the handover.</p>
+<h2 id="prototypes">Prototypes<a class="headerlink" href="#prototypes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Prototype</th>
+<th>Status</th>
+<th>Result in one line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P1-registration">RC-P1 Registration on every machine</a></td>
+<td><strong>Proven</strong></td>
+<td>COLMAP and GLOMAP register kicker, courtyard and pipes on the X3, the M4 Pro and the GB10</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P2-gpu">RC-P2 The expensive stages on the GPUs</a></td>
+<td><strong>Proven</strong></td>
+<td>Dense depth on courtyard through CUDA on the GB10 (1,169 s) and through HIP on the X3 in a ROCm container (3,205 s, about 2.7 times slower); a gsplat splat on the GB10</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P3-quality">RC-P3 Quality state an agent can read</a></td>
+<td><strong>Proven</strong></td>
+<td>An agent with only three MCP read tools names the held-out region on both scenes</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P4-products">RC-P4 Dense, mesh, texture and splat, measured</a></td>
+<td><strong>Proven</strong></td>
+<td>Courtyard dense and mesh scored with the ETH3D tool (F1 at 5 cm: 0.35 with RC-P1 poses, 0.88 with ground-truth poses); splats on garden (PSNR 27.7) and counter (29.2); textured mesh via texrecon; all seven complaint measurements have a first number (underwater colour from RC-P12, on images). The courtyard splat at 30,000 steps reaches 18.2 dB, no better than at 7,000, so steps are not the cause. The texture-side parts of measurements 1 and 4 (2026-11-25): a texel covers a median 10.2 mm on seen faces; 89% of the textured area comes from exactly one photo, 11% is hole-filled; colour difference across seams (median ΔE 2.48) is close to that inside patches (2.14)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P5-raw">RC-P5 RAW to a consistent set</a></td>
+<td><strong>Proven</strong> on one scene (pipes)</td>
+<td>The minimal rawpy route registers 14/14 with the lowest white-balance spread and is chosen</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P6-viewer">RC-P6 Mesh and splat in the browser</a></td>
+<td><strong>Proven</strong></td>
+<td>The RC-P4 courtyard mesh and a 1,000,000-gaussian splat load together in three.js + Spark at 59.9 fps (display-limited) in Chromium on the X3's iGPU; the Rerun export is verified with Rerun's CLI. iPhone 15 Pro (owner, 2026-11-26): 50.0 fps against 30, at 1024 px atlases, after a fix to how the page decodes them. M4 Pro (owner, 2026-11-26): 60.0, 59.9 (Chrome) and 58.8 fps (Safari) on a 60 Hz display, judged by the owner to meet 60. The splat looks poor from outside the capture positions (needles, floaters); quality is not a clause</td>
+</tr>
+<tr>
+<td>RC-P7 Distribution on a large set</td>
+<td>Deferred to the build phase</td>
+<td><a href="../gpu-rental-p7/">GPU rental spec</a> ready. Owner (2026-11-26): important, but not piloted in Step 0</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P8-learned">RC-P8 Learned and classical, compared</a></td>
+<td><strong>Proven</strong></td>
+<td>MapAnything + bundle adjustment comes close to COLMAP on ETH3D and covers frames COLMAP drops on two ARKit videos, but fails without warning on two others; its metric scale is off by up to 29% (ETH3D) and 41% (ARKit). Owner's decision: an optional second route beside COLMAP, kept only after an agreement check, never the source of scale. The check (built 2026-11-25) gets 15 of 16 runs right with no wrong pass; once checked, the route keeps 1–13 frames COLMAP lacks, since on the low-texture videos the learned model is wrong and is rejected</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P9-robot-capture">RC-P9 A robot's capture set</a></td>
+<td><strong>Proven</strong> on the 1.2 m fixture</td>
+<td>Scale error 0.021% (limit 0.5%), placement error 0.18% of extent (limit 1%)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P10-room">RC-P10 A room from inside</a></td>
+<td><strong>Not proven</strong></td>
+<td>Against the Faro scans of three visits the TSDF mesh meets the wall-length limit (2% or 2 cm) on 183 of 190 distances; all seven failures are 1.0–1.1 m pairs in 42444858, 2.2–3.8 cm short, where the ARKit-posed reference agrees with Faro (−0.08%), so they are the mesh's own. The earlier reading that the reference explains the failures held in two rooms only and is withdrawn. Against the ARKit-posed reference (five videos): 329 of 332. Splat: walls 323 of 331 against that reference, not checked against Faro. Photos only: <code>recon components</code> reports components and breaks (1 of 5 rooms is one model). Open: the cause of 42444858's short walls</td>
+</tr>
+<tr>
+<td>RC-P11 The iPhone capture app</td>
+<td>Not started</td>
+<td>Starts once RC-P8 or RC-P10 shows pose priors help</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P12-underwater">RC-P12 Underwater</a></td>
+<td><strong>Proven</strong>, one clause moved</td>
+<td>AquaMVS: the refractive model measures the board to +0.017% scale and 1.15 mm rigid RMSE, the pinhole model to −1.50% and 5.83 mm (−4.8% on one frame). SQUID: one global white balance on the RAW makes the grey patches grey at 6–19 m (median 1.4°); haze is what remains, and range-based backscatter removal raises contrast (mean 0.21 to 0.47) but tints the near charts. Ranges from our own reconstruction fail on SQUID (8 barely overlapping hazy stereo pairs: 0–1.1% of pixels pass PatchMatch's consistency check), so that clause cannot be met on this data. The open underwater benchmark is <a href="../underwater-benchmark-spec/">specified</a>. The "ranges from the reconstruction" clause moved to the benchmark's site scene S1 (owner, 2026-11-26)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/prototypes/RC-P13-structured">RC-P13 A structured model from a reconstruction</a></td>
+<td><strong>Partly proven</strong>, closed by the owner (2026-11-27)</td>
+<td>Added by the owner (2026-11-26): one tool-neutral description, Blender as the first tool, three segments. Room (ARKitScenes 42444793): 13 of 13 measured dimensions within 2% or 2 cm of the Faro scan, height −1.5 cm, 1.92 m² of floor tagged unknown, four agent iterations. Cave (Etna lava tube, CC BY 4.0): stations and cross-sections against the LiDAR; on covered sections 11 of 17 widths and heights within 2% or 5 cm (proposed), median −0.9 cm, p95 12 cm; the fork marked unknown. Drone (EuroSDR P4 RTK, no buildings on the site): a 2 m terrain grid against 58 survey points; as mapped with RTK only the ground reads 1.05 m low, 18 of 57 heights within the stated 2σ; after one shift from 7 control points 50 of 50 check points within it, std 0.27 m; the offset splits into the RTK frame (0.12 m, by PPK), the mapper's hold on the priors (0.26 m) and DJI's focal length (0.6% long, 0.28–0.36 m), with 0.25–0.38 m unexplained. Buildings (UseGeo Dataset-1, CC BY-NC-SA; from the providers' poses): our mapper's bend was distortion left in the "undistorted" photos; with an OPENCV lens free our own cameras land 0.26 m from the given, but the surface reads 1.11 m low (focal 1.3% long), the drone's focal-height trade again. LOD1 from a dense cloud against a tolerance fixed beforehand (f414c06) and OpenStreetMap's outlines. Not met: 31 of 49 buildings pass IoU 0.5 (80% needed); with the eaves stated (bias 0.32 m per metre of outline, calibrated on half the buildings) 30 of 31 areas within 2σ (σ a median 29% of the area), 29 of 31 heights; every mapped building is found; merged neighbours and roof-versus-wall outlines fail it</td>
+</tr>
+</tbody>
+</table>
+<h2 id="findings">Findings<a class="headerlink" href="#findings" title="Permanent link">&para;</a></h2>
+<p><strong>Strategies.</strong> On three scenes and three machines GLOMAP maps 3–4 times faster than COLMAP's
+incremental mapper with the same pose accuracy (rotation within a few tenths of a degree, position
+under a centimetre apart). GLOMAP's reprojection error is about twice COLMAP's on every scene and
+machine (1.9–2.9 px against 1.1–1.3 px); the cause is not known.</p>
+<p><strong>Scoring.</strong> A camera a mapper poses without any 3D point is not part of the model. GLOMAP posed
+one such photo on kicker about 47 m from its true place, and including it in the alignment turned
+a 0.6° result into 13°. Every score now counts only cameras that hold points.</p>
+<p><strong>Machines and builds.</strong>
+- pycolmap 4.2.1 from PyPI has no CUDA and no Linux ARM wheel. On the GB10 the conda-forge build
+  (CUDA) is used through micromamba. It runs SIFT extraction and matching on the GPU, about three
+  times faster than the CPU on the X3 or the M4 Pro.
+- Runs on different machines give the same quality but not identical models: GLOMAP joined
+  kicker's problem photo on the M4 Pro and the GB10, not on the X3.
+- Registration of a 38-image scene peaks at 28 GB resident memory (courtyard, M4 Pro).
+- Poisson meshing in the conda-forge pycolmap build for the GB10 aborts ("Failed to close loop"),
+  even on a synthetic sphere. Delaunay meshing works and is used.
+- COLMAP upstream has a HIP backend since 2026-10 (PR #4795). Built from <code>main</code> in a ROCm 7.2.4 container for gfx1151, it runs dense depth on the X3 at about 2.7 times the GB10's time, at 98% GPU use; one run aborted with a memory-aperture violation and a repeat passed (not root-caused). Nothing is installed on the host.</p>
+<p><strong>GB10 GPU time.</strong> The DGX serves production LLMs in gpu-mode <code>prod</code>, which leaves about 15 GB of
+memory. Recce GPU work runs in a <code>free</code> window: by day under the owner's standing go, switched by
+the Recce session as <code>markodragoljevic</code>, switched back to <code>prod</code> and verified by the homelab
+session. Dense depth and a splat together used up to 50 GB.</p>
+<p><strong>Quality state.</strong> Coverage per region is enough for an agent to find a removed region, when the
+removal is local: choosing the region whose removal touches the fewest neighbours matters, since a
+naive choice left 12 of 22 regions at zero coverage and the test unanswerable.</p>
+<p><strong>RAW.</strong> A minimal pipeline (rawpy, one white balance and one exposure for the whole set)
+registers as well as the camera JPEGs, with the most even colour. Chemigram, as driven here,
+registered 7 of 14 photos with dark, yellow-green renders; stock darktable on the same RAW files is
+neutral, so the cause lies in Chemigram's presets or the recipe used. Not investigated.</p>
+<p><strong>Robot capture sets.</strong> With exact poses the model lands within 0.021% scale and 0.18% placement;
+the frame conversion (OpenGL camera axes, z-up world, <code>{x, y, z, w}</code> quaternions) is checked by
+render, and both wrong-convention controls fail.</p>
+<p><strong>Poses decide dense quality.</strong> On courtyard the same dense stage scores F1 0.35 at 5 cm from
+RC-P1's poses and 0.88 from ETH3D's ground-truth poses; RC-P1's cameras sit a median 6.1 cm from
+the truth after alignment. Pose refinement before dense is the first lever, ahead of any dense
+setting. Why RC-P1's poses are that far off is not investigated.</p>
+<p><strong>Splat quality.</strong> gsplat at 30,000 steps reaches PSNR 27.7 on Mip-NeRF 360 garden and 29.2 on
+counter, in line with published gsplat figures. On courtyard (7,000 steps) it stays low: 18.4 dB
+from RC-P1's poses, 20.9 from ground-truth poses, so poses explain part of it; 30,000 steps from
+RC-P1's poses give 18.2 dB, so the step count does not. Garden used
+14.3 GiB of GPU memory, close to what <code>prod</code> mode leaves free.</p>
+<p><strong>Texture.</strong> texrecon (BSD; dependencies BSD and MPL-2.0) textures the courtyard mesh in 52 s on
+the GB10; 16% of the faces are seen by no photo.</p>
+<p><strong>Learned poses.</strong> MapAnything's Apache checkpoint alone is 0.9–1.7° and 12–37 cm off on ETH3D;
+bundle-adjusted from the same SIFT matches it comes close to COLMAP (0.36–0.82° relative against
+0.40–0.69°). The adjustment
+lets the scale drift (−41% and −74% on two ETH3D runs), so the adjusted model is anchored to
+MapAnything's camera centres. On ARKitScenes it fails on one low-texture video (82° relative) and
+is wrong in parts on a textured one; COLMAP registers 10–18% of the frames of the low-texture
+videos. MapAnything needs 42–59 GiB of GPU memory for 90–218 views, more than <code>prod</code> mode leaves.
+The agreement check (learned against each COLMAP component, within 2° relative rotation and 2% of
+extent, no ground truth) passes all six ETH3D runs and rejects every broken learned model; its one
+miss is a COLMAP component that is itself 13.8° off. It can confirm the learned model only where
+COLMAP also registered, and on these runs the frames only the learned model has are where it fails.</p>
+<p><strong>Underwater.</strong> Refraction is a scale error, not noise: on AquaMVS a pinhole calibration is off by
+−0.03% to −4.8% depending on where the board is, and a refractive model by at most ±0.28%. Colour
+underwater needs the RAW: SQUID's published TIFs clip red to zero on 78–99.9% of pixels. Over 6–19 m
+on the Satil wreck the colour cast is nearly one global tint, which a single white balance removes;
+what changes with range is contrast (0.39 to 0.07 on the grey ramp), and the simple per-image
+backscatter fit restores it unevenly, whichever model is fitted (simple or Sea-thru's form): near
+the camera the deck holds no dark objects, so the dark-pixel estimate overshoots. Our own pipeline gets no depth from SQUID's few hazy stereo
+pairs without the rig calibration. SQUID's chart annotations sit a few pixels off its published
+undistorted images and are snapped before use.</p>
+<h2 id="mock-ups">Mock-ups<a class="headerlink" href="#mock-ups" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Mock-up</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M1-run">RC-M1 the run</a> (with first passes at M2 and M3)</td>
+<td>Phase 2 done: IBM Plex, tokens, AA contrast, field shot cards; photos hang in the air with faint rays (owner feedback, 2026-11-24); the coach in Debrief (2026-11-27), <strong>kept by the owner (2026-11-27): good to go as a prototype</strong></td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M2-coverage">RC-M2 coverage and confidence</a></td>
+<td>Phase 1 built 2026-11-27 on RC-P10's room and RC-P13's structure: light and shadow, confidence as solid and hatched, the Faro truth beside it, OKLCH ramps, the coverage glyph, the next shot. Surfaces no frame saw are 52.4 mm off Faro, those seen by 32+ frames 14.7 mm. <strong>Owner verdict (2026-11-27): all concepts kept, finished in the build phase</strong></td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M3-debrief">RC-M3 the debrief</a></td>
+<td>Phase 1 built 2026-11-27 on ETH3D courtyard (RC-P1, P3, P4, P6), in two layers. Without AI (the default): the engine writes the debrief from templates and rules, every number with its tool call, and places each new shot by a where-to-stand rule (hand height, walked area, facing side, clear sight, a new angle). With the person's own AI connected (opt-in, OpenAI-compatible endpoint): the AI adds what the model is good for, priorities per purpose and a walking plan above the engine's text, checked by replay. An agent left to invent positions put 0 of 3 shots where a photographer can stand; with the engine's spots, 3 of 3. <strong>Owner verdict (2026-11-27): all concepts kept</strong></td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M4-recipes">RC-M4 recipes and comparison</a></td>
+<td>Phase 1 built 2026-11-27 on ETH3D kicker and courtyard: the recipe graph forked at the node that differs (mapping), a wipe across one 3D view, what changed with a verdict by rule (or by the person's own AI, checked), and cost per stage estimated before and measured after, time and energy (the X3's package power above idle). GLOMAP maps 3.4–3.7 times faster for a quarter to two fifths of the energy; COLMAP's worst camera stays 1.9–2.2% of the scene off the truth against 3.9–10.9%. Estimates missed by −9% and +17% in time. <strong>Owner verdict (2026-11-27): all concepts kept</strong></td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M6-presentation">RC-M6 presentation</a></td>
+<td>Phase 1 built 2026-11-27 on ETH3D courtyard (RC-P4 mesh, RC-P6 splat): a path through 8 of the 38 photos where each stop dissolves into its undistorted photo with the lens matched, a band showing how close each moment is to a photo (94% at or near one), four lighting presets (the splat cannot be relit, and the page says so), the mesh drawn where the splat does not hold, framing guides, and a link that opens the audience view with an "About this model" card. Words by rule, or drafted by the person's AI from the stop photos (one recorded call, US$0.064; 1 supported, 9 judgement, 0 unsupported). <strong>Owner verdict (2026-11-27): all concepts kept</strong></td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M7-underwater">RC-M7 underwater</a></td>
+<td>Phase 1 built 2026-11-27 on RC-P12's data: colour in water (SQUID Satil, local only) as a wipe between the camera's view and each correction, charts scored per side, the range of every pixel, and the backscatter fit against each chart's black patch; the water lens (AquaMVS) as a switch between the refractive and pinhole models, each corner's miss drawn exaggerated, per-frame scale errors. Verdicts by rule, and the coach (rule plan, or the person's AI). <strong>Owner verdict (2026-11-27): every concept kept; what goes into the product is decided in the build phase</strong></td>
+</tr>
+<tr>
+<td><a href="https://github.com/chipi/recce/tree/main/mockups/RC-M5-learn">RC-M5 learn</a></td>
+<td>Phase 1 built 2026-11-27, synthetic by design: five mini-labs beside the primer, each with a tutor (a rule without AI, or the person's AI: one call per lab, US$0.083 for five, 33 of 51 statements number-checked, 15 judgement, 3 unsupported). <strong>Owner verdict (2026-11-27): good to go as a prototype</strong></td>
+</tr>
+<tr>
+<td>M8</td>
+<td>After RC-P11 (the phone app); not in Step 0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resume-here-handover-2026-11-25">Resume here (handover, 2026-11-25)<a class="headerlink" href="#resume-here-handover-2026-11-25" title="Permanent link">&para;</a></h2>
+<p>A fresh session starts from this page. Updated after the RC-P8 GPU window (2026-11-25, 15:15 to
+17:14): no Recce process runs on the X3 or the DGX, the homelab session has switched the DGX back to
+gpu-mode <code>prod</code>, and <code>main</code> holds everything finished. RC-P8's results and the 30,000-step
+courtyard splat are in their READMEs.</p>
+<p><strong>Tracker.</strong> The owner follows progress on a private page,
+<a href="https://claude.ai/artifact/L5nUn48i3hDqYkxz9frQE5">Recce Step 0 Tracker</a>, which mirrors this page.
+Republish it (read it first, then publish to the same link) whenever a row here changes.</p>
+<p><strong>Next, in order</strong></p>
+<ol>
+<li><strong>RC-P10: not proven (2026-11-26).</strong> Three Faro visits: 183 of 190 mesh distances within the limit; the
+   seven failures (42444858, 1.0–1.1 m pairs, 2.2–3.8 cm short) are traced to one wall of a 1.05 m
+   passage, about 1 cm from ARKit's poses there and the rest from the LiDAR surface; no room-wide bias,
+   and three fusion settings leave it in place. Pose refinement (ICP or a pose graph) is the untried fix.</li>
+<li><strong>RC-P6: proven (2026-11-26).</strong> M4 Pro 58.8 to 60.0 fps at a 60 Hz display's ceiling, met by
+   the owner's judgement; the iPhone 15 Pro 50.0 against 30. Done (bb21a28): a cleaner splat (crop to the
+   capture area, reduce by contribution in the training views).</li>
+<li><strong>RC-P13: the drone and cave segments.</strong> The drone reconstruction is done (RC-P8, "Drone with RTK priors", 2026-11-26): RTK priors on half the photos fix scale (+0.025%) and the held-out half lands 0.31 m median from RTK with the OPENCV lens; a 0.2 m dome remains. The terrain model is built and checked (2026-11-26): the offset is split (RC-P8, "The height offset against the survey"), 0.25–0.38 m unexplained; the tolerance defaults to 2σ (configurable); the buildings segment is built on UseGeo Dataset-1 (2026-11-26): against OpenStreetMap it misses the fixed tolerance on outlines (63% of buildings pass, 80% needed); the mapper's bend is traced to the lens (2026-11-26); open are splitting houses of one roof height and the focal-height trade in nadir blocks with position priors (drone and buildings both read about 1.1 m low). The cave segment is built (2026-11-26); on the owner's tolerance (2% or 5 cm, 2026-11-27) it is not met. RC-P13 is closed as partly proven (2026-11-27).</li>
+<li><strong>RC-P11</strong> after RC-P8 or RC-P10 shows pose priors help. RC-P10's result (with poses and depth the
+   rooms meet the wall limit; photos only, four of five split) is a finding; the owner puts it in
+   context later (2026-11-25).</li>
+</ol>
+<p><strong>Decided by the owner (2026-11-27)</strong></p>
+<ul>
+<li><strong>The cave tolerance</strong> is 2% or 5 cm; on it the cave segment is not met (11 of 17).</li>
+<li><strong>RC-P10</strong> stays not proven with its cause recorded; pose refinement moves to the build phase.</li>
+<li><strong>RC-P13</strong> closes as partly proven, each segment's verdict recorded.</li>
+<li><strong>Step 0 ends</strong> when the mock-ups (M2, M3, M4, M6, M7) have the owner's verdicts and a close-out
+  report is written for RC-01 Vision. The report is written: <a href="../step0-closeout-2026-11-27/">Step 0 close-out report</a> (2026-11-27).</li>
+<li><strong>AI is optional; Recce is complete without it.</strong> Every feature works from geometry and rules
+  alone and is good enough on its own. AI is opt-in: Recce is an MCP server for a person's own
+  agent, and a person can bring their own AI (an OpenAI-compatible endpoint, hosted or local) to
+  take features further. Recorded in the brief; the mock-ups show both states.</li>
+<li><strong>The first case: the owner's home, captured with the iPhone app</strong> <em>(owner, 2026-11-27)</em>. The build starts with the iPhone capture app (RC-P11) and the owner photographing at home, from simpler to more complex: objects first, then a whole room. The room is the setting the robots map, so it leads into the robot use cases. Recorded in the brief.</li>
+<li><strong>Learn mode is a feature inside the product</strong> <em>(owner, 2026-11-27)</em>: the mini-labs and their tutor (RC-M5) live in Recce beside what they explain, not as a separate face.</li>
+<li><strong>Distribution is at the front, for work in the field</strong> <em>(owner, 2026-11-27)</em>. The owner travels with a laptop and shoots with a camera, a drone or an underwater camera, and processes the day's work after. The answer is not a stronger laptop but offloading: the laptop sends work to the owner's other machines and to rented GPUs. Running workloads on other machines, rented GPUs included, is built from the beginning and is a key part of the vision, not a later scaling step. Open problems this raises: the upload (1,500 photos at 50 MB are 75 GB), whether the RAW files need to leave the laptop at all, and how work splits between the laptop and the remote workers before anything is sent. Recorded in the brief.</li>
+<li><strong>Both: Recce Studio on the desktop, and the web</strong> <em>(owner, 2026-11-27)</em>: the web application packaged with the local engine in Electron, for macOS and Windows; RAW processing stays local.</li>
+</ul>
+<p><strong>Deferred by the owner (2026-11-26)</strong></p>
+<ul>
+<li><strong>RC-P7</strong> to the build phase: important, but not piloted in Step 0
+  (<a href="../gpu-rental-p7/">spec</a> ready).</li>
+<li><strong>RC-P12's ranges clause</strong> to the underwater benchmark's site scene S1. RC-P12 is otherwise
+  proven. Data on the X3: SQUID Satil (MD5 matches Zenodo's) and its evaluation code, AquaMVS core
+  and <code>data.zip</code> (MD5 matches). SQUID is non-commercial: develop only, never redistribute.</li>
+<li><strong>The underwater benchmark capture</strong> (S1–S4, licence, the friend's set): decided after
+  everything else in Step 0 is finished. The drone and Android dataset search is done: <a href="../research-drone-phone-datasets-2026-11-26/">report</a> (2026-11-26); fetching any of it is the owner's call.</li>
+</ul>
+<p><strong>Standing rules that carry over</strong></p>
+<ul>
+<li>Approved downloads and installs (user-level only): ETH3D and Mip-NeRF 360 data, MapAnything
+  (Apache weights only), PyTorch, gsplat, texrecon, micromamba, Open3D, ARKitScenes subset,
+  AquaMVS, SQUID, Blender, rawpy, the MCP SDK (RC-P3); three.js and Spark from a CDN and
+  <code>rerun-sdk</code> (RC-P6's environment); scipy, tifffile and <code>opencv-python-headless</code> (RC-P12's
+  environment). In throwaway Docker containers only (nothing on the host): CloudCompare, RTKLIB
+  and <code>laspy</code> (2026-11-26). Datasets added 2026-11-26: the Etna lava tube (CC BY 4.0), two more
+  ARKitScenes Faro visits, EuroSDR RPAS Phase 2/3 (CC BY 4.0) and UseGeo Dataset-1 (CC BY-NC-SA
+  4.0; fetched with certificate checks off by the owner's decision, the host's certificate having
+  expired in 2024). Anything else is asked first.</li>
+<li><strong>Recipes and profiles stay private (owner, 2026-11-26).</strong> What evaluation teaches (per-device
+  corrections such as a focal-length fix, calibrated uncertainty models, tuned settings per capture
+  scenario, the evaluation corpus and its scores) will live as data files in a separate private
+  repository, next to the owner's data; the public engine loads them from a path and falls back to
+  public defaults. Not built yet; new work keeps engine code generic and tuned values separable,
+  so they can move there.</li>
+<li><strong>DGX GPU windows:</strong> standing go by day. Message the homelab session before switching; switch with
+  <code>ssh markodragoljevic@dgx-llm-1 '~/bin/gpu-mode-swap.sh free --json'</code>; when the work's processes
+  have exited, send it "done"; it switches back to <code>prod</code> and verifies both vLLMs. The <code>claude</code>
+  account (reached through the Mac mini) runs the jobs and cannot switch modes.</li>
+<li><strong>The X3</strong> is shared with eval-harness, which announces its test runs; heavy Recce work stays
+  sequential and off cores it pins. The HIP build is the Docker image <code>recce-p2-colmap-hip:latest</code>.</li>
+<li><strong>Gate:</strong> <code>make check; echo EXIT=$?</code> before every commit, never a filtered line; commits land on
+  <code>main</code> and CI is watched to a verdict.</li>
+<li>Two parallel streams at most, on sonnet subagents; each writes only its own prototype folder and
+  never commits.</li>
+</ul>
+<h2 id="open-for-the-owner">Open, for the owner<a class="headerlink" href="#open-for-the-owner" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The underwater benchmark capture, after the rest of Step 0 is finished (owner, 2026-11-26).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

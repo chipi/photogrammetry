@@ -1,0 +1,3327 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Recce, an open-source photogrammetry reconstruction engine; concept package, reference docs and working notes.">
+      
+      
+      
+        <link rel="canonical" href="https://chipi.github.io/recce/reference/tools-overview/">
+      
+      
+        <link rel="prev" href="../photogrammetry-primer/">
+      
+      
+        <link rel="next" href="../product-feature-analysis/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Tools overview - Recce</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tools-overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Recce" class="md-header__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Recce
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tools overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Recce" class="md-nav__button md-logo" aria-label="Recce" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Recce
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chipi/recce" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chipi/recce
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../concept/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concept
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-01-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RC-01 Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-brief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-architecture-sketch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture sketch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concept/RC-use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../photogrammetry-primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Photogrammetry primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-end-to-end-pipelines-open-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. End-to-end pipelines (open source)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-structure-from-motion-and-bundle-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Structure from motion and bundle adjustment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-features-and-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Features and matching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-learned-feed-forward-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Learned feed-forward reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-dense-reconstruction-mvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Dense reconstruction (MVS)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-meshing-mesh-processing-texturing-uv-decimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Meshing, mesh processing, texturing, UV, decimation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-radiance-fields-and-gaussian-splatting-incl-underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Radiance fields and gaussian splatting (incl. underwater)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-masking-and-segmentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Masking and segmentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-image-decoding-raw-metadata-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Image decoding, RAW, metadata, video
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-colour-and-underwater-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Colour and underwater correction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-capture-side-apps-and-device-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Capture-side apps and device APIs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-viewers-and-rendering-web-and-desktop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Viewers and rendering (web and desktop)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Formats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-game-engines-and-dcc-import-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Game engines and DCC import paths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-agent-and-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Agent and integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-commercial-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Commercial products
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-frameworks-and-runtimes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Frameworks and runtimes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-platform-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Platform matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-licence-traps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Licence traps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-not-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Not verified
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product-feature-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product feature analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../public-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licensing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wip/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/hardware-and-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware and parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 status and findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/step0-closeout-2026-11-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 0 close-out report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gpu-rental-p7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU rental for RC-P7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/underwater-benchmark-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Underwater benchmark spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/robotics-lab-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robotics-lab contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-landscape-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-metashape-underwater-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, Metashape and underwater
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/review-fable-2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review of the concept-phase start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/capture-set-amendments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capture-set amendments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/verification-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification of open facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/visual-ideas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual ideas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-ux-inspiration-2026-11-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, UX inspiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/research-drone-phone-datasets-2026-11-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research, drone and phone datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wip/gap-list-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap list as an interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-end-to-end-pipelines-open-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. End-to-end pipelines (open source)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-structure-from-motion-and-bundle-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Structure from motion and bundle adjustment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-features-and-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Features and matching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-learned-feed-forward-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Learned feed-forward reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-dense-reconstruction-mvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Dense reconstruction (MVS)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-meshing-mesh-processing-texturing-uv-decimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Meshing, mesh processing, texturing, UV, decimation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-radiance-fields-and-gaussian-splatting-incl-underwater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Radiance fields and gaussian splatting (incl. underwater)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-masking-and-segmentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Masking and segmentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-image-decoding-raw-metadata-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Image decoding, RAW, metadata, video
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-colour-and-underwater-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Colour and underwater correction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-capture-side-apps-and-device-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Capture-side apps and device APIs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-viewers-and-rendering-web-and-desktop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Viewers and rendering (web and desktop)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Formats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-game-engines-and-dcc-import-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Game engines and DCC import paths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-agent-and-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Agent and integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-commercial-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Commercial products
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-frameworks-and-runtimes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Frameworks and runtimes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-platform-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Platform matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-licence-traps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Licence traps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-not-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Not verified
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="tools-overview">Tools overview<a class="headerlink" href="#tools-overview" title="Permanent link">&para;</a></h1>
+<p>The catalogue of every tool, library, model, format and product that bears on the photogrammetry
+project, kept open as a lookup while designing and prototyping. It merges the two research notes
+(<a href="../../wip/research-landscape-2026-11-23/">landscape</a>,
+<a href="../../wip/research-metashape-underwater-2026-11-23/">Metashape and underwater</a>) with a licence and
+platform pass done the same day. As of 2026-11-23.</p>
+<p><strong>Verification.</strong> <code>[V]</code> = read on a primary page on 2026-11-23 (GitHub repo and LICENSE file, official
+docs, PyPI file list); the URL follows. <code>[U]</code> = memory, a search snippet or a secondary page; a lead,
+not a fact. A <code>[V]</code> carried from a research note keeps that note's reading. Where the platform column
+cites "wheels", it is the PyPI file list read today, not an install test.</p>
+<p><strong>Licence classes.</strong> <em>Permissive</em> (MIT, BSD, Apache-2.0, MPL-2.0 file-level) · <em>Copyleft</em> (GPL, LGPL,
+AGPL) · <em>Non-commercial</em> (CC-BY-NC, research-only, NVIDIA non-commercial) · <em>Custom</em> (a bespoke
+agreement that is neither OSI-permissive nor non-commercial, read the text) · <em>Proprietary</em>.</p>
+<p><strong>Role.</strong> <em>Default</em> = in the permissive default stack. <em>Plug-in</em> = optional, labelled, never required.
+<em>Reference</em> = compared against or read, not shipped. <em>Not used</em>.</p>
+<p><strong>Policy.</strong> The default stack is permissive so it can be open-sourced. Non-commercial weights and
+AGPL/GPL tools are optional plug-ins. Engine is Python first. Machines: M4 Pro (Metal), GB10 (ARM64 +
+CUDA 13), X3 (ROCm/HIP or Vulkan, x86_64 Linux), iMac Pro (CPU, macOS x86_64).</p>
+<h2 id="1-end-to-end-pipelines-open-source">1. End-to-end pipelines (open source)<a class="headerlink" href="#1-end-to-end-pipelines-open-source" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COLMAP</td>
+<td>SfM + MVS; the format hub. GLOMAP merged in.</td>
+<td>Permissive, BSD-3 [V]. Dependencies licensed separately; a build may change the effective licence.</td>
+<td>CUDA; HIP/ROCm build (<code>-DHIP_ENABLED=ON</code>, accelerates <code>patch_match_stereo</code> and GPU SIFT) [V]; builds on Linux/Mac/Windows [V]; Metal/Vulkan not in docs read [U]; aarch64 by source build</td>
+<td>Default (SfM, BA); dense via CUDA/HIP only</td>
+<td><a href="https://github.com/colmap/colmap">https://github.com/colmap/colmap</a> [V]; <a href="https://github.com/colmap/colmap/blob/main/doc/install.rst">https://github.com/colmap/colmap/blob/main/doc/install.rst</a> [V]</td>
+</tr>
+<tr>
+<td>GLOMAP</td>
+<td>Global SfM</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>CPU/CUDA per COLMAP; standalone repo, merged into COLMAP</td>
+<td>Default option</td>
+<td><a href="https://github.com/colmap/glomap">https://github.com/colmap/glomap</a> [V]</td>
+</tr>
+<tr>
+<td>pycolmap</td>
+<td>Python bindings for COLMAP SfM and MVS</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>PyPI 4.2.1 wheels: Linux x86_64, macOS arm64 (14.0+), Windows; <strong>no Linux aarch64, no macOS x86_64</strong>; CUDA 12 wheels only as <code>pycolmap-cuda12</code>, Linux x86_64 [V]</td>
+<td>Default (Python API)</td>
+<td><a href="https://pypi.org/project/pycolmap/">https://pypi.org/project/pycolmap/</a> [V]</td>
+</tr>
+<tr>
+<td>WebODM / NodeODM (ODX)</td>
+<td>Web UI + API + worker nodes; orthophotos, point clouds, DEMs, meshes, splats</td>
+<td>Copyleft, AGPL-3.0 [V, partly]</td>
+<td>Docker; aerial-only workflow; NodeODM REST API (task new/upload/status/output/cancel) [U]; one WebODM schedules many nodes [U]</td>
+<td>Reference (closest analogue)</td>
+<td><a href="https://github.com/WebODM/WebODM">https://github.com/WebODM/WebODM</a></td>
+</tr>
+<tr>
+<td>Meshroom / AliceVision</td>
+<td>Node-graph photogrammetry, caching, render farm, plugins</td>
+<td>Permissive (file-level), MPL-2.0 [V Meshroom page note]; GitHub reports "NOASSERTION" for both repos, LICENSE not read [U]</td>
+<td>CUDA for depth maps [U]</td>
+<td>Reference</td>
+<td><a href="https://github.com/alicevision/Meshroom">https://github.com/alicevision/Meshroom</a></td>
+</tr>
+<tr>
+<td>OpenMVG</td>
+<td>SfM library</td>
+<td>Permissive (file-level), MPL-2.0 [V]</td>
+<td>CPU</td>
+<td>Reference</td>
+<td><a href="https://github.com/openMVG/openMVG">https://github.com/openMVG/openMVG</a> [V]</td>
+</tr>
+<tr>
+<td>OpenMVS</td>
+<td>Dense reconstruction, meshing, refinement, texturing</td>
+<td><strong>Copyleft, AGPL-3.0 [V]</strong>; a risk for a hosted service</td>
+<td>CPU, CUDA [U]</td>
+<td>Plug-in only</td>
+<td><a href="https://github.com/cdcseacave/openMVS">https://github.com/cdcseacave/openMVS</a> [V]</td>
+</tr>
+<tr>
+<td>nerfstudio</td>
+<td>Radiance-field framework; transforms.json</td>
+<td>Permissive, Apache-2.0 [U]; ran at 1.1.5 on a GB10 in one write-up [U]</td>
+<td>CUDA</td>
+<td>Reference</td>
+<td><a href="https://github.com/nerfstudio-project/nerfstudio">https://github.com/nerfstudio-project/nerfstudio</a></td>
+</tr>
+<tr>
+<td>Refractive COLMAP (IROS 2024)</td>
+<td>SfM with flat and dome port refraction</td>
+<td>Open source, licence not stated [V]</td>
+<td>COLMAP-based</td>
+<td>Reference (underwater)</td>
+<td><a href="https://arxiv.org/abs/2403.08640">https://arxiv.org/abs/2403.08640</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-structure-from-motion-and-bundle-adjustment">2. Structure from motion and bundle adjustment<a class="headerlink" href="#2-structure-from-motion-and-bundle-adjustment" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COLMAP incremental mapper</td>
+<td>Incremental SfM + BA (Ceres)</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>CPU; optional CUDA Ceres solver "Caspar", off by default [V]</td>
+<td>Default</td>
+<td><a href="https://github.com/colmap/colmap/blob/main/doc/install.rst">https://github.com/colmap/colmap/blob/main/doc/install.rst</a> [V]</td>
+</tr>
+<tr>
+<td>GLOMAP global mapper</td>
+<td>Global rotation/position averaging</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>CPU</td>
+<td>Default (fast path)</td>
+<td><a href="https://github.com/colmap/glomap">https://github.com/colmap/glomap</a> [V]</td>
+</tr>
+<tr>
+<td>COLMAP hierarchical mapper</td>
+<td>Clustered reconstruction on one box</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>CPU</td>
+<td>Default (basis for spatial partitioning)</td>
+<td><a href="https://github.com/colmap/colmap">https://github.com/colmap/colmap</a></td>
+</tr>
+<tr>
+<td>Ceres Solver</td>
+<td>Nonlinear least squares under COLMAP</td>
+<td>Permissive, Apache-2.0 [U]</td>
+<td>CPU, CUDA</td>
+<td>Default (transitive)</td>
+<td>unverified</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-features-and-matching">3. Features and matching<a class="headerlink" href="#3-features-and-matching" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COLMAP SIFT</td>
+<td>Classical features, GPU and CPU</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>CUDA, HIP [V]; CPU fallback (apt COLMAP fell back to CPU SIFT headless on GB10 [V blog])</td>
+<td>Default</td>
+<td><a href="https://dev.classmethod.jp/en/articles/dgx-spark-3dgs-digital-twin/">https://dev.classmethod.jp/en/articles/dgx-spark-3dgs-digital-twin/</a></td>
+</tr>
+<tr>
+<td>hloc</td>
+<td>Feature + match pipeline over COLMAP</td>
+<td>Permissive, Apache-2.0 [V]</td>
+<td>PyTorch; not on PyPI under that name [U]</td>
+<td>Default (driver option)</td>
+<td><a href="https://github.com/cvg/Hierarchical-Localization">https://github.com/cvg/Hierarchical-Localization</a> [V]</td>
+</tr>
+<tr>
+<td>LightGlue</td>
+<td>Learned matcher</td>
+<td>Code <strong>and</strong> released weights Apache-2.0 per its README [V]; the <strong>SuperPoint</strong> extractor and its weights follow a different, restrictive Magic Leap licence [V]</td>
+<td>PyTorch (CUDA/MPS/ROCm via torch)</td>
+<td>Default with ALIKED or DISK; SuperPoint = plug-in</td>
+<td><a href="https://github.com/cvg/LightGlue">https://github.com/cvg/LightGlue</a> [V]</td>
+</tr>
+<tr>
+<td>ALIKED</td>
+<td>Learned keypoints + descriptors</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>PyTorch</td>
+<td>Default</td>
+<td><a href="https://github.com/Shiaoming/ALIKED">https://github.com/Shiaoming/ALIKED</a> [V]</td>
+</tr>
+<tr>
+<td>DISK</td>
+<td>Learned keypoints (EPFL)</td>
+<td>Permissive, Apache-2.0 [V repo <code>cvlab-epfl/disk</code>]; its weights' terms not read separately [U]</td>
+<td>PyTorch</td>
+<td>Default candidate</td>
+<td><a href="https://github.com/cvlab-epfl/disk">https://github.com/cvlab-epfl/disk</a> [V]</td>
+</tr>
+<tr>
+<td>RoMa</td>
+<td>Dense matcher</td>
+<td>Code MIT [V]; weights licence not read [U]</td>
+<td>PyTorch</td>
+<td>Default candidate (weights unchecked)</td>
+<td><a href="https://github.com/Parskatt/RoMa">https://github.com/Parskatt/RoMa</a> [V]</td>
+</tr>
+<tr>
+<td>SuperPoint (Magic Leap)</td>
+<td>Keypoints</td>
+<td>Restrictive (not OSI) [V via LightGlue README]</td>
+<td>PyTorch</td>
+<td>Plug-in only</td>
+<td><a href="https://github.com/magicleap/SuperPointPretrainedNetwork/blob/master/LICENSE">https://github.com/magicleap/SuperPointPretrainedNetwork/blob/master/LICENSE</a> [U, not opened]</td>
+</tr>
+<tr>
+<td>Kornia</td>
+<td>Differentiable CV, LoFTR, DISK ports</td>
+<td>Permissive, Apache-2.0 [V PyPI 0.9.2]</td>
+<td>PyTorch</td>
+<td>Optional</td>
+<td><a href="https://pypi.org/project/kornia/">https://pypi.org/project/kornia/</a> [V]</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-learned-feed-forward-reconstruction">4. Learned feed-forward reconstruction<a class="headerlink" href="#4-learned-feed-forward-reconstruction" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapAnything (Meta)</td>
+<td>Metric multi-view reconstruction; optional intrinsics, poses, depth; to ~2,000 views on 140 GB</td>
+<td>Code Apache-2.0 [V]; <code>map-anything-apache</code> weights Apache-2.0 [V]; <code>map-anything</code> weights CC-BY-NC [V]</td>
+<td>PyTorch, CUDA</td>
+<td>Default (Apache checkpoint, RC-P4); NC checkpoint = plug-in</td>
+<td><a href="https://github.com/facebookresearch/map-anything">https://github.com/facebookresearch/map-anything</a></td>
+</tr>
+<tr>
+<td>VGGT (Meta/Oxford)</td>
+<td>Feed-forward poses + depth, COLMAP export</td>
+<td>Code relicensed commercial-friendly (excluding military) 2025-07-29 [V README]; <code>VGGT-1B</code> weights non-commercial; <code>VGGT-1B-Commercial</code> gated by application form [V]; code licence not captured separately in the landscape note [U]; "VGGT-Omega" (May 2026) unread [U]</td>
+<td>PyTorch, CUDA</td>
+<td>Plug-in (commercial checkpoint is gated)</td>
+<td><a href="https://github.com/facebookresearch/vggt">https://github.com/facebookresearch/vggt</a> [V]</td>
+</tr>
+<tr>
+<td>Pi3 / Pi3X</td>
+<td>Permutation-equivariant reconstruction; Pi3X takes optional pose/intrinsics/depth</td>
+<td>Code BSD-3 [V]; weights CC-BY-NC 4.0 [V]</td>
+<td>PyTorch</td>
+<td>Plug-in (NC)</td>
+<td><a href="https://github.com/yyfz/Pi3">https://github.com/yyfz/Pi3</a></td>
+</tr>
+<tr>
+<td>DUSt3R / MASt3R / MASt3R-SfM (Naver)</td>
+<td>Pairwise pointmaps, matching</td>
+<td>CC BY-NC-SA 4.0 [V]</td>
+<td>PyTorch</td>
+<td>Plug-in (NC)</td>
+<td><a href="https://github.com/naver/mast3r">https://github.com/naver/mast3r</a></td>
+</tr>
+</tbody>
+</table>
+<p>Feed-forward models run at low resolution (about 518 px for VGGT [U]); use them for initialisation,
+pose priors, metric scale and sparse views, with COLMAP/GLOMAP bundle adjustment as the accuracy
+engine. No head-to-head numbers were checked.</p>
+<h2 id="5-dense-reconstruction-mvs">5. Dense reconstruction (MVS)<a class="headerlink" href="#5-dense-reconstruction-mvs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COLMAP PatchMatch stereo + fusion</td>
+<td>Dense depth maps, fused point cloud, Poisson/Delaunay meshing</td>
+<td>Permissive, BSD-3 [V]</td>
+<td>CUDA or HIP build required for <code>patch_match_stereo</code>; the docs read describe no CPU or Metal dense path [V, absence only]</td>
+<td>Default on GB10 (CUDA) and X3 (HIP)</td>
+<td><a href="https://github.com/colmap/colmap/blob/main/doc/install.rst">https://github.com/colmap/colmap/blob/main/doc/install.rst</a> [V]</td>
+</tr>
+<tr>
+<td>OpenMVS</td>
+<td>Dense point cloud, mesh, refine, texture</td>
+<td>Copyleft, AGPL-3.0 [V]</td>
+<td>CPU/CUDA [U]</td>
+<td>Plug-in</td>
+<td><a href="https://github.com/cdcseacave/openMVS">https://github.com/cdcseacave/openMVS</a> [V]</td>
+</tr>
+<tr>
+<td>Metashape depth maps</td>
+<td>Depth-map MVS</td>
+<td>Proprietary</td>
+<td>CUDA, OpenCL 1.2; Vulkan for texture blending; <strong>Metal not mentioned</strong> [V manual]</td>
+<td>Reference</td>
+<td><a href="https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf">https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf</a></td>
+</tr>
+<tr>
+<td>MapAnything / VGGT depth</td>
+<td>Learned depth as dense prior</td>
+<td>see section 4</td>
+<td></td>
+<td>Optional</td>
+<td></td>
+</tr>
+<tr>
+<td>Own depth fusion (Metal, wgpu)</td>
+<td>To fill the M4 Pro and iMac Pro gap</td>
+<td>n/a</td>
+<td>Metal/wgpu</td>
+<td>Open question for RC-P2/P3</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-meshing-mesh-processing-texturing-uv-decimation">6. Meshing, mesh processing, texturing, UV, decimation<a class="headerlink" href="#6-meshing-mesh-processing-texturing-uv-decimation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mvs-texturing</td>
+<td>Texture a mesh from posed images (view selection, seam levelling)</td>
+<td>Permissive, BSD-3 [V LICENSE.txt]; GitHub shows "NOASSERTION"; last push 2026-03-11</td>
+<td>CPU (C++) [U]</td>
+<td>Default candidate</td>
+<td><a href="https://github.com/nmoehrle/mvs-texturing">https://github.com/nmoehrle/mvs-texturing</a> [V]</td>
+</tr>
+<tr>
+<td>Open3D</td>
+<td>Point clouds, meshes, Poisson, ICP, visualisation</td>
+<td>Permissive, MIT [V LICENSE]; 0.20.0 wheels: macOS arm64, Linux x86_64 and aarch64, Windows; <strong>no macOS x86_64</strong> [V PyPI]</td>
+<td>CPU; CUDA in some builds [U]</td>
+<td>Default</td>
+<td><a href="https://github.com/isl-org/Open3D">https://github.com/isl-org/Open3D</a> [V]; <a href="https://pypi.org/project/open3d/">https://pypi.org/project/open3d/</a> [V]</td>
+</tr>
+<tr>
+<td>trimesh</td>
+<td>Pure-Python mesh I/O and ops</td>
+<td>Permissive, MIT [V]; 5.2.2 pure Python wheel [V PyPI]</td>
+<td>CPU, any platform</td>
+<td>Default</td>
+<td><a href="https://github.com/mikedh/trimesh">https://github.com/mikedh/trimesh</a> [V]</td>
+</tr>
+<tr>
+<td>PyMeshLab</td>
+<td>MeshLab filters from Python</td>
+<td><strong>Copyleft, GPL-3.0 [V]</strong>; wheels for macOS arm64+x86_64, Linux x86_64+aarch64, Windows [V PyPI 2025.7.post1]</td>
+<td>CPU</td>
+<td>Plug-in only (not in default stack)</td>
+<td><a href="https://github.com/cnr-isti-vclab/pymeshlab">https://github.com/cnr-isti-vclab/pymeshlab</a> [V]</td>
+</tr>
+<tr>
+<td>meshoptimizer</td>
+<td>Simplification, vertex cache, meshopt/quantisation compression for glTF</td>
+<td>Permissive, MIT [V]; Python package name unknown [U]</td>
+<td>CPU</td>
+<td>Default (decimation, glTF compression)</td>
+<td><a href="https://github.com/zeux/meshoptimizer">https://github.com/zeux/meshoptimizer</a> [V]</td>
+</tr>
+<tr>
+<td>fast-simplification</td>
+<td>Quadric decimation, Python</td>
+<td>Permissive, MIT [V]; wheels incl. Linux aarch64, macOS arm64 and x86_64 [V PyPI 0.2.0]</td>
+<td>CPU</td>
+<td>Default</td>
+<td><a href="https://github.com/pyvista/fast-simplification">https://github.com/pyvista/fast-simplification</a> [V]</td>
+</tr>
+<tr>
+<td>xatlas</td>
+<td>UV atlas generation</td>
+<td>Permissive, MIT [V]; <code>xatlas</code> PyPI wheels macOS arm64+x86_64, Linux x86_64 [V]; Linux aarch64 not in the visible list [U]</td>
+<td>CPU</td>
+<td>Default</td>
+<td><a href="https://github.com/jpcy/xatlas">https://github.com/jpcy/xatlas</a> [V]</td>
+</tr>
+<tr>
+<td>Poisson / screened Poisson (Kazhdan)</td>
+<td>Surface reconstruction</td>
+<td>licence not checked [U]</td>
+<td>CPU</td>
+<td>Via COLMAP/Open3D</td>
+<td>unverified</td>
+</tr>
+<tr>
+<td>MeshLab</td>
+<td>Desktop mesh tool</td>
+<td>GPL-3.0 [U]</td>
+<td>desktop</td>
+<td>Reference</td>
+<td><a href="https://github.com/cnr-isti-vclab/meshlab">https://github.com/cnr-isti-vclab/meshlab</a></td>
+</tr>
+<tr>
+<td>darktable</td>
+<td>RAW development, CLI driven (RC-P7b)</td>
+<td>GPL-3.0 [U]</td>
+<td>macOS, Linux</td>
+<td>Plug-in (compared in RC-P7b)</td>
+<td>unverified</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-radiance-fields-and-gaussian-splatting-incl-underwater">7. Radiance fields and gaussian splatting (incl. underwater)<a class="headerlink" href="#7-radiance-fields-and-gaussian-splatting-incl-underwater" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gsplat</td>
+<td>Splat training library: pinhole and fisheye, 3DGUT, MCMC</td>
+<td>Permissive, Apache-2.0 [V]</td>
+<td>CUDA; no prebuilt aarch64 wheels, JIT build [V]; needed <code>TORCH_CUDA_ARCH_LIST=12.0</code> on GB10 [V blog]</td>
+<td>Default (GB10, CUDA)</td>
+<td><a href="https://github.com/nerfstudio-project/gsplat">https://github.com/nerfstudio-project/gsplat</a></td>
+</tr>
+<tr>
+<td>Brush</td>
+<td>Splat training on wgpu</td>
+<td>Permissive, Apache-2.0 [V]; README: macOS/Windows/Linux, AMD/Nvidia/Intel, Android, browser (Chrome 134+ for WebGPU) [V]</td>
+<td>wgpu (Metal, Vulkan), no CUDA</td>
+<td>Default (M4 Pro, X3, iMac Pro)</td>
+<td><a href="https://github.com/ArthurBrussee/brush">https://github.com/ArthurBrussee/brush</a></td>
+</tr>
+<tr>
+<td>OpenSplat</td>
+<td>Splat training, CPU/CUDA/Metal/HIP</td>
+<td><strong>Copyleft, AGPL-3.0 [U]</strong>; GitHub licence call returned "moved permanently" and was not followed</td>
+<td>CUDA, Metal, HIP [U]</td>
+<td>Plug-in</td>
+<td><a href="https://github.com/pierotofy/OpenSplat">https://github.com/pierotofy/OpenSplat</a></td>
+</tr>
+<tr>
+<td>3DGS original (Inria)</td>
+<td>Reference splat training</td>
+<td>Non-commercial research licence [U]</td>
+<td>CUDA</td>
+<td>Not used</td>
+<td><a href="https://github.com/graphdeco-inria/gaussian-splatting">https://github.com/graphdeco-inria/gaussian-splatting</a></td>
+</tr>
+<tr>
+<td>Instant-NGP</td>
+<td>NeRF/hash grid</td>
+<td>NVIDIA non-commercial [U]; GitHub reports NOASSERTION, file not read</td>
+<td>CUDA</td>
+<td>Not used</td>
+<td><a href="https://github.com/NVlabs/instant-ngp">https://github.com/NVlabs/instant-ngp</a></td>
+</tr>
+<tr>
+<td>2DGS / PGSR</td>
+<td>Surface-accurate splats</td>
+<td>research code, licences unchecked [U]</td>
+<td>CUDA</td>
+<td>Reference (splat-to-mesh)</td>
+<td>unverified</td>
+</tr>
+<tr>
+<td>WaterSplatting</td>
+<td>Underwater splats, nerfstudio 1.1.4, CUDA 11.8</td>
+<td>Permissive, Apache-2.0 [V]</td>
+<td>CUDA</td>
+<td>Plug-in candidate</td>
+<td><a href="https://github.com/water-splatting/water-splatting">https://github.com/water-splatting/water-splatting</a></td>
+</tr>
+<tr>
+<td>SeaThru-NeRF</td>
+<td>Underwater NeRF</td>
+<td>Permissive, Apache-2.0 [V]</td>
+<td>CUDA</td>
+<td>Reference</td>
+<td><a href="https://github.com/deborahLevy130/seathru_NeRF">https://github.com/deborahLevy130/seathru_NeRF</a></td>
+</tr>
+<tr>
+<td>RUSplatting</td>
+<td>Underwater splats</td>
+<td>Research-only [V]</td>
+<td>CUDA</td>
+<td>Not used</td>
+<td>unverified</td>
+</tr>
+<tr>
+<td>SeaSplat</td>
+<td>Underwater splats</td>
+<td>unknown [U]</td>
+<td>CUDA</td>
+<td>Reference</td>
+<td>unverified</td>
+</tr>
+<tr>
+<td>KIRI 3DGS-to-mesh</td>
+<td>Splat to mesh API</td>
+<td>Proprietary [V]</td>
+<td>cloud</td>
+<td>Reference</td>
+<td>see section 16</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-masking-and-segmentation">8. Masking and segmentation<a class="headerlink" href="#8-masking-and-segmentation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAM 2</td>
+<td>Promptable image/video segmentation</td>
+<td>Permissive, Apache-2.0 for checkpoints, demo and training code [V README]; <code>sam2</code> PyPI 1.1.0 is sdist only [V]</td>
+<td>PyTorch; CUDA expected, MPS/ROCm unverified [U]</td>
+<td>Default</td>
+<td><a href="https://github.com/facebookresearch/sam2">https://github.com/facebookresearch/sam2</a> [V]</td>
+</tr>
+<tr>
+<td>SAM 3 / SAM 3.1</td>
+<td>Concept (text) segmentation; <strong>exists</strong>, SAM 3.1 checkpoints released</td>
+<td><strong>Custom, "SAM License", last updated 2025-11-19 [V]</strong>: royalty-free grant to use, modify, distribute; terms include trade-control and military/ITAR end-use bans and a copy-of-agreement duty on redistribution; checkpoints gated on Hugging Face [V]; full text not read past section 3 [U]</td>
+<td>README states CUDA 12.6+ GPU [V]; no CPU/Metal claim</td>
+<td>Plug-in</td>
+<td><a href="https://github.com/facebookresearch/sam3">https://github.com/facebookresearch/sam3</a> [V]</td>
+</tr>
+<tr>
+<td>rembg</td>
+<td>Background removal CLI/lib</td>
+<td>Permissive, MIT [V]; PyPI 2.0.87; extras <code>[gpu]</code> (onnxruntime-gpu) and <code>[rocm]</code> (onnxruntime-rocm) [V README]; <strong>model weight licences (u2net, etc.) unread</strong> [U]</td>
+<td>ONNX Runtime: CPU, CUDA, ROCm; onnxruntime 1.32.0 wheels macOS arm64, Linux x86_64 and aarch64 (no macOS x86_64) [V PyPI]</td>
+<td>Default (weights to check)</td>
+<td><a href="https://github.com/danielgatis/rembg">https://github.com/danielgatis/rembg</a> [V]</td>
+</tr>
+<tr>
+<td>ONNX Runtime</td>
+<td>Inference runtime</td>
+<td>Permissive, MIT [V PyPI]</td>
+<td>see above</td>
+<td>Default</td>
+<td><a href="https://pypi.org/project/onnxruntime/">https://pypi.org/project/onnxruntime/</a> [V]</td>
+</tr>
+<tr>
+<td>TagLab</td>
+<td>AI-assisted segmentation and annotation (with SAM)</td>
+<td>Copyleft, GPL-3.0 [V]</td>
+<td>desktop</td>
+<td>Reference (reef)</td>
+<td><a href="https://github.com/cnr-isti-vclab/TagLab">https://github.com/cnr-isti-vclab/TagLab</a></td>
+</tr>
+<tr>
+<td>Metashape AI masks</td>
+<td>Automatic masking (2.2)</td>
+<td>Proprietary [U]</td>
+<td>n/a</td>
+<td>Reference</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-image-decoding-raw-metadata-video">9. Image decoding, RAW, metadata, video<a class="headerlink" href="#9-image-decoding-raw-metadata-video" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rawpy</td>
+<td>Python wrapper for LibRaw</td>
+<td>Permissive, MIT [V]; 0.28.0 wheels: macOS arm64, Linux x86_64 and aarch64, Windows incl. arm64; <strong>no macOS x86_64 wheel</strong>, so the iMac Pro builds from sdist [V PyPI]; bundled LibRaw version unchecked [U]</td>
+<td>CPU</td>
+<td>Default</td>
+<td><a href="https://github.com/letmaik/rawpy">https://github.com/letmaik/rawpy</a> [V]; <a href="https://pypi.org/project/rawpy/">https://pypi.org/project/rawpy/</a> [V]</td>
+</tr>
+<tr>
+<td>LibRaw</td>
+<td>RAW decoder</td>
+<td><strong>Dual-licensed: LGPL-2.1 or CDDL-1.0, user's choice [V COPYRIGHT]</strong>; 0.22 lists D850 and Sony ILCE-1 [V]; compressed ARW support not stated [U]</td>
+<td>CPU</td>
+<td>Default</td>
+<td><a href="https://github.com/LibRaw/LibRaw">https://github.com/LibRaw/LibRaw</a> [V]; <a href="https://www.libraw.org/supported-cameras">https://www.libraw.org/supported-cameras</a> [V]</td>
+</tr>
+<tr>
+<td>pillow-heif</td>
+<td>HEIC/HEIF for Pillow</td>
+<td>Permissive, BSD-3 [V]; 1.8.1 wheels for macOS x86_64 and arm64, Linux x86_64 and aarch64, musl, Windows [V PyPI]</td>
+<td>CPU</td>
+<td>Default</td>
+<td><a href="https://github.com/bigcat88/pillow_heif">https://github.com/bigcat88/pillow_heif</a> [V]</td>
+</tr>
+<tr>
+<td>libheif</td>
+<td>HEIF codec library</td>
+<td><strong>Copyleft, LGPL (library); samples MIT [V COPYING]</strong>; version not stated</td>
+<td>CPU</td>
+<td>Default (dynamic link, via wheel)</td>
+<td><a href="https://github.com/strukturag/libheif">https://github.com/strukturag/libheif</a> [V]</td>
+</tr>
+<tr>
+<td>ExifTool</td>
+<td>Metadata read/write (Perl)</td>
+<td>Artistic/GPL dual [U]</td>
+<td>CLI, all</td>
+<td>Default (external process)</td>
+<td><a href="https://exiftool.org">https://exiftool.org</a> [U]</td>
+</tr>
+<tr>
+<td>PyExifTool</td>
+<td>Python wrapper for ExifTool</td>
+<td>PyPI metadata: "GPLv3+/BSD" [V PyPI 0.5.6]</td>
+<td>CPU</td>
+<td>Optional; check which half applies [U]</td>
+<td><a href="https://pypi.org/project/pyexiftool/">https://pypi.org/project/pyexiftool/</a> [V]</td>
+</tr>
+<tr>
+<td>PyAV</td>
+<td>FFmpeg bindings</td>
+<td>Permissive, BSD-3 [V]; 19.0.2 needs Python &gt;=3.12; wheels macOS arm64 and x86_64, Linux x86_64 and aarch64 [V PyPI]</td>
+<td>CPU; FFmpeg GPU codecs per build [U]</td>
+<td>Default</td>
+<td><a href="https://github.com/PyAV-Org/PyAV">https://github.com/PyAV-Org/PyAV</a> [V]</td>
+</tr>
+<tr>
+<td>FFmpeg</td>
+<td>Video decode</td>
+<td>LGPL/GPL depending on build [U]</td>
+<td>all</td>
+<td>Default (LGPL build)</td>
+<td><a href="https://ffmpeg.org">https://ffmpeg.org</a> [U]</td>
+</tr>
+<tr>
+<td>gpmf-parser</td>
+<td>GoPro GPMF telemetry: accel (~200 Hz), gyro, GPS, magnetometer, shutter, ISO, orientation quaternions, gravity; HERO5-HERO13, MAX</td>
+<td>Permissive, Apache-2.0 [V]; Apache/MIT per note [V]</td>
+<td>C, portable</td>
+<td>Default</td>
+<td><a href="https://github.com/gopro/gpmf-parser">https://github.com/gopro/gpmf-parser</a></td>
+</tr>
+<tr>
+<td><code>gpmf</code> (PyPI)</td>
+<td>Python GPMF</td>
+<td>version 0.1, licence blank in metadata [V PyPI]</td>
+<td>CPU</td>
+<td>Not used (unvetted)</td>
+<td><a href="https://pypi.org/project/gpmf/">https://pypi.org/project/gpmf/</a></td>
+</tr>
+<tr>
+<td>Pillow, numpy, OpenCV</td>
+<td>Core imaging</td>
+<td>Permissive [U]</td>
+<td>all</td>
+<td>Default</td>
+<td>unverified</td>
+</tr>
+</tbody>
+</table>
+<p>No evidence was found that GPMF has been used as an SfM prior.</p>
+<h2 id="10-colour-and-underwater-correction">10. Colour and underwater correction<a class="headerlink" href="#10-colour-and-underwater-correction" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sea-Thru (Akkaynak and Treibitz, CVPR 2019)</td>
+<td>Physically based underwater colour recovery; needs per-pixel range</td>
+<td>No official code [V]</td>
+<td>n/a</td>
+<td>Reference</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Sea-Thru-Impl (Teragion)</td>
+<td>Small reimplementation</td>
+<td>GPL-3.0 and MIT, as the note reads [V]</td>
+<td>Python</td>
+<td>Reference only</td>
+<td><a href="https://github.com/Teragion/Sea-Thru-Impl">https://github.com/Teragion/Sea-Thru-Impl</a></td>
+</tr>
+<tr>
+<td>Own set-wide white balance, exposure, tone</td>
+<td>Minimal pipeline on rawpy</td>
+<td>n/a</td>
+<td>CPU</td>
+<td>Default (RC-P7b)</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Refraction-aware camera models</td>
+<td>Flat/dome port</td>
+<td>see Refractive COLMAP, section 1</td>
+<td></td>
+<td>Differentiator</td>
+<td><a href="https://isprs-archives.copernicus.org/articles/XLIII-B2-2020/977/2020/">https://isprs-archives.copernicus.org/articles/XLIII-B2-2020/977/2020/</a> [V]</td>
+</tr>
+</tbody>
+</table>
+<p>Colour correction after geometry (the reconstruction supplies Sea-thru's range), with an uncorrected
+copy kept for features, is the agent's reasoning in the note, not sourced.</p>
+<p>Not covered: backscatter, caustics, moving subjects, scale methods, swim patterns, image counts.</p>
+<h2 id="11-capture-side-apps-and-device-apis">11. Capture-side apps and device APIs<a class="headerlink" href="#11-capture-side-apps-and-device-apis" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Record3D app + <code>record3d</code> library</td>
+<td>Streams RGB-D with LiDAR, camera poses, confidence maps over USB from iPhone</td>
+<td>Library Copyleft, LGPL-2.1 [V]; app proprietary [U]</td>
+<td>iOS app; Python lib; Linux needs <code>libusbmuxd</code> [V]</td>
+<td>Plug-in (pose-bearing iPhone ingest)</td>
+<td><a href="https://github.com/marek-simonik/record3d">https://github.com/marek-simonik/record3d</a> [V]</td>
+</tr>
+<tr>
+<td>Polycam raw data export</td>
+<td>Images, camera intrinsics/extrinsics, depth maps</td>
+<td>Proprietary app</td>
+<td><strong>Only iOS devices with LiDAR, LiDAR or Room mode, Developer mode on, same device</strong> [U, search snippet; page returned 403]; <code>polyform</code> converts to NeRF formats [U]</td>
+<td>Plug-in (ingest)</td>
+<td><a href="https://learn.poly.cam/hc/en-us/articles/38276871185044">https://learn.poly.cam/hc/en-us/articles/38276871185044</a> [U]</td>
+</tr>
+<tr>
+<td>Scaniverse (Niantic Spatial)</td>
+<td>Splats: SPZ, PLY; meshes: GLB, USDZ; web, iOS, Android [V]. Also OBJ/FBX/STL per community info [U]. Pose export not mentioned [V, absence]</td>
+<td>Proprietary app</td>
+<td>iOS, Android, web</td>
+<td>Plug-in (ingest of splats/meshes)</td>
+<td><a href="https://nianticspatial.com/products/scaniverse">https://nianticspatial.com/products/scaniverse</a> [V]</td>
+</tr>
+<tr>
+<td>Apple Object Capture / <code>PhotogrammetrySession</code></td>
+<td>On-device photogrammetry; USDZ out</td>
+<td>Proprietary (Apple SDK)</td>
+<td>macOS 12+, iOS/iPadOS 17+ [V metadata]; needs a GPU with at least 4 GB RAM and <strong>ray tracing support</strong>; on iOS, select LiDAR devices [V article]; inputs include depth, gravity; Intel support and iMac Pro Vega eligibility unknown [U]</td>
+<td>Reference; plug-in on M4 Pro</td>
+<td><a href="https://developer.apple.com/documentation/realitykit/photogrammetrysession">https://developer.apple.com/documentation/realitykit/photogrammetrysession</a> [V]; <a href="https://developer.apple.com/documentation/realitykit/creating-3d-objects-from-photographs">https://developer.apple.com/documentation/realitykit/creating-3d-objects-from-photographs</a> [V]</td>
+</tr>
+<tr>
+<td>NeRFCapture, iPhone ProRAW, HEIC depth</td>
+<td>Pose/depth capture</td>
+<td>unverified [U]</td>
+<td>iOS</td>
+<td>Unverified</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Open GoPro (BLE + HTTP/Wi-Fi API, Python SDK <code>open_gopro</code>, Kotlin SDK)</td>
+<td>Control camera, settings, media, preview stream, capabilities per camera/firmware; demos in several languages</td>
+<td>Python SDK MIT [V PyPI 0.22.0]; <strong>repo itself has no licence statement: root LICENSE only refers to third-party licences, GitHub shows "Other"</strong> [V]; Python &lt;3.14</td>
+<td>Python 3.11-3.13</td>
+<td>Optional (capture control is a non-goal)</td>
+<td><a href="https://github.com/gopro/OpenGoPro">https://github.com/gopro/OpenGoPro</a> [V]; <a href="https://pypi.org/project/open-gopro/">https://pypi.org/project/open-gopro/</a> [V]</td>
+</tr>
+<tr>
+<td>DJI MSDK v5</td>
+<td>Drone app SDK; Mini 4 Pro supported only with RC-N2, not RC 2</td>
+<td>Proprietary [U]</td>
+<td>Android/iOS</td>
+<td>Not used (capture is a non-goal)</td>
+<td><a href="https://dronedj.com/2025/03/21/dji-mini-4-pro-msdk/">https://dronedj.com/2025/03/21/dji-mini-4-pro-msdk/</a> [V]</td>
+</tr>
+<tr>
+<td>Litchi, Maven, Drone Harmony</td>
+<td>Mission planners named for Mini 4 Pro</td>
+<td>Proprietary [V named only]</td>
+<td></td>
+<td>Not used</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>DJI Mini 4 Pro EXIF/XMP fields are unverified.</p>
+<h2 id="12-viewers-and-rendering-web-and-desktop">12. Viewers and rendering (web and desktop)<a class="headerlink" href="#12-viewers-and-rendering-web-and-desktop" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>three.js</td>
+<td>WebGL/WebGPU 3D library</td>
+<td>Permissive, MIT [V]</td>
+<td>Browser</td>
+<td>Default (viewer base)</td>
+<td><a href="https://github.com/mrdoob/three.js">https://github.com/mrdoob/three.js</a> [V]</td>
+</tr>
+<tr>
+<td>Spark (sparkjs.dev)</td>
+<td>3DGS renderer for three.js; mixes splats and meshes; WebGL2; reads PLY (also compressed), SPZ, SPLAT, KSPLAT, SOG</td>
+<td>Permissive, MIT [V]</td>
+<td>Browser, WebGL2 (README targets 98%+)</td>
+<td>Default (splat view)</td>
+<td><a href="https://github.com/sparkjsdev/spark">https://github.com/sparkjsdev/spark</a> [V]</td>
+</tr>
+<tr>
+<td>PlayCanvas SuperSplat</td>
+<td>Splat editor/viewer</td>
+<td>Permissive, MIT [V]</td>
+<td>Browser</td>
+<td>Optional (editing, clean-up)</td>
+<td><a href="https://github.com/playcanvas/supersplat">https://github.com/playcanvas/supersplat</a> [V]</td>
+</tr>
+<tr>
+<td>splat-transform</td>
+<td>CLI/lib: reads PLY, compressed PLY, SOG, streamed SOG, SPZ, SPLAT, KSPLAT, LCC; writes PLY, compressed PLY, SOG, streamed SOG, SPZ, GLB, CSV, HTML viewer, LOD, voxel, WebP</td>
+<td>Permissive, MIT [V]</td>
+<td>Node (npm); Docker backend with GPU/Vulkan setup documented [V]</td>
+<td>Default (conversion)</td>
+<td><a href="https://github.com/playcanvas/splat-transform">https://github.com/playcanvas/splat-transform</a> [V]</td>
+</tr>
+<tr>
+<td>PlayCanvas engine</td>
+<td>Engine reading PLY, SOG, SPZ, splat-GLB</td>
+<td>licence not read [U]</td>
+<td>Browser</td>
+<td>Reference</td>
+<td>per landscape note [V]</td>
+</tr>
+<tr>
+<td>Babylon.js</td>
+<td>Web 3D engine</td>
+<td>Permissive, Apache-2.0 [V]</td>
+<td>Browser</td>
+<td>Optional</td>
+<td><a href="https://github.com/BabylonJS/Babylon.js">https://github.com/BabylonJS/Babylon.js</a> [V]</td>
+</tr>
+<tr>
+<td>potree</td>
+<td>Web viewer for large point clouds</td>
+<td>Permissive, BSD-style (2-clause text, copyright Markus Schuetz) [V]; GitHub shows NOASSERTION; last push 2026-11-20</td>
+<td>Browser</td>
+<td>Optional</td>
+<td><a href="https://github.com/potree/potree">https://github.com/potree/potree</a> [V]</td>
+</tr>
+<tr>
+<td>Rerun</td>
+<td>Multimodal logging and viewer; Python, Rust, C++ SDKs; <code>pip install rerun-sdk</code> bundles viewer</td>
+<td>Permissive, MIT or Apache-2.0 [V README]; 0.43.2 wheels: macOS arm64, Linux x86_64 and aarch64, Windows; <strong>no macOS x86_64</strong> [V PyPI]</td>
+<td>Rust viewer (wgpu)</td>
+<td>Default (dev/debug viewer)</td>
+<td><a href="https://github.com/rerun-io/rerun">https://github.com/rerun-io/rerun</a> [V]</td>
+</tr>
+<tr>
+<td>Viscore</td>
+<td>Large SfM model viewing, 100 Island Challenge</td>
+<td>unknown [U]</td>
+<td>desktop</td>
+<td>Reference (reef)</td>
+<td><a href="https://chei.ucsd.edu/?p=2805">https://chei.ucsd.edu/?p=2805</a> [V named]</td>
+</tr>
+<tr>
+<td>Cesium / CesiumJS</td>
+<td>3D Tiles viewer</td>
+<td>Apache-2.0 [U]</td>
+<td>Browser</td>
+<td>Optional</td>
+<td>unverified</td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-formats">13. Formats<a class="headerlink" href="#13-formats" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>What it is</th>
+<th>Licence / spec status</th>
+<th>Used by</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>glTF 2.0 / GLB</td>
+<td>Web and engine mesh interchange</td>
+<td>Khronos open standard</td>
+<td>all viewers, engines</td>
+<td>Default (mesh)</td>
+<td><a href="https://www.khronos.org/gltf/">https://www.khronos.org/gltf/</a> [U]</td>
+</tr>
+<tr>
+<td><code>KHR_gaussian_splatting</code></td>
+<td>Splats in glTF</td>
+<td><strong>Status line reads "Complete, Ratified by the Khronos Group"</strong>, spec CC-BY-4.0 [V]; the landscape note had "release candidate 2026-02-04"</td>
+<td>Cesium, Niantic, Esri, Nvidia, Autodesk contributors listed [V]</td>
+<td>Default (splat interchange, target)</td>
+<td><a href="https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_gaussian_splatting/README.md">https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_gaussian_splatting/README.md</a> [V]; <a href="https://digitalproduction.com/2026/02/04/gltf-learns-to-splat-without-losing-the-plot/">https://digitalproduction.com/2026/02/04/gltf-learns-to-splat-without-losing-the-plot/</a> [V]</td>
+</tr>
+<tr>
+<td><code>KHR_gaussian_splatting_compression_spz</code></td>
+<td>SPZ compression in glTF</td>
+<td>RC at 2026-02-04 [V note]; the directory name checked on main was not found (<code>..._spz_2</code> 404) [U]</td>
+<td></td>
+<td>Optional</td>
+<td>as above</td>
+</tr>
+<tr>
+<td>SPZ</td>
+<td>Niantic compressed splat format (~90% smaller than PLY)</td>
+<td>Permissive, MIT [V repo]</td>
+<td>Scaniverse, Spark, splat-transform</td>
+<td>Default (delivery)</td>
+<td><a href="https://github.com/nianticlabs/spz">https://github.com/nianticlabs/spz</a> [V]</td>
+</tr>
+<tr>
+<td>SOG</td>
+<td>PlayCanvas compressed splat (<code>meta.json</code> + WebP textures)</td>
+<td>PlayCanvas docs; spec licence not read [U]</td>
+<td>PlayCanvas, Spark, splat-transform</td>
+<td>Default (web delivery)</td>
+<td><a href="https://developer.playcanvas.com/user-manual/gaussian-splatting/formats/sog/">https://developer.playcanvas.com/user-manual/gaussian-splatting/formats/sog/</a> [V named]</td>
+</tr>
+<tr>
+<td>PLY (3DGS)</td>
+<td>Uncompressed splat/point cloud interchange</td>
+<td>de-facto</td>
+<td>everything</td>
+<td>Default (source)</td>
+<td><a href="https://developer.playcanvas.com/user-manual/gaussian-splatting/formats/ply/">https://developer.playcanvas.com/user-manual/gaussian-splatting/formats/ply/</a> [V named]</td>
+</tr>
+<tr>
+<td>OBJ</td>
+<td>Mesh interchange</td>
+<td>de-facto</td>
+<td>everything</td>
+<td>Default (interchange)</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>USD / USDZ</td>
+<td>Apple/AR and robotics sim scene format</td>
+<td><code>usd-core</code> 26.11 on PyPI, licence "TOST-1.0" (Tomorrow Open Source Technology License) [V PyPI]; wheels macOS universal2, Linux x86_64 and aarch64, Windows; Python 3.11-3.14 [V]</td>
+<td>Apple Quick Look, Object Capture, Scaniverse export, Omniverse</td>
+<td>Default (Apple output)</td>
+<td><a href="https://pypi.org/project/usd-core/">https://pypi.org/project/usd-core/</a> [V]</td>
+</tr>
+<tr>
+<td>COLMAP text/binary (<code>cameras</code>, <code>images</code>, <code>points3D</code>)</td>
+<td>The SfM exchange format</td>
+<td>BSD-3 project [V]</td>
+<td>nearly every tool</td>
+<td>Default (hub)</td>
+<td><a href="https://github.com/colmap/colmap">https://github.com/colmap/colmap</a></td>
+</tr>
+<tr>
+<td>nerfstudio <code>transforms.json</code></td>
+<td>Poses + intrinsics JSON</td>
+<td>Apache-2.0 project [U]</td>
+<td>Brush, gsplat, nerfstudio</td>
+<td>Default (splat input)</td>
+<td><a href="https://github.com/nerfstudio-project/nerfstudio">https://github.com/nerfstudio-project/nerfstudio</a> [U]</td>
+</tr>
+<tr>
+<td>3D Tiles</td>
+<td>Streaming tiled geometry; LOD splats added Apr 2026 [V note]</td>
+<td>OGC standard [U]; <code>3d-tiles-tools</code> Apache-2.0 [V]</td>
+<td>Cesium</td>
+<td>Optional</td>
+<td><a href="https://github.com/CesiumGS/3d-tiles-tools">https://github.com/CesiumGS/3d-tiles-tools</a> [V]</td>
+</tr>
+<tr>
+<td>E57 / LAS / LAZ</td>
+<td>Point cloud exchange</td>
+<td>ASTM / ASPRS [U]</td>
+<td>Polycam exports LAS/LAZ/PLY/PTS/XYZ [U]</td>
+<td>Only if survey input arrives</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>MCAP, rrd</td>
+<td>Rerun/robot logs</td>
+<td>n/a</td>
+<td>Rerun ingests MCAP, rrd, LeRobot [V]</td>
+<td>Optional</td>
+<td><a href="https://github.com/rerun-io/rerun">https://github.com/rerun-io/rerun</a></td>
+</tr>
+<tr>
+<td><code>provenance.json</code>, world frame</td>
+<td>Project's own contract</td>
+<td>n/a (see RC-P5)</td>
+<td></td>
+<td>Default</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<h2 id="14-game-engines-and-dcc-import-paths">14. Game engines and DCC import paths<a class="headerlink" href="#14-game-engines-and-dcc-import-paths" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Import path</th>
+<th>Licence</th>
+<th>Platforms</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unity glTFast</td>
+<td>glTF/GLB import and export package</td>
+<td>Permissive, Apache-2.0 [V]</td>
+<td>Unity</td>
+<td>Default (Unity path)</td>
+<td><a href="https://github.com/atteneder/glTFast">https://github.com/atteneder/glTFast</a> [V]</td>
+</tr>
+<tr>
+<td>Unreal Engine</td>
+<td>glTF and GLB import through the Interchange framework; Import Into Level works with glTF and MaterialX [U, search snippet]. The Epic page read lists KHR_lights_punctual, KHR_materials_unlit, KHR_materials_clearcoat, KHR_materials_variants, KHR_mesh_quantization, KHR_texture_transform, and does <strong>not</strong> mention KHR_draco or KHR_gaussian_splatting [V, page is the export-support page]</td>
+<td>Proprietary engine</td>
+<td>Windows, Mac, Linux</td>
+<td>Default (mesh path)</td>
+<td><a href="https://dev.epicgames.com/documentation/en-us/unreal-engine/gltf-file-format-support-in-unreal-engine">https://dev.epicgames.com/documentation/en-us/unreal-engine/gltf-file-format-support-in-unreal-engine</a> [V]</td>
+</tr>
+<tr>
+<td>Godot</td>
+<td>Native glTF 2.0 import</td>
+<td>Permissive, MIT [V repo]; native glTF support [U]</td>
+<td>all</td>
+<td>Default</td>
+<td><a href="https://github.com/godotengine/godot">https://github.com/godotengine/godot</a></td>
+</tr>
+<tr>
+<td>Blender</td>
+<td>Native glTF importer/exporter (Khronos glTF-Blender-IO, Apache-2.0 [V])</td>
+<td>GPL (Blender itself) [U]</td>
+<td>all</td>
+<td>Default (inspection)</td>
+<td><a href="https://github.com/KhronosGroup/glTF-Blender-IO">https://github.com/KhronosGroup/glTF-Blender-IO</a> [V]</td>
+</tr>
+<tr>
+<td>Apple Quick Look / RealityKit</td>
+<td>USDZ</td>
+<td>Proprietary</td>
+<td>iOS, macOS</td>
+<td>Default (AR path)</td>
+<td>see section 11</td>
+</tr>
+<tr>
+<td>Omniverse gsplat converter</td>
+<td>splat to USD</td>
+<td>unknown [U]</td>
+<td></td>
+<td>Reference</td>
+<td><a href="https://docs.omniverse.nvidia.com/extensions/latest/ext_gsplat-converter/manual.html">https://docs.omniverse.nvidia.com/extensions/latest/ext_gsplat-converter/manual.html</a> [U]</td>
+</tr>
+</tbody>
+</table>
+<p>Splat-in-engine paths (KHR_gaussian_splatting in Unity, Unreal, Godot) are unverified.</p>
+<h2 id="15-agent-and-integration">15. Agent and integration<a class="headerlink" href="#15-agent-and-integration" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCP Python SDK (<code>modelcontextprotocol/python-sdk</code>)</td>
+<td>Build MCP servers and clients</td>
+<td>Permissive, MIT [V]; PyPI <code>mcp</code> 2.3.0, Python &gt;=3.10, pure wheel [V]</td>
+<td>any</td>
+<td>Default (agent surface, RC-P6)</td>
+<td><a href="https://github.com/modelcontextprotocol/python-sdk">https://github.com/modelcontextprotocol/python-sdk</a> [V]; <a href="https://pypi.org/project/mcp/">https://pypi.org/project/mcp/</a> [V]</td>
+</tr>
+<tr>
+<td><code>metashape-mcp</code></td>
+<td>MCP server over the Metashape Python API; 106 tools reported</td>
+<td>Author and licence unverified [U]</td>
+<td>needs licensed Metashape Professional</td>
+<td>Reference</td>
+<td>PyPI (name only)</td>
+</tr>
+<tr>
+<td>SceneAgent</td>
+<td>Paper, arXiv 2610.34745</td>
+<td>unread [U]</td>
+<td></td>
+<td>Reference</td>
+<td>unverified</td>
+</tr>
+<tr>
+<td>NodeODM REST</td>
+<td>Task API</td>
+<td>AGPL project [V, partly]</td>
+<td></td>
+<td>Reference</td>
+<td><a href="https://github.com/WebODM/WebODM">https://github.com/WebODM/WebODM</a></td>
+</tr>
+</tbody>
+</table>
+<p>Two searches found no MCP server for COLMAP or splat training; that is a fact about two searches,
+not proof of a gap.</p>
+<h2 id="16-commercial-products">16. Commercial products<a class="headerlink" href="#16-commercial-products" title="Permanent link">&para;</a></h2>
+<p>Prices only where the notes hold them.</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agisoft Metashape</td>
+<td>Industry reference; Standard $179, Professional $3,499, perpetual node-locked; Professional adds Python, network/cloud processing, 4D, DEM, orthomosaic [V]. 2.3.x; <strong>no gaussian splats</strong> [V]; network processing is task-level (server, workers on shared storage, clients) [V]; frame, fisheye, spherical, cylindrical, RPC cameras [V]; iPhone TrueDepth loads with depth, rear LiDAR not mentioned [V]</td>
+<td>Proprietary</td>
+<td>CUDA, OpenCL 1.2, Vulkan (texture); Metal not mentioned [V]</td>
+<td>Reference</td>
+<td><a href="https://www.agisoft.com/buy/online-store/">https://www.agisoft.com/buy/online-store/</a> [V]; <a href="https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf">https://www.agisoft.com/pdf/metashape-pro_2_3_en.pdf</a> [V]</td>
+</tr>
+<tr>
+<td>RealityScan (Epic, ex-RealityCapture)</td>
+<td>Free under $1M revenue, $1,250/seat/year above [V via news]; 2.1 (Nov 2025) CLI <code>importColmap</code> + Remote Command plugin (REST/gRPC); 2.2 (Jun 2026) AMD GPUs</td>
+<td>Proprietary</td>
+<td>Windows-only [U]</td>
+<td>Reference</td>
+<td>news only</td>
+</tr>
+<tr>
+<td>Pix4Dmatic / PIX4Dcatch / PIX4Dcloud</td>
+<td>Large-scale survey, CAD vectors, mobile capture</td>
+<td>Proprietary</td>
+<td></td>
+<td>Reference</td>
+<td><a href="https://www.pix4d.com/product/pix4dmatic/">https://www.pix4d.com/product/pix4dmatic/</a> [V]</td>
+</tr>
+<tr>
+<td>3DF Zephyr</td>
+<td>Free (50 photos), Lite 199 EUR, Pro 4,200 EUR or 250 EUR/month; photogrammetry + laser scans, GIS/CAD</td>
+<td>Proprietary</td>
+<td></td>
+<td>Reference</td>
+<td><a href="https://www.3dflow.net/3df-zephyr-photogrammetry-software/">https://www.3dflow.net/3df-zephyr-photogrammetry-software/</a> [V]</td>
+</tr>
+<tr>
+<td>DJI Terra</td>
+<td>Photogrammetry, 3DGS, multispectral, LiDAR, cluster reconstruction; trial capped at 500 photos</td>
+<td>Proprietary</td>
+<td>DJI-tied</td>
+<td>Reference</td>
+<td><a href="https://enterprise.dji.com/dji-terra">https://enterprise.dji.com/dji-terra</a> [V]</td>
+</tr>
+<tr>
+<td>iTwin Capture (Bentley)</td>
+<td>Features not verified</td>
+<td>Proprietary</td>
+<td></td>
+<td>Reference</td>
+<td>unverified [U]</td>
+</tr>
+<tr>
+<td>Polycam</td>
+<td>Phone/cloud scanning; API mentioned; exports OBJ, GLB, FBX, DAE, STL, USDZ meshes and DXF, PLY, LAZ, XYZ, PTS points; free tier GLTF only [U, search snippet]</td>
+<td>Proprietary</td>
+<td>iOS, web</td>
+<td>Reference</td>
+<td><a href="https://learn.poly.cam/hc/en-us/articles/27756102599572">https://learn.poly.cam/hc/en-us/articles/27756102599572</a> [U]</td>
+</tr>
+<tr>
+<td>KIRI Engine</td>
+<td>Pay-per-credit API incl. 3DGS-to-mesh [V]</td>
+<td>Proprietary</td>
+<td>cloud</td>
+<td>Reference</td>
+<td><a href="https://www.kiriengine.app/features/export-formats">https://www.kiriengine.app/features/export-formats</a> [U]</td>
+</tr>
+<tr>
+<td>Luma</td>
+<td>$1/capture API, possibly stale [U]</td>
+<td>Proprietary</td>
+<td>cloud</td>
+<td>Reference</td>
+<td>unverified</td>
+</tr>
+<tr>
+<td>Scaniverse</td>
+<td>see section 11</td>
+<td>Proprietary</td>
+<td></td>
+<td>Reference</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple Object Capture</td>
+<td>see section 11</td>
+<td>Proprietary</td>
+<td></td>
+<td>Reference</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="17-frameworks-and-runtimes">17. Frameworks and runtimes<a class="headerlink" href="#17-frameworks-and-runtimes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Licence</th>
+<th>Platforms / GPU</th>
+<th>Role</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PyTorch</td>
+<td>Tensor/NN runtime</td>
+<td>Permissive, BSD-style with bundled Apache/MIT parts [V PyPI 2.15.0 expression]; repo LICENSE read</td>
+<td><strong>PyPI 2.15.0: macOS arm64 (14.0), Linux x86_64 and aarch64, Windows; no macOS x86_64 wheel [V]</strong>. CUDA index <code>cu132</code> has 2.15.0 for Linux aarch64 and x86_64 [V]; <code>cu130</code> lists 2.9.1 aarch64 [V]. ROCm index: <code>rocm7.2</code> up to 2.14.1, <code>rocm7.1</code> up to 2.13.0, Linux x86_64 [V]. Whether gfx1151 (X3) is supported by those wheels: unknown [U]. MPS on M4 Pro [U]</td>
+<td>Default</td>
+<td><a href="https://pypi.org/project/torch/">https://pypi.org/project/torch/</a> [V]; <a href="https://download.pytorch.org/whl/rocm7.2/torch/">https://download.pytorch.org/whl/rocm7.2/torch/</a> [V]</td>
+</tr>
+<tr>
+<td>Hugging Face Transformers</td>
+<td>Hosts LightGlue</td>
+<td>Apache-2.0 [U]</td>
+<td></td>
+<td>Optional</td>
+<td><a href="https://huggingface.co/docs/transformers/main/en/model_doc/lightglue">https://huggingface.co/docs/transformers/main/en/model_doc/lightglue</a> [V named]</td>
+</tr>
+<tr>
+<td>Burn / wgpu</td>
+<td>Rust ML and GPU layers under Brush</td>
+<td>permissive [U]</td>
+<td>Metal, Vulkan</td>
+<td>Via Brush</td>
+<td><a href="https://github.com/tracel-ai/burn">https://github.com/tracel-ai/burn</a> [U]</td>
+</tr>
+</tbody>
+</table>
+<h2 id="18-platform-matrix">18. Platform matrix<a class="headerlink" href="#18-platform-matrix" title="Permanent link">&para;</a></h2>
+<p>Expectation table, not measurement. Prototype RC-P2 confirms or replaces every cell with a command
+and its output. "Native GPU" = a vendor GPU path exists for that machine; "CPU only" = runs, no GPU
+path; "build needed" = no wheel or binary for that architecture, a source build is required.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>M4 Pro (Metal)</th>
+<th>GB10 (ARM64 + CUDA 13)</th>
+<th>X3 (x86_64, ROCm/Vulkan)</th>
+<th>iMac Pro (x86_64 macOS, CPU)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COLMAP SfM (SIFT, mapper)</td>
+<td>CPU only; GPU SIFT unknown [U]</td>
+<td>native GPU (build needed on aarch64; apt build fell back to CPU SIFT) [V blog]</td>
+<td>native GPU via HIP build, RDNA3.5 may need <code>HSA_OVERRIDE_GFX_VERSION</code> [V install.rst]; gfx1151 unknown [U]</td>
+<td>CPU only [U]</td>
+</tr>
+<tr>
+<td>COLMAP dense (patch_match)</td>
+<td>no (no Metal/CPU path in docs read) [V absence]</td>
+<td>native GPU (CUDA) [U]</td>
+<td>native GPU (HIP build) [V install.rst]</td>
+<td>no [U]</td>
+</tr>
+<tr>
+<td>pycolmap</td>
+<td>wheel (arm64) [V]</td>
+<td>build needed (no aarch64 wheel) [V]</td>
+<td>wheel (x86_64; CUDA wheel is CUDA-only) [V]</td>
+<td>build needed (no macOS x86_64 wheel) [V]</td>
+</tr>
+<tr>
+<td>GLOMAP</td>
+<td>CPU [U]</td>
+<td>CPU [U]</td>
+<td>CPU [U]</td>
+<td>CPU [U]</td>
+</tr>
+<tr>
+<td>PyTorch</td>
+<td>wheel, MPS [U]</td>
+<td>wheel, CUDA (cu130/cu132 aarch64) [V]</td>
+<td>wheel, ROCm index (gfx1151 unknown) [V/U]</td>
+<td>build needed (no wheel on latest; old versions [U]) [V]</td>
+</tr>
+<tr>
+<td>hloc + LightGlue + ALIKED</td>
+<td>MPS/CPU [U]</td>
+<td>native GPU [U]</td>
+<td>native GPU (ROCm) [U]</td>
+<td>CPU [U]</td>
+</tr>
+<tr>
+<td>MapAnything (Apache ckpt)</td>
+<td>MPS or CPU [U]</td>
+<td>native GPU [U]</td>
+<td>ROCm unknown [U]</td>
+<td>CPU, slow [U]</td>
+</tr>
+<tr>
+<td>gsplat</td>
+<td>no (CUDA JIT) [V]</td>
+<td>build/JIT needed (no aarch64 wheels) [V]</td>
+<td>no (CUDA) [U]</td>
+<td>no [U]</td>
+</tr>
+<tr>
+<td>Brush (wgpu)</td>
+<td>native GPU (Metal) [V README]</td>
+<td>Vulkan [U]</td>
+<td>Vulkan [V README: AMD]</td>
+<td>Metal on Vega [U]</td>
+</tr>
+<tr>
+<td>SAM 2</td>
+<td>MPS/CPU [U]</td>
+<td>native GPU [U]</td>
+<td>ROCm unknown [U]</td>
+<td>CPU [U]</td>
+</tr>
+<tr>
+<td>rembg (ONNX)</td>
+<td>CPU (CoreML unverified) [V wheels]</td>
+<td>CPU/CUDA [V extras]</td>
+<td>CPU/ROCm [V extras]</td>
+<td>CPU, wheels arm64-only: build/sdist [V]</td>
+</tr>
+<tr>
+<td>rawpy / LibRaw</td>
+<td>wheel [V]</td>
+<td>wheel (aarch64) [V]</td>
+<td>wheel [V]</td>
+<td>sdist build (no x86_64 mac wheel) [V]</td>
+</tr>
+<tr>
+<td>pillow-heif</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+</tr>
+<tr>
+<td>PyAV</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+</tr>
+<tr>
+<td>Open3D</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>build needed (no x86_64 mac wheel) [V]</td>
+</tr>
+<tr>
+<td>trimesh, xatlas, fast-simplification</td>
+<td>wheel [V]</td>
+<td>wheel (xatlas aarch64 unknown) [V/U]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+</tr>
+<tr>
+<td>Rerun SDK</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>build needed (no x86_64 mac wheel) [V]</td>
+</tr>
+<tr>
+<td>usd-core</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel [V]</td>
+<td>wheel (universal2) [V]</td>
+</tr>
+<tr>
+<td>MCP SDK</td>
+<td>pure Python [V]</td>
+<td>pure Python [V]</td>
+<td>pure Python [V]</td>
+<td>pure Python [V]</td>
+</tr>
+<tr>
+<td>Apple Object Capture</td>
+<td>native GPU [V metadata; hardware fit M4 Pro [U]]</td>
+<td>no</td>
+<td>no</td>
+<td>unknown (needs ray-tracing GPU) [V/U]</td>
+</tr>
+</tbody>
+</table>
+<h2 id="19-licence-traps">19. Licence traps<a class="headerlink" href="#19-licence-traps" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>VGGT, Pi3, DUSt3R/MASt3R, original MapAnything weights are non-commercial.</strong> Only
+   <code>map-anything-apache</code> (Apache-2.0) and the form-gated <code>VGGT-1B-Commercial</code> are commercial-safe.
+   Code under a permissive licence does not license its weights.</li>
+<li><strong>SuperPoint is restrictive and so is its inference file</strong> in LightGlue (<code>lightglue/superpoint.py</code>).
+   LightGlue's README states its own code and weights are Apache-2.0; the research note's claim that
+   SuperPoint-trained LightGlue weights inherit the restriction is not what the README says. Decide
+   with a lawyer's eye, or avoid by default: ALIKED/DISK + LightGlue.</li>
+<li><strong>AGPL: OpenMVS, OpenSplat [U], WebODM.</strong> A hosted service must offer source. Plug-ins only, run
+   as separate processes.</li>
+<li><strong>GPL: PyMeshLab (GPL-3.0), TagLab, Sea-Thru-Impl, MeshLab, darktable [U].</strong> Do not link into the
+   engine. PyExifTool is listed "GPLv3+/BSD" on PyPI: check which applies, or call <code>exiftool</code> directly.</li>
+<li><strong>LGPL: LibRaw (also CDDL option), libheif, <code>record3d</code>.</strong> Wheels bundle the libraries; dynamic
+   linking and shipping notices apply. LibRaw's CDDL option is the way out of LGPL.</li>
+<li><strong>SAM 3 is a custom licence</strong>, not Apache. Grant is broad but carries trade-control and military
+   end-use terms and a duty to ship the agreement; checkpoints are gated. SAM 2 is Apache-2.0.</li>
+<li><strong>Open GoPro repo has no licence statement</strong>; only the Python SDK is MIT. Treat the spec text and
+   demos as unlicensed until clarified.</li>
+<li><strong>COLMAP "BSD-3" excludes dependencies</strong>: a CUDA, FreeImage or similar build may carry other terms.</li>
+<li><strong>Instant-NGP and Inria 3DGS</strong> are non-commercial [U]; RUSplatting is research-only.</li>
+<li><strong>rembg model weights</strong> (u2net, etc.) have their own licences, unread.</li>
+<li><strong>Proprietary SDKs</strong> (DJI MSDK, Record3D app, Polycam, Apple Object Capture) are interop targets,
+    never dependencies.</li>
+</ol>
+<h2 id="20-not-verified">20. Not verified<a class="headerlink" href="#20-not-verified" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Licences read only from search snippets or memory: OpenSplat, Ceres, ExifTool, FFmpeg, darktable,
+  MeshLab, Cesium, PlayCanvas engine, SOG spec, nerfstudio, Transformers, Burn, Instant-NGP, Inria 3DGS,
+  2DGS/PGSR, SeaSplat, Viscore, Omniverse converter.</li>
+<li>AliceVision/Meshroom LICENSE files (GitHub reports NOASSERTION); the "MPL-2.0" is from the notes.</li>
+<li>RoMa, DISK, rembg, MapAnything and Pi3 weights' terms beyond what is stated above; VGGT-Omega and
+  <code>KHR_gaussian_splatting_compression_spz</code> ratification state.</li>
+<li>SAM 3 licence past section 3; SAM 2 and SAM 3 on MPS and ROCm.</li>
+<li>Whether PyTorch ROCm wheels support gfx1151 (X3), and whether CUDA 13 wheels cover compute capability
+  12.1 without <code>TORCH_CUDA_ARCH_LIST</code>.</li>
+<li>Last PyTorch version with a macOS x86_64 wheel (believed 2.2.x).</li>
+<li>A CPU or Metal path for dense MVS; Open3D CUDA build availability; xatlas Linux aarch64 wheel;
+  meshoptimizer's Python package; bundled LibRaw version in rawpy; compressed ARW on the A1.</li>
+<li>Apple Object Capture on Intel and on the iMac Pro's Vega GPU; ProRAW, HEIC depth, NeRFCapture;
+  Polycam raw-data page content (403) and format details; Scaniverse pose export; Unreal's glTF import
+  path (Interchange) beyond a search snippet; Godot glTF behaviour; splat-in-engine support.</li>
+<li>Pix4D, iTwin Capture, RealityScan features; Luma pricing; <code>metashape-mcp</code> provenance; DJI Mini 4
+  Pro EXIF/XMP; GoPro lens modes; reef groups' software; backscatter, caustics, scale research;
+  Metashape education prices, 2.3 release date, forum sentiment.</li>
+<li>Every platform-matrix cell marked <code>[U]</code>, and every <code>[V]</code> cell is a wheel listing, not an install.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      MIT, Marko Mrdjenovic and contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.indexes", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
