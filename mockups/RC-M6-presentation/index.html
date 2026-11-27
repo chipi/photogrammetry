@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recce · Presentation (RC-M6)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* Tokens follow RC-M1 to RC-M4. The audience view adds one face, IBM Plex Serif, for the title
+   and captions: the presentation speaks to people outside the field, the editor does not. */
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 14px; --fs-xl: 16px;
+  --r-1: 4px; --r-2: 6px; --r-3: 8px; --r-pill: 999px;
+  --dur-fast: 120ms; --ui: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --serif: "IBM Plex Serif", Georgia, serif;
+  --bg-app: #0b0d10; --bg-panel: #111419; --bg-raised: #161a21; --bg-field: #1b2029; --bg-hover: #212734;
+  --border: #212733; --border-strong: #2c3442;
+  --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
+  --accent: #7cc4ff; --ok: #5ee0a0; --warn: #ffcf5c; --fail: #ff7a7a; --ai: #c9a2ff; --path: #ffb36b;
+  --view-bg: #07090c; --bg-label: rgba(12,15,20,.88); color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
+  --border: #dde1e7; --border-strong: #c9cfd8;
+  --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
+  --accent: #1f6fc4; --ok: #137a49; --warn: #8a5a00; --fail: #c23030; --ai: #7a3fc4; --path: #c2600f;
+  --view-bg: #dfe2e7; --bg-label: rgba(255,255,255,.94); color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg-app); color: var(--text); font: var(--fs-md)/1.45 var(--ui); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button, select, input, textarea { font: inherit; color: inherit; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.mono { font-family: var(--mono); font-size: var(--fs-sm); }
+.dim { color: var(--text-dim); }
+.app { display: grid; height: 100%; grid-template-rows: 48px minmax(0,1fr); grid-template-columns: 320px minmax(0,1fr) 340px;
+  grid-template-areas: "top top top" "left view right"; }
+.top { grid-area: top; display: flex; align-items: center; gap: var(--sp-3); padding: 0 var(--sp-4); border-bottom: 1px solid var(--border); background: var(--bg-panel); min-width: 0; }
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; letter-spacing: .02em; }
+.brand i { width: 14px; height: 14px; border-radius: var(--r-1); background: conic-gradient(from 210deg, var(--accent), var(--path), var(--ok), var(--accent)); display: block; }
+.crumbs { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.crumbs b { color: var(--text); font-weight: 500; }
+.grow { flex: 1; }
+.seg { display: inline-flex; background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-3); padding: 2px; flex: none; }
+.seg button { height: 26px; border: 0; background: transparent; padding: 0 var(--sp-3); border-radius: var(--r-2); color: var(--text-dim); cursor: pointer; transition: background var(--dur-fast), color var(--dur-fast); white-space: nowrap; }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.seg.ai button[aria-pressed="true"][data-v="1"] { color: var(--ai); }
+.iconbtn { height: 28px; padding: 0 var(--sp-3); border-radius: var(--r-2); border: 1px solid var(--border); background: var(--bg-field); cursor: pointer; color: var(--text-dim); white-space: nowrap; }
+.iconbtn:hover:not([disabled]) { background: var(--bg-hover); color: var(--text); }
+.iconbtn[disabled] { opacity: .55; cursor: not-allowed; }
+.iconbtn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg-app); font-weight: 500; }
+.left, .right { background: var(--bg-panel); overflow: auto; scrollbar-width: thin; min-width: 0; }
+.left { grid-area: left; border-right: 1px solid var(--border); }
+.right { grid-area: right; border-left: 1px solid var(--border); }
+.sec { padding: var(--sp-4); border-bottom: 1px solid var(--border); display: grid; gap: var(--sp-2); }
+.sec h2 { margin: 0 0 var(--sp-1); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; display: flex; justify-content: space-between; gap: var(--sp-2); align-items: center; }
+.sec p { margin: 0; color: var(--text-dim); }
+.sec p b { color: var(--text); font-weight: 500; }
+.field { display: grid; gap: var(--sp-1); }
+.field > span { font-size: var(--fs-xs); color: var(--text-dim); }
+.field input[type=text], .field textarea { width: 100%; border: 1px solid var(--border); background: var(--bg-field); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); resize: vertical; }
+.row { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+label.check { display: grid; grid-template-columns: auto minmax(0,1fr); gap: var(--sp-2); align-items: start; }
+label.check input { margin: 3px 0 0; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: var(--r-pill); font-size: var(--fs-xs); border: 1px solid var(--border-strong); color: var(--text-dim); white-space: nowrap; }
+.chip.ai { border-color: var(--ai); color: var(--ai); }
+.chip.ok { border-color: var(--ok); color: var(--ok); }
+.chip.warn { border-color: var(--warn); color: var(--warn); }
+.chip.fail { border-color: var(--fail); color: var(--fail); }
+.chip i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: block; }
+/* Stops */
+.stops { display: grid; gap: var(--sp-2); }
+.stop { display: grid; grid-template-columns: 72px minmax(0,1fr); gap: var(--sp-2) var(--sp-3); padding: var(--sp-2); border: 1px solid var(--border); border-radius: var(--r-3); background: var(--bg-raised); }
+.stop.sel { border-color: var(--path); }
+.stop .ph { position: relative; cursor: pointer; }
+.stop .ph::after { content: attr(data-n); position: absolute; top: 3px; left: 3px; font: 500 10px/14px var(--mono); padding: 0 4px; border-radius: 3px; background: var(--path); color: var(--bg-app); }
+.stop img, .stop .free { width: 72px; height: 48px; object-fit: cover; border-radius: var(--r-1); display: block; }
+.stop .sub { font-size: var(--fs-xs); color: var(--text-faint); }
+.stop .free { display: grid; place-items: center; background: var(--bg-field); border: 1px dashed var(--warn); color: var(--warn); font-size: var(--fs-xs); }
+.stop .hd { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; }
+.stop .hd b { font-weight: 500; }
+.stop .hd .mono { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stop .acts { margin-left: auto; display: flex; gap: 2px; flex: none; }
+.stop .acts button { width: 22px; height: 22px; border: 0; border-radius: var(--r-1); background: transparent; color: var(--text-dim); cursor: pointer; padding: 0; }
+.stop .acts button:hover { background: var(--bg-hover); color: var(--text); }
+.stop .cap { grid-column: 1 / -1; display: grid; gap: var(--sp-1); }
+.stop .cap textarea { width: 100%; min-height: 38px; border: 1px solid var(--border); background: var(--bg-field); border-radius: var(--r-2); padding: 6px var(--sp-2); resize: vertical; font-size: var(--fs-sm); }
+.stop .cap .src { display: flex; gap: var(--sp-2); align-items: center; font-size: var(--fs-xs); color: var(--text-faint); }
+.grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 4px; }
+.grid button { padding: 0; border: 2px solid transparent; border-radius: var(--r-1); background: none; cursor: pointer; position: relative; }
+.grid button img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 2px; }
+.grid button.on { border-color: var(--path); }
+.grid button.on::after { content: attr(data-n); position: absolute; top: 2px; left: 2px; font: 500 10px/14px var(--mono); padding: 0 4px; border-radius: 3px; background: var(--path); color: var(--bg-app); }
+/* Look */
+.presets { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.preset { text-align: left; border: 1px solid var(--border); background: var(--bg-field); border-radius: var(--r-3); padding: var(--sp-2) var(--sp-3); cursor: pointer; display: grid; gap: 2px; }
+.preset:hover { background: var(--bg-hover); }
+.preset[aria-pressed="true"] { border-color: var(--accent); background: var(--bg-raised); }
+.preset b { font-weight: 500; }
+.preset small { color: var(--text-dim); font-size: var(--fs-xs); line-height: 1.35; }
+.preset .sw { height: 6px; border-radius: 3px; margin-bottom: 4px; }
+.note { font-size: var(--fs-sm); color: var(--text-dim); border-left: 2px solid var(--warn); padding-left: var(--sp-2); }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.kv { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px var(--sp-3); font-size: var(--fs-sm); }
+.kv span:nth-child(odd) { color: var(--text-dim); }
+.kv span:nth-child(even) { font-family: var(--mono); text-align: right; }
+table { border-collapse: collapse; width: 100%; font-size: var(--fs-sm); }
+td, th { padding: 3px 0; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-weight: 500; color: var(--text-dim); font-size: var(--fs-xs); }
+td.n, th.n { text-align: right; font-family: var(--mono); }
+.link { display: flex; gap: var(--sp-2); }
+.link input { flex: 1; min-width: 0; border: 1px solid var(--border); background: var(--bg-field); border-radius: var(--r-2); padding: 0 var(--sp-2); height: 28px; font: var(--fs-xs) var(--mono); color: var(--text-dim); }
+/* The view */
+.view { grid-area: view; position: relative; background: var(--view-bg); min-width: 0; min-height: 0; overflow: hidden; display: grid; grid-template-rows: minmax(0,1fr) auto; }
+.stage { position: relative; min-height: 0; display: grid; place-items: center; }
+.frame { position: relative; overflow: hidden; background: #000; }
+.frame canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.frame .photo { position: absolute; inset: 0; background: center / cover no-repeat; opacity: 0; pointer-events: none; transition: opacity 700ms ease; }
+.guides { position: absolute; inset: 0; pointer-events: none; }
+.guides i { position: absolute; background: rgba(255,255,255,.22); }
+.guides .safe { position: absolute; inset: 5% 5%; border: 1px dashed rgba(255,255,255,.3); }
+.hud { position: absolute; top: var(--sp-3); left: var(--sp-3); display: flex; gap: var(--sp-2); flex-wrap: wrap; pointer-events: none; }
+.hud .chip { background: var(--bg-label); pointer-events: auto; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: #c9ced8; font-size: var(--fs-sm); pointer-events: none; }
+.timeline { border-top: 1px solid var(--border); background: var(--bg-panel); padding: var(--sp-2) var(--sp-4) var(--sp-3); display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: var(--sp-2) var(--sp-3); align-items: center; }
+.play { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--bg-raised); cursor: pointer; display: grid; place-items: center; }
+.play svg { width: 14px; height: 14px; fill: var(--text); }
+.track { position: relative; height: 62px; cursor: pointer; }
+.track .thumbs { position: absolute; left: 0; right: 0; top: 0; height: 36px; }
+.track .thumbs img, .track .thumbs .free { position: absolute; top: 0; height: 36px; width: 54px; object-fit: cover; border-radius: 3px; transform: translateX(-50%); border: 1px solid var(--border-strong); }
+.track .thumbs .free { background: var(--bg-field); border: 1px dashed var(--warn); }
+.track .thumbs .sel { outline: 2px solid var(--path); }
+.track .band { position: absolute; left: 0; right: 0; top: 44px; height: 6px; border-radius: 3px; overflow: hidden; display: flex; }
+.track .band i { height: 100%; flex: 1; }
+.track .head { position: absolute; top: -2px; bottom: 0; width: 2px; background: var(--text); transform: translateX(-1px); }
+.track .scale { position: absolute; left: 0; right: 0; top: 52px; font: 10px/10px var(--mono); color: var(--text-faint); display: flex; justify-content: space-between; }
+.legend { display: flex; gap: var(--sp-3); font-size: var(--fs-xs); color: var(--text-dim); grid-column: 2; }
+.legend i { display: inline-block; width: 10px; height: 6px; border-radius: 2px; margin-right: 4px; vertical-align: 1px; }
+.time { font: var(--fs-sm) var(--mono); color: var(--text-dim); text-align: right; min-width: 92px; }
+/* The audience view: everything but the frame goes away */
+.aud { display: none; }
+body.present .app { grid-template-columns: 0 minmax(0,1fr) 0; grid-template-rows: 0 minmax(0,1fr); }
+body.present .top, body.present .left, body.present .right, body.present .timeline, body.present .hud, body.present .guides { display: none; }
+body.present .view { background: #000; }
+body.present .aud { display: block; }
+.aud-title { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.65)); color: #f3f1ec; padding: var(--sp-6); }
+.aud-title .card { max-width: 34rem; display: grid; gap: var(--sp-3); }
+.aud-title h1 { font: 500 clamp(28px, 4.4vw, 46px)/1.1 var(--serif); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.aud-title p { font: 400 clamp(15px, 1.6vw, 18px)/1.5 var(--serif); margin: 0; color: #d9d6cf; }
+.aud-title .start { justify-self: start; margin-top: var(--sp-2); height: 40px; padding: 0 var(--sp-6); border-radius: var(--r-pill); border: 1px solid rgba(255,255,255,.6); background: rgba(255,255,255,.08); color: #fff; cursor: pointer; font: 500 var(--fs-lg) var(--ui); }
+.aud-title .start:hover { background: rgba(255,255,255,.18); }
+.aud-cap { position: absolute; left: 50%; bottom: calc(56px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: min(46rem, calc(100% - 32px)); text-align: center; color: #f6f4ef; font: 400 clamp(16px, 1.9vw, 22px)/1.4 var(--serif); text-shadow: 0 1px 12px rgba(0,0,0,.7); transition: opacity 500ms ease; text-wrap: balance; }
+.aud-cap small { display: block; font: 400 var(--fs-xs) var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #cfd3da; margin-bottom: 6px; }
+.aud-bar { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: var(--sp-3); color: #e8e8e8; background: linear-gradient(0deg, rgba(0,0,0,.55), transparent); }
+.aud-bar button { white-space: nowrap; flex: none; height: 30px; min-width: 30px; padding: 0 var(--sp-3); border-radius: var(--r-pill); border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.35); color: #fff; cursor: pointer; font-size: var(--fs-sm); }
+.aud-dots { display: flex; gap: 6px; flex: 1; justify-content: center; }
+.aud-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.35); display: block; }
+.aud-dots i.on { background: #fff; }
+.aud-made { font-size: var(--fs-xs); color: #b9bec8; white-space: nowrap; }
+.aud-about { position: absolute; right: var(--sp-4); bottom: calc(56px + env(safe-area-inset-bottom, 0px)); width: min(300px, calc(100% - 32px)); background: rgba(12,14,18,.9); color: #e6e9ef; border: 1px solid rgba(255,255,255,.14); border-radius: var(--r-3); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); display: grid; gap: 6px; }
+.aud-about b { font-weight: 500; }
+.aud-about .r { display: flex; justify-content: space-between; gap: var(--sp-3); }
+.aud-about .r span:last-child { font-family: var(--mono); color: #c9ced8; text-align: right; }
+.aud-about p { margin: 4px 0 0; color: #aab1bd; font-size: var(--fs-xs); }
+.ai-sum { display: grid; gap: 6px; }
+.ai-sum .r { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); }
+.ai-sum .r .chip { flex: none; }
+.byo { border: 1px dashed var(--border-strong); border-radius: var(--r-3); padding: var(--sp-3); display: grid; gap: var(--sp-2); }
+.byo .kv span:nth-child(even) { color: var(--text-dim); }
+@media (max-width: 520px) {
+  .aud-made { display: none; }
+  .aud-bar { gap: var(--sp-2); }
+  .aud-cap { bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: minmax(0,1fr); grid-template-rows: 48px 60vh auto auto; grid-template-areas: "top" "view" "left" "right"; overflow: auto; height: auto; }
+  body { overflow: auto; }
+  body.present { overflow: hidden; }
+  body.present .app { height: 100%; grid-template-rows: 0 100%; grid-template-columns: minmax(0,1fr); }
+}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+  "@sparkjsdev/spark": "https://cdn.jsdelivr.net/npm/@sparkjsdev/spark@2.4.0/dist/spark.module.js" } }
+</script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <span class="brand"><i></i>Recce</span>
+    <span class="crumbs">courtyard › <b>Presentation</b></span>
+    <span class="grow"></span>
+    <div class="seg ai" id="ai-seg" title="Recce is complete without AI; the person's own AI is opt-in">
+      <button data-v="0" aria-pressed="true">No AI</button><button data-v="1" aria-pressed="false">AI connected</button>
+    </div>
+    <div class="seg" id="mode-seg"><button data-v="edit" aria-pressed="true">Edit</button><button data-v="present" aria-pressed="false">Preview as audience</button></div>
+    <button class="iconbtn" id="theme">Light</button>
+  </header>
+
+  <aside class="left">
+    <section class="sec">
+      <h2>Story</h2>
+      <label class="field"><span>Title</span><input type="text" id="title"></label>
+      <label class="field"><span>Introduction</span><textarea id="intro" rows="3"></textarea></label>
+      <div class="row" id="story-src"></div>
+    </section>
+    <section class="sec">
+      <h2>Stops <span class="dim" id="stops-n"></span></h2>
+      <p>The path walks through the photos. At each stop the view turns into the photo taken there.</p>
+      <div class="stops" id="stops"></div>
+      <div class="row">
+        <button class="iconbtn" id="add-view" title="A stop where no photo was taken">Add the current view</button>
+        <button class="iconbtn" id="reset-stops">Reset to the engine's stops</button>
+      </div>
+    </section>
+    <section class="sec">
+      <h2>Photos <span class="dim">in walking order</span></h2>
+      <p>Click a photo to add or remove it as a stop.</p>
+      <div class="grid" id="all"></div>
+    </section>
+  </aside>
+
+  <main class="view">
+    <div class="stage" id="stage">
+      <div class="frame" id="frame">
+        <div class="photo" id="photo" role="img" aria-label="The photo taken at this stop"></div>
+        <div class="guides" id="guides" hidden><i style="left:33.33%;top:0;bottom:0;width:1px"></i><i style="left:66.66%;top:0;bottom:0;width:1px"></i><i style="top:33.33%;left:0;right:0;height:1px"></i><i style="top:66.66%;left:0;right:0;height:1px"></i><div class="safe"></div></div>
+        <div class="hud"><span class="chip" id="near"><i></i>—</span><span class="chip" id="hud-rep"></span><button class="chip" id="overview" style="cursor:pointer">Overview</button></div>
+        <div class="loading" id="loading">Loading the mesh and the splat</div>
+        <div class="aud">
+          <div class="aud-title" id="aud-title"><div class="card"><h1 id="a-title"></h1><p id="a-intro"></p><button class="start" id="a-start">Start the tour</button></div></div>
+          <div class="aud-cap" id="aud-cap"><small id="a-cap-k"></small><span id="a-cap"></span></div>
+          <div class="aud-about" id="aud-about" hidden></div>
+          <div class="aud-bar"><button id="a-play">Pause</button><div class="aud-dots" id="a-dots"></div><button id="a-about">About</button><button id="a-exit" title="Back to the editor">Edit</button><span class="aud-made">Made with Recce</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="timeline">
+      <button class="play" id="play" aria-label="Play"><svg viewBox="0 0 14 14"><path id="play-icon" d="M3 1.5v11l9-5.5z"/></svg></button>
+      <div class="track" id="track"><div class="thumbs" id="t-thumbs"></div><div class="band" id="band"></div><div class="scale" id="t-scale"></div><div class="head" id="head"></div></div>
+      <div class="time" id="time">0.0 / 0.0 s</div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>at a photo</span><span><i style="background:var(--accent)"></i>near the photos</span><span><i style="background:var(--warn)"></i>away from the photos</span></div>
+    </div>
+  </main>
+
+  <aside class="right">
+    <section class="sec">
+      <h2>Look</h2>
+      <div class="field"><span>Show</span><div class="seg" id="rep-seg"><button data-v="splat">Splat</button><button data-v="mesh">Mesh</button><button data-v="both">Both</button></div></div>
+      <div class="field"><span>Lighting</span><div class="presets" id="presets"></div></div>
+      <label class="check"><input type="checkbox" id="mesh-away"> Show the mesh where the view is away from the photos</label>
+      <p class="dim" style="font-size:var(--fs-sm)">The splat holds near the photos and breaks into streaks away from them (RC-P6); the mesh holds everywhere it has surface.</p>
+      <div class="field" id="sun-f" hidden><span>Sun direction <b class="mono" id="sun-v"></b></span><input type="range" id="sun" min="0" max="359" value="220"></div>
+      <p class="note" id="light-note" hidden></p>
+      <div class="field"><span>Background</span><div class="seg" id="bg-seg"><button data-v="night">Night</button><button data-v="paper">Paper</button><button data-v="fog">Fog</button></div></div>
+    </section>
+    <section class="sec">
+      <h2>Framing</h2>
+      <div class="field"><span>Frame</span><div class="seg" id="aspect-seg"><button data-v="fill">Fill</button><button data-v="16:9">16:9</button><button data-v="4:5">4:5</button><button data-v="9:16">9:16</button></div></div>
+      <label class="check"><input type="checkbox" id="guides-on"> Thirds and a 5% safe area</label>
+      <p>At a stop the lens matches the photo's (<span class="mono" id="fov-v"></span> vertical in this frame), so the dissolve lines up.</p>
+    </section>
+    <section class="sec">
+      <h2>Path</h2>
+      <div class="field"><span>Walking speed <b class="mono" id="speed-v"></b></span><input type="range" id="speed" min="0.3" max="2" step="0.1" value="0.8"></div>
+      <div class="field"><span>Hold at a stop <b class="mono" id="hold-v"></b></span><input type="range" id="hold" min="1" max="8" step="0.5" value="3.5"></div>
+      <label class="check"><input type="checkbox" id="dissolve" checked> Dissolve into the photo at each stop</label>
+      <label class="check"><input type="checkbox" id="show-path" checked> Show the path in the editor</label>
+      <div class="kv"><span>Path length</span><span id="k-len"></span><span>Duration</span><span id="k-dur"></span><span>Time at or near a photo</span><span id="k-near"></span></div>
+    </section>
+    <section class="sec">
+      <h2>Share</h2>
+      <p>A link opens the audience view in a browser, with nothing to install.</p>
+      <div class="link"><input id="link" readonly aria-label="Link"><button class="iconbtn" id="copy">Copy</button></div>
+      <label class="check"><input type="checkbox" id="about-on" checked> Show "About this model" to the audience</label>
+      <table id="bytes"></table>
+      <table id="fps"></table>
+      <p class="note">This link works on this network. A public link needs hosting, which is not built.</p>
+      <div class="row"><button class="iconbtn" disabled title="Not built: needs hosting">Publish a public link</button></div>
+    </section>
+    <section class="sec" id="ai-sec">
+      <h2>AI <span class="chip" id="ai-chip">off</span></h2>
+      <div id="ai-body"></div>
+    </section>
+  </aside>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+
+const $ = (id) => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+const mobile = /iPhone|iPad|Android/.test(navigator.userAgent);
+const MAX_TEX = Number(q.get("maxtex") ?? (mobile ? 1024 : 0));
+const TEX_PAR = mobile ? 2 : 8;
+const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+const meta = await (await fetch("data/meta.json")).json();
+const ai = await fetch("data/ai.json").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+const M = meta.metres_per_unit;
+const cams = meta.cameras;
+const tourPos = new Map(meta.tour.map((ci, k) => [ci, k]));
+
+// ---------- State: everything the share link carries ----------
+const defaults = { stops: meta.stops.map((ci) => ({ ci })), light: "captured", rep: "splat", bg: "night", aspect: "fill",
+  speed: 0.8, hold: 3.5, dissolve: true, meshAway: true, about: true, ai: false, sun: 220, title: null, intro: null };
+let S = structuredClone(defaults);
+if (q.has("s")) { try { S = { ...S, ...JSON.parse(decodeURIComponent(escape(atob(q.get("s").replace(/-/g, "+").replace(/_/g, "/"))))) }; } catch (e) { console.warn("bad state", e); } }
+if (q.has("ai")) S.ai = q.get("ai") === "1";
+let present = q.get("present") === "1";
+let sel = 0;
+if (q.get("theme") === "light") document.documentElement.dataset.theme = "light";
+
+// ---------- Text: the rule writes it; the AI drafts it when connected; the person's edit wins ----------
+const aiStop = (ci) => ai?.stops.find((s) => s.photo === cams[ci]?.name);
+function ruleTitle() { return "The courtyard"; }
+function ruleIntro() {
+  return `A 3D model built from ${meta.cameras.length} photos. Between the stops you see the model; at each stop it turns into the photo taken there.`;
+}
+function walkedTo(k) {
+  let m = 0;
+  for (let i = 1; i <= k; i++) m += pose(S.stops[i - 1]).c.distanceTo(pose(S.stops[i]).c) * M;
+  return m;
+}
+function ruleCaption(k) {
+  const st = S.stops[k];
+  const where = k === 0 ? "the start" : `${walkedTo(k).toFixed(1)} m along the walk`;
+  return st.ci == null ? `A view between the photos, ${where}` : `Photo ${tourPos.get(st.ci) + 1} of ${cams.length}, ${where}`;
+}
+function caption(k) {
+  const st = S.stops[k];
+  if (st.text != null) return { text: st.text, src: "yours" };
+  if (S.ai && st.ci != null && aiStop(st.ci)) return { text: aiStop(st.ci).text, src: "ai", status: aiStop(st.ci).status };
+  return { text: ruleCaption(k), src: "rule" };
+}
+function usesAI() { return S.ai && ai && (S.title == null || S.intro == null || S.stops.some((st, k) => caption(k).src === "ai")); }
+function titleText() { return S.title ?? (S.ai && ai ? ai.title.text : ruleTitle()); }
+function introText() { return S.intro ?? (S.ai && ai ? ai.intro.text : ruleIntro()); }
+
+// ---------- three.js ----------
+const frame = $("frame");
+const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance", preserveDrawingBuffer: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+frame.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, 1.6, 0.05, 500);
+scene.add(new SparkRenderer({ renderer }));
+const world = new THREE.Group();
+world.rotation.x = -Math.PI / 2; // the result is z-up; three.js is y-up
+scene.add(world);
+world.updateMatrixWorld();
+const hemi = new THREE.HemisphereLight(0xffffff, 0x3a3630, 0);
+const sun = new THREE.DirectionalLight(0xffffff, 0);
+scene.add(hemi, sun, sun.target);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// A camera's pose in three.js world space, from its COLMAP camera-to-world (OpenCV axes).
+const flip = new THREE.Matrix4().makeScale(1, -1, -1);
+const poseCache = new Map();
+function pose(st) {
+  if (st.ci == null) return { c: new THREE.Vector3(...st.c), q: new THREE.Quaternion(...st.q), vfov: st.vfov, cm: new THREE.Vector3(...st.cm) };
+  if (poseCache.has(st.ci)) return poseCache.get(st.ci);
+  const cam = cams[st.ci], R = cam.rotation, C = cam.centre;
+  const m = new THREE.Matrix4().set(R[0][0], R[0][1], R[0][2], C[0], R[1][0], R[1][1], R[1][2], C[1], R[2][0], R[2][1], R[2][2], C[2], 0, 0, 0, 1);
+  m.multiply(flip).premultiply(world.matrixWorld);
+  const p = { c: new THREE.Vector3(), q: new THREE.Quaternion(), vfov: cam.vfov_deg, aspect: cam.aspect, cm: new THREE.Vector3(...C) };
+  m.decompose(p.c, p.q, new THREE.Vector3());
+  poseCache.set(st.ci, p);
+  return p;
+}
+// The render's vertical fov so that an object-fit: cover photo lines up with the frame.
+function renderFov(photoVfov, photoAspect, frameAspect) {
+  if (frameAspect <= photoAspect) return photoVfov;
+  const h = Math.atan(Math.tan((photoVfov * Math.PI) / 360) * photoAspect);
+  return (2 * Math.atan(Math.tan(h) / frameAspect) * 180) / Math.PI;
+}
+
+// ---------- The mesh and the splat (RC-P6's files) ----------
+const mats = { captured: [], lit: [] };
+let clay, meshObj, splat;
+async function loadTexture(url) {
+  const img = new Image();
+  img.src = url;
+  await img.decode();
+  let source = img;
+  if (MAX_TEX && img.width > MAX_TEX) {
+    const c = document.createElement("canvas");
+    c.width = c.height = MAX_TEX;
+    c.getContext("2d").drawImage(img, 0, 0, MAX_TEX, MAX_TEX);
+    source = c;
+    img.src = "";
+  }
+  const t = new THREE.Texture(source);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  t.needsUpdate = true;
+  return t;
+}
+async function loadMesh() {
+  const base = meta.mesh.slice(0, meta.mesh.lastIndexOf("/") + 1);
+  const [objText, mtlText] = await Promise.all([fetch("data/" + meta.mesh).then((r) => r.text()), fetch("data/" + meta.mtl).then((r) => r.text())]);
+  const maps = {};
+  let cur = null;
+  for (const line of mtlText.split("\n")) {
+    const [k, v] = line.trim().split(/\s+/);
+    if (k === "newmtl") cur = v;
+    else if (k === "map_Kd") maps[cur] = line.trim().split(/\s+/).slice(1).join(" ");
+  }
+  const group = new OBJLoader().parse(objText);
+  const byName = {};
+  const queue = Object.entries(maps);
+  const worker = async () => {
+    while (queue.length) {
+      const [name, file] = queue.shift();
+      try {
+        const map = await loadTexture("data/" + base + file);
+        byName[name] = { captured: new THREE.MeshBasicMaterial({ map, side: THREE.DoubleSide }), lit: new THREE.MeshLambertMaterial({ map, side: THREE.DoubleSide }) };
+      } catch (e) { console.warn("atlas failed", file, e); }
+    }
+  };
+  await Promise.all(Array.from({ length: TEX_PAR }, worker));
+  clay = new THREE.MeshLambertMaterial({ color: 0xd8d3ca, side: THREE.DoubleSide });
+  const grey = { captured: new THREE.MeshBasicMaterial({ color: 0x888888 }), lit: new THREE.MeshLambertMaterial({ color: 0x888888 }) };
+  group.traverse((o) => {
+    if (!o.isMesh) return;
+    const list = Array.isArray(o.material) ? o.material : [o.material];
+    o.userData.captured = list.map((m) => (byName[m.name] ?? grey).captured);
+    o.userData.lit = list.map((m) => (byName[m.name] ?? grey).lit);
+    o.userData.clay = list.map(() => clay);
+    o.userData.multi = Array.isArray(o.material);
+  });
+  world.add(group);
+  return group;
+}
+async function loadSplat() {
+  const s = new SplatMesh({ url: "data/" + meta.splat });
+  await s.initialized;
+  world.add(s);
+  return s;
+}
+
+// ---------- Lighting presets ----------
+const PRESETS = {
+  captured: { name: "As captured", d: "The photos' own light, unlit. The colours are the measurement.", sw: "linear-gradient(90deg,#8b6a55,#c9b8a2,#6f7682)" },
+  studio: { name: "Soft studio", d: "Even sky light and a soft key, over the captured colours.", sw: "linear-gradient(90deg,#9aa6b8,#f2efe8,#9aa6b8)" },
+  sun: { name: "Low sun", d: "A warm, low sun you can turn; long, soft shading.", sw: "linear-gradient(90deg,#3b4a6b,#ffb36b,#ffd9a0)" },
+  clay: { name: "Clay", d: "Shape only: one matte colour, no photo texture.", sw: "linear-gradient(90deg,#77736c,#e8e3da,#77736c)" },
+};
+const BG = { night: 0x0b0d10, paper: 0xece8e1, fog: 0x9aa3ad };
+function applyLook() {
+  const L = S.light;
+  if (meshObj) meshObj.traverse((o) => {
+    if (!o.isMesh) return;
+    const set = L === "captured" ? o.userData.captured : L === "clay" ? o.userData.clay : o.userData.lit;
+    o.material = o.userData.multi ? set : set[0];
+  });
+  const az = (S.sun * Math.PI) / 180;
+  if (L === "studio") { hemi.color.set(0xf4f6fb); hemi.groundColor.set(0x6d6a64); hemi.intensity = 1.1; sun.color.set(0xffffff); sun.intensity = 0.7; sun.position.set(-0.4, 1, 0.6); }
+  else if (L === "sun") { hemi.color.set(0x8fa6d6); hemi.groundColor.set(0x3a3026); hemi.intensity = 0.85; sun.color.set(0xffc08a); sun.intensity = 2.2; sun.position.set(Math.cos(az), 0.32, Math.sin(az)); }
+  else if (L === "clay") { hemi.color.set(0xffffff); hemi.groundColor.set(0x55524d); hemi.intensity = 0.9; sun.color.set(0xffffff); sun.intensity = 1.1; sun.position.set(Math.cos(az), 0.9, Math.sin(az)); }
+  else { hemi.intensity = 0; sun.intensity = 0; }
+  showRep();
+  scene.background = new THREE.Color(BG[S.bg]);
+  $("sun-f").hidden = !(L === "sun" || L === "clay");
+  $("sun-v").textContent = `${S.sun}°`;
+  const note = $("light-note");
+  note.hidden = L === "captured" || S.rep === "mesh";
+  note.textContent = S.rep === "splat"
+    ? "Lighting changes the mesh only, and the splat is showing. Show the mesh to see it; the splat keeps the light it was photographed in."
+    : "Lighting changes the mesh only; the splat keeps the light it was photographed in, so the two disagree where both show.";
+}
+// What is drawn now: the chosen representation, or the mesh where the splat does not hold.
+let swapped = false;
+function showRep(away = false) {
+  swapped = S.meshAway && S.rep === "splat" && away;
+  const rep = swapped ? "mesh" : S.rep;
+  if (meshObj) meshObj.visible = rep !== "splat";
+  if (splat) splat.visible = rep !== "mesh";
+  $("hud-rep").textContent = swapped ? "Mesh here: the splat does not hold away from the photos" : { splat: "Splat, 1,000,000 gaussians", mesh: "Mesh, 463,017 faces", both: "Mesh and splat" }[S.rep];
+  $("hud-rep").className = `chip${swapped ? " warn" : ""}`;
+}
+
+// ---------- Framing ----------
+const ASPECTS = { "16:9": 16 / 9, "4:5": 4 / 5, "9:16": 9 / 16 };
+function layout() {
+  const st = $("stage").getBoundingClientRect();
+  const pad = present || S.aspect === "fill" ? 0 : 24;
+  let w = st.width - pad * 2, h = st.height - pad * 2;
+  const a = present && S.aspect === "fill" ? null : ASPECTS[S.aspect];
+  if (a) { if (w / h > a) w = h * a; else h = w / a; }
+  frame.style.width = `${Math.round(w)}px`;
+  frame.style.height = `${Math.round(h)}px`;
+  renderer.setSize(Math.round(w), Math.round(h), false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  $("guides").hidden = present || !$("guides-on").checked;
+}
+new ResizeObserver(layout).observe($("stage"));
+
+// ---------- The path: a spline through the stops, holds at each, timed by walking speed ----------
+let P = null;
+function buildPath() {
+  const poses = S.stops.map(pose);
+  const n = poses.length;
+  const curve = n > 1 ? new THREE.CatmullRomCurve3(poses.map((p) => p.c), false, "centripetal") : null;
+  const segs = [];
+  let t = 0;
+  for (let k = 0; k < n; k++) {
+    segs.push({ kind: "hold", k, t0: t, t1: t + S.hold });
+    t += S.hold;
+    if (k < n - 1) {
+      const len = poses[k].c.distanceTo(poses[k + 1].c) * M;
+      const dur = Math.max(2, len / S.speed);
+      segs.push({ kind: "move", k, t0: t, t1: t + dur, len });
+      t += dur;
+    }
+  }
+  P = { poses, curve, segs, T: t, n, len: segs.filter((s) => s.kind === "move").reduce((a, s) => a + s.len, 0) };
+  P.band = [];
+  let near = 0;
+  const N = 160;
+  for (let i = 0; i < N; i++) {
+    const v = sample(((i + 0.5) / N) * P.T);
+    const s = nearness(v.pos, v.q);
+    P.band.push(s.cls);
+    if (s.cls !== "warn") near++;
+  }
+  P.nearShare = near / N;
+}
+const ease = (x) => x * x * (3 - 2 * x);
+function stopFov(p) { return p.aspect ? renderFov(p.vfov, p.aspect, camera.aspect) : p.vfov; }
+function sample(t) {
+  const seg = P.segs.find((s) => t <= s.t1) ?? P.segs[P.segs.length - 1];
+  if (seg.kind === "hold") {
+    const p = P.poses[seg.k];
+    return { pos: p.c.clone(), q: p.q.clone(), fov: stopFov(p), seg, at: seg.k, local: (t - seg.t0) / (seg.t1 - seg.t0) };
+  }
+  const u = ease(Math.min(1, Math.max(0, (t - seg.t0) / (seg.t1 - seg.t0))));
+  const a = P.poses[seg.k], b = P.poses[seg.k + 1];
+  const pos = P.curve.getPoint((seg.k + u) / (P.n - 1));
+  return { pos, q: a.q.clone().slerp(b.q, u), fov: THREE.MathUtils.lerp(stopFov(a), stopFov(b), u), seg, at: null, local: u };
+}
+// How close a view is to a real photo: distance to the nearest camera centre and the turn from its view.
+const centresW = cams.map((_, i) => pose({ ci: i }));
+function nearness(pos, quat) {
+  const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(quat);
+  let best = { d: Infinity, ang: 180 };
+  for (const p of centresW) {
+    const d = p.c.distanceTo(pos) * M;
+    const ang = (fwd.angleTo(new THREE.Vector3(0, 0, -1).applyQuaternion(p.q)) * 180) / Math.PI;
+    const score = d + ang / 30;
+    if (score < best.d + best.ang / 30) best = { d, ang };
+  }
+  const cls = best.d < 0.25 && best.ang < 8 ? "ok" : best.d < 2 && best.ang < 40 ? "near" : "warn";
+  return { ...best, cls };
+}
+
+// ---------- The path drawn in the editor: a dashed line and each stop as its photo ----------
+const rayVS = "attribute float aF; varying float vF; void main(){ vF = aF; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }";
+const rayFS = "uniform vec3 uColor; uniform float uOpacity; varying float vF; void main(){ gl_FragColor = vec4(uColor, uOpacity * smoothstep(0.0, 1.0, vF * 0.9 + 0.1)); }";
+const texCache = new Map();
+const loader = new THREE.TextureLoader();
+function thumbTex(name) {
+  if (!texCache.has(name)) { const t = loader.load(`data/thumbs/${name}.jpg`); t.colorSpace = THREE.SRGBColorSpace; texCache.set(name, t); }
+  return texCache.get(name);
+}
+// A camera is its photo (RC-M1): the photo hangs where it was taken, rays fade from its corners to the centre.
+function photoCamera(st, d, tint) {
+  const p = pose(st);
+  const g = new THREE.Group();
+  g.position.copy(p.c);
+  g.quaternion.copy(p.q);
+  const hh = d * Math.tan((p.vfov * Math.PI) / 360), hw = hh * (p.aspect ?? 1.5);
+  const corners = [[-hw, -hh, -d], [hw, -hh, -d], [hw, hh, -d], [-hw, hh, -d]];
+  const lp = [], fade = [];
+  corners.forEach((c) => { lp.push(0, 0, 0, ...c); fade.push(0, 1); });
+  const rg = new THREE.BufferGeometry();
+  rg.setAttribute("position", new THREE.Float32BufferAttribute(lp, 3));
+  rg.setAttribute("aF", new THREE.Float32BufferAttribute(fade, 1));
+  g.add(new THREE.LineSegments(rg, new THREE.ShaderMaterial({ uniforms: { uColor: { value: new THREE.Color(tint) }, uOpacity: { value: 0.6 } },
+    vertexShader: rayVS, fragmentShader: rayFS, transparent: true, depthWrite: false })));
+  g.add(new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0], 3)),
+    new THREE.PointsMaterial({ color: tint, size: 5, sizeAttenuation: false })));
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute("position", new THREE.Float32BufferAttribute([...corners[3], ...corners[2], ...corners[0], ...corners[1]], 3));
+  pg.setAttribute("uv", new THREE.Float32BufferAttribute([0, 1, 1, 1, 0, 0, 1, 0], 2));
+  pg.setIndex([0, 2, 1, 1, 2, 3]);
+  const mat = st.ci == null
+    ? new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity: 0.18, side: THREE.DoubleSide })
+    : new THREE.MeshBasicMaterial({ map: thumbTex(cams[st.ci].name), side: THREE.DoubleSide });
+  g.add(new THREE.Mesh(pg, mat));
+  return g;
+}
+const pathGroup = new THREE.Group();
+scene.add(pathGroup);
+function drawPath() {
+  pathGroup.clear();
+  if (!P || !P.curve) return;
+  const tint = cssVar("--path");
+  const pts = P.curve.getPoints(Math.max(40, P.n * 24));
+  const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({ color: tint, dashSize: 0.12, gapSize: 0.08, transparent: true, opacity: 0.9 }));
+  line.computeLineDistances();
+  pathGroup.add(line);
+  S.stops.forEach((st, k) => pathGroup.add(photoCamera(st, 0.6, k === sel ? tint : cssVar("--text-dim"))));
+}
+
+// ---------- Playback ----------
+let t = 0, playing = false, lastNow = performance.now(), followPath = true;
+function setCamera(v) {
+  camera.position.copy(v.pos);
+  camera.quaternion.copy(v.q);
+  camera.fov = v.fov;
+  camera.updateProjectionMatrix();
+  controls.target.copy(v.pos).add(new THREE.Vector3(0, 0, -2).applyQuaternion(v.q));
+}
+function photoOpacity(v) {
+  if (!S.dissolve || v.at == null || S.stops[v.at].ci == null) return 0;
+  const x = v.local;
+  return x < 0.18 ? 0 : x < 0.82 ? 1 : 0;
+}
+let shownPhoto = null;
+function updateOverlays(v) {
+  const img = $("photo");
+  const want = v.at != null && S.stops[v.at].ci != null ? cams[S.stops[v.at].ci].name : null;
+  if (want && want !== shownPhoto) { img.style.backgroundImage = `url(data/photos/${want}.jpg)`; shownPhoto = want; }
+  img.style.opacity = followPath ? photoOpacity(v) : 0;
+  const n = nearness(camera.position, camera.quaternion);
+  if ((n.cls === "warn") !== swapped) showRep(n.cls === "warn");
+  const near = $("near");
+  near.className = `chip ${n.cls === "ok" ? "ok" : n.cls === "near" ? "" : "warn"}`;
+  near.innerHTML = `<i></i>${{ ok: "At a photo", near: "Near the photos", warn: "Away from the photos" }[n.cls]} · ${n.d.toFixed(2)} m and ${n.ang.toFixed(0)}° from the nearest photo`;
+  $("head").style.left = `${(t / P.T) * 100}%`;
+  $("time").textContent = `${t.toFixed(1)} / ${P.T.toFixed(1)} s`;
+  // Audience caption: shown while holding at a stop.
+  const k = v.at ?? (v.seg.kind === "move" && v.local > 0.85 ? v.seg.k + 1 : null);
+  const cap = $("aud-cap");
+  if (v.at != null && $("aud-title").hidden) { $("a-cap-k").textContent = `Stop ${v.at + 1} of ${P.n}`; $("a-cap").textContent = caption(v.at).text; cap.style.opacity = 1; }
+  else cap.style.opacity = 0;
+  [...$("a-dots").children].forEach((d, i) => d.classList.toggle("on", i === (v.at ?? v.seg.k)));
+  if (k != null && k !== sel) { sel = k; markSel(); }
+  $("fov-v").textContent = `${camera.fov.toFixed(1)}°`;
+}
+function seek(nt) {
+  t = Math.min(Math.max(0, nt), P.T);
+  followPath = true;
+  const v = sample(t);
+  setCamera(v);
+  updateOverlays(v);
+}
+function setPlaying(on) {
+  playing = on;
+  if (on && t >= P.T - 0.01) t = 0;
+  if (on) followPath = true;
+  controls.enabled = !on;
+  $("play-icon").setAttribute("d", on ? "M3 1.5h3v11H3zM8 1.5h3v11H8z" : "M3 1.5v11l9-5.5z");
+  $("a-play").textContent = on ? "Pause" : "Play";
+}
+controls.addEventListener("start", () => { if (!playing) { followPath = false; $("photo").style.opacity = 0; } });
+function tick(now) {
+  requestAnimationFrame(tick);
+  const dt = Math.min(0.1, (now - lastNow) / 1000);
+  lastNow = now;
+  if (playing) {
+    t += dt;
+    if (t >= P.T) { t = P.T; setPlaying(false); }
+    const v = sample(t);
+    setCamera(v);
+    updateOverlays(v);
+  } else if (!followPath) {
+    controls.update();
+    updateOverlays(sample(t));
+  }
+  pathGroup.visible = !present && !followPath && $("show-path").checked;
+  renderer.render(scene, camera);
+}
+
+// ---------- Editor UI ----------
+function seg(id, key, after) {
+  const el = $(id);
+  const sync = () => el.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === String(S[key]))));
+  el.onclick = (e) => { const b = e.target.closest("button"); if (!b) return; S[key] = b.dataset.v; sync(); after?.(); share(); };
+  sync();
+}
+function renderPresets() {
+  $("presets").innerHTML = Object.entries(PRESETS).map(([k, p]) =>
+    `<button class="preset" data-v="${k}" aria-pressed="${S.light === k}"><span class="sw" style="background:${p.sw}"></span><b>${p.name}</b><small>${p.d}</small></button>`).join("");
+}
+$("presets").onclick = (e) => { const b = e.target.closest(".preset"); if (!b) return; S.light = b.dataset.v; if (S.light !== "captured" && S.rep === "splat") S.rep = "mesh"; renderPresets(); seg("rep-seg", "rep", applyLook); applyLook(); share(); };
+function capSrc(c) {
+  if (c.src === "yours") return `<span class="chip">Yours</span>`;
+  if (c.src === "ai") return `<span class="chip ai">AI draft</span><span class="chip ${c.status === "unsupported" ? "fail" : c.status === "supported" ? "ok" : ""}"><i></i>${c.status === "judgement" ? "judgement: what the photo shows" : c.status}</span>`;
+  return `<span class="chip">Rule</span>`;
+}
+function renderStops() {
+  $("stops-n").textContent = `${S.stops.length}`;
+  $("stops").innerHTML = S.stops.map((st, k) => {
+    const c = caption(k);
+    const img = `<div class="ph" data-n="${k + 1}" data-go="${k}" title="Go to stop ${k + 1}">${st.ci == null ? `<div class="free" data-go="${k}">view</div>` : `<img src="data/thumbs/${cams[st.ci].name}.jpg" alt="" data-go="${k}">`}</div>`;
+    return `<div class="stop${k === sel ? " sel" : ""}" data-k="${k}">${img}<div><div class="hd"><b class="mono">${st.ci == null ? "A free view" : cams[st.ci].name}</b>
+      <span class="acts"><button data-act="up" title="Earlier">↑</button><button data-act="down" title="Later">↓</button><button data-act="del" title="Remove">×</button></span></div>
+      ${st.ci == null ? `<span class="chip warn"><i></i>not a photo: rendered only</span>` : `<div class="sub">Photo ${tourPos.get(st.ci) + 1} of ${cams.length} in walking order</div>`}</div>
+      <div class="cap"><textarea data-cap="${k}" rows="2" aria-label="Caption for stop ${k + 1}">${esc(c.text)}</textarea><div class="src">${capSrc(c)}${c.src === "yours" ? `<button class="iconbtn" style="height:20px;padding:0 6px" data-act="revert">Use the ${S.ai && ai ? "AI draft" : "rule"}</button>` : ""}</div></div></div>`;
+  }).join("");
+  const on = new Map(S.stops.map((st, k) => [st.ci, k]));
+  $("all").innerHTML = meta.tour.map((ci) => `<button data-ci="${ci}" class="${on.has(ci) ? "on" : ""}" data-n="${on.has(ci) ? on.get(ci) + 1 : ""}" title="${cams[ci].name}"><img src="data/thumbs/${cams[ci].name}.jpg" alt="${cams[ci].name}"></button>`).join("");
+  renderTrack();
+  renderAudience();
+  renderStory();
+}
+function markSel() {
+  document.querySelectorAll(".stop").forEach((el) => el.classList.toggle("sel", Number(el.dataset.k) === sel));
+  document.querySelectorAll("#t-thumbs > *").forEach((el, i) => el.classList.toggle("sel", i === sel));
+  drawPath();
+}
+function stopsChanged() { buildPath(); drawPath(); renderStops(); summary(); share(); seek(Math.min(t, P.T)); }
+$("stops").onclick = (e) => {
+  const row = e.target.closest(".stop"); if (!row) return;
+  const k = Number(row.dataset.k);
+  const act = e.target.closest("[data-act]")?.dataset.act;
+  if (act === "up" && k > 0) { [S.stops[k - 1], S.stops[k]] = [S.stops[k], S.stops[k - 1]]; sel = k - 1; stopsChanged(); }
+  else if (act === "down" && k < S.stops.length - 1) { [S.stops[k + 1], S.stops[k]] = [S.stops[k], S.stops[k + 1]]; sel = k + 1; stopsChanged(); }
+  else if (act === "del" && S.stops.length > 1) { S.stops.splice(k, 1); sel = Math.min(sel, S.stops.length - 1); stopsChanged(); }
+  else if (act === "revert") { delete S.stops[k].text; renderStops(); share(); }
+  else if (e.target.dataset.go != null) { sel = k; markSel(); goStop(k); }
+};
+$("stops").addEventListener("input", (e) => { const k = e.target.dataset.cap; if (k == null) return; S.stops[k].text = e.target.value; share(); renderAudience(); });
+$("stops").addEventListener("change", (e) => { if (e.target.dataset.cap != null) renderStops(); });
+$("all").onclick = (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const ci = Number(b.dataset.ci);
+  const i = S.stops.findIndex((s) => s.ci === ci);
+  if (i >= 0) { if (S.stops.length > 1) S.stops.splice(i, 1); }
+  else {
+    // Insert in walking order among the photo stops.
+    const at = S.stops.findIndex((s) => s.ci != null && tourPos.get(s.ci) > tourPos.get(ci));
+    S.stops.splice(at < 0 ? S.stops.length : at, 0, { ci });
+    sel = at < 0 ? S.stops.length - 1 : at;
+  }
+  stopsChanged();
+};
+$("add-view").onclick = () => {
+  const inv = world.matrixWorld.clone().invert();
+  const cm = camera.position.clone().applyMatrix4(inv);
+  S.stops.splice(sel + 1, 0, { ci: null, c: camera.position.toArray().map((x) => +x.toFixed(4)), q: camera.quaternion.toArray().map((x) => +x.toFixed(5)), vfov: +camera.fov.toFixed(2), cm: cm.toArray().map((x) => +x.toFixed(4)) });
+  sel += 1;
+  stopsChanged();
+};
+$("reset-stops").onclick = () => { S.stops = structuredClone(defaults.stops); sel = 0; stopsChanged(); };
+function goStop(k) { const s = P.segs.find((x) => x.kind === "hold" && x.k === k); setPlaying(false); seek((s.t0 + s.t1) / 2); }
+function renderTrack() {
+  $("t-thumbs").innerHTML = S.stops.map((st, k) => {
+    const s = P.segs.find((x) => x.kind === "hold" && x.k === k);
+    const left = (((s.t0 + s.t1) / 2) / P.T) * 100;
+    return st.ci == null ? `<div class="free${k === sel ? " sel" : ""}" style="left:${left}%"></div>` : `<img class="${k === sel ? "sel" : ""}" style="left:${left}%" src="data/thumbs/${cams[st.ci].name}.jpg" alt="">`;
+  }).join("");
+  $("band").innerHTML = P.band.map((c) => `<i style="background:var(${c === "ok" ? "--ok" : c === "near" ? "--accent" : "--warn"})"></i>`).join("");
+  const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => `<span>${(f * P.T).toFixed(0)} s</span>`).join("");
+  $("t-scale").innerHTML = ticks;
+}
+$("track").addEventListener("pointerdown", (e) => {
+  const r = $("track").getBoundingClientRect();
+  const go = (ev) => seek(((ev.clientX - r.left) / r.width) * P.T);
+  setPlaying(false);
+  go(e);
+  const mv = (ev) => go(ev);
+  addEventListener("pointermove", mv);
+  addEventListener("pointerup", () => removeEventListener("pointermove", mv), { once: true });
+});
+$("play").onclick = () => setPlaying(!playing);
+function summary() {
+  $("k-len").textContent = `${P.len.toFixed(1)} m`;
+  $("k-dur").textContent = `${P.T.toFixed(0)} s`;
+  $("k-near").textContent = `${Math.round(P.nearShare * 100)}%`;
+}
+for (const [id, key, fmt] of [["speed", "speed", (v) => `${v.toFixed(1)} m/s`], ["hold", "hold", (v) => `${v.toFixed(1)} s`]]) {
+  $(id).value = S[key];
+  $(`${id}-v`).textContent = fmt(S[key]);
+  $(id).oninput = (e) => { S[key] = Number(e.target.value); $(`${id}-v`).textContent = fmt(S[key]); buildPath(); renderTrack(); summary(); share(); seek(Math.min(t, P.T)); };
+}
+$("sun").value = S.sun;
+$("sun").oninput = (e) => { S.sun = Number(e.target.value); applyLook(); share(); };
+$("mesh-away").checked = S.meshAway;
+$("mesh-away").onchange = (e) => { S.meshAway = e.target.checked; showRep(nearness(camera.position, camera.quaternion).cls === "warn"); share(); };
+$("dissolve").checked = S.dissolve;
+$("dissolve").onchange = (e) => { S.dissolve = e.target.checked; share(); seek(t); };
+$("about-on").checked = S.about;
+$("about-on").onchange = (e) => { S.about = e.target.checked; renderAudience(); share(); };
+$("guides-on").onchange = layout;
+$("show-path").onchange = () => {};
+// A bird's-eye view of the whole path: above the stops' centre, looking down and ahead.
+function overview() {
+  setPlaying(false);
+  followPath = false;
+  const box = new THREE.Box3().setFromPoints(P.poses.map((p) => p.c));
+  const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3()).length();
+  camera.fov = 50;
+  camera.position.copy(c).add(new THREE.Vector3(0.3, 0.45, 0.6).multiplyScalar(Math.max(size, 8)));
+  controls.target.copy(c);
+  camera.updateProjectionMatrix();
+  controls.update();
+  $("photo").style.opacity = 0;
+}
+$("overview").onclick = overview;
+$("theme").onclick = () => {
+  const light = document.documentElement.dataset.theme !== "light";
+  document.documentElement.dataset.theme = light ? "light" : "dark";
+  $("theme").textContent = light ? "Dark" : "Light";
+  drawPath();
+};
+$("title").oninput = (e) => { S.title = e.target.value; renderAudience(); share(); };
+$("intro").oninput = (e) => { S.intro = e.target.value; renderAudience(); share(); };
+function renderStory() {
+  if (document.activeElement !== $("title")) $("title").value = titleText();
+  if (document.activeElement !== $("intro")) $("intro").value = introText();
+  const src = (own, aiPart) => own != null ? `<span class="chip">Yours</span>` : S.ai && ai ? `<span class="chip ai">AI draft</span><span class="chip ${aiPart.status === "supported" ? "ok" : aiPart.status === "unsupported" ? "fail" : ""}"><i></i>${aiPart.status === "supported" ? "numbers checked" : aiPart.status}</span>` : `<span class="chip">Rule</span>`;
+  $("story-src").innerHTML = `<span class="dim">Title</span> ${src(S.title, ai?.title ?? {})} <span class="dim">Introduction</span> ${src(S.intro, ai?.intro ?? {})}` +
+    (S.title != null || S.intro != null ? ` <button class="iconbtn" style="height:22px;padding:0 8px" id="story-revert">Undo my edits</button>` : "");
+  const rv = $("story-revert"); if (rv) rv.onclick = () => { S.title = null; S.intro = null; renderStory(); renderAudience(); share(); };
+}
+
+// ---------- AI panel (opt-in) ----------
+function renderAI() {
+  const seg = $("ai-seg");
+  seg.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === (S.ai ? "1" : "0"))));
+  const chip = $("ai-chip");
+  chip.className = `chip${S.ai ? " ai" : ""}`;
+  chip.textContent = S.ai ? (ai ? ai.model : "connected, no answer") : "off";
+  if (!S.ai) {
+    $("ai-body").innerHTML = `<p>Without AI, the rule writes the title, the introduction and a caption per stop from the geometry: which photo, how far along the walk. You can write over any of them.</p>
+      <p>With your own AI connected, it looks at each stop's photo and drafts the words. Numbers it uses are checked against the model's facts; what it says a photo shows is marked as its judgement.</p>`;
+    return;
+  }
+  if (!ai) { $("ai-body").innerHTML = `<p>No recorded answer: run <span class="mono">ai_present.py</span>.</p>`; return; }
+  const all = [ai.title, ai.intro, ...ai.stops];
+  const n = (s) => all.filter((c) => c.status === s).length;
+  $("ai-body").innerHTML = `<div class="ai-sum">
+      <div class="r"><span class="chip ok"><i></i>${n("supported")}</span>supported: every number matches a fact</div>
+      <div class="r"><span class="chip"><i></i>${n("judgement")}</span>judgement: what a photo shows; no number to check</div>
+      <div class="r"><span class="chip fail"><i></i>${n("unsupported")}</span>unsupported: a number with no fact behind it</div></div>
+    <p>One recorded call: ${esc(ai.model)} read the ${ai.stops.length} stop photos and wrote ${all.length} drafts for US$${ai.cost_usd.toFixed(3)}. Drafts cover the engine's stops; a stop you add keeps the rule's caption.</p>
+    <div class="byo"><b>Bring your own AI</b><div class="kv"><span>Provider</span><span>OpenAI-compatible endpoint</span><span>Base URL</span><span>for example http://localhost:11434/v1</span><span>Model</span><span>any with image input</span><span>Key</span><span>stored on this device</span></div><p>Not wired in the mock-up: the drafts shown are one recorded run.</p></div>`;
+}
+$("ai-seg").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; S.ai = b.dataset.v === "1"; renderAI(); renderStops(); share(); };
+
+// ---------- Share link and what it costs a viewer ----------
+function share() {
+  const json = JSON.stringify({ ...S });
+  const s = btoa(unescape(encodeURIComponent(json))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const url = `${location.origin}${location.pathname}?present=1&s=${s}`;
+  $("link").value = url;
+  return url;
+}
+$("copy").onclick = async () => {
+  try { await navigator.clipboard.writeText(share()); $("copy").textContent = "Copied"; }
+  catch { $("link").select(); $("copy").textContent = "Select and copy"; }
+  setTimeout(() => ($("copy").textContent = "Copy"), 1600);
+};
+const MB = (b) => `${(b / 1e6).toFixed(0)} MB`;
+function renderShareTables() {
+  const b = meta.bytes;
+  const photoBytes = b.photos / cams.length * S.stops.filter((s) => s.ci != null).length;
+  $("bytes").innerHTML = `<tr><th>A viewer downloads</th><th class="n">Size</th></tr>
+    <tr><td>Splat, 1,000,000 gaussians</td><td class="n">${MB(b.splat)}</td></tr>
+    <tr><td>Mesh, 463,017 faces</td><td class="n">${MB(b.mesh_obj)}</td></tr>
+    <tr><td>Mesh texture, 115 atlases</td><td class="n">${MB(b.mesh_atlases)}</td></tr>
+    <tr><td>Stop photos (${S.stops.filter((s) => s.ci != null).length}, estimated from the mean)</td><td class="n">${(photoBytes / 1e6).toFixed(1)} MB</td></tr>`;
+  $("fps").innerHTML = `<tr><th>Measured in RC-P6 (mesh and splat)</th><th class="n">fps</th></tr>` +
+    meta.fps_measured.map((f) => `<tr><td>${esc(f.device)}, ${esc(f.browser)}${f.note ? `, ${esc(f.note)}` : ""}</td><td class="n">${f.fps.toFixed(1)}</td></tr>`).join("");
+}
+
+// ---------- The audience view ----------
+function renderAudience() {
+  $("a-title").textContent = titleText();
+  $("a-intro").textContent = introText();
+  $("a-dots").innerHTML = S.stops.map(() => "<i></i>").join("");
+  const res = meta.camera_centre_residual_m;
+  $("a-about").hidden = !S.about;
+  $("aud-about").innerHTML = `<b>About this model</b>
+    <div class="r"><span>Built from</span><span>${cams.length} photos</span></div>
+    <div class="r"><span>Scale</span><span>metres, from surveyed cameras</span></div>
+    <div class="r"><span>Cameras off the survey, median</span><span>${(res.median * 100).toFixed(0)} cm</span></div>
+    <div class="r"><span>Surface</span><span>${meta.mesh_faces.toLocaleString("en")} faces</span></div>
+    <div class="r"><span>Splat</span><span>${meta.splat_gaussians.toLocaleString("en")} gaussians</span></div>
+    <p>Views between the stops are rendered from the model, not photographed. The stop photos are the originals, with lens distortion removed.${usesAI() ? " Some of the words were drafted by AI." : ""}</p>`;
+}
+$("a-about").onclick = () => ($("aud-about").hidden = !$("aud-about").hidden);
+$("a-start").onclick = () => { $("aud-title").hidden = true; seek(0); setPlaying(true); };
+$("a-play").onclick = () => setPlaying(!playing);
+$("a-exit").onclick = () => setMode(false);
+$("a-exit").hidden = q.get("present") === "1"; // a shared link has no editor behind it
+function setMode(p) {
+  present = p;
+  document.body.classList.toggle("present", p);
+  $("mode-seg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.v === "present") === p)));
+  $("aud-title").hidden = !p;
+  $("aud-about").hidden = true;
+  setPlaying(false);
+  seek(0);
+  requestAnimationFrame(layout);
+}
+$("mode-seg").onclick = (e) => { const b = e.target.closest("button"); if (b) setMode(b.dataset.v === "present"); };
+
+// ---------- Start ----------
+seg("rep-seg", "rep", applyLook);
+seg("bg-seg", "bg", applyLook);
+applyLook();
+seg("aspect-seg", "aspect", () => { layout(); buildPath(); renderTrack(); seek(t); });
+renderPresets();
+renderAI();
+layout();
+buildPath();
+drawPath();
+renderStops();
+renderShareTables();
+summary();
+share();
+setMode(present);
+if (!present && !q.has("t")) overview();
+requestAnimationFrame(tick);
+try {
+  [meshObj, splat] = await Promise.all([loadMesh(), loadSplat()]);
+  applyLook();
+  $("loading").hidden = true;
+  window.m6 = { seek, setMode, overview, segs: () => P.segs, setState: (o) => { Object.assign(S, o); applyLook(); layout(); } };
+  window.m6Ready = true;
+} catch (e) {
+  $("loading").textContent = `Could not load the model: ${e}`;
+  throw e;
+}
+if (q.has("t")) seek(Number(q.get("t")));
+if (q.get("play") === "1") { $("aud-title").hidden = true; setPlaying(true); }
+</script>
+</body>
+</html>
