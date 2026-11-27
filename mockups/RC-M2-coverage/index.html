@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recce · Coverage and confidence (RC-M2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Tokens follow RC-M1 (same spacing, type, radii and panel colours). Ramps are not tokens: they
+   are built in OKLCH at runtime so equal steps in the data are equal steps in lightness. */
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 14px; --fs-xl: 16px;
+  --r-1: 4px; --r-2: 6px; --r-3: 8px; --r-pill: 999px;
+  --dur-fast: 120ms; --ui: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --bg-app: #0b0d10; --bg-panel: #111419; --bg-raised: #161a21; --bg-field: #1b2029; --bg-hover: #212734;
+  --border: #212733; --border-strong: #2c3442;
+  --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
+  --accent: #7cc4ff; --accent-ink: #7cc4ff; --new: #ffb36b; --truth: #5ee0a0; --warn: #ffcf5c; --error: #ff7a7a;
+  --unknown: #ff7a7a; --inferred: #ffcf5c; --measured: #7cc4ff;
+  --view-bg: #0d1015; --bg-label: rgba(12,15,20,.86);
+}
+:root[data-theme="light"] {
+  --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
+  --border: #dde1e7; --border-strong: #c9cfd8;
+  --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
+  --accent: #1f7ad6; --accent-ink: #175fb0; --new: #d9711c; --truth: #18a865; --warn: #8a5a00; --error: #d23b3b;
+  --unknown: #d23b3b; --inferred: #9a6a00; --measured: #1f7ad6;
+  --view-bg: #f2f3f5; --bg-label: rgba(255,255,255,.92);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg-app); color: var(--text); font: var(--fs-md)/1.45 var(--ui); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button, input, select { font: inherit; color: inherit; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
+.mono { font-family: var(--mono); font-size: var(--fs-sm); }
+.dim { color: var(--text-dim); }
+.app { display: grid; height: 100vh; grid-template-rows: 48px minmax(0,1fr) 216px; grid-template-columns: 272px minmax(0,1fr) 320px;
+  grid-template-areas: "top top top" "left view right" "left chart right"; }
+.top { grid-area: top; display: flex; align-items: center; gap: var(--sp-3); padding: 0 var(--sp-4); border-bottom: 1px solid var(--border); background: var(--bg-panel); min-width: 0; }
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; letter-spacing: .02em; }
+.brand i { width: 14px; height: 14px; border-radius: var(--r-1); background: conic-gradient(from 210deg, var(--accent), var(--new), var(--truth), var(--accent)); display: block; }
+.crumbs { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.crumbs b { color: var(--text); font-weight: 500; }
+.grow { flex: 1; }
+.seg { display: inline-flex; background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-3); padding: 2px; flex: none; }
+.seg button { height: 26px; border: 0; background: transparent; padding: 0 var(--sp-3); border-radius: var(--r-2); color: var(--text-dim); cursor: pointer; transition: background var(--dur-fast), color var(--dur-fast); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.iconbtn { height: 28px; padding: 0 var(--sp-3); border-radius: var(--r-2); border: 1px solid var(--border); background: var(--bg-field); cursor: pointer; color: var(--text-dim); }
+.iconbtn:hover { background: var(--bg-hover); color: var(--text); }
+.left, .right { background: var(--bg-panel); overflow: auto; scrollbar-width: thin; }
+.left { grid-area: left; border-right: 1px solid var(--border); }
+.right { grid-area: right; border-left: 1px solid var(--border); }
+.sec { padding: var(--sp-4); border-bottom: 1px solid var(--border); }
+.sec h2 { margin: 0 0 var(--sp-3); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; display: flex; justify-content: space-between; }
+.sec p { margin: 0 0 var(--sp-2); color: var(--text-dim); }
+.sec p b { color: var(--text); font-weight: 500; }
+.view { grid-area: view; position: relative; background: var(--view-bg); min-width: 0; min-height: 0; }
+.view canvas { display: block; width: 100%; height: 100%; }
+.chart { grid-area: chart; border-top: 1px solid var(--border); background: var(--bg-panel); padding: var(--sp-3) var(--sp-4); display: grid; grid-template-columns: minmax(0,1fr) 240px; gap: var(--sp-4); min-width: 0; }
+.chart h2 { margin: 0 0 var(--sp-2); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; }
+.chart svg { width: 100%; height: 150px; display: block; }
+.chart text { fill: var(--text-dim); font: var(--fs-xs) var(--mono); }
+.legend-bar { height: 14px; border-radius: var(--r-1); border: 1px solid var(--border); }
+.legend-ticks { display: flex; justify-content: space-between; font: var(--fs-xs) var(--mono); color: var(--text-dim); margin-top: var(--sp-1); }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-1) var(--sp-3); }
+.kv dt { color: var(--text-dim); }
+.kv dd { margin: 0; text-align: right; font-family: var(--mono); font-size: var(--fs-sm); }
+.toggle { display: flex; align-items: center; gap: var(--sp-2); padding: 3px 0; color: var(--text-dim); cursor: pointer; }
+.toggle input { accent-color: var(--accent); }
+.swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; }
+.hatch { background: repeating-linear-gradient(45deg, currentColor 0 2px, transparent 2px 5px); }
+.card { border: 1px solid var(--border-strong); border-radius: var(--r-3); padding: var(--sp-3); background: var(--bg-raised); }
+.card h3 { margin: 0 0 var(--sp-2); font-size: var(--fs-lg); }
+.card p { margin: 0 0 var(--sp-2); color: var(--text-dim); }
+pre.brief { font: var(--fs-xs)/1.4 var(--mono); background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2); overflow: auto; max-height: 220px; margin: var(--sp-2) 0 0; }
+.hud { position: absolute; left: var(--sp-3); bottom: var(--sp-3); background: var(--bg-label); border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); color: var(--text-dim); font-size: var(--fs-sm); max-width: 60%; }
+.hud b { color: var(--text); font-weight: 500; }
+.tag { display: inline-flex; align-items: center; gap: var(--sp-1); height: 20px; padding: 0 var(--sp-2); border-radius: var(--r-pill); border: 1px solid var(--border-strong); font-size: var(--fs-xs); color: var(--text-dim); }
+.empty { color: var(--text-faint); font-style: italic; }
+.glyph-wrap { display: flex; gap: var(--sp-3); align-items: center; }
+.glyph-wrap svg { flex: none; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text-dim); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <span class="brand"><i></i>Recce</span>
+    <span class="crumbs">Room <b id="crumb-room">…</b> › Coverage and confidence</span>
+    <span class="grow"></span>
+    <div class="seg" id="mode" role="group" aria-label="Overlay">
+      <button data-v="coverage" aria-pressed="true">Light and shadow</button>
+      <button data-v="confidence">Confidence</button>
+      <button data-v="truth">Against Faro</button>
+      <button data-v="structure">Structure</button>
+    </div>
+    <div class="seg" id="ramp" role="group" aria-label="Colour ramp">
+      <button data-v="uniform" aria-pressed="true" title="Perceptually uniform, built in OKLCH">LCH</button>
+      <button data-v="cbsafe" title="Blue to yellow: readable with red-green colour blindness">CB-safe</button>
+      <button data-v="lum" title="Lightness only: survives greyscale print">Luminance</button>
+    </div>
+    <button class="iconbtn" id="theme">Light</button>
+  </header>
+
+  <aside class="left">
+    <section class="sec">
+      <h2>What this colour means</h2>
+      <div id="legend"></div>
+    </section>
+    <section class="sec">
+      <h2>Layers</h2>
+      <label class="toggle"><input type="checkbox" id="l-cams" checked> Where the phone went <span class="dim mono" id="n-cams"></span></label>
+      <label class="toggle"><input type="checkbox" id="l-ghost" checked> Next shot (ghost camera)</label>
+      <label class="toggle"><input type="checkbox" id="l-struct"> Structured elements (RC-P13)</label>
+      <label class="toggle"><input type="checkbox" id="l-cut" checked> Cut away the ceiling</label>
+    </section>
+    <section class="sec">
+      <h2>About this view</h2>
+      <p id="about"></p>
+    </section>
+    <section class="sec">
+      <h2>Data</h2>
+      <p>Real: the TSDF mesh of ARKitScenes video <span class="mono" id="d-vid"></span> (RC-P10), <span id="d-frames"></span> LiDAR frames, the Faro scan of the same visit and RC-P13's structured model.</p>
+      <p>Derived here: frames per vertex, direction spread, sectors, the ghost camera. Rules are written for the mock-up and stated where used.</p>
+    </section>
+  </aside>
+
+  <main class="view" id="view">
+    <div class="loading" id="loading">Loading the room…</div>
+    <div class="hud" id="hud" hidden></div>
+  </main>
+
+  <section class="chart">
+    <div>
+      <h2>Does the model know where it is wrong? Error against Faro, by how many frames saw the surface</h2>
+      <svg id="bars" role="img" aria-label="Median and 90th percentile error by frame count"></svg>
+    </div>
+    <div>
+      <h2>Reading</h2>
+      <p class="dim" id="reading" style="margin:0;font-size:var(--fs-sm);overflow:auto;max-height:170px"></p>
+    </div>
+  </section>
+
+  <aside class="right">
+    <section class="sec">
+      <h2>Inspector <span class="mono dim" id="pick-id"></span></h2>
+      <p class="empty" id="pick-empty">Click the surface to read one point.</p>
+      <div id="pick" hidden>
+        <div class="glyph-wrap">
+          <svg id="glyph" width="96" height="96" viewBox="-50 -50 100 100" aria-label="Coverage glyph"></svg>
+          <div>
+            <div class="mono" style="font-size:var(--fs-xl)" id="g-views"></div>
+            <div class="dim">frames saw this point</div>
+            <div class="dim" id="g-advice" style="margin-top:var(--sp-1)"></div>
+          </div>
+        </div>
+        <dl class="kv" style="margin-top:var(--sp-3)">
+          <dt>Directions covered</dt><dd id="k-sectors"></dd>
+          <dt>Direction spread</dt><dd id="k-spread"></dd>
+          <dt>Support (the model's claim)</dt><dd id="k-support"></dd>
+          <dt>Distance to Faro (truth)</dt><dd id="k-err"></dd>
+          <dt>Height above floor</dt><dd id="k-z"></dd>
+        </dl>
+      </div>
+    </section>
+    <section class="sec" id="shot-sec">
+      <h2>Next shot <span class="tag">gap 1 of 1 shown</span></h2>
+      <div class="card" id="shot"></div>
+      <button class="iconbtn" id="brief-btn" style="margin-top:var(--sp-2)">Robot brief (JSON)</button>
+      <pre class="brief" id="brief" hidden></pre>
+    </section>
+    <section class="sec" id="struct-sec" hidden>
+      <h2>Structure (RC-P13)</h2>
+      <div id="struct-list"></div>
+    </section>
+  </aside>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const params = new URLSearchParams(location.search);
+const state = { mode: params.get("mode") || "coverage", ramp: params.get("ramp") || "uniform" };
+if (params.get("theme") === "light") document.documentElement.dataset.theme = "light";
+const syncThemeLabel = () => document.getElementById("theme").textContent = document.documentElement.dataset.theme === "light" ? "Dark" : "Light";
+syncThemeLabel();
+
+/* ---------- Honest colour: OKLCH ramps ---------- */
+function oklchToSrgb(L, C, hDeg) {
+  for (let c = C; c >= 0; c -= 0.005) {
+    const h = hDeg * Math.PI / 180, a = c * Math.cos(h), b = c * Math.sin(h);
+    const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+    const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+    const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+    const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+    const lin = [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+                 -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+                 -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s];
+    if (lin.every(v => v >= -1e-4 && v <= 1 + 1e-4)) {
+      return lin.map(v => { v = Math.min(1, Math.max(0, v)); return v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055; });
+    }
+  }
+  return [L, L, L];
+}
+// Each ramp's lightness rises linearly, so equal data steps read as equal steps. Chroma is
+// reduced only where a colour falls outside sRGB.
+const RAMPS = {
+  uniform: t => oklchToSrgb(0.28 + 0.66 * t, 0.15, 300 - 230 * t),   // violet → orange → pale yellow
+  cbsafe:  t => oklchToSrgb(0.30 + 0.62 * t, 0.12, 255 - 160 * t),   // blue → yellow, no red-green axis
+  lum:     t => oklchToSrgb(0.22 + 0.74 * t, 0, 0),                  // lightness only
+};
+function rampTexture(name) {
+  const n = 256, data = new Uint8Array(n * 4);
+  for (let i = 0; i < n; i++) { const c = RAMPS[name](i / (n - 1)); data.set([c[0] * 255, c[1] * 255, c[2] * 255, 255], i * 4); }
+  const t = new THREE.DataTexture(data, n, 1); t.colorSpace = THREE.SRGBColorSpace; t.magFilter = THREE.LinearFilter; t.needsUpdate = true; return t;
+}
+const cssRamp = (name, stops = 12) => `linear-gradient(90deg, ${Array.from({ length: stops }, (_, i) => {
+  const c = RAMPS[name](i / (stops - 1)).map(v => Math.round(v * 255)); return `rgb(${c})`; }).join(",")})`;
+
+/* ---------- Data ---------- */
+const meta = await (await fetch("data/room.json")).json();
+const buf = await (await fetch("data/room.bin")).arrayBuffer();
+const TYPES = { float32: Float32Array, uint8: Uint8Array, uint16: Uint16Array, uint32: Uint32Array };
+const arr = name => { const L = meta.layout[name]; const n = L.shape.reduce((a, b) => a * b, 1); return new TYPES[L.dtype](buf, L.offset, n); };
+const pos = arr("position"), nrm = arr("normal"), col = arr("color"), views = arr("views"), spread = arr("spread"), sectors = arr("sectors"), err = arr("error_mm"), idx = arr("index");
+const N = views.length;
+document.getElementById("crumb-room").textContent = meta.video;
+document.getElementById("d-vid").textContent = meta.video;
+document.getElementById("d-frames").textContent = `${meta.frames_used} (every ${meta.frame_step}th)`;
+
+// Support: the model's own claim about a point, from its evidence only (never from Faro).
+// Frames on a log scale up to 32, discounted by up to 40% when every view came from one side.
+const SUPPORT_FULL = 32;
+const support = new Float32Array(N);
+for (let i = 0; i < N; i++) {
+  const v = Math.min(1, Math.log2(1 + views[i]) / Math.log2(1 + SUPPORT_FULL));
+  const s = Math.min(1, (spread[i] / 255) / 0.3);
+  support[i] = v * (0.6 + 0.4 * s);
+}
+const floorZ = meta.scene.elements.find(e => e.id === "floor-seen")?.geometry.z ?? 0;
+
+/* ---------- Scene ---------- */
+const view = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.localClippingEnabled = true;
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 100);
+camera.up.set(0, 0, 1);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+const geo = new THREE.BufferGeometry();
+geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+geo.setAttribute("normal", new THREE.BufferAttribute(nrm, 3));
+geo.setAttribute("color", new THREE.BufferAttribute(col, 3, true));
+geo.setAttribute("support", new THREE.BufferAttribute(support, 1));
+const errNorm = new Float32Array(N); for (let i = 0; i < N; i++) errNorm[i] = Math.min(1, err[i] / 100);
+geo.setAttribute("errn", new THREE.BufferAttribute(errNorm, 1));
+geo.setIndex(new THREE.BufferAttribute(idx, 1));
+geo.computeBoundingSphere();
+
+const uniforms = {
+  uMode: { value: 0 }, uRamp: { value: rampTexture(state.ramp) }, uLight: { value: new THREE.Vector3(0.3, -0.5, 0.8).normalize() },
+  uHatch: { value: 0.55 }, uGrey: { value: new THREE.Color(0.55, 0.56, 0.58) },
+};
+const ceilingZ = meta.scene.elements.find(e => e.id === "ceiling-seen")?.geometry.z ?? 2;
+const cut = new THREE.Plane(new THREE.Vector3(0, 0, -1), ceilingZ - 0.35);
+const mat = new THREE.ShaderMaterial({
+  uniforms, side: THREE.DoubleSide, clipping: true, clippingPlanes: [cut],
+  vertexShader: `
+    attribute vec3 color; attribute float support; attribute float errn;
+    varying vec3 vCol; varying vec3 vN; varying float vSup; varying float vErr;
+    #include <clipping_planes_pars_vertex>
+    void main() { vCol = color; vN = normalize(normal); vSup = support; vErr = errn;
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * mvPosition;
+      #include <clipping_planes_vertex>
+    }`,
+  fragmentShader: `
+    uniform int uMode; uniform sampler2D uRamp; uniform vec3 uLight; uniform float uHatch; uniform vec3 uGrey;
+    varying vec3 vCol; varying vec3 vN; varying float vSup; varying float vErr;
+    #include <clipping_planes_pars_fragment>
+    void main() {
+      #include <clipping_planes_fragment>
+      float shade = 0.55 + 0.45 * abs(dot(normalize(vN), uLight));
+      vec3 c;
+      if (uMode == 0) {            // light and shadow: the photo colour, lit by how well it was seen
+        float lit = 0.10 + 0.90 * pow(vSup, 0.8);
+        c = vCol * lit * shade;
+      } else if (uMode == 1) {     // confidence: ramp by support, hatched away where it is thin
+        if (vSup < uHatch) {
+          float density = vSup / uHatch;                    // 0 = almost nothing drawn
+          float stripe = mod(gl_FragCoord.x + gl_FragCoord.y, 7.0) / 7.0;
+          if (stripe > 0.18 + 0.82 * density) discard;
+        }
+        c = texture2D(uRamp, vec2(vSup, 0.5)).rgb * shade;
+      } else if (uMode == 2) {     // truth: distance to Faro, 0 to 100 mm
+        c = texture2D(uRamp, vec2(1.0 - vErr, 0.5)).rgb * shade;
+      } else {                     // structure: the mesh as a quiet grey backdrop
+        c = uGrey * shade;
+      }
+      gl_FragColor = vec4(c, 1.0);
+      #include <colorspace_fragment>
+    }`,
+});
+const mesh = new THREE.Mesh(geo, mat);
+scene.add(mesh);
+
+// Camera path
+const camPts = meta.cameras.map(p => new THREE.Vector3(...p));
+const camLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(camPts), new THREE.LineBasicMaterial({ color: 0x7cc4ff, transparent: true, opacity: 0.55 }));
+scene.add(camLine);
+document.getElementById("n-cams").textContent = `${meta.frames_used} frames`;
+
+// Ghost camera: a frustum at the suggested position, aimed at the weak patch.
+const ghost = new THREE.Group();
+{
+  const g = meta.ghost, p = new THREE.Vector3(...g.position), t = new THREE.Vector3(...g.target);
+  const fw = t.clone().sub(p).normalize(), up = new THREE.Vector3(0, 0, 1), right = fw.clone().cross(up).normalize(), u2 = right.clone().cross(fw);
+  const d = 0.35, w = 0.26, h = 0.2;
+  const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => p.clone().add(fw.clone().multiplyScalar(d)).add(right.clone().multiplyScalar(a * w)).add(u2.clone().multiplyScalar(b * h)));
+  const segs = [];
+  corners.forEach((c, i) => { segs.push(p, c, c, corners[(i + 1) % 4]); });
+  const ghostMat = new THREE.LineDashedMaterial({ color: 0xffb36b, dashSize: 0.04, gapSize: 0.03 });
+  const fr = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), ghostMat); fr.computeLineDistances(); ghost.add(fr);
+  const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints([p, t]), new THREE.LineDashedMaterial({ color: 0xffb36b, dashSize: 0.06, gapSize: 0.05, transparent: true, opacity: 0.7 }));
+  ray.computeLineDistances(); ghost.add(ray);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.16, 0.2, 40), new THREE.MeshBasicMaterial({ color: 0xffb36b, side: THREE.DoubleSide, transparent: true, opacity: 0.8 }));
+  ring.position.copy(t); ring.lookAt(p); ghost.add(ring);
+}
+scene.add(ghost);
+
+// Structured elements (RC-P13): walls as faces, floor and ceiling cells; unknown hatched by colour.
+const struct = new THREE.Group(); struct.visible = false; scene.add(struct);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function buildStructure() {
+  struct.clear();
+  const colFor = s => new THREE.Color(css(s === "measured" ? "--measured" : s === "inferred" ? "--inferred" : "--unknown"));
+  for (const e of meta.scene.elements) {
+    const g = e.geometry;
+    if (g.type === "wall_face") {
+      const [x0, y0] = g.p0, [x1, y1] = g.p1;
+      const shape = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(x0, y0, g.z0), new THREE.Vector3(x1, y1, g.z0), new THREE.Vector3(x1, y1, g.z1),
+        new THREE.Vector3(x0, y0, g.z0), new THREE.Vector3(x1, y1, g.z1), new THREE.Vector3(x0, y0, g.z1)]);
+      struct.add(new THREE.Mesh(shape, new THREE.MeshBasicMaterial({ color: colFor(e.source), transparent: true, opacity: 0.32, side: THREE.DoubleSide, depthWrite: false })));
+      const edge = new THREE.LineSegments(new THREE.EdgesGeometry(shape), new THREE.LineBasicMaterial({ color: colFor(e.source) }));
+      struct.add(edge);
+    } else if (g.type === "cells") {
+      const n = g.cells.length, m = new THREE.InstancedMesh(new THREE.PlaneGeometry(g.cell_m * 0.92, g.cell_m * 0.92),
+        new THREE.MeshBasicMaterial({ color: colFor(e.source), transparent: true, opacity: e.source === "unknown" ? 0.55 : 0.22, side: THREE.DoubleSide, depthWrite: false }), n);
+      const o = new THREE.Object3D();
+      g.cells.forEach(([i, j], k) => { o.position.set(g.origin[0] + (i + 0.5) * g.cell_m, g.origin[1] + (j + 0.5) * g.cell_m, g.z + 0.004); o.updateMatrix(); m.setMatrixAt(k, o.matrix); });
+      struct.add(m);
+    }
+  }
+}
+buildStructure();
+{
+  const list = document.getElementById("struct-list");
+  const rows = meta.scene.elements.map(e => {
+    const sig = e.uncertainty?.sigma_m ?? e.sigma_m;
+    const swatch = `<span class="swatch ${e.source === "unknown" ? "hatch" : ""}" style="background-color:${e.source === "unknown" ? "transparent" : `var(--${e.source})`};color:var(--${e.source})"></span>`;
+    return `<div class="toggle" style="cursor:default">${swatch}<span>${e.id}</span><span class="grow"></span><span class="mono dim">${e.source}${sig ? ` · σ ${(sig * 1000).toFixed(1)} mm` : ""}</span></div>`;
+  });
+  list.innerHTML = rows.join("");
+}
+
+// Frame the room.
+const bs = geo.boundingSphere;
+controls.target.copy(bs.center);
+camera.position.copy(bs.center).add(new THREE.Vector3(bs.radius * 0.35, -bs.radius * 0.9, bs.radius * 1.6));
+document.getElementById("loading").remove();
+
+/* ---------- Modes, legend, about ---------- */
+const MODES = {
+  coverage: { id: 0, legend: () => legendBar("lum", ["unseen", "", "32+ frames"], "Brightness is how well the surface was seen: the photo colour, dimmed where few frames agree on it. Dark is not black paint; it is shadow in the evidence."),
+    about: "<b>Light and shadow.</b> Well-covered surfaces are lit; surfaces few frames saw sink into shadow. The orange ghost camera is where to stand for the next shot, aimed at the largest patch of wall seen by fewer than 4 frames." },
+  confidence: { id: 1, legend: () => legendBar(state.ramp, ["thin", "", "solid"], "Colour is the model's support for the surface: frames that saw it on a log scale up to 32, discounted when all views came from one side. Below 0.55 the surface is hatched away: the sparser the hatch, the less the model claims to know.", true),
+    about: "<b>Confidence on the surface.</b> Solid where the model has evidence, sketchy where it has little, instead of a rainbow error map. The values blend across faces, so uncertainty fades rather than switching patch by patch." },
+  truth: { id: 2, legend: () => legendBar(state.ramp, ["100 mm", "50", "0 mm"], "Colour is the distance from the mesh to the Faro laser scan of the same visit, which the model never saw. Light is close to the truth; dark is 100 mm or more off."),
+    about: "<b>Against Faro.</b> The check the product cannot run in the field: a laser scan as truth. Compare it with Confidence. Where the model claimed little, it is usually wrong; the chart below gives the numbers." },
+  structure: { id: 3, legend: () => `<div style="display:grid;gap:6px">
+      <div class="toggle" style="cursor:default"><span class="swatch" style="background:var(--measured)"></span>Measured: fitted to the reconstruction, with σ</div>
+      <div class="toggle" style="cursor:default"><span class="swatch" style="background:var(--inferred)"></span>Inferred: closed by a rule</div>
+      <div class="toggle" style="cursor:default"><span class="swatch hatch" style="color:var(--unknown)"></span>Unknown: inside the room, never seen</div></div>`,
+    about: "<b>Structure.</b> RC-P13's structured model of the same room: walls and floor tagged measured, inferred or unknown. The unknown floor is where the coverage overlay is dark: the two views tell one story." },
+};
+function legendBar(ramp, ticks, text, hatch = false) {
+  const extra = hatch ? `<div class="legend-bar" style="margin-top:6px;background:repeating-linear-gradient(45deg, var(--text-dim) 0 2px, transparent 2px 6px)"></div><div class="legend-ticks"><span>hatched: support under 0.55</span></div>` : "";
+  return `<div class="legend-bar" style="background:${cssRamp(ramp)}"></div><div class="legend-ticks">${ticks.map(t => `<span>${t}</span>`).join("")}</div>${extra}<p style="margin-top:var(--sp-2)">${text}</p>
+    <p class="mono" style="font-size:var(--fs-xs)">Ramp: ${ramp === "lum" ? "lightness only" : ramp === "cbsafe" ? "blue to yellow, colour-blind safe" : "OKLCH, lightness linear"}</p>`;
+}
+function setMode(m) {
+  state.mode = m;
+  uniforms.uMode.value = MODES[m].id;
+  document.getElementById("legend").innerHTML = MODES[m].legend();
+  document.getElementById("about").innerHTML = MODES[m].about;
+  document.getElementById("ramp").style.visibility = (m === "confidence" || m === "truth") ? "visible" : "hidden";
+  document.getElementById("struct-sec").hidden = m !== "structure";
+  struct.visible = m === "structure" || document.getElementById("l-struct").checked;
+  for (const b of document.querySelectorAll("#mode button")) b.setAttribute("aria-pressed", b.dataset.v === m);
+  drawBars();
+  syncUrl();
+}
+function setRamp(r) {
+  state.ramp = r; uniforms.uRamp.value = rampTexture(r);
+  for (const b of document.querySelectorAll("#ramp button")) b.setAttribute("aria-pressed", b.dataset.v === r);
+  setMode(state.mode);
+}
+function syncUrl() {
+  const p = new URLSearchParams({ mode: state.mode, ramp: state.ramp });
+  if (document.documentElement.dataset.theme === "light") p.set("theme", "light");
+  history.replaceState(null, "", "?" + p);
+}
+document.getElementById("mode").onclick = e => e.target.dataset.v && setMode(e.target.dataset.v);
+document.getElementById("ramp").onclick = e => e.target.dataset.v && setRamp(e.target.dataset.v);
+document.getElementById("theme").onclick = () => {
+  const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light";
+  syncThemeLabel();
+  scene.background = new THREE.Color(css("--view-bg")); buildStructure(); drawBars(); syncUrl();
+};
+document.getElementById("l-cams").onchange = e => camLine.visible = e.target.checked;
+document.getElementById("l-ghost").onchange = e => ghost.visible = e.target.checked;
+document.getElementById("l-struct").onchange = () => setMode(state.mode);
+document.getElementById("l-cut").onchange = e => { mat.clippingPlanes = e.target.checked ? [cut] : []; mat.needsUpdate = true; };
+
+/* ---------- The chart: claim against truth ---------- */
+let pickedViews = null;
+function drawBars() {
+  const svg = document.getElementById("bars"), W = svg.clientWidth || 600, H = 150, pad = { l: 44, r: 8, t: 8, b: 30 };
+  const bins = meta.error_by_views, maxE = 220;
+  const bw = (W - pad.l - pad.r) / bins.length, y = e => pad.t + (H - pad.t - pad.b) * (1 - Math.min(e, maxE) / maxE);
+  const accent = css("--accent"), dim = css("--border-strong"), hi = css("--new");
+  let s = "";
+  for (const e of [0, 50, 100, 150, 200]) s += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(e)}" y2="${y(e)}" stroke="${css("--border")}"/><text x="${pad.l - 6}" y="${y(e) + 4}" text-anchor="end">${e}</text>`;
+  s += `<text x="4" y="${pad.t + 10}">mm</text>`;
+  bins.forEach((b, i) => {
+    const x = pad.l + i * bw, lo = b.views[0], hiV = b.views[1];
+    const mine = pickedViews != null && pickedViews >= lo && (hiV == null || pickedViews < hiV);
+    s += `<rect x="${x + bw * 0.18}" y="${y(b.error_mm_p90)}" width="${bw * 0.64}" height="${y(0) - y(b.error_mm_p90)}" fill="${dim}" opacity=".55"/>`;
+    s += `<rect x="${x + bw * 0.3}" y="${y(b.error_mm_median)}" width="${bw * 0.4}" height="${y(0) - y(b.error_mm_median)}" fill="${mine ? hi : accent}"/>`;
+    s += `<text x="${x + bw / 2}" y="${y(b.error_mm_median) - 4}" text-anchor="middle" style="fill:var(--text)">${b.error_mm_median}</text>`;
+    const label = hiV == null ? `${lo}+` : hiV - lo === 1 ? `${lo}` : `${lo}–${hiV - 1}`;
+    s += `<text x="${x + bw / 2}" y="${H - 14}" text-anchor="middle">${label}</text><text x="${x + bw / 2}" y="${H - 2}" text-anchor="middle" opacity=".7">${(b.vertices / 1000).toFixed(1)}k</text>`;
+  });
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = s;
+  const unseen = bins[0], solid = bins[bins.length - 1];
+  document.getElementById("reading").innerHTML =
+    `Frames that saw the surface (bottom), vertices in each bin, median error (solid bar, number) and 90th percentile (pale bar). ` +
+    `Surfaces no frame saw are a median <b>${unseen.error_mm_median} mm</b> off; surfaces seen by 32 or more frames, <b>${solid.error_mm_median} mm</b>. ` +
+    `The model's own evidence predicts its error, so shadow and hatching are honest. Not every dark spot is wrong, and not every lit one is right: the pale bars overlap.`;
+}
+
+/* ---------- Picking and the coverage glyph ---------- */
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+renderer.domElement.addEventListener("click", ev => {
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObject(mesh)[0];
+  if (!hit) return;
+  const f = hit.face, cands = [f.a, f.b, f.c];
+  let best = cands[0], bd = Infinity;
+  for (const i of cands) { const d = hit.point.distanceToSquared(new THREE.Vector3(pos[3 * i], pos[3 * i + 1], pos[3 * i + 2])); if (d < bd) { bd = d; best = i; } }
+  inspect(best, hit.point);
+});
+const marker = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+marker.visible = false; scene.add(marker);
+function inspect(i, p) {
+  marker.position.copy(p); marker.visible = true;
+  pickedViews = views[i];
+  document.getElementById("pick-empty").hidden = true;
+  document.getElementById("pick").hidden = false;
+  document.getElementById("pick-id").textContent = `vertex ${i}`;
+  const S = meta.sectors, mask = sectors[i], covered = [...Array(S).keys()].filter(k => mask & (1 << k)).length;
+  document.getElementById("g-views").textContent = views[i];
+  document.getElementById("k-sectors").textContent = `${covered} of ${S}`;
+  document.getElementById("k-spread").textContent = (spread[i] / 255).toFixed(2);
+  document.getElementById("k-support").textContent = support[i].toFixed(2);
+  document.getElementById("k-err").textContent = `${err[i]} mm`;
+  document.getElementById("k-z").textContent = `${(pos[3 * i + 2] - floorZ).toFixed(2)} m`;
+  document.getElementById("g-advice").textContent = views[i] === 0 ? "Never seen: the surface here is the fusion's guess."
+    : covered <= 2 ? "Seen from one side only: shoot it from the open sectors."
+    : views[i] < 8 ? "Seen, but thinly: a few more frames would firm it up." : "Well covered.";
+  drawGlyph(mask, S, views[i]);
+  drawBars();
+}
+// The coverage glyph: one ring, a sector per horizontal direction, filled where frames saw the
+// point from that side. The same glyph is meant for the phone (M8) and an operator's tablet.
+function drawGlyph(mask, S, n) {
+  const on = css("--accent"), off = css("--border-strong"), txt = css("--text");
+  let s = `<circle r="44" fill="none" stroke="${css("--border")}" stroke-width="1"/>`;
+  for (let k = 0; k < S; k++) {
+    const a0 = (k / S) * 2 * Math.PI - Math.PI, a1 = ((k + 1) / S) * 2 * Math.PI - Math.PI, gap = 0.04;
+    const arc = (r, a) => `${r * Math.cos(a)} ${-r * Math.sin(a)}`;
+    const filled = mask & (1 << k);
+    s += `<path d="M ${arc(30, a0 + gap)} L ${arc(44, a0 + gap)} A 44 44 0 0 0 ${arc(44, a1 - gap)} L ${arc(30, a1 - gap)} A 30 30 0 0 1 ${arc(30, a0 + gap)} Z" fill="${filled ? on : off}" opacity="${filled ? 1 : 0.45}"/>`;
+  }
+  s += `<text x="0" y="5" text-anchor="middle" style="font:600 14px var(--mono);fill:${txt}">${n}</text>`;
+  document.getElementById("glyph").innerHTML = s;
+}
+
+/* ---------- The next shot ---------- */
+{
+  const g = meta.ghost, p = g.position, t = g.target;
+  const weakBins = meta.error_by_views.filter(b => b.views[1] != null && b.views[1] <= 4).map(b => b.error_mm_median);
+  const weakLo = Math.round(Math.min(...weakBins)), weakHi = Math.round(Math.max(...weakBins));
+  const solidE = Math.round(meta.error_by_views[meta.error_by_views.length - 1].error_mm_median);
+  const facing = Math.round((Math.atan2(t[1] - p[1], t[0] - p[0]) * 180 / Math.PI + 360) % 360);
+  document.getElementById("shot").innerHTML = `<h3>Shoot the wall ${(t[2] - floorZ).toFixed(1)} m above the floor</h3>
+    <p><b>Where to stand:</b> the orange frustum, ${g.standoff_m.toFixed(1)} m back from the wall, at the height the phone was carried.</p>
+    <p><b>What:</b> a slow sweep across the patch at the ring, holding the phone level.</p>
+    <p><b>Why:</b> ${g.weak_vertices} wall vertices there were seen by fewer than 4 frames; at fewer than 4 frames the mesh is a median ${weakLo}–${weakHi} mm off Faro, against ${solidE} mm where 32 or more frames saw it.</p>
+    <p class="mono dim" style="font-size:var(--fs-xs)">Rule: ${g.rule}.</p>`;
+  const brief = { gap_list: 1, room: meta.video, gaps: [{ id: 1, kind: "thin_coverage", target_m: t, stand_m: p, heading_deg: facing,
+    reason: `${g.weak_vertices} wall vertices seen by fewer than 4 frames`, expected_gain: "support above 0.55 on the patch" }] };
+  document.getElementById("brief").textContent = JSON.stringify(brief, null, 2);
+  document.getElementById("brief-btn").onclick = () => { const b = document.getElementById("brief"); b.hidden = !b.hidden; };
+}
+
+/* ---------- Loop ---------- */
+function resize() { const w = view.clientWidth, h = view.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+new ResizeObserver(() => { resize(); drawBars(); }).observe(view);
+scene.background = new THREE.Color(css("--view-bg"));
+resize();
+setRamp(state.ramp);
+setMode(state.mode);
+// A view is a link: ?mode=…&ramp=…&pick=<vertex>|ghost selects a point on load.
+{
+  const p = params.get("pick");
+  let i = p === "ghost" ? null : Number(p);
+  if (p === "ghost") {
+    const tg = meta.ghost.target; let bd = Infinity;
+    for (let k = 0; k < N; k++) { const d = (pos[3*k]-tg[0])**2 + (pos[3*k+1]-tg[1])**2 + (pos[3*k+2]-tg[2])**2; if (d < bd) { bd = d; i = k; } }
+  }
+  if (Number.isInteger(i) && i >= 0 && i < N) inspect(i, new THREE.Vector3(pos[3*i], pos[3*i+1], pos[3*i+2]));
+}
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+</script>
+</body>
+</html>
