@@ -4,6 +4,7 @@ Research, reviews and drafts that are not yet settled documents. Content here is
 
 - [Hardware and parallelism](hardware-and-parallelism.md)
 - [Step 0 status and findings](step0-status.md)
+- [Step 0 close-out report (2026-11-27)](step0-closeout-2026-11-27.md)
 - [GPU rental spec for RC-P7](gpu-rental-p7.md)
 - [Underwater benchmark spec (RC-P12)](underwater-benchmark-spec.md)
 - [Research, drone and phone datasets (2026-11-26)](research-drone-phone-datasets-2026-11-26.md)

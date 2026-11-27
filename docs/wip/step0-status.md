@@ -142,7 +142,7 @@ Republish it (read it first, then publish to the same link) whenever a row here 
 - **RC-P10** stays not proven with its cause recorded; pose refinement moves to the build phase.
 - **RC-P13** closes as partly proven, each segment's verdict recorded.
 - **Step 0 ends** when the mock-ups (M2, M3, M4, M6, M7) have the owner's verdicts and a close-out
-  report is written for RC-01 Vision.
+  report is written for RC-01 Vision. The report is written: [Step 0 close-out report](step0-closeout-2026-11-27.md) (2026-11-27).
 - **AI is optional; Recce is complete without it.** Every feature works from geometry and rules
   alone and is good enough on its own. AI is opt-in: Recce is an MCP server for a person's own
   agent, and a person can bring their own AI (an OpenAI-compatible endpoint, hosted or local) to
