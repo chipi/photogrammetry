@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recce · The debrief (RC-M3)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Tokens follow RC-M1 and RC-M2. The debrief itself is set in Plex Serif: it is the one place in
+   the product that reads as a written report rather than an instrument. */
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 14px; --fs-xl: 16px; --fs-2xl: 20px;
+  --r-1: 4px; --r-2: 6px; --r-3: 8px; --r-pill: 999px;
+  --dur-fast: 120ms; --ui: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --serif: "IBM Plex Serif", Georgia, serif;
+  --bg-app: #0b0d10; --bg-panel: #111419; --bg-raised: #161a21; --bg-field: #1b2029; --bg-hover: #212734;
+  --border: #212733; --border-strong: #2c3442;
+  --text: #e6e9ef; --text-dim: #9aa3b2; --text-faint: #8a93a3;
+  --accent: #7cc4ff; --accent-ink: #7cc4ff; --new: #ffb36b; --truth: #5ee0a0; --warn: #ffcf5c; --error: #ff7a7a;
+  --pass: #5ee0a0; --fail: #ff7a7a; --unknown: #ffcf5c;
+  --view-bg: #0d1015; --bg-label: rgba(12,15,20,.88); --sel: rgba(124,196,255,.12); color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg-app: #eef0f3; --bg-panel: #f8f9fb; --bg-raised: #ffffff; --bg-field: #eceff3; --bg-hover: #e3e7ed;
+  --border: #dde1e7; --border-strong: #c9cfd8;
+  --text: #161a21; --text-dim: #4f5868; --text-faint: #5d6677;
+  --accent: #1f7ad6; --accent-ink: #175fb0; --new: #d9711c; --truth: #18a865; --warn: #8a5a00; --error: #c23030;
+  --pass: #137a49; --fail: #c23030; --unknown: #8a5a00;
+  --view-bg: #f2f3f5; --bg-label: rgba(255,255,255,.94); --sel: rgba(31,122,214,.09); color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg-app); color: var(--text); font: var(--fs-md)/1.45 var(--ui); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font: inherit; color: inherit; }
+button:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
+.mono { font-family: var(--mono); font-size: var(--fs-sm); }
+.dim { color: var(--text-dim); }
+.app { display: grid; height: 100vh; grid-template-rows: 48px minmax(0,1fr); grid-template-columns: 460px minmax(0,1fr) 340px;
+  grid-template-areas: "top top top" "report view evidence"; }
+.top { grid-area: top; display: flex; align-items: center; gap: var(--sp-3); padding: 0 var(--sp-4); border-bottom: 1px solid var(--border); background: var(--bg-panel); min-width: 0; }
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; letter-spacing: .02em; }
+.brand i { width: 14px; height: 14px; border-radius: var(--r-1); background: conic-gradient(from 210deg, var(--accent), var(--new), var(--truth), var(--accent)); display: block; }
+.crumbs { color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.crumbs b { color: var(--text); font-weight: 500; }
+.grow { flex: 1; }
+.tally { display: flex; gap: var(--sp-3); font-size: var(--fs-sm); color: var(--text-dim); white-space: nowrap; }
+.tally b { font-family: var(--mono); font-weight: 500; color: var(--text); }
+.iconbtn { height: 28px; padding: 0 var(--sp-3); border-radius: var(--r-2); border: 1px solid var(--border); background: var(--bg-field); cursor: pointer; color: var(--text-dim); }
+.iconbtn:hover { background: var(--bg-hover); color: var(--text); }
+.report, .evidence { background: var(--bg-panel); overflow: auto; scrollbar-width: thin; min-width: 0; }
+.report { grid-area: report; border-right: 1px solid var(--border); }
+.evidence { grid-area: evidence; border-left: 1px solid var(--border); }
+.doc { padding: var(--sp-6) var(--sp-6) var(--sp-4); }
+.doc .eyebrow { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; }
+.doc h1 { font: 500 var(--fs-2xl)/1.3 var(--serif); margin: var(--sp-2) 0 var(--sp-2); text-wrap: balance; }
+.doc .byline { color: var(--text-dim); font-size: var(--fs-sm); margin-bottom: var(--sp-4); }
+.doc h2 { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; margin: var(--sp-6) 0 var(--sp-2); }
+.claim { position: relative; font: var(--fs-lg)/1.6 var(--serif); padding: var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-4); margin: 0 calc(-1 * var(--sp-3)) var(--sp-1); border-radius: var(--r-2); cursor: pointer; border-left: 3px solid transparent; }
+.claim:hover { background: var(--bg-hover); }
+.claim[aria-current="true"] { background: var(--sel); }
+.claim.supported { border-left-color: color-mix(in oklab, var(--pass) 55%, transparent); }
+.claim.unsupported { border-left-color: var(--fail); }
+.claim.judgement { border-left-color: var(--border-strong); }
+.claim .num { font-family: var(--mono); font-size: .9em; text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--accent-ink) 60%, transparent); text-underline-offset: 3px; }
+.claim .num.unbacked { text-decoration: underline wavy var(--fail); }
+.claim .meta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-1); font: var(--fs-xs)/1.4 var(--ui); color: var(--text-dim); }
+.flag { color: var(--fail); font-weight: 500; }
+.stamps { display: grid; gap: var(--sp-2); }
+.stamp { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: var(--sp-3); align-items: start; border: 1px solid var(--border); border-radius: var(--r-3); padding: var(--sp-3); background: var(--bg-raised); cursor: pointer; }
+.stamp:hover { border-color: var(--border-strong); }
+.stamp[aria-current="true"] { outline: 2px solid var(--accent-ink); outline-offset: -1px; }
+.stamp .mark { font: 600 var(--fs-sm)/1 var(--mono); letter-spacing: .1em; text-align: center; padding: var(--sp-2) 0; border: 2px solid currentColor; border-radius: var(--r-2); transform: rotate(-4deg); }
+.stamp .mark.pass { color: var(--pass); } .stamp .mark.fail { color: var(--fail); } .stamp .mark.unknown { color: var(--unknown); border-style: dashed; }
+.stamp b { display: block; font-size: var(--fs-lg); font-weight: 600; }
+.stamp p { margin: var(--sp-1) 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
+.stamp p i { font-style: normal; color: var(--text-faint); }
+.view { grid-area: view; position: relative; background: var(--view-bg); min-width: 0; min-height: 0; overflow: hidden; }
+.view canvas { display: block; width: 100%; height: 100%; }
+.hud { position: absolute; left: var(--sp-3); bottom: var(--sp-3); background: var(--bg-label); border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); color: var(--text-dim); font-size: var(--fs-sm); max-width: 70%; }
+.hud b { color: var(--text); font-weight: 500; }
+.ann { position: absolute; transform: translate(-50%, -100%); display: flex; align-items: center; gap: var(--sp-1); background: var(--bg-label); border: 1px solid var(--border-strong); border-radius: var(--r-2); padding: 2px 2px 2px var(--sp-2); font-size: var(--fs-xs); white-space: nowrap; cursor: grab; user-select: none; }
+.ann.camera { border-style: dashed; border-color: var(--new); }
+.ann.moved { box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent-ink) 50%, transparent); }
+.ann .aid { font-family: var(--mono); color: var(--text-dim); }
+.ann button { border: 0; background: transparent; color: var(--text-dim); cursor: pointer; width: 20px; height: 20px; border-radius: var(--r-1); line-height: 1; }
+.ann button:hover { background: var(--bg-hover); color: var(--fail); }
+.sec { padding: var(--sp-4); border-bottom: 1px solid var(--border); }
+.sec h2 { margin: 0 0 var(--sp-3); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 600; display: flex; justify-content: space-between; gap: var(--sp-2); }
+.sec p { margin: 0 0 var(--sp-2); color: var(--text-dim); }
+.empty { color: var(--text-faint); font-style: italic; }
+.photos { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--sp-2); }
+.photos figure { margin: 0; }
+.photos img { width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: var(--r-1); display: block; border: 1px solid var(--border); }
+.photos figcaption { font: var(--fs-xs) var(--mono); color: var(--text-dim); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.handle { border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-2); background: var(--bg-raised); font: var(--fs-xs)/1.5 var(--mono); overflow-wrap: anywhere; }
+.handle .call { color: var(--text); }
+.handle .ok { color: var(--pass); } .handle .bad { color: var(--fail); }
+.handle dl { display: grid; grid-template-columns: auto 1fr; gap: 0 var(--sp-3); margin: var(--sp-1) 0 0; }
+.handle dt { color: var(--text-dim); } .handle dd { margin: 0; }
+pre.json { font: var(--fs-xs)/1.4 var(--mono); background: var(--bg-field); border: 1px solid var(--border); border-radius: var(--r-2); padding: var(--sp-2); overflow: auto; max-height: 260px; margin: var(--sp-2) 0 0; }
+.edit-log { font-size: var(--fs-sm); color: var(--text-dim); margin: 0; padding-left: var(--sp-4); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text-dim); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <span class="brand"><i></i>Recce</span>
+    <span class="crumbs">ETH3D <b>courtyard</b> › run <b class="mono" id="crumb-run"></b> › Debrief</span>
+    <span class="grow"></span>
+    <span class="tally" id="tally"></span>
+    <button class="iconbtn" id="theme">Light</button>
+  </header>
+
+  <aside class="report" aria-label="The debrief">
+    <div class="doc" id="doc"></div>
+  </aside>
+
+  <main class="view" id="view">
+    <div class="loading" id="loading">Loading the courtyard…</div>
+    <div class="hud" id="hud"></div>
+  </main>
+
+  <aside class="evidence" aria-label="Evidence">
+    <section class="sec">
+      <h2>Evidence <span class="mono" id="ev-id"></span></h2>
+      <p class="empty" id="ev-empty">Pick a sentence or a stamp: its photos and its tool calls appear here, replayed.</p>
+      <div id="ev" hidden>
+        <div class="photos" id="ev-photos"></div>
+        <div id="ev-handles" style="margin-top:var(--sp-3)"></div>
+      </div>
+    </section>
+    <section class="sec">
+      <h2>In the scene <span class="dim">placed by the agent</span></h2>
+      <p>Labels and ghost cameras arrive through the agent's <span class="mono">place_label</span> and <span class="mono">place_camera</span>. Drag one to move it, × to delete it.</p>
+      <ol class="edit-log" id="edit-log"></ol>
+      <button class="iconbtn" id="ann-btn" style="margin-top:var(--sp-2)">What the agent reads back</button>
+      <pre class="json" id="ann-json" hidden></pre>
+    </section>
+    <section class="sec">
+      <h2>Data</h2>
+      <p>Real: RC-P1's COLMAP model of ETH3D courtyard in RC-P3's frame, RC-P3's quality state (run <span class="mono">courtyard/full</span>), RC-P4's scan checks and RC-P6's frame rates.</p>
+      <p>The debrief is one real agent run through the tools only; the checks on its sentences are replays of the same tools. The readiness rules are written for the mock-up.</p>
+    </section>
+  </aside>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const params = new URLSearchParams(location.search);
+if (params.get("theme") === "light") document.documentElement.dataset.theme = "light";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const syncTheme = () => {
+  document.getElementById("theme").textContent = document.documentElement.dataset.theme === "light" ? "Dark" : "Light";
+  if (window.repaint) window.repaint();
+};
+syncTheme();
+document.getElementById("theme").onclick = () => {
+  const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light"; syncTheme();
+};
+
+const [scn, deb] = await Promise.all([
+  fetch("data/scene.json").then(r => r.json()), fetch("data/debrief.json").then(r => r.json())]);
+document.getElementById("crumb-run").textContent = scn.run;
+const regionById = Object.fromEntries(scn.regions.map(r => [r.id, r]));
+const camByName = Object.fromEntries(scn.cameras.map(c => [c.name, c]));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+/* ---------- The report ---------- */
+const c = deb.count, a = deb.agent;
+document.getElementById("tally").innerHTML =
+  `<span><b>${c.supported}</b> supported</span><span><b style="color:var(--fail)">${c.unsupported}</b> unsupported</span><span><b>${c.judgement}</b> judgement</span>`;
+
+// The same number pattern as verify.py; names (region ids, photo files) are not quantities.
+const NUM = /(?<![\w.])-?\d{1,3}(?:,\d{3})+(?:\.\d+)?|(?<![\w.])-?\d+(?:\.\d+)?/g;
+function markNumbers(text, unbacked) {
+  const parts = text.split(/(\bR\d{3}\b|DSC_\d+(?:\.JPG)?)/);
+  return parts.map((p, i) => i % 2 ? `<span class="mono">${esc(p)}</span>` :
+    esc(p).replace(NUM, m => `<span class="num${unbacked.includes(m) ? " unbacked" : ""}">${m}</span>`)).join("");
+}
+const items = [];
+let html = `<div class="eyebrow">Debrief · written by the agent, checked by replay</div>
+  <h1>${esc(deb.title)}</h1>
+  <div class="byline">One run of Claude ${esc(params.get("model") || "Sonnet")} with only the run's quality tools · ${a.num_turns} turns · ${(a.duration_ms / 1000).toFixed(0)} s · US$${a.total_cost_usd.toFixed(2)}. A sentence's numbers are underlined where a tool call backs them; a wavy line marks a number nothing backs. This is the second run; the first had no tool for camera positions and put all three new shots where no one can stand.</div>`;
+for (const sec of deb.sections) {
+  html += `<h2>${esc(sec.heading)}</h2>`;
+  for (const cl of sec.claims) {
+    const k = items.push({ kind: "claim", ...cl }) - 1;
+    const metaBits = [];
+    if (cl.status === "unsupported") {
+      const bad = cl.handles.filter(h => !h.ok).length;
+      metaBits.push(`<span class="flag">Unsupported:</span> ${cl.unbacked_numbers.length ? `${cl.unbacked_numbers.length} number${cl.unbacked_numbers.length > 1 ? "s" : ""} without a handle` : ""}${bad ? ` ${bad} handle${bad > 1 ? "s" : ""} did not replay` : ""}`);
+    } else if (cl.status === "judgement") metaBits.push("Judgement: no number, no handle");
+    metaBits.push(`${cl.handles.length} handle${cl.handles.length === 1 ? "" : "s"}`);
+    if (cl.region) metaBits.push(`<span class="mono">${esc(cl.region)}</span>`);
+    if (cl.photos?.length) metaBits.push(`${cl.photos.length} photo${cl.photos.length > 1 ? "s" : ""}`);
+    html += `<div class="claim ${cl.status}" data-k="${k}" tabindex="0" role="button">${markNumbers(cl.text, cl.unbacked_numbers)}<div class="meta">${metaBits.join("<span>·</span>")}</div></div>`;
+  }
+}
+html += `<h2>Readiness <span class="dim" style="text-transform:none;letter-spacing:0;font-weight:400">· rules, not the agent's opinion</span></h2><div class="stamps">`;
+for (const st of deb.readiness) {
+  const k = items.push({ kind: "stamp", ...st }) - 1;
+  html += `<div class="stamp" data-k="${k}" tabindex="0" role="button"><div class="mark ${st.status}">${st.status.toUpperCase()}</div>
+    <div><b>${esc(st.use)}</b><p><i>Requires</i> ${esc(st.requires)}</p><p><i>Because</i> ${esc(st.because)}</p></div></div>`;
+}
+html += `</div>`;
+document.getElementById("doc").innerHTML = html;
+
+/* ---------- Scene ---------- */
+const view = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500);
+camera.up.set(0, 0, 1);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+const P = scn.points, NP = P.region.length;
+const regIndex = Object.fromEntries(scn.regions.map((r, i) => [r.id, i + 1]));
+const pgeo = new THREE.BufferGeometry();
+pgeo.setAttribute("position", new THREE.Float32BufferAttribute(P.xyz, 3));
+pgeo.setAttribute("color", new THREE.Uint8BufferAttribute(P.rgb, 3, true));
+pgeo.setAttribute("reg", new THREE.Float32BufferAttribute(P.region.map(r => regIndex[r] || 0), 1));
+const pu = { uSel: { value: -1 }, uSize: { value: 2.2 } };
+const pmat = new THREE.ShaderMaterial({
+  uniforms: pu, transparent: true, depthWrite: false,
+  vertexShader: `attribute vec3 color; attribute float reg; uniform float uSel; uniform float uSize;
+    varying vec3 vC; varying float vA;
+    void main() { bool on = uSel < 0.0 || abs(reg - uSel) < 0.5;
+      vC = color; vA = on ? 1.0 : 0.3;
+      gl_PointSize = uSize * (on && uSel >= 0.0 ? 1.8 : 1.0);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `varying vec3 vC; varying float vA;
+    void main() { vec2 d = gl_PointCoord - 0.5; if (dot(d, d) > 0.25) discard; gl_FragColor = vec4(vC, vA); }`,
+});
+scene.add(new THREE.Points(pgeo, pmat));
+
+// Cameras: a camera is its frustum; evidence photos get their picture on the image plane.
+const FRUST = 0.7;
+const camGroup = new THREE.Group(); scene.add(camGroup);
+const texLoader = new THREE.TextureLoader();
+const camLines = new Map();
+function frustumPoints(centre, R, w, h, f, d) {
+  const o = new THREE.Vector3(...centre);
+  const ax = k => new THREE.Vector3(R[0][k], R[1][k], R[2][k]);
+  const x = ax(0), y = ax(1), z = ax(2);
+  const hw = d * w / (2 * f), hh = d * h / (2 * f);
+  const corner = (sx, sy) => o.clone().addScaledVector(z, d).addScaledVector(x, sx * hw).addScaledVector(y, sy * hh);
+  return { o, c: [corner(-1, -1), corner(1, -1), corner(1, 1), corner(-1, 1)], x, y, z, hw, hh };
+}
+function frustumGeometry(fp) {
+  const v = [];
+  for (const k of fp.c) v.push(fp.o, k);
+  for (let i = 0; i < 4; i++) v.push(fp.c[i], fp.c[(i + 1) % 4]);
+  return new THREE.BufferGeometry().setFromPoints(v);
+}
+const camMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.35 });
+const camSelMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 1 });
+for (const cm of scn.cameras) {
+  const fp = frustumPoints(cm.centre, cm.rotation, cm.width, cm.height, cm.focal, FRUST);
+  const line = new THREE.LineSegments(frustumGeometry(fp), camMat);
+  camGroup.add(line);
+  camLines.set(cm.name, { line, fp, plane: null });
+}
+function showPhoto(name, on) {
+  const e = camLines.get(name); if (!e) return;
+  e.line.material = on ? camSelMat : camMat;
+  if (on && !e.plane) {
+    const g = new THREE.PlaneGeometry(2 * e.fp.hw, 2 * e.fp.hh);
+    const m = new THREE.MeshBasicMaterial({ map: texLoader.load("data/" + camByName[name].thumb), side: THREE.DoubleSide });
+    m.map.colorSpace = THREE.SRGBColorSpace;
+    e.plane = new THREE.Mesh(g, m);
+    const basis = new THREE.Matrix4().makeBasis(e.fp.x, e.fp.y.clone().negate(), e.fp.z.clone().negate());
+    e.plane.quaternion.setFromRotationMatrix(basis);
+    e.plane.position.copy(e.fp.o).addScaledVector(e.fp.z, FRUST);
+    scene.add(e.plane);
+  }
+  if (e.plane) e.plane.visible = on;
+}
+
+// The selected region's cell.
+const cellBox = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)), new THREE.LineBasicMaterial());
+cellBox.scale.setScalar(scn.frame.cell_m); cellBox.visible = false; scene.add(cellBox);
+
+// Annotations: ghost cameras are dashed frustums; every annotation has an HTML handle that drags.
+const anns = deb.annotations.map(x => ({ ...x, moved: false, deleted: false, by: "agent" }));
+const annGroup = new THREE.Group(); scene.add(annGroup);
+const ghostMat = new THREE.LineDashedMaterial({ dashSize: 0.18, gapSize: 0.12 });
+function ghostGeometry(an) {
+  const o = new THREE.Vector3(...an.position), t = new THREE.Vector3(...an.look_at);
+  const z = t.clone().sub(o).normalize(), x = new THREE.Vector3().crossVectors(z, new THREE.Vector3(0, 0, 1)).normalize();
+  const y = new THREE.Vector3().crossVectors(z, x);
+  const R = [[x.x, y.x, z.x], [x.y, y.y, z.y], [x.z, y.z, z.z]];
+  // The courtyard camera's proportions; the dashed line runs to what the photo should look at.
+  const c0 = scn.cameras[0];
+  const fp = frustumPoints(an.position, R, c0.width, c0.height, c0.focal, 1.2);
+  const v = [];
+  for (const k of fp.c) v.push(fp.o, k);
+  for (let i = 0; i < 4; i++) v.push(fp.c[i], fp.c[(i + 1) % 4]);
+  v.push(o, t);
+  return new THREE.BufferGeometry().setFromPoints(v);
+}
+for (const an of anns) {
+  if (an.kind === "camera") {
+    an.obj = new THREE.LineSegments(ghostGeometry(an), ghostMat); an.obj.computeLineDistances(); annGroup.add(an.obj);
+  }
+  const el = document.createElement("div");
+  el.className = `ann ${an.kind}`;
+  el.innerHTML = `<span class="aid">${an.id}</span><span>${esc(an.kind === "camera" ? "Shoot here" : an.text)}</span><button title="Delete" aria-label="Delete ${an.id}">×</button>`;
+  el.title = an.kind === "camera" ? an.reason : (an.region ? `Region ${an.region}` : "");
+  view.appendChild(el); an.el = el;
+  el.querySelector("button").onclick = ev => { ev.stopPropagation(); an.deleted = true; el.hidden = true; if (an.obj) an.obj.visible = false; logEdits(); };
+  el.addEventListener("pointerdown", ev => startDrag(ev, an));
+}
+const ray = new THREE.Raycaster();
+let drag = null;
+function startDrag(ev, an) {
+  if (ev.target.tagName === "BUTTON") return;
+  ev.preventDefault(); controls.enabled = false;
+  drag = { an, plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), -an.position[2]) };
+  an.el.setPointerCapture(ev.pointerId);
+  an.el.onpointermove = e => {
+    const r = renderer.domElement.getBoundingClientRect();
+    ray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+    const hit = new THREE.Vector3();
+    if (ray.ray.intersectPlane(drag.plane, hit)) {
+      an.position = [+hit.x.toFixed(2), +hit.y.toFixed(2), an.position[2]]; an.moved = true; an.el.classList.add("moved");
+      if (an.obj) { an.obj.geometry.dispose(); an.obj.geometry = ghostGeometry(an); an.obj.computeLineDistances(); }
+    }
+  };
+  an.el.onpointerup = () => { an.el.onpointermove = null; drag = null; controls.enabled = true; logEdits(); };
+}
+function logEdits() {
+  const lines = anns.filter(x => x.moved || x.deleted).map(x => `<li><span class="mono">${x.id}</span> ${x.deleted ? "deleted" : `moved to (${x.position.join(", ")})`} by you</li>`);
+  document.getElementById("edit-log").innerHTML = lines.join("") || `<li class="empty" style="list-style:none;margin-left:calc(-1*var(--sp-4))">No edits yet: ${anns.length} placed by the agent.</li>`;
+  const back = anns.filter(x => !x.deleted).map(({ el, obj, moved, deleted, by, ...rest }) => ({ ...rest, ...(moved ? { moved_by: "person" } : {}) }));
+  document.getElementById("ann-json").textContent = JSON.stringify(back, null, 1);
+}
+logEdits();
+document.getElementById("ann-btn").onclick = () => { const p = document.getElementById("ann-json"); p.hidden = !p.hidden; };
+
+window.repaint = () => {
+  scene.background = new THREE.Color(cssVar("--view-bg"));
+  camMat.color.set(cssVar("--text-dim")); camSelMat.color.set(cssVar("--accent"));
+  cellBox.material.color.set(cssVar("--accent")); ghostMat.color.set(cssVar("--new"));
+};
+window.repaint();
+
+// Home view: the whole courtyard from above the cameras' side.
+// Framed on the 5th to 95th percentile of the points, so stray far points do not shrink the yard.
+const pct = (axis, q) => { const v = []; for (let i = axis; i < P.xyz.length; i += 3) v.push(P.xyz[i]); v.sort((m, n) => m - n); return v[Math.floor(q * (v.length - 1))]; };
+const lo = new THREE.Vector3(pct(0, .05), pct(1, .05), pct(2, .05)), hi = new THREE.Vector3(pct(0, .95), pct(1, .95), pct(2, .95));
+const mid = lo.clone().add(hi).multiplyScalar(0.5), span = hi.clone().sub(lo).length();
+const camMid = scn.cameras.reduce((s, c) => s.add(new THREE.Vector3(...c.centre)), new THREE.Vector3()).divideScalar(scn.cameras.length);
+function home() {
+  camera.position.copy(mid).add(new THREE.Vector3(0.35, -0.75, 0.55).multiplyScalar(span * 0.85));
+  controls.target.copy(mid);
+}
+home();
+
+let fly = null;
+function flyTo(target, from) {
+  fly = { t0: performance.now(), p0: camera.position.clone(), q0: controls.target.clone(), p1: from, q1: target };
+}
+function regionView(reg, photos) {
+  const t = new THREE.Vector3(...reg.cell_centre);
+  const seen = (photos || []).map(n => camByName[n]).filter(Boolean);
+  const base = seen.length ? seen.reduce((s, c) => s.add(new THREE.Vector3(...c.centre)), new THREE.Vector3()).divideScalar(seen.length) : camMid.clone();
+  const dir = base.clone().sub(t); dir.z = 0; if (dir.length() < 1e-3) dir.set(0, -1, 0); dir.normalize();
+  return { target: t, from: t.clone().addScaledVector(dir, scn.frame.cell_m * 3.2).add(new THREE.Vector3(0, 0, scn.frame.cell_m * 1.6)) };
+}
+
+/* ---------- Selection ---------- */
+const hud = document.getElementById("hud");
+const defaultHud = `<b>${scn.cameras.length}</b> photos, <b>${NP.toLocaleString("en")}</b> points, <b>${scn.regions.length}</b> regions of ${scn.frame.cell_m} m. Drag to orbit; pick a sentence to fly to its evidence.`;
+hud.innerHTML = defaultHud;
+let shownPhotos = [];
+function fmt(v) { return typeof v === "object" ? JSON.stringify(v) : String(v); }
+function handleCard(h) {
+  const args = Object.entries(h.args || {}).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(", ");
+  const ok = h.ok !== false;
+  return `<div class="handle"><div class="call">${esc(h.tool)}(${esc(args)})</div>
+    <dl><dt>field</dt><dd>${esc(h.field)}</dd><dt>claimed</dt><dd>${esc(fmt(h.value))}</dd>
+    <dt>replayed</dt><dd class="${ok ? "ok" : "bad"}">${esc(fmt(h.actual ?? h.value))} ${ok ? "✓ matches" : "✗ " + esc(h.error || "differs")}</dd></dl></div>`;
+}
+function select(k) {
+  document.querySelectorAll("[data-k]").forEach(e => e.setAttribute("aria-current", String(+e.dataset.k === k)));
+  shownPhotos.forEach(n => showPhoto(n, false));
+  const it = items[k];
+  document.getElementById("ev-empty").hidden = true;
+  document.getElementById("ev").hidden = false;
+  document.getElementById("ev-id").textContent = it.kind === "claim" ? (it.region || it.status) : it.use;
+  const handles = it.kind === "claim" ? it.handles : it.evidence.map(h => ({ ...h, actual: h.value, ok: true }));
+  let hh = handles.map(handleCard).join("") || `<p class="empty">No handle: the agent gave this sentence no tool call.</p>`;
+  if (it.kind === "claim" && it.unbacked_numbers.length)
+    hh = `<p class="flag" style="margin:0 0 var(--sp-2)">No handle for: <span class="mono">${it.unbacked_numbers.map(esc).join(", ")}</span></p>` + hh;
+  document.getElementById("ev-handles").innerHTML = hh;
+  const photos = it.photos || [];
+  document.getElementById("ev-photos").innerHTML = photos.map(n => `<figure><img src="data/${camByName[n]?.thumb}" alt="${esc(n)}"><figcaption>${esc(n.split("/").pop())}</figcaption></figure>`).join("");
+  shownPhotos = photos; photos.forEach(n => showPhoto(n, true));
+  const reg = it.region && regionById[it.region];
+  if (reg) {
+    pu.uSel.value = regIndex[reg.id]; cellBox.position.set(...reg.cell_centre); cellBox.visible = true;
+    const v = regionView(reg, photos); flyTo(v.target, v.from);
+    hud.innerHTML = `<b class="mono">${reg.id}</b> · coverage ${reg.coverage} · ${reg.points} points${reg.flags.length ? " · " + reg.flags.join(", ") : ""}. ${photos.length} evidence photo${photos.length === 1 ? "" : "s"} shown on their cameras.`;
+  } else {
+    pu.uSel.value = -1; cellBox.visible = false; hud.innerHTML = defaultHud;
+    const h = new THREE.Vector3(...mid.toArray()).add(new THREE.Vector3(0.35, -0.75, 0.55).multiplyScalar(span * 0.85));
+    flyTo(mid.clone(), h);
+  }
+  const u = new URL(location); u.searchParams.set("pick", k); history.replaceState(null, "", u);
+}
+document.querySelectorAll("[data-k]").forEach(e => {
+  e.onclick = () => select(+e.dataset.k);
+  e.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(+e.dataset.k); } };
+});
+
+/* ---------- Loop ---------- */
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(view); resize();
+const tmp = new THREE.Vector3();
+function placeLabels() {
+  const w = view.clientWidth, h = view.clientHeight;
+  for (const an of anns) {
+    if (an.deleted) continue;
+    tmp.set(...an.position).project(camera);
+    const on = tmp.z < 1 && Math.abs(tmp.x) < 1.1 && Math.abs(tmp.y) < 1.1;
+    an.el.hidden = !on;
+    if (on) { an.el.style.left = `${(tmp.x + 1) / 2 * w}px`; an.el.style.top = `${(1 - tmp.y) / 2 * h - 6}px`; }
+  }
+}
+document.getElementById("loading").remove();
+const pick = params.get("pick");
+if (pick !== null && items[+pick]) { select(+pick); document.querySelector(`[data-k="${+pick}"]`).scrollIntoView({ block: "center" }); }
+if (fly && params.get("still") === "1") fly.t0 = -1e9;
+renderer.setAnimationLoop(now => {
+  if (fly) {
+    const s = Math.min(1, (now - fly.t0) / 900), e = s * s * (3 - 2 * s);
+    camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.q0, fly.q1, e);
+    if (s >= 1) fly = null;
+  }
+  controls.update(); renderer.render(scene, camera); placeLabels();
+});
+</script>
+</body>
+</html>

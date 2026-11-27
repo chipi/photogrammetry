@@ -104,7 +104,8 @@ undistorted images and are snapped before use.
 |---|---|
 | [RC-M1 the run](https://github.com/chipi/recce/tree/main/mockups/RC-M1-run) (with first passes at M2 and M3) | Phase 2 done: IBM Plex, tokens, AA contrast, field shot cards; photos hang in the air with faint rays (owner feedback, 2026-11-24) |
 | [RC-M2 coverage and confidence](https://github.com/chipi/recce/tree/main/mockups/RC-M2-coverage) | Phase 1 built 2026-11-27 on RC-P10's room and RC-P13's structure: light and shadow, confidence as solid and hatched, the Faro truth beside it, OKLCH ramps, the coverage glyph, the next shot. Surfaces no frame saw are 52.4 mm off Faro, those seen by 32+ frames 14.7 mm. **Owner verdict (2026-11-27): all concepts kept, finished in the build phase** |
-| M3–M8 | Next: M3, M4, M6, M7 on prototype data; M5 synthetic; M8 after RC-P11 |
+| [RC-M3 the debrief](https://github.com/chipi/recce/tree/main/mockups/RC-M3-debrief) | Phase 1 built 2026-11-27 on ETH3D courtyard (RC-P1, P3, P4, P6): an agent writes the debrief through the quality tools only, every number replayed (8 of 12 claims supported), readiness stamps by rule, agent-placed labels and ghost cameras the person moves. Without camera positions the agent put 0 of 3 shots where a photographer can stand; with `list_cameras`, 2 of 3. Owner verdict open |
+| M4–M8 | Next: M4, M6, M7 on prototype data; M5 synthetic; M8 after RC-P11 |
 
 ## Resume here (handover, 2026-11-25)
 
