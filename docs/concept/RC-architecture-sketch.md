@@ -443,3 +443,5 @@ Recommendations for the prototypes to confirm, not locked decisions.
 15. The benchmark set: which captures, how reference dimensions are measured, which metrics gate a
     recipe change, and where the set lives (it holds private photos).
 16. A portable dense path for Macs (Metal or CPU), or dense always on a CUDA/HIP worker.
+17. The field split *(owner, 2026-11-27)*: which stages run on the laptop before anything is sent, what leaves it (RAW, developed images at a working resolution, features, a sparse model), and what a field uplink allows; 1,500 photos at 50 MB are 75 GB.
+18. The field client *(owner, 2026-11-27)*: a web application, a local client, or both; the laptop already runs the coordinator and a worker alone when offline (section 4), so the open part is how that is packaged and shown.

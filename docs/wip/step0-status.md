@@ -149,6 +149,8 @@ Republish it (read it first, then publish to the same link) whenever a row here 
   take features further. Recorded in the brief; the mock-ups show both states.
 - **The first case: the owner's home, captured with the iPhone app** *(owner, 2026-11-27)*. The build starts with the iPhone capture app (RC-P11) and the owner photographing at home, from simpler to more complex: objects first, then a whole room. The room is the setting the robots map, so it leads into the robot use cases. Recorded in the brief.
 - **Learn mode is a feature inside the product** *(owner, 2026-11-27)*: the mini-labs and their tutor (RC-M5) live in Recce beside what they explain, not as a separate face.
+- **Distribution is at the front, for work in the field** *(owner, 2026-11-27)*. The owner travels with a laptop and shoots with a camera, a drone or an underwater camera, and processes the day's work after. The answer is not a stronger laptop but offloading: the laptop sends work to the owner's other machines and to rented GPUs. Running workloads on other machines, rented GPUs included, is built from the beginning and is a key part of the vision, not a later scaling step. Open problems this raises: the upload (1,500 photos at 50 MB are 75 GB), whether the RAW files need to leave the laptop at all, and how work splits between the laptop and the remote workers before anything is sent. Recorded in the brief.
+- **A web application, a local client, or both** *(open, owner, 2026-11-27)*: in the field something has to run on the laptop; how it is packaged is decided later.
 
 **Deferred by the owner (2026-11-26)**
 
