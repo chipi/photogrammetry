@@ -33,6 +33,27 @@ count (34–45 mm under 4 frames, 26 mm at 8–15, 15 mm at 16–31). The model'
 its error, so shadow and hatching are not decoration. The 90th percentiles overlap (35 to 205 mm),
 so a single dark or lit spot proves nothing; the legend says so.
 
+**The coach** (added 2026-11-27, owner: AI as a coach to the operator; pattern in RC-M7). The
+engine supplies the room's facts (frame counts, the error by frame count, directions, the next
+shot, RC-P13's unknown areas and sigmas) and a menu of actions: engine views (light and shadow,
+confidence, structure) with Apply, and next-capture steps (the ghost shot, a second pass, sweeping
+the floor and ceiling, a tape check). Without AI, a rule lists 6 steps, each with its fact. With
+the person's own AI (Claude Sonnet, one call, no images, US$0.038), the coach chose 4 capture
+steps in order (the ghost shot first, "the cheapest fix"), said to re-run the frame counts to
+know it worked (the unseen share below 3.5%, the weak share below 4.2%, the unseen floor below
+1.9 m²), and named what the facts cannot say. Of its 13 statements, 9 have every number checked,
+3 are judgement and 1 is unsupported (an uncited "4" in the ghost shot's expected result).
+
+One thing the coach saw that the rule did not: surfaces seen from three or more horizontal
+directions are 11 mm off against 16 mm from one direction (median, where 16 or more frames saw
+them), and the coach said this may be confounded rather than caused by the directions. The rule
+uses that difference to ask for a second pass; whether a second side helps is not tested here.
+
+Building the rule found a dead measure: the direction spread (1 minus the length of the mean
+viewing direction) is near 0 almost everywhere (median 0.004 where 4 or more frames saw a
+point), so "seen from one side" by spread flagged 94% of the room. The rule counts the glyph's
+horizontal sectors instead: 55% of the surface was seen from one sector only.
+
 ## Data
 
 Real output from [RC-P10](../../prototypes/RC-P10-room/) and
@@ -51,6 +72,8 @@ Nothing from the dataset is committed: `export_room.py` writes `data/room.bin` a
 | The camera path | Real: ARKit's poses, levelled into RC-P13's frame |
 | The next shot | **Heuristic**: the 0.5 m cell with most wall vertices seen by fewer than 4 frames, up to 1.4 m out on the side the phone was, at the capture's median height |
 | Robot brief | The shape of the gap-list draft (`gap_list` 1), filled from the one gap |
+| The coach without AI | **Rules written for the mock-up** (`coach.py`): under 4 frames is weak, one direction is one of 12 sectors |
+| The coach with AI | **One recorded run**, checked by `../coach_lib.py` |
 
 ## Run
 
@@ -58,11 +81,14 @@ Nothing from the dataset is committed: `export_room.py` writes `data/room.bin` a
 cd prototypes/RC-P10-room
 uv run python ../../mockups/RC-M2-coverage/export_room.py 42444793 \
   ../../mockups/RC-M2-coverage/data
-cd ../../mockups/RC-M2-coverage && python3 -m http.server 8794 --bind 0.0.0.0
+cd ../../mockups/RC-M2-coverage
+python3 coach.py data              # the coach's facts, menu and rule plan
+python3 coach.py data ai sonnet    # optional: the AI coach (one call)
+python3 -m http.server 8794 --bind 0.0.0.0
 ```
 
 Open `http://<host>:8794/`. three.js loads from jsDelivr. A view is a link:
-`?mode=coverage|confidence|truth|structure&ramp=uniform|cbsafe|lum&pick=<vertex>|ghost&theme=light`.
+`?mode=coverage|confidence|truth|structure&ramp=uniform|cbsafe|lum&pick=<vertex>|ghost&ai=1&theme=light`.
 
 ## Verdict
 
@@ -78,6 +104,7 @@ Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept**; t
 | "Does the model know where it is wrong?" chart | 4, 14 | Kept |
 | Structure over the mesh | (RC-P13) | Kept |
 | Next shot as ghost camera, card and brief | 3, 21 | Kept |
+| The coach: rule plan, or the person's AI, checked (added after the verdict) | pattern (owner, 2026-11-27) | New, no verdict yet |
 
 ## Not covered
 

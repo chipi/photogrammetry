@@ -81,6 +81,15 @@ def check_claim(claim: dict, facts: dict, actions: dict | None = None) -> dict:
         cite["ok"] = isinstance(v, int | float) and close(str(cite.get("value")), float(v))
         if isinstance(v, int | float):
             known.append(float(v))
+        # a threshold named in the cited fact ("share_seen_by_32_or_more") is backed by that cite,
+        # and so are the other numbers of the record it sits in (a bin's bounds beside its median)
+        try:
+            parent = walk(facts, cite["path"].rsplit(".", 1)[0]) if "." in cite["path"] else {}
+        except (KeyError, IndexError, ValueError, TypeError):
+            parent = {}
+        if isinstance(parent, dict):
+            known += [float(x) for x in parent.values() if isinstance(x, int | float)]
+        known += [float(x) for x in re.findall(r"(?<![a-z])\d+(?![a-z])", cite.get("path", ""))]
     text = " ".join(claim.get(k, "") for k in ("text", "expect"))
     numbers = NUMBER.findall(NOT_NUMBERS.sub(" ", text))
     claim["unbacked"] = [n for n in numbers if not any(close(n, k) for k in known)]

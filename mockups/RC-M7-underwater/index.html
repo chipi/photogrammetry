@@ -602,7 +602,7 @@ function renderCoach() {
     chip.className = "chip ai"; chip.textContent = aiCoach.model;
     $("coach").innerHTML = `<div class="head">${marked(aiCoach.headline)} ${stat(aiCoach.headline)}</div>
       <details><summary>Why it is like this (${aiCoach.why.length})</summary>${aiCoach.why.map((c) => `<p>${marked(c)} ${stat(c)}</p>`).join("")}</details>
-      <ol>${aiCoach.plan.map((c) => step(c.action, `<div class="w">${marked(c)} ${stat(c)}</div>${c.expect ? `<div class="e">Expect: ${esc(c.expect)}</div>` : ""}`)).join("")}</ol>
+      <ol>${aiCoach.plan.map((c) => step(c.action, `<div class="w">${marked(c)} ${stat(c)}</div>${c.expect ? `<div class="e">Expect: ${marked({ text: c.expect, unbacked: c.unbacked })}</div>` : ""}`)).join("")}</ol>
       <details open><summary>How you will know it worked</summary><p>${marked(aiCoach.check)} ${stat(aiCoach.check)}</p></details>
       <details><summary>What the facts cannot say (${aiCoach.unknown.length})</summary>${aiCoach.unknown.map((c) => `<p>${marked(c)} ${stat(c)}</p>`).join("")}</details>
       <div class="foot">One recorded call: ${esc(aiCoach.model)}, US$${aiCoach.cost_usd.toFixed(3)}. ${n("supported")} supported, ${n("judgement")} judgement, ${n("unsupported")} unsupported. Plan steps can only name actions from the engine's menu.</div>`;
