@@ -78,7 +78,9 @@ def check_claim(claim: dict, facts: dict, actions: dict | None = None) -> dict:
         except (KeyError, IndexError, ValueError, TypeError):
             v = None
         cite["actual"] = v
-        cite["ok"] = isinstance(v, int | float) and close(str(cite.get("value")), float(v))
+        cite["ok"] = (isinstance(v, int | float) and close(str(cite.get("value")), float(v))) or (
+            isinstance(v, str) and v == cite.get("value")
+        )
         if isinstance(v, int | float):
             known.append(float(v))
         # a threshold named in the cited fact ("share_seen_by_32_or_more") is backed by that cite,
@@ -90,6 +92,9 @@ def check_claim(claim: dict, facts: dict, actions: dict | None = None) -> dict:
         if isinstance(parent, dict):
             known += [float(x) for x in parent.values() if isinstance(x, int | float)]
         known += [float(x) for x in re.findall(r"(?<![a-z])\d+(?![a-z])", cite.get("path", ""))]
+    if actions and claim.get("action") in actions:
+        # the step's own action defines its thresholds ("rays under 5 degrees"): given, not claimed
+        known += [float(x) for x in NUMBER.findall(actions[claim["action"]]["text"])]
     text = " ".join(claim.get(k, "") for k in ("text", "expect"))
     numbers = NUMBER.findall(NOT_NUMBERS.sub(" ", text))
     claim["unbacked"] = [n for n in numbers if not any(close(n, k) for k in known)]

@@ -60,7 +60,7 @@ of the same day, also approved as directions. Source tags `[V]` and `[U]` there 
 - **The AI is a coach** (owner, 2026-11-27): why the result is as it is, a plan made only of
   actions from the engine's menu (each "engine" or "next capture"), how the operator will know it
   worked, and what the facts cannot say. The rule writes a plan from the same facts without AI.
-  Shared checker: `mockups/coach_lib.py`; first in RC-M7.
+  Shared checker: `mockups/coach_lib.py`; first in RC-M7, then RC-M2 and RC-M1.
 - **The frame follows robotics-lab** (Observatory, Mission Control): dark by default, outliner,
   read-only inspector, label left and value right in mono; tokens derived from base, accent and
   contrast (Linear's approach).

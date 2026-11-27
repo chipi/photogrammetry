@@ -14,6 +14,14 @@
 - **Debrief** (first pass at M3): a written debrief whose every claim carries an evidence handle
   that flies the scene to its evidence, a claim without evidence flagged as such, readiness stamps
   with their stated requirements, and labels placed in the scene. Ideas 5, 10, 16, 18.
+- **The coach** (in Debrief; owner, 2026-11-27: AI as a coach to the operator). The engine
+  supplies the run's facts and a menu of actions it or the photographer can take, each marked
+  "engine" or "next capture"; engine actions have an Apply button (switch solver, show coverage,
+  show the photo that did not join, show the next shot). Without AI, a rule picks the steps from
+  the facts. With the person's own AI connected, it says why the run is as it is, orders the plan,
+  says how the operator will know it worked and what the facts cannot say. Every number it writes
+  is checked against the fact it cites, and every step must name an action from the menu
+  (`../coach_lib.py`, shared with RC-M2 and RC-M7).
 
 The frame around them (M0): outliner, inspector, timeline with a filmstrip, command palette with
 each command's CLI line (idea 15), light and dark. Ideas are numbered as in the
@@ -44,6 +52,9 @@ development use), both strategies. Nothing from the dataset is committed: `expor
 | Robot brief | The shape of the gap-list interface draft (`gap_list` 1, docs/wip/gap-list-interface.md), filled from the page's gaps; rankings follow the mock-up's rules |
 | Debrief text | **Template** filled from the run's numbers; an agent writes it in the product |
 | Readiness stamps | Rules written for the mock-up; their requirements are stated next to each stamp |
+| The coach's facts | Real: `coach.py` reads `data/run.json` (shares of points by photos and ray angle, the three photos with most observations, pose errors) |
+| The coach without AI | **Rules written for the mock-up** (`coach.py`), over those facts |
+| The coach with AI | **One recorded run**, checked by `coach_lib.py` |
 
 ## Run
 
@@ -52,11 +63,14 @@ cd prototypes/RC-P1-registration
 uv run python ../../mockups/RC-M1-run/export_run.py \
   ~/.cache/recce/datasets/eth3d/kicker ~/.cache/recce/runs/p1/x3/kicker \
   ../../mockups/RC-M1-run/data
-cd ../../mockups/RC-M1-run && python3 -m http.server 8793 --bind 127.0.0.1
+cd ../../mockups/RC-M1-run
+python3 coach.py data              # the coach's facts, action menu and rule plan
+python3 coach.py data ai sonnet    # optional: the AI coach (one call)
+python3 -m http.server 8793 --bind 127.0.0.1
 ```
 
 Open <http://127.0.0.1:8793/>. three.js loads from jsDelivr. A view is a link:
-`?strategy=glomap_global&timeline=name&at=12&truth=1&select=DSC_6487.JPG`, plus `mode=coverage|debrief`, `view=map`, `gap=N`, `purpose=web|measure|robot`, `brief=1`, `theme=light`, `palette=1`, `fly=weak|ghost`.
+`?strategy=glomap_global&timeline=name&at=12&truth=1&select=DSC_6487.JPG`, plus `mode=coverage|debrief`, `view=map`, `gap=N`, `purpose=web|measure|robot`, `brief=1`, `theme=light`, `palette=1`, `fly=weak|ghost`, `ai=1`.
 
 Keys: space play, ← → step, G ground truth, T threads, ⌘K or Ctrl+K commands.
 
@@ -67,9 +81,36 @@ from its true place; that camera had distorted RC-P1's first scoring
 ([RC-P1 results](../../prototypes/RC-P1-registration/README.md#results)). The mock-up flags such
 a camera in the top bar and the inspector.
 
+## The coach, without and with AI
+
+The rule lists 6 steps: keep the incremental solver (the global one maps 2.8 times faster, but its
+95th-percentile reprojection is 9.2 px against 2.3 px), show and retake DSC_6487.JPG, show
+coverage (27% of points seen by only 2 photos, 11% on rays under 5° apart), take the next shot
+the coverage view places, and add a scale bar. The AI coach (Claude Sonnet, one call with the
+facts and the menu, no images, US$0.039) chose the same solver and five of the same actions and
+added: dropping the weak points before meshing or measuring; that the camera positions are nearly
+tied (2.3 cm against 2.5 cm median), so reprojection is what decides; that DSC_6487.JPG missing
+from both solvers points at the photo, not the solver, marked as a guess; and a test for the next
+run (all 31 photos join, fewer 2-photo points, mean reprojection near 1.23 px). Of its 14
+statements, 12 have every number checked and 2 are judgement.
+
+**What the checker missed.** One plan step says "neither solver placed it" of DSC_6487.JPG; the
+facts say the global solver posed it but tied no point to it (`posed_without_points` 1), and the
+page found it about 47 m from its true place ("What it already showed"). The statement has no number, so
+nothing checks it. A cited name is checked only for being the same name.
+
+**Checker changes from this run.** Two statements came back unsupported for the checker's own
+reasons, not the model's: a cited name (`DSC_6487.JPG`) never matched because only numbers were
+compared, and "rays under 5 degrees" in the drop-weak-points step was flagged though the 5 is in
+that action's own menu text. `coach_lib.py` now accepts a cited name that matches exactly and the
+numbers in a plan step's own action text. Rechecked after the change, RC-M2 (9 supported, 3
+judgement, 1 unsupported) and RC-M7 (15, 2, 0) are unchanged.
+
 ## Verdict
 
 **Kept, all concepts shown (owner, 2026-11-24):** the style ("I really like the style"), every concept in the three modes ("we really love everything"), and the gap list with site map and cards ("exactly what I wanted"). Phase 2 polishes the direction; the typeface (Inter, flagged as overused) is decided there.
+
+**The coach (2026-11-27):** new, no verdict yet.
 
 ## Phase 2 (2026-11-24)
 
