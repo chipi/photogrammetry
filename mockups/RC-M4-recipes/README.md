@@ -62,9 +62,20 @@ only.
 
 **The AI layer.** One call (Claude Sonnet, `claude -p`, no tools) read the comparison and wrote
 four sentences per scene: GLOMAP for web viewing, COLMAP for measurement and robot localisation,
-and "GLOMAP for a quick first pass, then let COLMAP refine" as the thing to try. All 8 sentences
-are backed: every number matches the path it cites. The call cost US$1.75, about twenty times the
-US$0.10 expected; the cause was not investigated.
+and "GLOMAP first, then let COLMAP polish its result" as the thing to try. All 8 sentences are
+backed: every number matches the path it cites (after the checker learned that "95th" in
+"95th-percentile" is a label, not a number).
+
+**What the call costs, and why the first one cost US$1.75.** `claude -p` is the whole Claude Code
+agent, and by default each call carries its system prompt, this machine's instructions and the
+tool definitions of every connected MCP server. The first run (2026-11-27, kept as
+`data/ai_default_context.json`) used those defaults and cost US$1.75. The same prompt and model
+with no MCP servers, no settings sources and a one-line system prompt cost US$0.028: 1,406 input
+tokens and 2,270 output tokens. Both runs answered the same prompt with 8 sentences, and the
+whole second call, output included, cost US$0.028, so the extra US$1.72 of the first call came
+from what it sent, not what it wrote: the default context. The first run's token counts were not recorded, so its context size is
+inferred, not measured. The product carries no such context: the person's own AI gets the prompt
+and the comparison only.
 
 ## Data
 
@@ -137,5 +148,6 @@ Phase 1, built 2026-11-27. **Owner verdict (2026-11-27): every concept kept.** C
   measured; neither is variation in the energy reading.
 - **Truth columns.** The camera miss and the "worst camera" are known only for benchmarks; the
   page says so, and the rule falls back on the reprojection tail.
-- **The AI call's cost** (US$1.75) is not explained or reduced; no other model or provider tried.
+- **One model and provider.** The call ran on Claude Sonnet only; no other model, provider or local
+  model was tried.
 - **Swap in place** swaps between existing runs; it does not start a new run.

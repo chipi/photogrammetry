@@ -60,10 +60,11 @@ shows, with no number), 0 unsupported. The first check marked the title unsuppor
 "3" in "3D"; the checker now treats "3D" as a word, not a number. I compared 5 of the 8 captions with their photos (stops
 1 to 5) and found them accurate; stops 6 to 8 were not checked.
 
-**Why RC-M4's call cost US$1.75.** A call with no MCP servers, no settings sources and its own
-system prompt costs US$0.0009 for a one-word answer (447 input tokens). RC-M4's call ran with
-`claude -p`'s default context (this machine's MCP servers, instructions and skills). I believe
-that context made the difference, but I have not re-run RC-M4's call to measure it.
+**Why RC-M4's first call cost US$1.75.** It ran with `claude -p`'s default context (Claude
+Code's system prompt, this machine's instructions and every connected MCP server's tools). This
+call switches that off: no MCP servers, no settings sources, its own system prompt. Re-run the
+same way, RC-M4's call cost US$0.028 (see RC-M4's README); a one-word answer costs US$0.0009
+(447 input tokens).
 
 ## Data
 

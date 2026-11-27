@@ -3,7 +3,12 @@ same numbers the page shows) and says which recipe suits which purpose; each num
 cites its path in that comparison, and this script checks every number against the path it
 cites. Writes data/ai.json; without it the page shows only the rule-based verdict.
 
+The call runs with no MCP servers, no settings sources and its own system prompt: the default
+context of `claude -p` (its system prompt, instructions, every connected MCP server's tools)
+is what a person's own AI would not carry.
+
     python3 ai_compare.py data [model]        (runs `claude -p`; default model sonnet)
+    python3 ai_compare.py data --recheck      (re-checks the recorded answer, no call)
 """
 
 import json
@@ -14,7 +19,10 @@ import sys
 from pathlib import Path
 
 NUMBER = re.compile(r"(?<![\w.])-?\d{1,3}(?:,\d{3})+(?:\.\d+)?|(?<![\w.])-?\d+(?:\.\d+)?")
-NAMES = re.compile(r"DSC_\d+(?:\.JPG)?")
+NAMES = re.compile(r"DSC_\d+(?:\.JPG)?|\b\d+th(?=[- ]percentile)")  # names, percentile labels
+
+SYSTEM = "You explain 3D reconstruction results in plain words."
+USAGE = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens")
 
 PROMPT = """You are the optional AI layer of a 3D reconstruction tool; the person connected you
 and the tool works without you. Two recipes registered the same photos from the same matches:
@@ -97,6 +105,15 @@ def main():
     data = Path(sys.argv[1])
     model = sys.argv[2] if len(sys.argv) > 2 else "sonnet"
     comp = comparison(json.loads((data / "meta.json").read_text()))
+    if model == "--recheck":
+        out = json.loads((data / "ai.json").read_text())
+        for scene, rec in out["scenes"].items():
+            rec["claims"] = [check(c, comp) for c in rec["claims"]]
+            rec["supported"] = sum(c["supported"] for c in rec["claims"])
+            for c in rec["claims"]:
+                print(scene, "OK " if c["supported"] else "BAD", c["unbacked"], c["text"])
+        (data / "ai.json").write_text(json.dumps(out, indent=1))
+        return
     run = subprocess.run(  # noqa: S603 (an argument list, no shell; the prompt is ours)
         [
             shutil.which("claude") or "claude",
@@ -108,6 +125,13 @@ def main():
             "json",
             "--tools",
             "",
+            "--strict-mcp-config",
+            "--setting-sources",
+            "",
+            "--system-prompt",
+            SYSTEM,
+            "--max-budget-usd",
+            "0.50",
         ],
         capture_output=True,
         text=True,
@@ -120,6 +144,7 @@ def main():
     out = {
         "model": f"Claude {model.capitalize()}",
         "cost_usd": raw.get("total_cost_usd"),
+        "usage": {k: raw.get("usage", {}).get(k) for k in USAGE},
         "scenes": {},
     }
     for scene, claims in doc["scenes"].items():
